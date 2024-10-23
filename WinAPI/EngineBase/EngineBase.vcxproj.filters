@@ -2,35 +2,53 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="EngineDebug.h">
-      <Filter>Debug</Filter>
+      <Filter>01_Debug</Filter>
     </ClInclude>
     <ClInclude Include="EngineFile.h">
-      <Filter>IO</Filter>
+      <Filter>02_IO</Filter>
     </ClInclude>
     <ClInclude Include="EngineMath.h">
-      <Filter>Math</Filter>
+      <Filter>03_Math</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineDelegate.h">
+      <Filter>04_Functional</Filter>
+    </ClInclude>
+    <ClInclude Include="PreCompile.h">
+      <Filter>00_PreCompile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineDebug.cpp">
-      <Filter>Debug</Filter>
+      <Filter>01_Debug</Filter>
     </ClCompile>
     <ClCompile Include="EngineFile.cpp">
-      <Filter>IO</Filter>
+      <Filter>02_IO</Filter>
     </ClCompile>
     <ClCompile Include="EngineMath.cpp">
-      <Filter>Math</Filter>
+      <Filter>03_Math</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineDelegate.cpp">
+      <Filter>04_Functional</Filter>
+    </ClCompile>
+    <ClCompile Include="PreCompile.cpp">
+      <Filter>00_PreCompile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Debug">
+    <Filter Include="00_PreCompile">
+      <UniqueIdentifier>{aae6a820-8c80-4f51-90dc-d99b8a1043a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01_Debug">
       <UniqueIdentifier>{78b6108e-3fc1-4750-8641-f8bd572d937d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="IO">
+    <Filter Include="02_IO">
       <UniqueIdentifier>{61834f60-1002-4071-9e28-34087dfb4d09}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Math">
+    <Filter Include="03_Math">
       <UniqueIdentifier>{ea7ef493-e79b-4081-9ac6-502c8d1eb677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Functional">
+      <UniqueIdentifier>{69b4e2a6-deca-4ddc-b582-fdf9d2f373ea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
