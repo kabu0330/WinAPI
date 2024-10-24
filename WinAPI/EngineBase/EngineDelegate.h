@@ -33,7 +33,7 @@ public:
 		}
 	}
 
-	void operator=(std::function<void()> _Function)
+	void operator+=(std::function<void()> _Function)
 	{
 		Functions.push_back(_Function);
 	}

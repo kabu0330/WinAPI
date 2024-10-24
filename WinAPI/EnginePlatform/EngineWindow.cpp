@@ -63,7 +63,10 @@ int UEngineWindow::WindowMessageLoop(EngineDelegate _FrameFuction)
 {
     // 윈도우 단축키
     // HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINDOWSPROJECT2));
-    MSG msg;
+    MSG msg = MSG();
+
+    // 프로그램이 시작하고 딱 한번 로드되어야 할 것 : 이미지
+
 
     // 기본 메시지 루프입니다:
     while (WindowCount)
@@ -149,6 +152,11 @@ void UEngineWindow::Open(std::string_view _TitleName /*= "Window"*/)
     {
         // 윈도우 창 만들어.
         Create("Window");
+    }
+
+    if (0 == WindowHandle)
+    {
+        return;
     }
 
     // ShowWindow 함수가 호출되면 이제서야 창이 뜬다.
