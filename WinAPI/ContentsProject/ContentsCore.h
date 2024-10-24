@@ -3,7 +3,7 @@
 
 
 
-// 설명 :
+// 설명 : 엔진 루프에 컨텐츠를 올려주는 클래스
 class ContentsCore : public UContentsCore
 {
 public:
@@ -22,6 +22,6 @@ protected:
 	void Tick() override;
 
 private:
-
+	ULevel* TitleLevel;
 };
 

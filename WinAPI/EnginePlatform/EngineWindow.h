@@ -26,6 +26,11 @@ public:
 
 	void Open(std::string_view _TitleName = "Window");
 
+	inline HDC GetBackBuffer()
+	{
+		return BackBuffer;
+	}
+
 protected:
 
 private:
@@ -35,6 +40,7 @@ private:
 	// 창을 여러 개 띄울거라면 창 클래스를 map에 저장
 	static std::map<std::string, WNDCLASSEXA> WindowClasss;
 
+	HDC BackBuffer = nullptr;
 	HWND WindowHandle = nullptr; // 윈도우 창 주소(몇 번째 창)
 };
 

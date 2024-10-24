@@ -66,7 +66,10 @@ int UEngineWindow::WindowMessageLoop(EngineDelegate _StartFunction, EngineDelega
     MSG msg = MSG();
 
     // 프로그램이 시작하고 딱 한번 로드되어야 할 것 : 이미지
-    _StartFunction();
+    if (true == _StartFunction.IsBind())
+    {
+        _StartFunction();   
+    }
 
     // 기본 메시지 루프입니다:
     while (0 != WindowCount)
@@ -143,6 +146,9 @@ void UEngineWindow::Create(std::string_view _TitleName, std::string_view _ClassN
         return;
     }
 
+    // GetDC는 윈도우 화면에 HDC와 윈도우를 연결한다.
+    // 윈도우 화면에 그릴 HDC는 여기서 생성한다.
+    BackBuffer = GetDC(WindowHandle);
 }
 
 void UEngineWindow::Open(std::string_view _TitleName /*= "Window"*/)

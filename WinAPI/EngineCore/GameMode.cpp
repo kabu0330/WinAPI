@@ -1,5 +1,5 @@
 #include "PreCompile.h"
-#include "AGameMode.h"
+#include "GameMode.h"
 
 AGameMode::AGameMode()
 {

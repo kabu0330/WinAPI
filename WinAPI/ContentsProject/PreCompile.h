@@ -1,12 +1,4 @@
 #pragma once
 
-// OS
-#include <Windows.h>
+#include <EngineCore/PreCompile.h>
 
-// std
-#include <list>
-#include <vector>
-#include <map>
-#include <string>
-#include <iostream>
-#include <functional>

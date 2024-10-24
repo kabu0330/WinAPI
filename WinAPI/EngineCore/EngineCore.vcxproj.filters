@@ -1,37 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="..\EngineBase\PreCompile.h">
-      <Filter>00_PreCompile</Filter>
-    </ClInclude>
     <ClInclude Include="Actor.h">
       <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Level.h">
       <Filter>Object\Level</Filter>
     </ClInclude>
-    <ClInclude Include="AGameMode.h">
-      <Filter>Object\Actor</Filter>
-    </ClInclude>
     <ClInclude Include="EngineAPICore.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="PreCompile.h">
+      <Filter>00_PreCompile</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMode.h">
+      <Filter>Object\Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\EngineBase\PreCompile.cpp">
-      <Filter>00_PreCompile</Filter>
-    </ClCompile>
     <ClCompile Include="Actor.cpp">
       <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Level.cpp">
       <Filter>Object\Level</Filter>
     </ClCompile>
-    <ClCompile Include="AGameMode.cpp">
-      <Filter>Object\Actor</Filter>
-    </ClCompile>
     <ClCompile Include="EngineAPICore.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="PreCompile.cpp">
+      <Filter>00_PreCompile</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMode.cpp">
+      <Filter>Object\Actor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
