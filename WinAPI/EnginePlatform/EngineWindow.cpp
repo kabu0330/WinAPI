@@ -59,17 +59,17 @@ void UEngineWindow::EngineWindowInit(HINSTANCE _Instance)
     //CreateWindowClass(wcex);
 }
 
-int UEngineWindow::WindowMessageLoop(EngineDelegate _FrameFuction)
+int UEngineWindow::WindowMessageLoop(EngineDelegate _StartFunction, EngineDelegate _FrameFunction)
 {
     // 윈도우 단축키
     // HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINDOWSPROJECT2));
     MSG msg = MSG();
 
     // 프로그램이 시작하고 딱 한번 로드되어야 할 것 : 이미지
-
+    _StartFunction();
 
     // 기본 메시지 루프입니다:
-    while (WindowCount)
+    while (0 != WindowCount)
     {
         // 윈도우 단축키는 사용하지 않을 것이므로 TranslateAccelerator 함수는 항상 false임
         // if (!TranslateAccelerator(msg.hwnd, nullptr, &msg))
@@ -83,9 +83,9 @@ int UEngineWindow::WindowMessageLoop(EngineDelegate _FrameFuction)
 
         // 1. 메시지가 없는 시간에 내 게임 엔진을 돌린다.
         // 2. 메시지 처리하고 나서 내 게임 엔진을 돌린다.
-        if (true == _FrameFuction.IsBind())
+        if (true == _FrameFunction.IsBind())
         {
-            _FrameFuction(); // 내 게임 엔진
+            _FrameFunction(); // 내 게임 엔진
         }
     }
 

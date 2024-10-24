@@ -4,17 +4,51 @@
     <ClInclude Include="..\EngineBase\PreCompile.h">
       <Filter>00_PreCompile</Filter>
     </ClInclude>
-    <ClInclude Include="EngineAPICore.h" />
+    <ClInclude Include="Actor.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Level.h">
+      <Filter>Object\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="AGameMode.h">
+      <Filter>Object\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineAPICore.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\EngineBase\PreCompile.cpp">
       <Filter>00_PreCompile</Filter>
     </ClCompile>
-    <ClCompile Include="EngineAPICore.cpp" />
+    <ClCompile Include="Actor.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Object\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="AGameMode.cpp">
+      <Filter>Object\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineAPICore.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
       <UniqueIdentifier>{f82791f7-6692-45ab-84df-e0f058dfb3f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{73f3adde-1854-4009-97c9-2330e66769cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{97b398ec-2d85-4ff9-ad9c-43d63ad1d173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Level">
+      <UniqueIdentifier>{56c89f27-d8d0-49e4-a434-be93ba0663c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Actor">
+      <UniqueIdentifier>{342ac68a-f183-4ee0-b001-e31e83bbc3fe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

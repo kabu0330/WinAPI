@@ -1,7 +1,11 @@
 #include "PreCompile.h"
 #include "EngineAPICore.h"
 
+#include <EnginePlatform/EngineWindow.h>
+#include <EngineBase/EngineDelegate.h>
+
 UEngineAPICore* UEngineAPICore::MainCore = nullptr;
+UContentsCore* UEngineAPICore::UserCore = nullptr;
 
 UEngineAPICore::UEngineAPICore()
 {
@@ -10,19 +14,35 @@ UEngineAPICore::UEngineAPICore()
 
 UEngineAPICore::~UEngineAPICore()
 {
+	std::map<std::string, class ULevel*>::iterator StartIter = Levels.begin();
+	std::map<std::string, class ULevel*>::iterator EndIter = Levels.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		if (nullptr != StartIter->second)
+		{
+			delete StartIter->second;
+			StartIter->second = nullptr;
+		}
+	}
+
+	Levels.clear();
 }
 
-int UEngineAPICore::EngineStart(HINSTANCE _Inst)
+int UEngineAPICore::EngineStart(HINSTANCE _Inst, UContentsCore* _UserCore)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+	UserCore = _UserCore;
+
 	// 창 클래스 등록
 	UEngineWindow::EngineWindowInit(_Inst);
 
 	//UEngineWindow NewWindow;
 	//NewWindow.Open();
 
-	UEngineAPICore Core;
-
 	// 윈도우 창 생성
+	UEngineAPICore Core = UEngineAPICore();
 	Core.EngineMainWindow.Open(); 
 	
 	// 왜 함수 포인터로 엔진 루프를 돌리냐?
@@ -31,19 +51,23 @@ int UEngineAPICore::EngineStart(HINSTANCE _Inst)
 	// EngineWindow에 UEngineAPICore 객체를 만들지 않고 UEngineAPICore::EngineLoop 함수를 윈도우 메시지 루프에서 돌리기 위해
 	// 객체의 생성 없이 함수만 넘겨서 실행시키기 위해 함수 포인터를 이용한 방법을 선택했다.
 	// 또 다른 방법으론 가상함수를 이용하는 방법도 있다.
-	EngineDelegate NewDel;
-	NewDel += EngineLoop;
+	EngineDelegate Start = EngineDelegate(std::bind(EngineBeginPlay));
+	EngineDelegate FrameLoop = EngineDelegate(std::bind(EngineTick));;
 
-	// 메시지 무한 루프 -> 게임 프레임 돌릴거임
-	return UEngineWindow::WindowMessageLoop(NewDel);
+	return UEngineWindow::WindowMessageLoop(Start, FrameLoop);
 }
 
 // 
 
-void UEngineAPICore::EngineLoop()
+void UEngineAPICore::EngineBeginPlay()
 {
+	UserCore->BeginPlay();
+}
+
+void UEngineAPICore::EngineTick()
+{
+	UserCore->Tick();
 	MainCore->Tick();
-	MainCore->Render();
 }
 
 void UEngineAPICore::Tick()

@@ -152,7 +152,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\EngineBase\PreCompile.h" />
+    <ClInclude Include="Actor.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="AGameMode.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="EngineAPICore.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Level.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -170,7 +182,19 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">PreCompile.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PreCompile.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Actor.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="AGameMode.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="EngineAPICore.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Level.cpp">
       <SubType>
       </SubType>
     </ClCompile>

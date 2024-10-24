@@ -4,11 +4,13 @@
     <ClInclude Include="..\EngineBase\PreCompile.h">
       <Filter>00_PreCompile</Filter>
     </ClInclude>
+    <ClInclude Include="ContentsCore.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\EngineBase\PreCompile.cpp">
       <Filter>00_PreCompile</Filter>
     </ClCompile>
+    <ClCompile Include="ContentsCore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

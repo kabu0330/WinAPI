@@ -5,7 +5,9 @@
 #pragma comment (lib, "EngineBase.lib")
 #pragma comment (lib, "EnginePlatform.lib")
 
-// 설명 : 하위 프로젝트에서 엔진에 접근하여 
+#include "Level.h"
+
+// 설명 : 하위 프로젝트에서 가상함수로 엔진에 요청
 class UContentsCore
 {
 public:
@@ -18,7 +20,7 @@ public:
 class UEngineAPICore
 {
 public:
-	// constrcuter destructer
+	// constructer destructer
 	UEngineAPICore();
 	~UEngineAPICore();
 
@@ -28,9 +30,9 @@ public:
 	UEngineAPICore& operator=(const UEngineAPICore& _Other) = delete;
 	UEngineAPICore& operator=(UEngineAPICore&& _Other) noexcept = delete;
 
-	static int EngineStart(HINSTANCE _Inst);
+	static int EngineStart(HINSTANCE _Inst, UContentsCore* _UserCore);
 
-	class UEngineAPICore* GetCore()
+	static class UEngineAPICore* GetCore()
 	{
 		return MainCore;
 	}
@@ -40,18 +42,27 @@ public:
 		return EngineMainWindow;
 	}
 
+	void CreateLevel(std::string_view _LevelName)
+	{
+		ULevel* NewLevel = new ULevel();
+
+	}
+
 protected:
 
 private:
-	static void EngineLoop();
-	
+	static void EngineBeginPlay();
+	static void EngineTick();
 	static UEngineAPICore* MainCore;
+	static UContentsCore* UserCore;
+	
 
 	UEngineWindow EngineMainWindow;
-	
+	std::map<std::string, class ULevel*> Levels;
+
+
 	void Tick();
 	void Render();
-
 };
 
 // 엔진의 기능을 컨텐츠에서 쓰고 싶다면
