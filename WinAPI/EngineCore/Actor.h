@@ -18,7 +18,7 @@ public:
 	AActor& operator=(AActor&& _Other) noexcept = delete;
 
 	virtual void BeginPlay() {}
-	virtual void Tick() {}
+	virtual void Tick(float _DeltaTime) {}
 	virtual void Render();
 
 	class ULevel* GetWorld()

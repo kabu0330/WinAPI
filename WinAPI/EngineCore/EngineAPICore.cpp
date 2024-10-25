@@ -43,7 +43,7 @@ int UEngineAPICore::EngineStart(HINSTANCE _Inst, UContentsCore* _UserCore)
 	//UEngineWindow NewWindow;
 	//NewWindow.Open();
 
-	// 윈도우 창 생성
+	// 윈도우 창 생성, 엔진을 관리할 엔진코어 생성
 	UEngineAPICore Core = UEngineAPICore();
 	Core.EngineMainWindow.Open(); 
 	
@@ -61,24 +61,28 @@ int UEngineAPICore::EngineStart(HINSTANCE _Inst, UContentsCore* _UserCore)
 
 void UEngineAPICore::EngineBeginPlay()
 {
+	//
 	UserCore->BeginPlay();
 }
 
 void UEngineAPICore::EngineTick()
 {
-	UserCore->Tick();
-	MainCore->Tick();
+	UserCore->Tick(); // 컨텐츠 코어
+	MainCore->Tick(); // 레벨의 Tick과 Render 
 }
 
 void UEngineAPICore::Tick()
 {
+	DeltaTimer.TimeCheck();
+	float DeltaTime = DeltaTimer.GetDeltaTime();
+
 	if (nullptr == CurLevel)
 	{
 		MSGASSERT("엔진 코어에 현재 레벨이 지정되지 않았습니다.");
 		return;
 	}
 
-	CurLevel->Tick();
+	CurLevel->Tick(DeltaTime);
 	CurLevel->Render();
 }
 

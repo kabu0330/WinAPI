@@ -21,7 +21,7 @@ ULevel::~ULevel()
 	}
 }
 
-void ULevel::Tick()
+void ULevel::Tick(float _DeltaTime)
 {
 	std::list<AActor*>::iterator StartIter = AllActors.begin();
 	std::list<AActor*>::iterator EndIter = AllActors.end();
@@ -29,7 +29,7 @@ void ULevel::Tick()
 	for (; StartIter != EndIter; ++StartIter)
 	{
 		AActor* CurActor = *StartIter;
-		CurActor->Tick();
+		CurActor->Tick(_DeltaTime);
 	}
 }
 

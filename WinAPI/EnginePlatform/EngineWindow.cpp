@@ -29,19 +29,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 // (UEngineWindow) EngineWindowInit → CreateWindowClass → RegisterClassExA → WindowClasss → UEngineWindow → Open → Create → ShowWindow → UpdateWindow
+// 윈도우 창 클래스의 구성을 정의
 void UEngineWindow::EngineWindowInit(HINSTANCE _Instance)
 {
+    // 내 프로그램의 주소를 저장
     hInstance = _Instance; 
 
-    // 윈도우 창 클래스의 구성을 정의
+    // 윈도우 창을 정의하기 위한 구조체(클래스)
     WNDCLASSEXA wcex;
 
     wcex.cbSize = sizeof(WNDCLASSEX);
-
     wcex.style = CS_HREDRAW | CS_VREDRAW;
+
+    // 창 클래스에서 발생하는 메시지를 처리할 함수
     wcex.lpfnWndProc = WndProc; // 함수 포인터
     // C스타일에서는 객체지향을 사용할 수 없으므로 함수 포인터로 호출해줄 수 밖에 없다. 
-    // 창 클래스에서 발생하는 메시지를 처리할 함수
 
     wcex.cbClsExtra = 0;
     wcex.cbWndExtra = 0;
@@ -59,9 +61,10 @@ void UEngineWindow::EngineWindowInit(HINSTANCE _Instance)
     //CreateWindowClass(wcex);
 }
 
+// 윈도우 메시지 루프(PeekMessage)
 int UEngineWindow::WindowMessageLoop(EngineDelegate _StartFunction, EngineDelegate _FrameFunction)
 {
-    // 윈도우 단축키
+    // 윈도우 단축키관련 변수
     // HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_WINDOWSPROJECT2));
     MSG msg = MSG();
 
@@ -95,11 +98,12 @@ int UEngineWindow::WindowMessageLoop(EngineDelegate _StartFunction, EngineDelega
     return (int)msg.wParam;
 }
 
+// 창 클래스를 등록하고 WindowClass에 저장
 void UEngineWindow::CreateWindowClass(const WNDCLASSEXA& _Class)
 {
     // 일반적인 map의 사용법 
-    std::map<std::string, WNDCLASSEXA>::iterator EndIter = WindowClasss.end();
     std::map<std::string, WNDCLASSEXA>::iterator FindIter = WindowClasss.find(std::string(_Class.lpszClassName));
+    std::map<std::string, WNDCLASSEXA>::iterator EndIter = WindowClasss.end();
 
     // C++ 17버전 이상에서는 bool로 반환해주는 contains 함수가 있다.
     // find 함수로 찾다가 없으면 end를 반환한다.

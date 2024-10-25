@@ -1,6 +1,6 @@
 #pragma once
 
-// 설명 :
+// 설명 : 게임 엔진 로직 저장 및 실행
 class EngineDelegate
 {
 public:

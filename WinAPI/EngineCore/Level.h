@@ -17,7 +17,7 @@ public:
 	ULevel& operator=(const ULevel& _Other) = delete;
 	ULevel& operator=(ULevel&& _Other) noexcept = delete;
 
-	void Tick();
+	void Tick(float _DeltaTime);
 	void Render();
 
 	template<typename ActorType>
@@ -38,12 +38,17 @@ private:
 	template<typename GameModeType, typename MainPawnType>
 	void CreateGameMode()
 	{
+		// 게임의 관리와 규칙을 설정할 게임 모드
 		GameMode = new GameModeType();
+
+		// 플레이어
 		MainPawn = new MainPawnType();
 
+		// ULevel이 유저가 보는 '월드'임
 		MainPawn->World = this;
 		GameMode->World = this;
 
+		// 초기 세팅
 		GameMode->BeginPlay();
 		MainPawn->BeginPlay();
 

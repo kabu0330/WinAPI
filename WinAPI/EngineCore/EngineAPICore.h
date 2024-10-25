@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <EnginePlatform/EngineWindow.h>
+#include <EngineBase/UEngineTimer.h>
 
 #pragma comment (lib, "EngineBase.lib")
 #pragma comment (lib, "EnginePlatform.lib")
@@ -16,7 +17,7 @@ public:
 };
 
 // 설명 : 게임 엔진
-// 설정 : 창 크기 설정
+// 설정 : 윈도우 생성, 레벨 관리, 컨텐츠 Tick/Render 루프
 class UEngineAPICore
 {
 public:
@@ -29,6 +30,7 @@ public:
 	UEngineAPICore(UEngineAPICore&& _Other) noexcept = delete;
 	UEngineAPICore& operator=(const UEngineAPICore& _Other) = delete;
 	UEngineAPICore& operator=(UEngineAPICore&& _Other) noexcept = delete;
+	//
 
 	static int EngineStart(HINSTANCE _Inst, UContentsCore* _UserCore);
 
@@ -63,8 +65,10 @@ private:
 	static UEngineAPICore* MainCore;
 	static UContentsCore* UserCore;
 	
+	UEngineTimer  DeltaTimer       = UEngineTimer();
+	UEngineWindow EngineMainWindow = UEngineWindow();
 
-	UEngineWindow EngineMainWindow;
+
 	std::map<std::string, class ULevel*> Levels;
 
 	class ULevel* CurLevel = nullptr;
