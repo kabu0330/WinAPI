@@ -12,6 +12,7 @@
     </ClInclude>
     <ClInclude Include="Player.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Room.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -25,6 +26,7 @@
     </ClCompile>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Room.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

@@ -1,5 +1,7 @@
 #include "PreCompile.h"
 #include "PlayGameMode.h"
+#include "Room.h"
+#include <EngineCore/EngineAPICore.h>
 
 APlayGameMode::APlayGameMode()
 {
@@ -19,6 +21,18 @@ void APlayGameMode::BeginPlay()
 	
 	// Player의 BeginPlay 함수에서도 만들어도 동일한 효과를 볼 수 있지만
 	// Player로서의 순수한 독립성을 지켜주기 위해서 Player의 기능이 아니면 모두 여기서 만든다.
+	
+	ARoom* BaseRoom    = GetWorld()->SpawnActor<ARoom>();
+	ARoom* CommonRoom0 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* CommonRoom1 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* CommonRoom2 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* CommonRoom3 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* BossRoom    = GetWorld()->SpawnActor<ARoom>();
 
+	   BaseRoom->LinkRoom(CommonRoom0, RoomDir::LEFT );
+	   BaseRoom->LinkRoom(CommonRoom1, RoomDir::RIGHT);
+	   BaseRoom->LinkRoom(CommonRoom2, RoomDir::UP   );
+	   BaseRoom->LinkRoom(CommonRoom3, RoomDir::DOWN );
+	CommonRoom3->LinkRoom(BossRoom   , RoomDir::DOWN );
 }
 
