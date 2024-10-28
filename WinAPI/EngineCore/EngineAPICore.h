@@ -48,8 +48,11 @@ public:
 	ULevel* CreateLevel(std::string_view _LevelName)
 	{
 		ULevel* NewLevel = new ULevel();
+
+		// 게임 모드가 레벨의 특성을 설정하는 중요한 객체
 		NewLevel->CreateGameMode<GameModeType, MainPawnType>();
 
+		// 레벨을 string으로 저장하고 string으로 호출한다.
 		Levels.insert({ _LevelName.data(), NewLevel });
 
 		return NewLevel;
@@ -66,11 +69,13 @@ private:
 	static UContentsCore* UserCore;
 	
 	UEngineTimer  DeltaTimer       = UEngineTimer();
-	UEngineWindow EngineMainWindow = UEngineWindow();
+	UEngineWindow EngineMainWindow = UEngineWindow(); // 엔진 메인 윈도우
 
+	// 만들어진 모든 레벨
+	std::map<std::string, class ULevel*> Levels; 
 
-	std::map<std::string, class ULevel*> Levels;
-
+	// 현재 내가 눈으로 보고 있어야 하는 레벨
+	// 화면 전환시 포인터 체인지 방식으로 레벨 전환
 	class ULevel* CurLevel = nullptr;
 
 	void Tick();

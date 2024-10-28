@@ -11,6 +11,7 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Bullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -23,6 +24,7 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Bullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

@@ -26,12 +26,12 @@ public:
 		return World;
 	}
 
-	void SetActorLoaction(FVector2D _Location)
+	void SetActorLocation(FVector2D _Location)
 	{
 		Location = _Location;
 	}
 
-	void AddActorLoaction(FVector2D _Direction)
+	void AddActorLocation(FVector2D _Direction)
 	{
 		Location += _Direction;
 	}
@@ -39,6 +39,11 @@ public:
 	void SetActorScale(FVector2D _Scale)
 	{
 		Scale = _Scale;
+	}
+
+	FVector2D GetActorLocation()
+	{
+		return Location;
 	}
 
 protected:

@@ -1,7 +1,7 @@
 #pragma once
 #include <Windows.h>
 
-// 설명 :
+// 설명 : 시간 측정 및 DeltaTime 반환
 class UEngineTimer
 {
 public:
@@ -38,14 +38,15 @@ protected:
 
 private:
 
-	LARGE_INTEGER Count = LARGE_INTEGER(); // QuadPart => 1 => 나는 1초에 1을 셀 수 있어요.
+	// LARGE_INTEGER : 64비트 정수(long long)
+	LARGE_INTEGER Count    = LARGE_INTEGER(); // QuadPart => 1 => 나는 1초에 1을 셀 수 있어요.
 	LARGE_INTEGER PrevTime = LARGE_INTEGER(); // LONGLONG QuadPart => 10000 / 1(Count)
-	LARGE_INTEGER CurTime = LARGE_INTEGER(); // LONGLONG QuadPart => 10002(Cur) - 10000(Prev) = 2(Tick)
+	LARGE_INTEGER CurTime  = LARGE_INTEGER(); // LONGLONG QuadPart => 10002(Cur) - 10000(Prev) = 2(Tick)
 
 	
 	double TimeCounter = 0.0;
-	double DeltaTime = 0.0;
-	float fDeltaTime = 0.0f;
+	double DeltaTime   = 0.0;
+	float  fDeltaTime  = 0.0f;
 
 
 };

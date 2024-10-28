@@ -11,5 +11,7 @@ APlayGameMode::~APlayGameMode()
 
 void APlayGameMode::BeginPlay()
 {
+	// 여기서 세팅
+
 }
 

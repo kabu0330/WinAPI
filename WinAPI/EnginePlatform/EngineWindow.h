@@ -31,6 +31,12 @@ public:
 		return BackBuffer;
 	}
 
+	// window 창 이름 설정
+	inline void SetWindowTitle(std::string_view Text)
+	{
+		SetWindowTextA(WindowHandle, Text.data());
+	}
+
 protected:
 
 private:

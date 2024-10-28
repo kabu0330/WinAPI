@@ -4,6 +4,7 @@
 #include <EnginePlatform/EngineWindow.h>
 #include <EngineBase/EngineDelegate.h>
 #include <EngineBase/EngineDebug.h>
+#include <EnginePlatform/EngineInput.h>
 
 UEngineAPICore* UEngineAPICore::MainCore = nullptr;
 UContentsCore* UEngineAPICore::UserCore = nullptr;
@@ -59,28 +60,38 @@ int UEngineAPICore::EngineStart(HINSTANCE _Inst, UContentsCore* _UserCore)
 	return UEngineWindow::WindowMessageLoop(Start, FrameLoop);
 }
 
+// 게임 시작 시 딱 한번만 실행될 것들
 void UEngineAPICore::EngineBeginPlay()
 {
-	//
+	// 레벨 세팅
 	UserCore->BeginPlay();
 }
 
+// 프레임 : EngineTick 함수가 1초에 몇 번 실행되냐
 void UEngineAPICore::EngineTick()
 {
-	UserCore->Tick(); // 컨텐츠 코어
-	MainCore->Tick(); // 레벨의 Tick과 Render 
+	UserCore->Tick(); // 컨텐츠 코어는 현재 사용처가 없음
+	MainCore->Tick(); // DeltaTime, 레벨의 Tick과 Render 
 }
 
 void UEngineAPICore::Tick()
 {
+	// Delta Time
 	DeltaTimer.TimeCheck();
 	float DeltaTime = DeltaTimer.GetDeltaTime();
+	//
+
+	// 입력 체크
+	UEngineInput::GetInst().KeyCheck(DeltaTime);
 
 	if (nullptr == CurLevel)
 	{
 		MSGASSERT("엔진 코어에 현재 레벨이 지정되지 않았습니다.");
 		return;
 	}
+
+	// 입력 이벤트 체크
+	UEngineInput::GetInst().EventCheck(DeltaTime);
 
 	CurLevel->Tick(DeltaTime);
 	CurLevel->Render();
