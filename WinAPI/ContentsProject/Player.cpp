@@ -55,6 +55,7 @@ void APlayer::Tick(float _DeltaTime)
 
 	if (1.0f < UEngineInput::GetInst().IsPressTime(VK_SPACE))
 	{
+		// 플레이어가 속한 레벨에 Bullet을 생성한다.
         ABullet* Ptr = GetWorld()->SpawnActor<ABullet>();
 		Ptr->SetActorLocation(GetActorLocation());
 		return;
@@ -66,7 +67,6 @@ void APlayer::LeftMove(float _DeltaTime)
 {
 	AddActorLocation(FVector2D::LEFT * _DeltaTime * Speed);
 }
-
 
 void APlayer::RightMove(float _DeltaTime)
 {

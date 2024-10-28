@@ -1,7 +1,7 @@
 #pragma once
 #include "Actor.h"
 
-// 설명 :
+// 설명 : 게임에서 가장 먼저 만들어지고 게임의 규칙을 정하는 클래스
 class AGameMode : public AActor
 {
 public:

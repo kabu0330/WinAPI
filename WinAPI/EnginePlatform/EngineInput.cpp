@@ -98,6 +98,18 @@ void UEngineInput::EventCheck(float _DeltaTime)
 
 }
 
+void UEngineInput::KeyCheck(float _DeltaTime)
+{
+	std::map<int, UEngineKey>::iterator StartIter = Keys.begin();
+	std::map<int, UEngineKey>::iterator EndIter = Keys.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		UEngineKey& CurKey = StartIter->second;
+		CurKey.KeyCheck(_DeltaTime);
+	}
+}
+
 void UEngineInput::BindAction(int _KeyIndex, KeyEvent _EventType, std::function<void(float)> _Function)
 {
 	if (false == Keys.contains(_KeyIndex))
@@ -125,18 +137,7 @@ void UEngineInput::BindAction(int _KeyIndex, KeyEvent _EventType, std::function<
 	}
 }
 
-void UEngineInput::KeyCheck(float _DeltaTime)
-{
-	std::map<int, UEngineKey>::iterator StartIter = Keys.begin();
-	std::map<int, UEngineKey>::iterator EndIter = Keys.end();
-
-	for (; StartIter != EndIter; ++StartIter)
-	{
-		UEngineKey& CurKey = StartIter->second;
-		CurKey.KeyCheck(_DeltaTime);
-	}
-}
-
+// 생성자에서 입력을 받을 키를 모두 Keys에 넣는다.
 UEngineInput::UEngineInput()
 {
 	// 기본 알파뱃
@@ -167,6 +168,7 @@ UEngineInput::UEngineInput()
 	Keys.insert({ 'N', UEngineKey('N') });
 	Keys.insert({ 'M', UEngineKey('M') });
 
+	// 숫자
 	Keys.insert({ '1', UEngineKey('1') });
 	Keys.insert({ '2', UEngineKey('2') });
 	Keys.insert({ '3', UEngineKey('3') });
@@ -178,8 +180,11 @@ UEngineInput::UEngineInput()
 	Keys.insert({ '9', UEngineKey('9') });
 	Keys.insert({ '0', UEngineKey('0') });
 
+	// 마우스
 	Keys.insert({ VK_LBUTTON , UEngineKey(VK_LBUTTON) });
 	Keys.insert({ VK_RBUTTON , UEngineKey(VK_RBUTTON) });
+
+	// 방향키
 	Keys.insert({ VK_LEFT ,    UEngineKey(VK_LEFT) });
 	Keys.insert({ VK_RIGHT ,   UEngineKey(VK_RIGHT) });
 	Keys.insert({ VK_UP ,      UEngineKey(VK_UP) });
@@ -190,6 +195,7 @@ UEngineInput::UEngineInput()
 	Keys.insert({ VK_UP,    UEngineKey(VK_UP) });
 	Keys.insert({ VK_DOWN,  UEngineKey(VK_DOWN) });
 
+	// 기타 키
 	Keys.insert({ VK_SPACE		, UEngineKey(VK_SPACE) });
 	Keys.insert({ VK_PRIOR		, UEngineKey(VK_PRIOR) });
 	Keys.insert({ VK_NEXT		, UEngineKey(VK_NEXT) });
@@ -203,7 +209,7 @@ UEngineInput::UEngineInput()
 	Keys.insert({ VK_DELETE		, UEngineKey(VK_DELETE) });
 	Keys.insert({ VK_HELP		, UEngineKey(VK_HELP) });
 
-
+	// 넘버패드
 	Keys.insert({ VK_NUMPAD0	, UEngineKey(VK_NUMPAD0) });
 	Keys.insert({ VK_NUMPAD1	, UEngineKey(VK_NUMPAD1) });
 	Keys.insert({ VK_NUMPAD2	, UEngineKey(VK_NUMPAD2) });
@@ -220,6 +226,8 @@ UEngineInput::UEngineInput()
 	Keys.insert({ VK_SUBTRACT	, UEngineKey(VK_SUBTRACT) });
 	Keys.insert({ VK_DECIMAL	, UEngineKey(VK_DECIMAL) });
 	Keys.insert({ VK_DIVIDE	    , UEngineKey(VK_DIVIDE) });
+
+	// Function 키
 	Keys.insert({ VK_F1		    , UEngineKey(VK_F1) });
 	Keys.insert({ VK_F2		    , UEngineKey(VK_F2) });
 	Keys.insert({ VK_F3		    , UEngineKey(VK_F3) });

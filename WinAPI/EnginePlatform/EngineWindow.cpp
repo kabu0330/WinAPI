@@ -161,7 +161,7 @@ void UEngineWindow::Open(std::string_view _TitleName /*= "Window"*/)
     if (nullptr == WindowHandle)
     {
         // 윈도우 창 만들어.
-        Create("Window");
+        Create(_TitleName);
     }
 
     if (0 == WindowHandle)

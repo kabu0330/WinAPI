@@ -1,7 +1,7 @@
 #pragma once
 #include <EngineCore/GameMode.h>
 
-// 설명 :
+// 설명 : Play 레벨에서 가장 먼저 세팅할 것들을 입력하는 클래스
 class APlayGameMode : public AGameMode
 {
 public:

@@ -84,14 +84,14 @@ void UEngineAPICore::Tick()
 	// 입력 체크
 	UEngineInput::GetInst().KeyCheck(DeltaTime);
 
+	// 입력 이벤트 체크
+	UEngineInput::GetInst().EventCheck(DeltaTime);
+
 	if (nullptr == CurLevel)
 	{
 		MSGASSERT("엔진 코어에 현재 레벨이 지정되지 않았습니다.");
 		return;
 	}
-
-	// 입력 이벤트 체크
-	UEngineInput::GetInst().EventCheck(DeltaTime);
 
 	CurLevel->Tick(DeltaTime);
 	CurLevel->Render();
