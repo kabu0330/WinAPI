@@ -151,7 +151,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h">
+    <ClInclude Include="Tear.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -174,7 +174,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp">
+    <ClCompile Include="Tear.cpp">
       <SubType>
       </SubType>
     </ClCompile>

@@ -5,38 +5,56 @@
       <Filter>00_PreCompile</Filter>
     </ClInclude>
     <ClInclude Include="PlayGameMode.h">
-      <Filter>GameMode</Filter>
+      <Filter>02_GameMode</Filter>
     </ClInclude>
     <ClInclude Include="ContentsCore.h">
-      <Filter>Core</Filter>
+      <Filter>01_Core</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="Room.h" />
+    <ClInclude Include="Player.h">
+      <Filter>03_Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>04_Play</Filter>
+    </ClInclude>
+    <ClInclude Include="Tear.h">
+      <Filter>04_Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
       <Filter>00_PreCompile</Filter>
     </ClCompile>
     <ClCompile Include="PlayGameMode.cpp">
-      <Filter>GameMode</Filter>
+      <Filter>02_GameMode</Filter>
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp">
-      <Filter>Core</Filter>
+      <Filter>01_Core</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Room.cpp" />
+    <ClCompile Include="Player.cpp">
+      <Filter>03_Global</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>04_Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Tear.cpp">
+      <Filter>04_Play</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
       <UniqueIdentifier>{95e63637-c58b-41a6-9b12-de93b264b045}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameMode">
+    <Filter Include="01_Core">
+      <UniqueIdentifier>{97b010e1-9c4d-453f-a487-043b33e7fea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_GameMode">
       <UniqueIdentifier>{43dc0062-0f27-4a2f-9179-1c6fb089c4e8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{97b010e1-9c4d-453f-a487-043b33e7fea3}</UniqueIdentifier>
+    <Filter Include="03_Global">
+      <UniqueIdentifier>{956971ea-0454-4048-b8ea-d4e7bbd1825b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Play">
+      <UniqueIdentifier>{6dfcefa1-122c-4926-907e-1e8189ea5436}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

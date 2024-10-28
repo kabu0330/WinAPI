@@ -1,7 +1,7 @@
 #include "PreCompile.h"
 #include "Player.h"
 #include <EnginePlatform/EngineInput.h>
-#include "Bullet.h"
+#include "Tear.h"
 
 APlayer::APlayer()
 {
@@ -56,7 +56,7 @@ void APlayer::Tick(float _DeltaTime)
 	if (1.0f < UEngineInput::GetInst().IsPressTime(VK_SPACE))
 	{
 		// 플레이어가 속한 레벨에 Bullet을 생성한다.
-        ABullet* Ptr = GetWorld()->SpawnActor<ABullet>();
+        ATear* Ptr = GetWorld()->SpawnActor<ATear>();
 		Ptr->SetActorLocation(GetActorLocation());
 		return;
 	}

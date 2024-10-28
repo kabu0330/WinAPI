@@ -1,16 +1,16 @@
 #include "PreCompile.h"
-#include "Bullet.h"
+#include "Tear.h"
 
-ABullet::ABullet()
+ATear::ATear()
 {
 	SetActorScale({ 50, 50 });
 }
 
-ABullet::~ABullet()
+ATear::~ATear()
 {
 }
 
-void ABullet::Tick(float _DeltaTime)
+void ATear::Tick(float _DeltaTime)
 {
 	AddActorLocation(FVector2D::RIGHT * _DeltaTime * 300.0f);
 }

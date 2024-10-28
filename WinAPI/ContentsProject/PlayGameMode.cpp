@@ -23,16 +23,16 @@ void APlayGameMode::BeginPlay()
 	// Player로서의 순수한 독립성을 지켜주기 위해서 Player의 기능이 아니면 모두 여기서 만든다.
 	
 	ARoom* BaseRoom    = GetWorld()->SpawnActor<ARoom>();
-	ARoom* CommonRoom0 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* CommonRoom1 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* CommonRoom2 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* CommonRoom3 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* BossRoom    = GetWorld()->SpawnActor<ARoom>();
 
-	   BaseRoom->LinkRoom(CommonRoom0, RoomDir::LEFT );
-	   BaseRoom->LinkRoom(CommonRoom1, RoomDir::RIGHT);
-	   BaseRoom->LinkRoom(CommonRoom2, RoomDir::UP   );
-	   BaseRoom->LinkRoom(CommonRoom3, RoomDir::DOWN );
-	CommonRoom3->LinkRoom(BossRoom   , RoomDir::DOWN );
+	   BaseRoom->LinkRoom(MinionRoom0, RoomDir::LEFT );
+	   BaseRoom->LinkRoom(MinionRoom1, RoomDir::RIGHT);
+	   BaseRoom->LinkRoom(MinionRoom2, RoomDir::UP   );
+	   BaseRoom->LinkRoom(MinionRoom3, RoomDir::DOWN );
+	MinionRoom3->LinkRoom(BossRoom   , RoomDir::DOWN );
 }
 

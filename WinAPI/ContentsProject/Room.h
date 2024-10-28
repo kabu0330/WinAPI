@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include <map>
 
 enum class RoomDir
 {
@@ -25,10 +26,15 @@ public:
 	ARoom& operator=(const ARoom& _Other) = delete;
 	ARoom& operator=(ARoom&& _Other) noexcept = delete;
 
+	bool IsLinking(ARoom* _Room);
+	bool InterLinkRoom(ARoom* _Room, RoomDir _Dir);
 	ARoom* LinkRoom(ARoom* _Room, RoomDir _Dir);
+
 protected:
 
 private:
-	ARoom* Room[4] = { 0, };
+	//ARoom* Rooms[static_cast<int>(RoomDir::MAX)] = { nullptr, };
+	//RoomDir RoomDir = RoomDir::NONE;
+	std::map<RoomDir, ARoom*> Rooms;
 };
 
