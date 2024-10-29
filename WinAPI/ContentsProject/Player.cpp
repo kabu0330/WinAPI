@@ -2,11 +2,12 @@
 #include "Player.h"
 #include <EnginePlatform/EngineInput.h>
 #include "Tear.h"
+#include "Global.h"
 
 APlayer::APlayer()
 {
-	SetActorLocation({ 300, 300 });
-	SetActorScale({ 100, 100 });
+	SetActorLocation(Global::WindowSize.Half());
+	SetActorScale({ 20, 20 });
 }
 
 APlayer::~APlayer()

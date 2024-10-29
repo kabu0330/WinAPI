@@ -82,7 +82,11 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 
 	_Room->LinkRoom(this, _Dir);
 
+
 	// 위치 조정
+	// 문제점 1. 방을 연결한 횟수만큼 중복해서 그려지는 문제
+	// 문제점 2. 메모리 릭
+	// 문제점 3. 방 크기가 ContentsWindow에서 초기화 한 창 크기가 아닌 전역변수를 초기화 할 때의 창 크기 값을 기준으로 방 크기가 설정되는 문제
 	if (RoomDir::LEFT == _Room->Directon)
 	{
 		_Room->SetActorLocation({ GetRightPos().X + GetActorScale().Half().X, GetActorLocation().Y });
