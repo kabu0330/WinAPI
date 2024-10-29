@@ -48,6 +48,12 @@ public:
 		return Transform.Location;
 	}
 
+	// Ãß°¡
+	FVector2D GetActorScale()
+	{
+		return Transform.Scale;
+	}
+
 protected:
 
 private:

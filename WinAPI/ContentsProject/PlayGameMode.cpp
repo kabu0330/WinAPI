@@ -29,11 +29,11 @@ void APlayGameMode::BeginPlay()
 	ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* BossRoom    = GetWorld()->SpawnActor<ARoom>();
 
-	   BaseRoom->LinkRoom(MinionRoom0, RoomDir::LEFT );
-	   BaseRoom->LinkRoom(MinionRoom1, RoomDir::RIGHT);
-	   BaseRoom->LinkRoom(MinionRoom2, RoomDir::UP   );
-	   BaseRoom->LinkRoom(MinionRoom3, RoomDir::DOWN );
-	MinionRoom3->LinkRoom(BossRoom   , RoomDir::DOWN );
+	   BaseRoom->InterLinkRoom(MinionRoom0, RoomDir::LEFT );
+	   BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::RIGHT);
+	   BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::UP   );
+	   BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN );
+	MinionRoom3->InterLinkRoom(BossRoom   , RoomDir::DOWN );
 
 	int a = 0;
 }

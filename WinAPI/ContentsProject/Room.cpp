@@ -14,6 +14,17 @@ ARoom::ARoom()
 ARoom::~ARoom()
 {
 	// map에서 insert한 자료들을 모두 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
+	//std::map<RoomDir, ARoom*>::iterator StartIter = Rooms.begin();
+	//std::map<RoomDir, ARoom*>::iterator EndIter = Rooms.end();
+
+	//for (; StartIter != EndIter; ++StartIter)
+	//{
+	//	if (nullptr != StartIter->second)
+	//	{
+	//		delete StartIter->second;
+	//		StartIter->second = nullptr;
+	//	}
+	//}
 }
 
 void ARoom::BeginPlay()
@@ -24,60 +35,7 @@ void ARoom::BeginPlay()
 
 void ARoom::Tick(float _DeltaTime)
 {
-	std::map<RoomDir, ARoom*>::iterator StartIter = Rooms.begin();
-	std::map<RoomDir, ARoom*>::iterator EndIter = Rooms.end();
 
-	for (; StartIter != EndIter; ++StartIter)
-	{
-		ARoom* CurRoom = StartIter->second;
-		CurRoom->SetActorLocation(Global::WindowSize.Half());
-	}
-}
-
-FVector2D ARoom::RoomLocation()
-{
-	std::map<RoomDir, ARoom*>::iterator StartIter = Rooms.begin();
-	std::map<RoomDir, ARoom*>::iterator EndIter = Rooms.end();
-
-
-	for (; StartIter != EndIter; ++StartIter)
-	{
-		ARoom* CurRoom = StartIter->second;
-		RoomDir RoomKey = StartIter->first;
-
-		Direction = CurRoom->RoomDirection(RoomKey);
-
-		FVector2D CurPos = GetActorLocation();
-		CurRoom->SetActorLocation(CurPos );
-	}
-	return FVector2D();
-}
-
-FVector2D ARoom::RoomDirection(RoomDir _Dir)
-{
-	
-	switch (_Dir)
-	{
-	case RoomDir::NONE:
-		break;
-	case RoomDir::LEFT:
-		return FVector2D::LEFT;
-		break;
-	case RoomDir::RIGHT:
-		return FVector2D::RIGHT;
-		break;
-	case RoomDir::UP:
-		return FVector2D::UP;
-		break;
-	case RoomDir::DOWN:
-		return FVector2D::DOWN;
-		break;
-	case RoomDir::MAX:
-		break;
-	default:
-		break;
-	}
-	return FVector2D();
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
@@ -98,26 +56,51 @@ bool ARoom::IsLinking(ARoom* _Room)
 bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 {
 	this->LinkRoom(_Room, _Dir);
+	FVector2D CurLocation = this->GetActorLocation();
 
 	// _Room과 this의 문 위치는 서로 정반대가 되어야 한다.
 	if (RoomDir::LEFT == _Dir)
 	{
 		_Dir = RoomDir::RIGHT;
+		_Room->Directon = _Dir;
 	}
 	else if (RoomDir::RIGHT == _Dir)
 	{
 		_Dir = RoomDir::LEFT;
+		_Room->Directon = _Dir;
 	}
 	else if (RoomDir::UP == _Dir)
 	{
 		_Dir = RoomDir::DOWN;
+		_Room->Directon = _Dir;
 	}
 	else if (RoomDir::DOWN == _Dir)
 	{
 		_Dir = RoomDir::UP;
+		_Room->Directon = _Dir;
 	}
 
 	_Room->LinkRoom(this, _Dir);
+
+	// 위치 조정
+	if (RoomDir::LEFT == _Room->Directon)
+	{
+		_Room->SetActorLocation({ GetRightPos().X + GetActorScale().Half().X, GetActorLocation().Y });
+	}
+	else if (RoomDir::RIGHT == _Room->Directon)
+	{
+		_Room->SetActorLocation({ GetLeftPos().X - GetActorScale().Half().X, GetActorLocation().Y });
+	}
+	else if (RoomDir::UP == _Room->Directon)
+	{
+		float Result0 = GetDownPos().Y;
+		float Result1 = GetActorScale().Half().Y;
+		_Room->SetActorLocation({ GetActorLocation().X, GetDownPos().Y + GetActorScale().Half().Y });
+	}
+	else if (RoomDir::DOWN == _Room->Directon)
+	{
+		_Room->SetActorLocation({ GetActorLocation().X, GetUpPos().Y - GetActorScale().Half().Y });
+	}
 
 	return true;
 }
@@ -142,24 +125,28 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
 		break;
 	case RoomDir::LEFT:
 	{
+		//Direction = FVector2D::LEFT;
 		Rooms.insert({ RoomDir::LEFT, _Room });
 		return Rooms.find(RoomDir::LEFT)->second;
 		break;
 	}
 	case RoomDir::RIGHT:
 	{
+		//Direction = FVector2D::RIGHT;
 		Rooms.insert({ RoomDir::RIGHT, _Room });
 		return Rooms.find(RoomDir::RIGHT)->second;
 		break;
 	}
 	case RoomDir::UP:
 	{
+		//Direction = FVector2D::UP;
 		Rooms.insert({ RoomDir::UP, _Room });
 		return Rooms.find(RoomDir::UP)->second;
 		break;
 	}
 	case RoomDir::DOWN:
 	{
+		//Direction = FVector2D::DOWN;
 		Rooms.insert({ RoomDir::DOWN, _Room });
 		return Rooms.find(RoomDir::DOWN)->second;
 		break;
