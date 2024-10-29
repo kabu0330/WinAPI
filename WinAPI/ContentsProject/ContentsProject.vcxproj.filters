@@ -19,6 +19,9 @@
     <ClInclude Include="Tear.h">
       <Filter>04_Play</Filter>
     </ClInclude>
+    <ClInclude Include="Global.h">
+      <Filter>03_Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -38,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="Tear.cpp">
       <Filter>04_Play</Filter>
+    </ClCompile>
+    <ClCompile Include="Global.cpp">
+      <Filter>03_Global</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

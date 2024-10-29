@@ -156,8 +156,16 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineDirectory.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="EngineFile.h" />
     <ClInclude Include="EngineMath.h" />
+    <ClInclude Include="EnginePath.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="PreCompile.h">
       <SubType>
       </SubType>
@@ -173,8 +181,16 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="EngineDirectory.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="EngineFile.cpp" />
     <ClCompile Include="EngineMath.cpp" />
+    <ClCompile Include="EnginePath.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="PreCompile.cpp">
       <SubType>
       </SubType>

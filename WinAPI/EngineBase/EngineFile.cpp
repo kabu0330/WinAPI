@@ -7,6 +7,17 @@ UEngineFile::UEngineFile()
 
 }
 
+// 자식 클래스에서 부모 생성자를 명시적으로 호출
+UEngineFile::UEngineFile(std::string_view _Path)
+	:UEnginePath(_Path)
+{
+}
+
+UEngineFile::UEngineFile(std::filesystem::path _Path)
+	:UEnginePath(_Path)
+{
+}
+
 UEngineFile::~UEngineFile()
 {
 	Close();
@@ -18,7 +29,7 @@ void UEngineFile::FileOpen(const char* _Mode)
 
 	if (nullptr == File)
 	{
-		MSGASSERT("파일 오픈에 실패했습니다");
+		MSGASSERT(std::string(Path) + "파일 오픈에 실패했습니다");
 	}
 }
 

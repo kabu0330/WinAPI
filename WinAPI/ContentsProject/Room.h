@@ -30,11 +30,18 @@ public:
 	bool InterLinkRoom(ARoom* _Room, RoomDir _Dir);
 	ARoom* LinkRoom(ARoom* _Room, RoomDir _Dir);
 
+	void BeginPlay() override;
+	void Tick(float _DeltaTime) override;
+
+	FVector2D RoomLocation();
+	FVector2D RoomDirection(RoomDir _Dir);
+
 protected:
 
 private:
 	//ARoom* Rooms[static_cast<int>(RoomDir::MAX)] = { nullptr, };
 	//RoomDir RoomDir = RoomDir::NONE;
 	std::map<RoomDir, ARoom*> Rooms;
+	FVector2D Direction = FVector2D::ZERO;
 };
 

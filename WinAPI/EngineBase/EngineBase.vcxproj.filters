@@ -19,6 +19,12 @@
     <ClInclude Include="UEngineTimer.h">
       <Filter>05_Time</Filter>
     </ClInclude>
+    <ClInclude Include="EngineDirectory.h">
+      <Filter>02_IO</Filter>
+    </ClInclude>
+    <ClInclude Include="EnginePath.h">
+      <Filter>02_IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineDebug.cpp">
@@ -38,6 +44,12 @@
     </ClCompile>
     <ClCompile Include="UEngineTimer.cpp">
       <Filter>05_Time</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineDirectory.cpp">
+      <Filter>02_IO</Filter>
+    </ClCompile>
+    <ClCompile Include="EnginePath.cpp">
+      <Filter>02_IO</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

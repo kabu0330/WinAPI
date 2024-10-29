@@ -10,3 +10,9 @@
 // std::vector<char> char* = new char[100];
 // ErrorText const char* 리턴해주는 함수가 c_str()
 // const char* Text = ErrorText.c_str();
+
+namespace UEngineDebug
+{
+	// Visual Studio 출력 창에 문자를 출력해주는 함수
+	void OutPutString(const std::string& Text);
+}

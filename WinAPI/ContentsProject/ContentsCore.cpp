@@ -1,8 +1,14 @@
 #include "PreCompile.h"
-#include "ContentsCore.h"
-#include <EngineCore/EngineAPICore.h>
-#include "PlayGameMode.h"
 #include "Player.h"
+
+#include <EngineBase/EngineDebug.h>
+#include <EngineBase/EngineDirectory.h>
+#include <EngineBase/EngineFile.h>
+#include <EngineCore/EngineAPICore.h>
+
+#include "ContentsCore.h"
+#include "PlayGameMode.h"
+#include "Global.h"
 
 ContentsCore::ContentsCore()
 {
@@ -18,8 +24,30 @@ void ContentsCore::BeginPlay()
 	// 윈도우 타이틀을 여기서 정한다.
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowTitle("The Binding of Isaac");
 
+
 	// 윈도우 사이즈를 반드시 정해야 한다.
-	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, { 1280, 720 });
+	Global::WindowSize = { 1280, 720 };
+	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, Global::WindowSize);
+
+
+	// 파일 리소스 가져오기
+	UEngineDirectory Dir;
+
+	// 상대경로 : 디버깅을 할 때와 릴리즈하여 배포할 때 내 실행 파일의 경로가 다르다.
+	// 이 때, 언제 어떤 상황에서도 내 리소스 파일을 찾아갈 수 있도록 방법을 만들어야 한다.
+	if (false == Dir.MoveParentToDirectory("Resources"))
+	{
+		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+		return;
+	}
+
+	std::vector<UEngineFile> ImageFiles = Dir.GetAllFile();
+
+	for (size_t i = 0; i < ImageFiles.size(); i++)
+	{
+		std::string FilePath = ImageFiles[i].GetPathToString();
+	}
+
 
 	// 레벨을 생성한다.
 	//UEngineAPICore::GetCore()->CreateLevel("Title");

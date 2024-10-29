@@ -151,6 +151,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Global.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Tear.h">
       <SubType>
       </SubType>
@@ -174,6 +178,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Global.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Tear.cpp">
       <SubType>
       </SubType>

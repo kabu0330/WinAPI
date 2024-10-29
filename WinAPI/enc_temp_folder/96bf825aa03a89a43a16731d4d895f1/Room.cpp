@@ -2,82 +2,18 @@
 #include "Room.h"
 #include <EngineBase/EngineDebug.h>
 #include <EngineCore/EngineAPICore.h>
-#include "Global.h"
 
 ARoom::ARoom()
 {
-	SetActorScale(Global::WindowScale);
-	SetActorLocation(Global::WindowSize.Half());
+	//FVector2D WindowSize = UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
 
+	//SetActorScale(WindowSize.Half());
+	//SetActorLocation(WindowSize.Half());
 }
 
 ARoom::~ARoom()
 {
 	// map에서 insert한 자료들을 모두 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
-}
-
-void ARoom::BeginPlay()
-{
-	Super::BeginPlay();
-
-}
-
-void ARoom::Tick(float _DeltaTime)
-{
-	std::map<RoomDir, ARoom*>::iterator StartIter = Rooms.begin();
-	std::map<RoomDir, ARoom*>::iterator EndIter = Rooms.end();
-
-	for (; StartIter != EndIter; ++StartIter)
-	{
-		ARoom* CurRoom = StartIter->second;
-		CurRoom->SetActorLocation(Global::WindowSize.Half());
-	}
-}
-
-FVector2D ARoom::RoomLocation()
-{
-	std::map<RoomDir, ARoom*>::iterator StartIter = Rooms.begin();
-	std::map<RoomDir, ARoom*>::iterator EndIter = Rooms.end();
-
-
-	for (; StartIter != EndIter; ++StartIter)
-	{
-		ARoom* CurRoom = StartIter->second;
-		RoomDir RoomKey = StartIter->first;
-
-		Direction = CurRoom->RoomDirection(RoomKey);
-
-		FVector2D CurPos = GetActorLocation();
-		CurRoom->SetActorLocation(CurPos );
-	}
-	return FVector2D();
-}
-
-FVector2D ARoom::RoomDirection(RoomDir _Dir)
-{
-	
-	switch (_Dir)
-	{
-	case RoomDir::NONE:
-		break;
-	case RoomDir::LEFT:
-		return FVector2D::LEFT;
-		break;
-	case RoomDir::RIGHT:
-		return FVector2D::RIGHT;
-		break;
-	case RoomDir::UP:
-		return FVector2D::UP;
-		break;
-	case RoomDir::DOWN:
-		return FVector2D::DOWN;
-		break;
-	case RoomDir::MAX:
-		break;
-	default:
-		break;
-	}
-	return FVector2D();
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
@@ -172,8 +108,6 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
 
     return nullptr;
 }
-
-
 
 
 

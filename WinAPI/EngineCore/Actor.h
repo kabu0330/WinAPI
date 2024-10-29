@@ -5,6 +5,8 @@
 class AActor
 {
 public:
+	typedef AActor Super;
+
 	friend class ULevel;
 
 	// constrcuter destructer
@@ -54,4 +56,4 @@ private:
 	FTransform Transform;
 };
 
-typedef AActor Super;
+

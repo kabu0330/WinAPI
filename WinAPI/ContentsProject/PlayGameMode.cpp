@@ -34,5 +34,7 @@ void APlayGameMode::BeginPlay()
 	   BaseRoom->LinkRoom(MinionRoom2, RoomDir::UP   );
 	   BaseRoom->LinkRoom(MinionRoom3, RoomDir::DOWN );
 	MinionRoom3->LinkRoom(BossRoom   , RoomDir::DOWN );
+
+	int a = 0;
 }
 
