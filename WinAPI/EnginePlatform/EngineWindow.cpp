@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "EngineWindow.h"
 #include <EngineBase/EngineDebug.h>
+#include "EngineWinImage.h"
 
 HINSTANCE UEngineWindow::hInstance = nullptr;
 std::map<std::string, WNDCLASSEXA> UEngineWindow::WindowClasss;
@@ -127,6 +128,16 @@ UEngineWindow::UEngineWindow()
 
 UEngineWindow::~UEngineWindow()
 {
+    if (nullptr != WindowImage)
+    {
+        delete WindowImage;
+        WindowImage = nullptr;
+    }
+    if (nullptr != BackBufferImage)
+    {
+        delete BackBufferImage;
+        BackBufferImage = nullptr;
+    }
 }
 
 void UEngineWindow::Create(std::string_view _TitleName, std::string_view _ClassName)
@@ -152,7 +163,13 @@ void UEngineWindow::Create(std::string_view _TitleName, std::string_view _ClassN
 
     // GetDC는 윈도우 화면에 HDC와 윈도우를 연결한다.
     // 윈도우 화면에 그릴 HDC는 여기서 생성한다.
-    BackBuffer = GetDC(WindowHandle);
+    //BackBuffer = GetDC(WindowHandle);
+    HDC WindowMainDC = GetDC(WindowHandle);
+
+    // 진짜 윈도우 버퍼가 생성되는 순간
+    WindowImage = new UEngineWinImage();
+    WindowImage->Create(WindowMainDC);
+
 }
 
 void UEngineWindow::Open(std::string_view _TitleName /*= "Window"*/)
@@ -175,4 +192,32 @@ void UEngineWindow::Open(std::string_view _TitleName /*= "Window"*/)
 
     UpdateWindow(WindowHandle);
     ++WindowCount;
+}
+
+void UEngineWindow::SetWindowPosAndScale(FVector2D _Pos, FVector2D _Scale)
+{
+    // 윈도우 사이즈가 바뀌면 백버퍼의 크기도 바뀐다.
+    if (false == WindowSize.EqualToInt(_Scale))
+    {
+        // 기존 백버퍼를 지우고
+        if (nullptr != BackBufferImage)
+        {
+            delete BackBufferImage;
+            BackBufferImage = nullptr;
+        }
+
+        // 윈도우 크기와 동일한 새로운 백버퍼를 만든다.
+        BackBufferImage = new UEngineWinImage();
+        BackBufferImage->Create(WindowImage, _Scale);
+    }
+
+    WindowSize = _Scale;
+
+    // 타이틀 메뉴바 크기를 화면 크기에서 제외시키기 위한 작업을 한다.
+    RECT Rc = { 0, 0, _Scale.iX(), _Scale.iY() };
+
+    AdjustWindowRect(&Rc, WS_OVERLAPPEDWINDOW, FALSE);
+
+    ::SetWindowPos(WindowHandle, nullptr, _Pos.iX(), _Pos.iY(), Rc.right - Rc.left, Rc.bottom - Rc.top, SWP_NOZORDER);
+
 }

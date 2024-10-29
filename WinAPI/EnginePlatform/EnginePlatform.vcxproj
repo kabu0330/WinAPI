@@ -156,6 +156,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="EngineWindow.h" />
+    <ClInclude Include="EngineWinImage.h" />
     <ClInclude Include="PreCompile.h" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,7 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="EngineWindow.cpp" />
+    <ClCompile Include="EngineWinImage.cpp" />
     <ClCompile Include="PreCompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

@@ -10,6 +10,7 @@
     <ClInclude Include="EngineInput.h">
       <Filter>02_Input</Filter>
     </ClInclude>
+    <ClInclude Include="EngineWinImage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineWindow.cpp">
@@ -21,6 +22,7 @@
     <ClCompile Include="EngineInput.cpp">
       <Filter>02_Input</Filter>
     </ClCompile>
+    <ClCompile Include="EngineWinImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

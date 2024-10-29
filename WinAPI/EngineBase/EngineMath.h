@@ -28,17 +28,17 @@ public:
 
 	}
 
-	int iX()
+	int iX() const
 	{
 		return static_cast<int>(X);
 	}
 
-	int iY()
+	int iY() const
 	{
 		return static_cast<int>(Y);
 	}
 
-	FVector2D Half()
+	FVector2D Half() const
 	{
 		return { X * 0.5f, Y * 0.5f };
 	}
@@ -80,11 +80,33 @@ public:
 		return X == _Other.X && Y == _Other.Y;
 	}
 
+	bool EqualToInt(FVector2D _Other) const
+	{
+		return iX() == _Other.iX() && iY() == _Other.iY();
+	}
+
 	FVector2D& operator+=(FVector2D _Other)
 	{
 		X += _Other.X;
 		Y += _Other.Y;
 		return *this;
+	}
+};
+
+class FTransform
+{
+public:
+	FVector2D Scale;
+	FVector2D Location;
+
+	FVector2D CenterLeftTop() const
+	{
+		return Location - Scale.Half();
+	}
+
+	FVector2D CenterRightBottom() const
+	{
+		return Location + Scale.Half();
 	}
 };
 

@@ -1,22 +1,19 @@
 #include "PreCompile.h"
 #include "Room.h"
 #include <EngineBase/EngineDebug.h>
+#include <EngineCore/EngineAPICore.h>
 
 ARoom::ARoom()
 {
+	//FVector2D WindowSize = UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
+
+	//SetActorScale(WindowSize.Half());
+	//SetActorLocation(WindowSize.Half());
 }
 
 ARoom::~ARoom()
 {
-	std::map<RoomDir, ARoom*>::iterator StartIter = Rooms.begin();
-	std::map<RoomDir, ARoom*>::iterator EndIter   = Rooms.end();
-
-	for (; StartIter != EndIter; ++StartIter)
-	{
-		 delete StartIter->second;
-		 StartIter->second = nullptr;
-	}
-
+	// map에서 insert한 자료들을 모두 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
 }
 
 bool ARoom::IsLinking(ARoom* _Room)

@@ -18,6 +18,9 @@ void ContentsCore::BeginPlay()
 	// 윈도우 타이틀을 여기서 정한다.
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowTitle("The Binding of Isaac");
 
+	// 윈도우 사이즈를 반드시 정해야 한다.
+	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, { 1280, 720 });
+
 	// 레벨을 생성한다.
 	//UEngineAPICore::GetCore()->CreateLevel("Title");
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
