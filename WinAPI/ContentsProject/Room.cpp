@@ -2,11 +2,11 @@
 #include "Room.h"
 #include <EngineBase/EngineDebug.h>
 #include <EngineCore/EngineAPICore.h>
-#include "Global.h"
+
 
 ARoom::ARoom()
 {
-	SetActorScale(Global::WindowScale);
+	SetActorScale(Scale);
 	SetActorLocation(Global::WindowSize.Half());
 	
 	SetSprite("SampleMap(848,536).png");

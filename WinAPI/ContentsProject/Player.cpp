@@ -8,7 +8,7 @@
 APlayer::APlayer()
 {
 	SetActorLocation(Global::WindowSize.Half());
-	SetActorScale({ 20, 20 });
+	SetActorScale({ 100, 100 });
 
 	SetSprite("icon.png");
 }

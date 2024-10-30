@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <map>
+#include "Global.h"
 
 enum class RoomDir
 {
@@ -32,8 +33,6 @@ public:
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
-
-	// void SetRoomSize(FVector2D _Scale);
 
 	FVector2D GetLeftPos()
 	{
@@ -71,6 +70,7 @@ protected:
 private:
 	std::map<RoomDir, ARoom*> Rooms;
 	RoomDir Directon = RoomDir::NONE;
+	FVector2D Scale = { Global::WindowSize * 0.3};
 	//FVector2D Direction = FVector2D::ZERO;
 };
 

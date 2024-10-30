@@ -10,6 +10,7 @@
 #include "ContentsCore.h"
 #include "PlayGameMode.h"
 #include "Global.h"
+#include "Room.h"
 
 ContentsCore::ContentsCore()
 {
@@ -52,6 +53,7 @@ void ContentsCore::BeginPlay()
 
 	UImageManager::GetInst().CuttingSprite("icon.png", { 1024, 1024 });
 	UImageManager::GetInst().CuttingSprite("SampleMap(848,536).png", { 848, 536 });
+
 
 	// 레벨을 생성한다.
 	//UEngineAPICore::GetCore()->CreateLevel("Title");
