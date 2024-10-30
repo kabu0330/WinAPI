@@ -1,6 +1,15 @@
 #include "PreCompile.h"
 #include "EngineWinImage.h"
 #include <EngineBase/EngineDebug.h>
+#include <EngineBase/EnginePath.h>
+#include <EngineBase/EngineString.h>
+
+// GDI PLUS용 헤더
+#include <objidl.h>  // .bmp
+#include <gdiplus.h> // .png
+
+#pragma comment(lib, "Msimg32.lib") // bmp 확장용 라이브러리
+#pragma comment(lib, "Gdiplus.lib") // png를 통한 윈도우 네이티브 그래픽 확장용 라이브러리
 
 UEngineWinImage::UEngineWinImage()
 {
@@ -8,6 +17,17 @@ UEngineWinImage::UEngineWinImage()
 
 UEngineWinImage::~UEngineWinImage()
 {
+	if (nullptr != hBitMap)
+	{
+		DeleteObject(hBitMap);
+		hBitMap = nullptr;
+	}
+
+	if (nullptr != ImageDC)
+	{
+		DeleteDC(ImageDC);
+		ImageDC = nullptr;
+	}
 }
 
 void UEngineWinImage::Create(UEngineWinImage* _TargetImage, FVector2D _Scale)
@@ -32,6 +52,7 @@ void UEngineWinImage::Create(UEngineWinImage* _TargetImage, FVector2D _Scale)
 	GetObject(hBitMap, sizeof(BITMAP), &Info);
 }
 
+// 백버퍼 생성용 HDC 함수. 이미지 생성에 BitBlt 함수는 적절하지 않다.
 void UEngineWinImage::CopyToBit(UEngineWinImage* _TargetImage, const FTransform& _Trans)
 {
 	if (nullptr == _TargetImage)
@@ -40,20 +61,107 @@ void UEngineWinImage::CopyToBit(UEngineWinImage* _TargetImage, const FTransform&
 		return;
 	}
 
-	HDC CopyDC = ImageDC;
-	HDC TargetDC = _TargetImage->ImageDC;
+	HDC CopyDC = ImageDC; // BackBuffer
+	HDC TargetDC = _TargetImage->ImageDC; // WinMainHDC
 
 	FVector2D LeftTop = _Trans.CenterLeftTop();
 
 	// BitBlt : HDC를 복사하는 가장 기본적인 함수
 	BitBlt(
-		TargetDC,			// 복사 받을 대상
+		TargetDC,			// 복사 받을 대상 : 윈도우 창
 		LeftTop.iX(),		// 복사 받을 시작 위치 x
 		LeftTop.iY(),		// 복사 받을 시작 위치 y
 		_Trans.Scale.iX(),  // 복사 받을 이미지 크기 x
 		_Trans.Scale.iY(),  // 복사 받을 이미지 크기 y
-		CopyDC,				// 복사할 이미지
+		CopyDC,				// 복사할 이미지 : BackBuffer
 		0, 0,				// 복사할 이미지 시작점 x, y
 		SRCCOPY);			// 복사 옵션 (그대로 복사해서 덮어씌우기)
+}
+
+// 이미지 생성용 HDC 함수, BitBlt보다 이미지 크기 조정, 날려버릴 색상을 지정할 수 있어 투명색(Alpha)이 없는 bmp파일에 적합하다. 
+void UEngineWinImage::CopyToTrans(UEngineWinImage* _TargetImage, const FTransform& _RenderTrans, const FTransform& _LTImageTrans, UColor _Color /*= UColor(255, 0, 255, 0)*/)
+{
+	HDC CopyDC = ImageDC; // BackBuffer
+	HDC TargetDC = _TargetImage->ImageDC; // WinMainHDC
+
+	FVector2D LeftTop = _RenderTrans.CenterLeftTop();
+
+	TransparentBlt(
+		TargetDC,					 // Window Main DC : 실제 화면에 보일 창
+		LeftTop.iX(),				 // 그리기 시작할 X 좌표 : 0
+		LeftTop.iY(),				 // 그리기 시작할 Y 좌표 : 0
+		_RenderTrans.Scale.iX(),	 // 어디까지 그릴지 X 좌표 : 윈도우 화면 너비
+		_RenderTrans.Scale.iY(),	 // 어디까지 그릴지 Y 좌표 : 윈도우 화면 높이
+		CopyDC,						 // 복사할 대상 : 나의 리소스(이미지)
+		_LTImageTrans.Location.iX(), // 복사를 시작할 X 좌표 : 0
+		_LTImageTrans.Location.iY(), // 복사를 시작할 Y 좌표 : 0
+		_LTImageTrans.Scale.iX(),	 // 어디까지 복사할지 X 좌표 : 내가 설정한 크기
+		_LTImageTrans.Scale.iY(),	 // 어디까지 복사할지 Y 좌표 : 내가 설정한 크기
+		_Color.Color				 // 날려버릴 배경색 : 기본값(마젠타)
+	);
+}
+
+void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path)
+{
+	// png 파일과 bmp 파일의 로드 방식이 다르다.
+	// bmp는 윈도우가 지원하는 이미지 파일 형식이고, png는 그렇지 않다.
+	// 그래서 DX이전에 GDI PLUS를 활용해 png 파일도 호환 가능하게 지원해줄 수 있는데 문제가 있다.
+	// 1. 이미지 처리 속도가 게임 전체 프레임에 엄청난 악영향을 줄 정도로 느리고
+	// 2. 그래픽카드를 활용하는 기술을 쓰면 DX를 사용하지 않고 WinAPI를 공부하는 목적에 위배된다.
+	// 그래서 GDI PLUS로는 png 파일을 로드하는데 까지만 활용하고 bmp 파일로 변환하여 알파값을 날려버린다. 
+
+	UEnginePath Path = _Path;
+
+	std::string UpperExt = UEngineString::ToUpper(Path.GetExtension());
+
+	HBITMAP NewBitmap = nullptr;
+
+	if (".PNG" == UpperExt)
+	{
+		ULONG_PTR GdiPlusToken = 0; // GdiPlus용 핸들을 표현할 때 사용
+		
+		// 초기 설정
+		Gdiplus::GdiplusStartupInput StartupInput;
+		Gdiplus::GdiplusStartup(&GdiPlusToken, &StartupInput, nullptr);
+
+		// 와이드바이트로 변경
+		std::wstring WidePath = UEngineString::AnsiToUnicode(_Path);
+
+		// 경로를 주면 이미지를 로딩해주는 함수
+		Gdiplus::Image* pImage = Gdiplus::Image::FromFile(WidePath.c_str());
+
+		// 복사본을 생성하고 bitmap을 캐스팅으로 강제 추출
+		Gdiplus::Bitmap* pBitMap = reinterpret_cast<Gdiplus::Bitmap*>(pImage->Clone());
+
+		Gdiplus::Status Stat = pBitMap->GetHBITMAP(Gdiplus::Color(255, 255, 0, 255), &NewBitmap);
+
+		// HBITMAP 추출에 실패하면
+		if (Gdiplus::Status::Ok != Stat)
+		{
+			MSGASSERT("png파일 이미지 로드에 실패했습니다." + std::string(_Path));
+			return;
+		}
+
+		// 직접 메모리를 해제해줘야 한다.
+		delete pBitMap;
+		delete pImage;
+	}
+
+	if (nullptr == NewBitmap)
+	{
+		MSGASSERT("이미지 로드에 실패했습니다. " + std::string(_Path));
+		return;
+	}
+
+	// 윈도우 창 HDC와 호환 가능한 HDC를 생성
+	HDC NewImageDC = CreateCompatibleDC(_TargetImage->GetDC());
+
+	HBITMAP OldBitMap = static_cast<HBITMAP>(SelectObject(NewImageDC, NewBitmap));
+	DeleteObject(OldBitMap); // (1, 1) 짜리 이미지 DC는 해제
+
+	hBitMap = NewBitmap;
+	ImageDC = NewImageDC;
+
+	GetObject(hBitMap, sizeof(BITMAP), &Info);
 }
 

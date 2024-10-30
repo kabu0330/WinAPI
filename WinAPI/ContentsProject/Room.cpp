@@ -8,6 +8,8 @@ ARoom::ARoom()
 {
 	SetActorScale(Global::WindowScale);
 	SetActorLocation(Global::WindowSize.Half());
+	
+	SetSprite("SampleMap(848,536).png");
 
 }
 

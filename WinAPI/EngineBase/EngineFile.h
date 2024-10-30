@@ -6,6 +6,7 @@
 
 const int MAXPATH = 256;
 
+// 설명 : 파일 읽기/쓰기
 class UEngineFile : public UEnginePath
 {
 public:

@@ -33,6 +33,8 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	// void SetRoomSize(FVector2D _Scale);
+
 	FVector2D GetLeftPos()
 	{
 		int PosX = GetActorLocation().iX();
@@ -64,8 +66,6 @@ public:
 		int Result = PosY + HalfScaleY;
 		return { GetActorLocation().iX() , Result };
 	}
-
-
 protected:
 
 private:

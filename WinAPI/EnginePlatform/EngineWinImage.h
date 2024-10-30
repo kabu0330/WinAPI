@@ -1,11 +1,12 @@
 #pragma once
 #include <Windows.h>
 #include <EngineBase/EngineMath.h>
+#include <EngineBase/Object.h>
 
 // 모든 이미지는 (1, 1) 픽셀 이미지다.
 
 // 설명 : 렌더링 핵심 클래스(HDC 랩핑)
-class UEngineWinImage
+class UEngineWinImage : public UObject
 {
 public:
 	// constrcuter destructer
@@ -31,6 +32,15 @@ public:
 	void Create(UEngineWinImage* _TargetImage, FVector2D _Scale);
 
 	void CopyToBit(UEngineWinImage* _TargetImage, const FTransform& _Trans);
+
+	void CopyToTrans(UEngineWinImage* _TargetImage, const FTransform& _RenderTrans, const FTransform& _LTImageTrans, UColor _Color = UColor(255, 0, 255, 0));
+
+	void Load(UEngineWinImage* _TargetImage, std::string_view _Path);
+
+	FVector2D GetImageScale() const
+	{
+		return { Info.bmWidth, Info.bmHeight };
+	}
 
 protected:
 

@@ -4,10 +4,13 @@
 #include "Tear.h"
 #include "Global.h"
 
+
 APlayer::APlayer()
 {
 	SetActorLocation(Global::WindowSize.Half());
 	SetActorScale({ 20, 20 });
+
+	SetSprite("icon.png");
 }
 
 APlayer::~APlayer()
@@ -54,6 +57,12 @@ void APlayer::Tick(float _DeltaTime)
         ATear* Ptr = GetWorld()->SpawnActor<ATear>();
 		Ptr->SetActorLocation(GetActorLocation());
 		return;
+	}
+
+	if (true == UEngineInput::GetInst().IsDown('R'))
+	{
+		SetSprite("icon.png", MySpriteIndex);
+		++MySpriteIndex;
 	}
 }
 

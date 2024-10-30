@@ -26,6 +26,16 @@ std::string UEnginePath::GetPathToString()
 	return Path.string();
 }
 
+std::string UEnginePath::GetFileName()
+{
+	return Path.filename().string();
+}
+
+std::string UEnginePath::GetExtension()
+{
+	return Path.extension().string();
+}
+
 bool UEnginePath::IsExists()
 {
 	return std::filesystem::exists(Path);
@@ -58,11 +68,19 @@ bool UEnginePath::MoveParentToDirectory(std::string_view _Path)
 	}
 
 	bool Result = false;
-
 	std::filesystem::path CurPath = DummyPath.Path;
-	while (CurPath != CurPath.root_path())
+
+	std::filesystem::path Root = CurPath.root_path();
+	while (true)
 	{
 		CurPath = DummyPath.Path;
+
+		// 무한루프 탈출 조건 append에 도달하기 전에 탈출
+		if (CurPath == Root)
+		{
+			break;
+		}
+
 		CurPath.append(_Path); // 현재 경로에서 _Path(Resource) 폴더명을 추가하여 검사
 		if (true == std::filesystem::exists(CurPath))
 		{

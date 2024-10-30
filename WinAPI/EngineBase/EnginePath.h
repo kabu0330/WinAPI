@@ -1,7 +1,7 @@
 #pragma once
 #include <filesystem>
 
-// 설명 :
+// 설명 : 파일 경로, 파일 경로상 이동
 class UEnginePath
 {
 public:
@@ -21,6 +21,9 @@ public:
 	void MoveParent();
 
 	std::string GetPathToString();
+	std::string GetFileName();
+	std::string GetExtension();
+
 
 	bool MoveParentToDirectory(std::string_view _Path);
 	bool IsDirectory();

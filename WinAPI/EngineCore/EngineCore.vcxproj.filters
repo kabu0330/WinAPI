@@ -2,53 +2,68 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Actor.h">
-      <Filter>Object</Filter>
+      <Filter>02_Object</Filter>
     </ClInclude>
     <ClInclude Include="Level.h">
-      <Filter>Object\Level</Filter>
+      <Filter>02_Object\01_Level</Filter>
     </ClInclude>
     <ClInclude Include="EngineAPICore.h">
-      <Filter>Core</Filter>
+      <Filter>01_Core</Filter>
     </ClInclude>
     <ClInclude Include="PreCompile.h">
       <Filter>00_PreCompile</Filter>
     </ClInclude>
     <ClInclude Include="GameMode.h">
-      <Filter>Object\Actor</Filter>
+      <Filter>02_Object\02_Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageManager.h">
+      <Filter>03_Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSprite.h">
+      <Filter>03_Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp">
-      <Filter>Object</Filter>
+      <Filter>02_Object</Filter>
     </ClCompile>
     <ClCompile Include="Level.cpp">
-      <Filter>Object\Level</Filter>
+      <Filter>02_Object\01_Level</Filter>
     </ClCompile>
     <ClCompile Include="EngineAPICore.cpp">
-      <Filter>Core</Filter>
+      <Filter>01_Core</Filter>
     </ClCompile>
     <ClCompile Include="PreCompile.cpp">
       <Filter>00_PreCompile</Filter>
     </ClCompile>
     <ClCompile Include="GameMode.cpp">
-      <Filter>Object\Actor</Filter>
+      <Filter>02_Object\02_Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageManager.cpp">
+      <Filter>03_Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSprite.cpp">
+      <Filter>03_Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
       <UniqueIdentifier>{f82791f7-6692-45ab-84df-e0f058dfb3f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core">
+    <Filter Include="01_Core">
       <UniqueIdentifier>{73f3adde-1854-4009-97c9-2330e66769cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object">
+    <Filter Include="02_Object">
       <UniqueIdentifier>{97b398ec-2d85-4ff9-ad9c-43d63ad1d173}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Level">
+    <Filter Include="02_Object\01_Level">
       <UniqueIdentifier>{56c89f27-d8d0-49e4-a434-be93ba0663c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Actor">
+    <Filter Include="02_Object\02_Actor">
       <UniqueIdentifier>{342ac68a-f183-4ee0-b001-e31e83bbc3fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03_Resources">
+      <UniqueIdentifier>{b12d3f76-8710-4fc9-935e-2cc65d1be9d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

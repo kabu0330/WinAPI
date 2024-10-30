@@ -5,6 +5,7 @@
 #include <EngineBase/EngineDirectory.h>
 #include <EngineBase/EngineFile.h>
 #include <EngineCore/EngineAPICore.h>
+#include <EngineCore/ImageManager.h>
 
 #include "ContentsCore.h"
 #include "PlayGameMode.h"
@@ -46,8 +47,11 @@ void ContentsCore::BeginPlay()
 	for (size_t i = 0; i < ImageFiles.size(); i++)
 	{
 		std::string FilePath = ImageFiles[i].GetPathToString();
+		UImageManager::GetInst().Load(FilePath);
 	}
 
+	UImageManager::GetInst().CuttingSprite("icon.png", { 1024, 1024 });
+	UImageManager::GetInst().CuttingSprite("SampleMap(848,536).png", { 848, 536 });
 
 	// 레벨을 생성한다.
 	//UEngineAPICore::GetCore()->CreateLevel("Title");

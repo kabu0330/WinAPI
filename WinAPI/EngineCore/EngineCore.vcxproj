@@ -155,11 +155,19 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineSprite.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GameMode.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="EngineAPICore.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="ImageManager.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -174,11 +182,19 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="EngineSprite.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GameMode.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="EngineAPICore.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="ImageManager.cpp">
       <SubType>
       </SubType>
     </ClCompile>

@@ -29,6 +29,8 @@ protected:
 
 private:
 	float Speed = 100;
+	int MySpriteIndex = 0;
+
 	class ARoom* CurRoom = nullptr;
 };
 
