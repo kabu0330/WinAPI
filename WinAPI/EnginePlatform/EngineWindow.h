@@ -62,8 +62,10 @@ private:
 
 	FVector2D WindowSize;
 
+	
 	UEngineWinImage* BackBufferImage  = nullptr; // HDC
 	UEngineWinImage* WindowImage = nullptr; // HDC
+
 	HWND WindowHandle = nullptr; // 윈도우 창 주소(몇 번째 창)
 };
 

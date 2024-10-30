@@ -29,5 +29,6 @@ protected:
 
 private:
 	float Speed = 100;
+	class ARoom* CurRoom = nullptr;
 };
 

@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <EngineBase/EngineMath.h>
 
+// 모든 이미지는 (1, 1) 픽셀 이미지다.
 
 // 설명 : 렌더링 핵심 클래스(HDC 랩핑)
 class UEngineWinImage

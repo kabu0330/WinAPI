@@ -17,6 +17,7 @@ UEngineDirectory::~UEngineDirectory()
 {
 }
 
+// 특정 디렉토리에 있는 모든 파일을 가져온다.
 std::vector<class UEngineFile> UEngineDirectory::GetAllFile(bool _IsRecursive /*= true*/)
 {
 	std::vector<class UEngineFile> Result;

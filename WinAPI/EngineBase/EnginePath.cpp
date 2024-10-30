@@ -26,7 +26,6 @@ std::string UEnginePath::GetPathToString()
 	return Path.string();
 }
 
-
 bool UEnginePath::IsExists()
 {
 	return std::filesystem::exists(Path);
@@ -64,15 +63,15 @@ bool UEnginePath::MoveParentToDirectory(std::string_view _Path)
 	while (CurPath != CurPath.root_path())
 	{
 		CurPath = DummyPath.Path;
-		CurPath.append(_Path);
+		CurPath.append(_Path); // 현재 경로에서 _Path(Resource) 폴더명을 추가하여 검사
 		if (true == std::filesystem::exists(CurPath))
 		{
 			Result = true;
-			Path = CurPath;
+			Path = CurPath; // 찾은 경로를 멤버에 저장
 			break;
 		}
-		DummyPath.MoveParent();
+		DummyPath.MoveParent(); // 찾는 폴더가 없으면 상위 폴더로 이동
 	}
 
-	return Result;
+	return Result; // 찾고자 하는 폴더를 찾으면 true 반환
 }

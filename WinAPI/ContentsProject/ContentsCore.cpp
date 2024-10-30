@@ -30,7 +30,7 @@ void ContentsCore::BeginPlay()
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, Global::WindowSize);
 
 
-	// 파일 리소스 가져오기
+	// 파일 리소스 가져온다.
 	UEngineDirectory Dir;
 
 	// 상대경로 : 디버깅을 할 때와 릴리즈하여 배포할 때 내 실행 파일의 경로가 다르다.

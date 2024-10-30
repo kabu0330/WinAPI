@@ -11,7 +11,7 @@ public:
 
 	// constrcuter destructer
 	AActor();
-	~AActor();
+	virtual ~AActor();
 
 	// delete Function
 	AActor(const AActor& _Other) = delete;

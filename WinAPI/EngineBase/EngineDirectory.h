@@ -12,10 +12,10 @@ public:
 	~UEngineDirectory();
 
 	// delete Function
-	UEngineDirectory(const UEngineDirectory& _Other) = delete;
-	UEngineDirectory(UEngineDirectory&& _Other) noexcept = delete;
-	UEngineDirectory& operator=(const UEngineDirectory& _Other) = delete;
-	UEngineDirectory& operator=(UEngineDirectory&& _Other) noexcept = delete;
+	//UEngineDirectory(const UEngineDirectory& _Other) = delete;
+	//UEngineDirectory(UEngineDirectory&& _Other) noexcept = delete;
+	//UEngineDirectory& operator=(const UEngineDirectory& _Other) = delete;
+	//UEngineDirectory& operator=(UEngineDirectory&& _Other) noexcept = delete;
 
 	// false로 하면 하위 폴더의 리소스도 모두 가져온다.
 	std::vector<class UEngineFile> GetAllFile(bool _IsRecursive = true);
