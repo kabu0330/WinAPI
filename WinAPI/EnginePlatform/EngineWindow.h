@@ -63,8 +63,8 @@ private:
 	FVector2D WindowSize;
 
 	
-	UEngineWinImage* BackBufferImage  = nullptr; // HDC
-	UEngineWinImage* WindowImage = nullptr; // HDC
+	UEngineWinImage* BackBufferImage  = nullptr; // HDC : 뒤에서 창에 그릴 그림을 그리는 화면
+	UEngineWinImage* WindowImage = nullptr; // HDC : 진짜 창에 그려지는 화면
 
 	HWND WindowHandle = nullptr; // 윈도우 창 주소(몇 번째 창)
 };

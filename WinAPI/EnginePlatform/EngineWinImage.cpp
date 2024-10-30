@@ -30,8 +30,9 @@ UEngineWinImage::~UEngineWinImage()
 	}
 }
 
+// 백버퍼 생성을 위한 최초 세팅을 한다.
 void UEngineWinImage::Create(UEngineWinImage* _TargetImage, FVector2D _Scale)
-{
+{										//  윈도우 메인 HDC
 	if (nullptr == _TargetImage)
 	{
 		MSGASSERT("Main WindowDC를 매개변수로 넣지 않고 이미지를 생성할 수 없습니다.");
@@ -42,13 +43,14 @@ void UEngineWinImage::Create(UEngineWinImage* _TargetImage, FVector2D _Scale)
 	HDC NewImageDC = CreateCompatibleDC(_TargetImage->GetDC());
 
 	// HDC를 생성만해도 (1, 1) 이미지와 연결되어 있어, (1, 1) 이미지를 먼저 메모리 할당을 해제해준다.
-	// 이로써 새로 생성한 NewImageDC는 연결된 이미지가 없는(nullptr) 상태가 된다?
+	// 이로써 새로 생성한 NewImageDC는 연결된 이미지가 없는(nullptr) 상태가 된다
 	HBITMAP OldBitMap = static_cast<HBITMAP>(SelectObject(NewImageDC, NewBitMap));
 	DeleteObject(OldBitMap);
 
 	hBitMap = NewBitMap;
 	ImageDC = NewImageDC;
 
+	// hBitMap의 정보(너비, 높이 등)를 Info에 저장 / GetObejct : 성공하면 바이트 수 반환, 실패하면 0 반환
 	GetObject(hBitMap, sizeof(BITMAP), &Info);
 }
 
@@ -101,8 +103,9 @@ void UEngineWinImage::CopyToTrans(UEngineWinImage* _TargetImage, const FTransfor
 	);
 }
 
+// bmp로 변환 후 이미지 정보 저장 및 이미지를 로드할 HDC와 HBITMAP 할당 및 저장
 void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path)
-{
+{						// _TargetImage : 윈도우 메인 HDC	
 	// png 파일과 bmp 파일의 로드 방식이 다르다.
 	// bmp는 윈도우가 지원하는 이미지 파일 형식이고, png는 그렇지 않다.
 	// 그래서 DX이전에 GDI PLUS를 활용해 png 파일도 호환 가능하게 지원해줄 수 있는데 문제가 있다.
@@ -112,6 +115,7 @@ void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path
 
 	UEnginePath Path = _Path;
 
+	// 확장자명만 추출하여 대문자로 변환
 	std::string UpperExt = UEngineString::ToUpper(Path.GetExtension());
 
 	HBITMAP NewBitmap = nullptr;
@@ -127,12 +131,14 @@ void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path
 		// 와이드바이트로 변경
 		std::wstring WidePath = UEngineString::AnsiToUnicode(_Path);
 
-		// 경로를 주면 이미지를 로딩해주는 함수
+		// 경로를 주면 png이미지를 로딩해주는 함수
 		Gdiplus::Image* pImage = Gdiplus::Image::FromFile(WidePath.c_str());
 
-		// 복사본을 생성하고 bitmap을 캐스팅으로 강제 추출
+		// png 이미지 파일의 복사본을 생성하고 bitmap*으로 강제 형변환
 		Gdiplus::Bitmap* pBitMap = reinterpret_cast<Gdiplus::Bitmap*>(pImage->Clone());
 
+		// Bitmap으로 변환 후 작업이 성공했는지 Status enum으로 반환
+		// GetHBITMAP : 배경색 설정(마젠타), 반환할 비트맵 포인터
 		Gdiplus::Status Stat = pBitMap->GetHBITMAP(Gdiplus::Color(255, 255, 0, 255), &NewBitmap);
 
 		// HBITMAP 추출에 실패하면
@@ -147,6 +153,7 @@ void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path
 		delete pImage;
 	}
 
+	// 비트맵 변환에 실패하면
 	if (nullptr == NewBitmap)
 	{
 		MSGASSERT("이미지 로드에 실패했습니다. " + std::string(_Path));

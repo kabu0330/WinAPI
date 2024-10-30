@@ -43,10 +43,12 @@ UImageManager::~UImageManager()
 	}
 }
 
+// 경로 전체를 입력하면 리소스를 로드해주는 함수
 void UImageManager::Load(std::string_view Path)
 {
 	UEnginePath EnginePath = UEnginePath(Path);
 	
+	// 경로에서 리소스 파일 '이름 + 확장자명'까지만 분리해서 가져온다
 	std::string FileName = EnginePath.GetFileName();
 
 	Load(FileName, Path);
@@ -67,7 +69,8 @@ void UImageManager::Load(std::string_view _KeyName, std::string_view Path)
 		MSGASSERT("유효하지 않은 파일 경로 입니다." + std::string(Path));
 		return;
 	}
-
+	
+	// 메인 윈도우 HDC
 	UEngineWinImage* WindowImage = UEngineAPICore::GetCore()->GetMainWindow().GetWindowImage();
 
 	// 리소스 파일 네이밍 규칙을 모두 "대문자" 기준으로 판별한다.
@@ -77,7 +80,8 @@ void UImageManager::Load(std::string_view _KeyName, std::string_view Path)
 	UEngineWinImage* NewImage = new UEngineWinImage();
 	NewImage->Load(WindowImage, Path);
 
-	Images.insert({ UpperName , NewImage });
+	// WinImage 클래스에 "파일명 + 확장자명"을 Key / HDC와 위치, 크기를 값으로 저장
+	Images.insert({ UpperName , NewImage }); // 결국 NewImage는 HDC다. 이미지 리소스는 HDC로 저장되었다.
 
 	UEngineSprite* NewSprite = new UEngineSprite();
 
@@ -86,14 +90,17 @@ void UImageManager::Load(std::string_view _KeyName, std::string_view Path)
 	Trans.Location = { 0,0 }; // LeftTop
 	Trans.Scale = NewImage->GetImageScale();
 
+	// HDC랑 위치, 크기를 엔진Sprite::SpriteData에 저장
 	NewSprite->PushData(NewImage, Trans);
 
+	// 다시 ImageManager 클래스에 "파일명 + 확장자명"을 Key / HDC와 위치, 크기를 값으로 저장
 	Sprites.insert({ UpperName , NewSprite });
 }
 
 void UImageManager::CuttingSprite(std::string_view _KeyName, FVector2D _CuttingSize)
 {
 	// 리소스 파일 네이밍 규칙을 모두 "대문자" 기준으로 판별한다.
+	// 파일명 + 확장자를 대문자로 반환
 	std::string UpperName = UEngineString::ToUpper(_KeyName);
 
 	if (false == Sprites.contains(UpperName))
@@ -112,6 +119,7 @@ void UImageManager::CuttingSprite(std::string_view _KeyName, FVector2D _CuttingS
 	UEngineSprite* Sprite = Sprites[UpperName];
 	UEngineWinImage* Image = Images[UpperName];
 
+	// 기존에 가지고 있던 스프라이트 이미지 지워.
 	Sprite->ClearSpriteData();
 
 	if (0 != (Image->GetImageScale().iX() % _CuttingSize.iX()))
@@ -126,6 +134,7 @@ void UImageManager::CuttingSprite(std::string_view _KeyName, FVector2D _CuttingS
 		return;
 	}
 
+	// 이미지를 크기대로 나눈다. 
 	int SpriteX = Image->GetImageScale().iX() / _CuttingSize.iX();
 	int SpriteY = Image->GetImageScale().iY() / _CuttingSize.iY();
 
@@ -138,6 +147,7 @@ void UImageManager::CuttingSprite(std::string_view _KeyName, FVector2D _CuttingS
 	{
 		for (size_t x = 0; x < SpriteX; ++x)
 		{
+			// Sprite::SpriteData에 저장
 			Sprite->PushData(Image, CuttingTrans);
 			CuttingTrans.Location.X += _CuttingSize.X;
 		}

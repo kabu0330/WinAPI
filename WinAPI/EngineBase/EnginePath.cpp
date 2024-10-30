@@ -70,6 +70,7 @@ bool UEnginePath::MoveParentToDirectory(std::string_view _Path)
 	bool Result = false;
 	std::filesystem::path CurPath = DummyPath.Path;
 
+	// root_path : 드라이브 위치(C:\\ 이나 D:\\과 같이 '내 컴퓨터'에서 보이는) 
 	std::filesystem::path Root = CurPath.root_path();
 	while (true)
 	{

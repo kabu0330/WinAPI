@@ -23,12 +23,14 @@ public:
 	{
 		return ImageDC;
 	}
-
+	
+	// 최초 생성하는 DC는 진짜 윈도우 화면을 보여주는 MainHDC이므로 그대로 리턴
 	void Create(HDC _DC)
 	{
 		ImageDC = _DC;
 	}
 
+	// 두 번째 생성하는 DC는 BackBuffer. 최초 윈도우 DC와 크기를 같게 하기 위해서 두번째 인자로 크기를 받는다.
 	void Create(UEngineWinImage* _TargetImage, FVector2D _Scale);
 
 	void CopyToBit(UEngineWinImage* _TargetImage, const FTransform& _Trans);

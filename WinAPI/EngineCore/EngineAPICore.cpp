@@ -63,7 +63,9 @@ int UEngineAPICore::EngineStart(HINSTANCE _Inst, UContentsCore* _UserCore)
 // 게임 시작 시 딱 한번만 실행될 것들
 void UEngineAPICore::EngineBeginPlay()
 {
-	// 레벨 세팅
+	// 1. 컨텐츠 중심 윈도우 세팅 재설정
+	// 2. 리소스 세팅
+	// 3. 레벨 세팅
 	UserCore->BeginPlay();
 }
 

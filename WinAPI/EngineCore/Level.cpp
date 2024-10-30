@@ -38,6 +38,7 @@ void ULevel::Tick(float _DeltaTime)
 // 여기서 모든 Actor들을 렌더한다.
 void ULevel::Render()
 {
+	// BackBuffer 렌더링 1 : 화면 지우기
 	ScreenClear();
 
 	std::list<AActor*>::iterator StartIter = AllActors.begin();
@@ -49,9 +50,11 @@ void ULevel::Render()
 		CurActor->Render();
 	}
 
+	// BackBuffer 렌더링 2 : 화면 그리기
 	DoubleBuffering();
 }
 
+// 화면을 깨끗하게 화이트로 지운다.
 void ULevel::ScreenClear()
 {
 	UEngineWindow& MainWindow = UEngineAPICore::GetCore()->GetMainWindow();

@@ -72,7 +72,7 @@ int UEngineWindow::WindowMessageLoop(EngineDelegate _StartFunction, EngineDelega
     // 프로그램이 시작하고 딱 한번 로드되어야 할 것 : 이미지
     if (true == _StartFunction.IsBind())
     {
-        _StartFunction();   
+        _StartFunction(); // 엔진코어의 BeginPlay 프로그램 실행 최초 1회 호출   
     }
 
     // 기본 메시지 루프입니다:
@@ -92,7 +92,7 @@ int UEngineWindow::WindowMessageLoop(EngineDelegate _StartFunction, EngineDelega
         // 2. 메시지 처리하고 나서 내 게임 엔진을 돌린다.
         if (true == _FrameFunction.IsBind())
         {
-            _FrameFunction(); // 내 게임 엔진
+            _FrameFunction(); // 내 게임 엔진 Tick & Render
         }
     }
 
@@ -194,6 +194,7 @@ void UEngineWindow::Open(std::string_view _TitleName /*= "Window"*/)
     ++WindowCount;
 }
 
+// 1. 백버퍼 생성, 2. 윈도우 크기 조정, 3. 타이틀 메뉴바 화면 크기서 제외
 void UEngineWindow::SetWindowPosAndScale(FVector2D _Pos, FVector2D _Scale)
 {
     // 윈도우 사이즈가 바뀌면 백버퍼의 크기도 바뀐다.
@@ -206,16 +207,20 @@ void UEngineWindow::SetWindowPosAndScale(FVector2D _Pos, FVector2D _Scale)
             BackBufferImage = nullptr;
         }
 
+        // 1. 백버퍼 생성
         // 윈도우 크기와 동일한 새로운 백버퍼를 만든다.
         BackBufferImage = new UEngineWinImage();
         BackBufferImage->Create(WindowImage, _Scale);
     }
 
+    // 2. 윈도우 크기 조정
     WindowSize = _Scale;
 
-    // 타이틀 메뉴바 크기를 화면 크기에서 제외시키기 위한 작업을 한다.
+    // 3. 타이틀 메뉴바 화면 크기서 제외
     RECT Rc = { 0, 0, _Scale.iX(), _Scale.iY() };
 
+    // WS_OVERLAPPEDWINDOW : 윈도우 창이 어떤 모습과 기능을 가질지 결정하는 스타일 플래그
+    // title bar와 테두리 포함, 제목 표시줄 추가, 최소화/최대화 버튼 지원, 창 크기 조절 프레임 제공
     AdjustWindowRect(&Rc, WS_OVERLAPPEDWINDOW, FALSE);
 
     ::SetWindowPos(WindowHandle, nullptr, _Pos.iX(), _Pos.iY(), Rc.right - Rc.left, Rc.bottom - Rc.top, SWP_NOZORDER);
