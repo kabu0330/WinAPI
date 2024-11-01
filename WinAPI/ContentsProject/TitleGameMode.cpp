@@ -5,6 +5,7 @@
 #include <EngineCore/EngineAPICore.h>
 
 #include "TitleScene.h"
+#include "Global.h"
 
 ATitleGameMode::ATitleGameMode()
 {
@@ -17,6 +18,7 @@ ATitleGameMode::~ATitleGameMode()
 void ATitleGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 void ATitleGameMode::Tick(float _DeltaTime)

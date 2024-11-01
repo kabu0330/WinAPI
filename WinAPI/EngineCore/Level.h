@@ -1,7 +1,8 @@
 #pragma once
 #include "GameMode.h"
 
-// 설명 :
+// 설명 : 화면에 출력될 모든 액터(+컴포넌트)들과 카메라를 관리하는 클래스
+// 타이틀 레벨, 플레이 레벨, 엔딩 레벨 등 화면에 출력될 액터들을 구성한다.
 class ULevel
 {
 public:
@@ -48,6 +49,11 @@ public:
 	void SetCameraPivot(FVector2D _Pivot)
 	{
 		CameraPivot = _Pivot;
+	}
+
+	void SetCameraPos(FVector2D _Pos)
+	{
+		CameraPos = _Pos;
 	}
 
 protected:

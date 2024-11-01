@@ -7,10 +7,12 @@
 
 ARoom::ARoom()
 {
-	SetActorScale(Scale);
 	SetActorLocation(Global::WindowSize.Half());
 
-	//SpriteRenderer->SetSprite("SampleMap(848,536).png"); // error
+	SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	SpriteRenderer->SetSprite("SampleMap(848,536).png"); 
+	SpriteRenderer->SetComponentScale(Global::WindowSize);
+	SpriteRenderer->SetOrder(ERenderOrder::BACKGROUND);
 	// 
 	//SpriteRenderer->CreateAnimation("BaseRoom", "SampleMap(848,536).png",0, 0);
 	//SpriteRenderer->ChangeAnimation("BaseRoom");

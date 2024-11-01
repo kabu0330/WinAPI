@@ -22,6 +22,9 @@ void APlayGameMode::BeginPlay()
 	
 	// Player의 BeginPlay 함수에서도 만들어도 동일한 효과를 볼 수 있지만
 	// Player로서의 순수한 독립성을 지켜주기 위해서 Player의 기능이 아니면 모두 여기서 만든다.
+	GetWorld()->SetCameraPos({0, 0});
+	GetWorld()->SetCameraToMainPawn(false);
+
 	ARoom* BaseRoom    = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();

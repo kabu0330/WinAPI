@@ -9,6 +9,7 @@
 
 #include "Tear.h"
 #include "Global.h"
+#include "ContentsEnum.h"
 
 void APlayer::RunSoundPlay()
 {
@@ -36,7 +37,6 @@ void APlayer::BeginPlay()
 	Super::BeginPlay();
 
 	// 직접 카메라 피봇을 설정해줘야 한다.
-	GetWorld()->SetCameraToMainPawn(false);
 	//FVector2D Size = UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
 	//GetWorld()->SetCameraPivot(Size.Half() * -1.0f);
 
@@ -103,6 +103,7 @@ void APlayer::AnimationSetting()
 	// 3. CreateAnimation 함수를 사용하여 ("동작 이름", "이미지.png", 동작순서, 프레임)을 설정한다.
 	// 4. SetComponentScale 함수를 사용하여 렌더러 컴포넌트의 크기를 정의한다.
 	// 5. ChanageAnimation 함수를 사용하여 기본 동작을 정의한다.
+	// 6. SetOrder로 정렬 순서를 정할 수 있다.
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle_Left", "Body.png", 1, 9, 0.1f);
@@ -116,6 +117,10 @@ void APlayer::AnimationSetting()
 	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 2 });
 	HeadRenderer->SetComponentScale({ 45, 45 });
 	HeadRenderer->ChangeAnimation("Head_Left");
+
+
+	BodyRenderer->SetOrder(ERenderOrder::PLAYER);
+	HeadRenderer->SetOrder(ERenderOrder::PLAYER);
 	//SpriteRenderer->SetComponentLocation({ -100, 0 });
 
 
