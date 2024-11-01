@@ -9,39 +9,21 @@ ARoom::ARoom()
 {
 	SetActorScale(Scale);
 	SetActorLocation(Global::WindowSize.Half());
-	
+
+	//SpriteRenderer->SetSprite("SampleMap(848,536).png"); // error
+	// 
 	//SpriteRenderer->CreateAnimation("BaseRoom", "SampleMap(848,536).png",0, 0);
 	//SpriteRenderer->ChangeAnimation("BaseRoom");
 
-		//FVector2D WindowSize =  UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
+	//FVector2D WindowSize =  UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
 	//SetActorScale(WindowSize.Half());
 	//SetActorLocation(WindowSize.Half());
-
-	//{
-	//	USpriteRenderer* SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	//	SpriteRenderer->SetOrder(ERenderOrder::BACKGROUND);
-	//	SpriteRenderer->SetSprite("bg-1-1.png");
-
-	//	FVector2D MapScale = SpriteRenderer->SetSpriteScale(1.0f);
-	//	SpriteRenderer->SetComponentLocation(MapScale.Half());
-	//}
 
 }
 
 ARoom::~ARoom()
 {
 	// map에서 insert한 자료들을 모두 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
-	//std::map<RoomDir, ARoom*>::iterator StartIter = Rooms.begin();
-	//std::map<RoomDir, ARoom*>::iterator EndIter = Rooms.end();
-
-	//for (; StartIter != EndIter; ++StartIter)
-	//{
-	//	if (nullptr != StartIter->second)
-	//	{
-	//		delete StartIter->second;
-	//		StartIter->second = nullptr;
-	//	}
-	//}
 }
 
 void ARoom::BeginPlay()
@@ -101,9 +83,7 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 
 
 	// 위치 조정
-	// 문제점 1. 방을 연결한 횟수만큼 중복해서 그려지는 문제
-	// 문제점 2. 메모리 릭
-	// 문제점 3. 방 크기가 ContentsWindow에서 초기화 한 창 크기가 아닌 전역변수를 초기화 할 때의 창 크기 값을 기준으로 방 크기가 설정되는 문제
+	// 문제점 1. 방을 연결한 횟수만큼 중복해서 그려지는 문제?
 	if (RoomDir::LEFT == _Room->Directon)
 	{
 		_Room->SetActorLocation({ GetRightPos().X + GetActorScale().Half().X, GetActorLocation().Y });

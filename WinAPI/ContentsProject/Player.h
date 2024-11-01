@@ -21,6 +21,7 @@ public:
 
 	void RunSoundPlay();
 
+	void AnimationSetting();
 	void EngineDebug();
 
 	// 입력 방법 2 : 이벤트 방식으로 처리
@@ -35,7 +36,7 @@ private:
 	float Speed = 100;
 	int MySpriteIndex = 0;
 
-	class USpriteRenderer* SpriteRenderer;
+	class USpriteRenderer* BodyRenderer;
 	class USpriteRenderer* HeadRenderer;
 
 	

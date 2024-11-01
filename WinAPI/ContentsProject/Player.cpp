@@ -19,27 +19,10 @@ APlayer::APlayer()
 {
 	// Actor의 위치는 의미가 있어도 크기는 의미가 없다.
 	SetActorLocation(Global::WindowSize.Half());
-	//SetSprite("icon.png");
 
-	// 랜더러를 하나 만든다.
-	SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	//SpriteRenderer->SetSprite("icon.png");
-	SpriteRenderer->CreateAnimation("Idle_Left", "Body.png", 1, 9, 0.1f);
-	SpriteRenderer->CreateAnimation("Idle_Right", "Body.png", 1, 9, 0.1f);
-	SpriteRenderer->SetComponentScale({ 45, 45 });
-	SpriteRenderer->ChangeAnimation("Idle_Left");
+	// 상태에 따른 애니메이션 동작을 정의한다.
+	AnimationSetting();
 
-	HeadRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	HeadRenderer->CreateAnimation("Head_Left", "Head.png", 0, 1, 0.5f);
-	HeadRenderer->SetComponentLocation({ 0, - SpriteRenderer->GetComponentScale().Half().iY() + 2});
-	HeadRenderer->SetComponentScale({ 45, 45 });
-	HeadRenderer->ChangeAnimation("Head_Left");
-	//SpriteRenderer->SetComponentLocation({ -100, 0 });
-
-
-	//SpriteRenderer->CreateAnimation("Run_Right", "Player_Right.png", { 2, 3, 4 }, { 0.1f, 0.1f, 0.1f });
-	//SpriteRenderer->ChangeAnimation("Idle_Right");
-	//SpriteRenderer->ChangeAnimation("Idle_Right");
 
 	// CreateDefaultSubObject<U2DCollision>();
 }
@@ -82,6 +65,7 @@ void APlayer::Tick(float _DeltaTime)
 	}
 	if (true == UEngineInput::GetInst().IsPress('W'))
 	{
+		BodyRenderer->ChangeAnimation("Idle_Left");
 		AddActorLocation(FVector2D::UP * _DeltaTime * Speed);
 	}
 	if (true == UEngineInput::GetInst().IsPress('S'))
@@ -110,6 +94,34 @@ void APlayer::Tick(float _DeltaTime)
 	//	SetSprite("icon.png", MySpriteIndex);
 	//	++MySpriteIndex;
 	//}
+}
+
+void APlayer::AnimationSetting()
+{
+	// 1. 헤더에 랜더러를 하나 만든다.
+	// 2. CreateDefualtSubObject 함수를 사용하여 렌더러 컴포넌트를 만든다.
+	// 3. CreateAnimation 함수를 사용하여 ("동작 이름", "이미지.png", 동작순서, 프레임)을 설정한다.
+	// 4. SetComponentScale 함수를 사용하여 렌더러 컴포넌트의 크기를 정의한다.
+	// 5. ChanageAnimation 함수를 사용하여 기본 동작을 정의한다.
+
+	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BodyRenderer->CreateAnimation("Idle_Left", "Body.png", 1, 9, 0.1f);
+	BodyRenderer->CreateAnimation("Idle_Right", "Body.png", 1, 9, 0.1f);
+	BodyRenderer->CreateAnimation("Idle_Down", "Body.png", 20, 29, 0.1f);
+	BodyRenderer->SetComponentScale({ 45, 45 });
+	BodyRenderer->ChangeAnimation("Idle_Left");
+
+	HeadRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	HeadRenderer->CreateAnimation("Head_Left", "Head.png", 0, 1, 0.5f);
+	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 2 });
+	HeadRenderer->SetComponentScale({ 45, 45 });
+	HeadRenderer->ChangeAnimation("Head_Left");
+	//SpriteRenderer->SetComponentLocation({ -100, 0 });
+
+
+	//SpriteRenderer->CreateAnimation("Run_Right", "Player_Right.png", { 2, 3, 4 }, { 0.1f, 0.1f, 0.1f });
+	//SpriteRenderer->ChangeAnimation("Idle_Right");
+	//SpriteRenderer->ChangeAnimation("Idle_Right");
 }
 
 void APlayer::EngineDebug()
