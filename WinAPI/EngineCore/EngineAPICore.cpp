@@ -16,6 +16,24 @@ UEngineAPICore::UEngineAPICore()
 
 UEngineAPICore::~UEngineAPICore()
 {
+	// 레벨 체인지
+	if (nullptr != NextLevel)
+	{
+		if (nullptr != CurLevel)
+		{
+			CurLevel->LevelChangeEnd();
+		}
+
+		CurLevel = NextLevel;
+
+		NextLevel->LevelChangeStart();
+
+		NextLevel = nullptr;
+
+		// 델타타임이 지연될수 있으므로 델타타임을 초기화시켜주는것이 좋다.
+		DeltaTimer.TimeStart();
+	}
+
 	std::map<std::string, class ULevel*>::iterator StartIter = Levels.begin();
 	std::map<std::string, class ULevel*>::iterator EndIter = Levels.end();
 

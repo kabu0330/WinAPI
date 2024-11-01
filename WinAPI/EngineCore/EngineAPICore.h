@@ -77,6 +77,7 @@ private:
 	// 현재 내가 눈으로 보고 있어야 하는 레벨
 	// 화면 전환시 포인터 체인지 방식으로 레벨 전환
 	class ULevel* CurLevel = nullptr;
+	class ULevel* NextLevel = nullptr;
 
 	void Tick();
 };

@@ -46,6 +46,11 @@ void USpriteRenderer::Render(float _DeltaTime)
 				if (true == CurAnimation->Loop)
 				{
 					CurAnimation->CurIndex = 0;
+
+					if (CurAnimation->Events.contains(CurAnimation->CurIndex))
+					{
+						CurAnimation->Events[CurAnimation->CurIndex]();
+					}
 				}
 				else
 				{
@@ -224,6 +229,11 @@ void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 
 	CurAnimation = &FrameAnimations[UpperName];
 	CurAnimation->Reset();
+
+	if (CurAnimation->Events.contains(CurAnimation->CurIndex))
+	{
+		CurAnimation->Events[CurAnimation->CurIndex]();
+	}
 }
 
 void USpriteRenderer::SetAnimationEvent(std::string_view _AnimationName, int _Frame, std::function<void()> _Function)

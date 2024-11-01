@@ -18,6 +18,12 @@ public:
 	ULevel& operator=(const ULevel& _Other) = delete;
 	ULevel& operator=(ULevel&& _Other) noexcept = delete;
 
+	// 내가 CurLevel 됐을대
+	void LevelChangeStart();
+
+	// 나 이제 새로운 레벨로 바뀔거야.
+	void LevelChangeEnd();
+
 	void Tick(float _DeltaTime);
 	void Render(float _DeltaTime);
 

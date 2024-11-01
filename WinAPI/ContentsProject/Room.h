@@ -72,5 +72,7 @@ private:
 	RoomDir Directon = RoomDir::NONE;
 	FVector2D Scale = { Global::WindowSize * 0.3f};
 	//FVector2D Direction = FVector2D::ZERO;
+
+	class USpriteRenderer* SpriteRenderer;
 };
 

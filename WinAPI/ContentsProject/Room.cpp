@@ -10,7 +10,8 @@ ARoom::ARoom()
 	SetActorScale(Scale);
 	SetActorLocation(Global::WindowSize.Half());
 	
-	//SetSprite("SampleMap(848,536).png");
+	//SpriteRenderer->CreateAnimation("BaseRoom", "SampleMap(848,536).png",0, 0);
+	//SpriteRenderer->ChangeAnimation("BaseRoom");
 
 		//FVector2D WindowSize =  UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
 	//SetActorScale(WindowSize.Half());

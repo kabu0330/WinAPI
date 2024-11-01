@@ -2,101 +2,110 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="Actor.h">
-      <Filter>02_Object</Filter>
+      <Filter>03_Object</Filter>
     </ClInclude>
     <ClInclude Include="Level.h">
-      <Filter>02_Object\01_Level</Filter>
+      <Filter>03_Object\01_Level</Filter>
     </ClInclude>
     <ClInclude Include="EngineAPICore.h">
-      <Filter>01_Core</Filter>
+      <Filter>02_Core</Filter>
     </ClInclude>
     <ClInclude Include="PreCompile.h">
       <Filter>00_PreCompile</Filter>
     </ClInclude>
     <ClInclude Include="GameMode.h">
-      <Filter>02_Object\02_Actor</Filter>
+      <Filter>03_Object\02_Actor</Filter>
     </ClInclude>
     <ClInclude Include="ImageManager.h">
-      <Filter>03_Resources</Filter>
+      <Filter>04_Resources</Filter>
     </ClInclude>
     <ClInclude Include="EngineSprite.h">
-      <Filter>03_Resources</Filter>
+      <Filter>04_Resources</Filter>
     </ClInclude>
     <ClInclude Include="SceneComponent.h">
-      <Filter>02_Object\02_Actor\Component</Filter>
+      <Filter>03_Object\02_Actor\Component</Filter>
     </ClInclude>
     <ClInclude Include="ActorComponent.h">
-      <Filter>02_Object\02_Actor\Component</Filter>
+      <Filter>03_Object\02_Actor\Component</Filter>
     </ClInclude>
     <ClInclude Include="SpriteRenderer.h">
-      <Filter>02_Object\02_Actor\Component\Rendering</Filter>
+      <Filter>03_Object\02_Actor\Component\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="2DCollision.h">
-      <Filter>02_Object\02_Actor\Component\Collision</Filter>
+      <Filter>03_Object\02_Actor\Component\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineCoreDebug.h">
+      <Filter>01_Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp">
-      <Filter>02_Object</Filter>
+      <Filter>03_Object</Filter>
     </ClCompile>
     <ClCompile Include="Level.cpp">
-      <Filter>02_Object\01_Level</Filter>
+      <Filter>03_Object\01_Level</Filter>
     </ClCompile>
     <ClCompile Include="EngineAPICore.cpp">
-      <Filter>01_Core</Filter>
+      <Filter>02_Core</Filter>
     </ClCompile>
     <ClCompile Include="PreCompile.cpp">
       <Filter>00_PreCompile</Filter>
     </ClCompile>
     <ClCompile Include="GameMode.cpp">
-      <Filter>02_Object\02_Actor</Filter>
+      <Filter>03_Object\02_Actor</Filter>
     </ClCompile>
     <ClCompile Include="ImageManager.cpp">
-      <Filter>03_Resources</Filter>
+      <Filter>04_Resources</Filter>
     </ClCompile>
     <ClCompile Include="EngineSprite.cpp">
-      <Filter>03_Resources</Filter>
+      <Filter>04_Resources</Filter>
     </ClCompile>
     <ClCompile Include="SceneComponent.cpp">
-      <Filter>02_Object\02_Actor\Component</Filter>
+      <Filter>03_Object\02_Actor\Component</Filter>
     </ClCompile>
     <ClCompile Include="ActorComponent.cpp">
-      <Filter>02_Object\02_Actor\Component</Filter>
+      <Filter>03_Object\02_Actor\Component</Filter>
     </ClCompile>
     <ClCompile Include="SpriteRenderer.cpp">
-      <Filter>02_Object\02_Actor\Component\Rendering</Filter>
+      <Filter>03_Object\02_Actor\Component\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="2DCollision.cpp">
-      <Filter>02_Object\02_Actor\Component\Collision</Filter>
+      <Filter>03_Object\02_Actor\Component\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineCoreDebug.cpp">
+      <Filter>01_Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
       <UniqueIdentifier>{f82791f7-6692-45ab-84df-e0f058dfb3f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01_Core">
+    <Filter Include="01_Debug">
+      <UniqueIdentifier>{95032b4b-2984-4244-b3ee-e4e02c9e3e6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_Core">
       <UniqueIdentifier>{73f3adde-1854-4009-97c9-2330e66769cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02_Object">
+    <Filter Include="03_Object">
       <UniqueIdentifier>{97b398ec-2d85-4ff9-ad9c-43d63ad1d173}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02_Object\01_Level">
+    <Filter Include="03_Object\01_Level">
       <UniqueIdentifier>{56c89f27-d8d0-49e4-a434-be93ba0663c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02_Object\02_Actor">
+    <Filter Include="03_Object\02_Actor">
       <UniqueIdentifier>{342ac68a-f183-4ee0-b001-e31e83bbc3fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03_Resources">
-      <UniqueIdentifier>{b12d3f76-8710-4fc9-935e-2cc65d1be9d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02_Object\02_Actor\Component">
+    <Filter Include="03_Object\02_Actor\Component">
       <UniqueIdentifier>{bda07c96-8bac-4385-b087-49a31ad40cce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02_Object\02_Actor\Component\Rendering">
+    <Filter Include="03_Object\02_Actor\Component\Rendering">
       <UniqueIdentifier>{dbffccf3-56d9-4a7d-b9a3-489866a58522}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02_Object\02_Actor\Component\Collision">
+    <Filter Include="03_Object\02_Actor\Component\Collision">
       <UniqueIdentifier>{4a82ed32-37c3-4bc8-b4e6-23a266aadcff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Resources">
+      <UniqueIdentifier>{b12d3f76-8710-4fc9-935e-2cc65d1be9d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

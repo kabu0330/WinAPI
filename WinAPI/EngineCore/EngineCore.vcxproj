@@ -160,6 +160,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineCoreDebug.h" />
     <ClInclude Include="EngineSprite.h">
       <SubType>
       </SubType>
@@ -200,6 +201,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="EngineCoreDebug.cpp" />
     <ClCompile Include="EngineSprite.cpp">
       <SubType>
       </SubType>

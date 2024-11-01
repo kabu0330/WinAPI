@@ -2,37 +2,53 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="EngineWindow.h">
-      <Filter>01_Window</Filter>
+      <Filter>02_Window</Filter>
     </ClInclude>
     <ClInclude Include="PreCompile.h">
       <Filter>00_PreCompile</Filter>
     </ClInclude>
     <ClInclude Include="EngineInput.h">
-      <Filter>02_Input</Filter>
+      <Filter>03_Input</Filter>
     </ClInclude>
-    <ClInclude Include="EngineWinImage.h" />
+    <ClInclude Include="EngineWinDebug.h">
+      <Filter>01_Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineWinImage.h">
+      <Filter>04_Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineWindow.cpp">
-      <Filter>01_Window</Filter>
+      <Filter>02_Window</Filter>
     </ClCompile>
     <ClCompile Include="PreCompile.cpp">
       <Filter>00_PreCompile</Filter>
     </ClCompile>
     <ClCompile Include="EngineInput.cpp">
-      <Filter>02_Input</Filter>
+      <Filter>03_Input</Filter>
     </ClCompile>
-    <ClCompile Include="EngineWinImage.cpp" />
+    <ClCompile Include="EngineWinDebug.cpp">
+      <Filter>01_Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineWinImage.cpp">
+      <Filter>04_Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
       <UniqueIdentifier>{1de720ff-b01f-403f-a03f-24c8bedc876f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01_Window">
+    <Filter Include="01_Debug">
+      <UniqueIdentifier>{1cdbcf3e-51f0-4b20-848e-61a2c60c7532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_Window">
       <UniqueIdentifier>{edcab772-a599-46f9-b9ca-2c2e8a2d9034}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02_Input">
+    <Filter Include="03_Input">
       <UniqueIdentifier>{ec240fbb-f6ba-4ee6-a886-bd32b6aca8ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Resource">
+      <UniqueIdentifier>{f5b37ea7-9130-4162-b710-9fc49d5fdcfe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

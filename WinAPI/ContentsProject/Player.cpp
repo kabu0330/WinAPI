@@ -1,9 +1,11 @@
 #include "PreCompile.h"
 #include "Player.h"
+#include <string>
 
 #include <EngineCore/EngineAPICore.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/EngineCoreDebug.h>
 
 #include "Tear.h"
 #include "Global.h"
@@ -12,7 +14,6 @@ void APlayer::RunSoundPlay()
 {
 	UEngineDebug::OutPutString("SoundPlay");
 }
-
 
 APlayer::APlayer()
 {
@@ -25,13 +26,13 @@ APlayer::APlayer()
 	//SpriteRenderer->SetSprite("icon.png");
 	SpriteRenderer->CreateAnimation("Idle_Left", "Body.png", 1, 9, 0.1f);
 	SpriteRenderer->CreateAnimation("Idle_Right", "Body.png", 1, 9, 0.1f);
-	SpriteRenderer->SetComponentScale({ 50, 50 });
+	SpriteRenderer->SetComponentScale({ 45, 45 });
 	SpriteRenderer->ChangeAnimation("Idle_Left");
 
 	HeadRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	HeadRenderer->CreateAnimation("Head_Left", "Head.png", 0, 1, 0.5f);
 	HeadRenderer->SetComponentLocation({ 0, - SpriteRenderer->GetComponentScale().Half().iY() + 2});
-	HeadRenderer->SetComponentScale({ 50, 50 });
+	HeadRenderer->SetComponentScale({ 45, 45 });
 	HeadRenderer->ChangeAnimation("Head_Left");
 	//SpriteRenderer->SetComponentLocation({ -100, 0 });
 
@@ -67,6 +68,7 @@ void APlayer::BeginPlay()
 
 void APlayer::Tick(float _DeltaTime)
 {
+	EngineDebug();
 	//this;
 	// 입력 방법 1
 	if (true == UEngineInput::GetInst().IsPress('A'))
@@ -108,6 +110,16 @@ void APlayer::Tick(float _DeltaTime)
 	//	SetSprite("icon.png", MySpriteIndex);
 	//	++MySpriteIndex;
 	//}
+}
+
+void APlayer::EngineDebug()
+{
+	UEngineDebug::CoreOutPutString("Player : " + GetActorLocation().ToString());
+
+	if (true == UEngineInput::GetInst().IsDown('B'))
+	{
+		UEngineDebug::SwitchIsDebug();
+	}
 }
 
 // 입력 방법 2 : 이벤트 방식으로 처리

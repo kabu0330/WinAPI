@@ -63,8 +63,8 @@ void ContentsCore::BeginPlay()
 	}
 	
 	// 이미지 한 장에서 스프라이트로 만들 크기가 몇인지
-	UImageManager::GetInst().CuttingSprite("icon.png", { 1024, 1024 });
-	UImageManager::GetInst().CuttingSprite("SampleMap(848,536).png", { 848, 536 });
+	//UImageManager::GetInst().CuttingSprite("icon.png", { 1024, 1024 });
+	//UImageManager::GetInst().CuttingSprite("SampleMap(848,536).png", { 848, 536 });
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
 	UImageManager::GetInst().CuttingSprite("Head.png", 5, 2);
 
