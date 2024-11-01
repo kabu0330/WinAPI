@@ -100,6 +100,7 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 	if (RoomDir::LEFT == _Room->Directon)
 	{
 		_Room->SetActorLocation({ GetRightPos().X + GetActorScale().Half().X, GetActorLocation().Y });
+
 	}
 	else if (RoomDir::RIGHT == _Room->Directon)
 	{
@@ -107,8 +108,7 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 	}
 	else if (RoomDir::UP == _Room->Directon)
 	{
-		//_Room->SetActorLocation({ GetActorLocation().X, GetDownPos().Y + GetActorScale().Half().Y });
-		_Room->SetActorLocation({ 0 , 0});
+		_Room->SetActorLocation({ GetActorLocation().X, GetDownPos().Y + GetActorScale().Half().Y });
 	}
 	else if (RoomDir::DOWN == _Room->Directon)
 	{

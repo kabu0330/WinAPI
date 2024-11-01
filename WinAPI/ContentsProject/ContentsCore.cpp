@@ -35,8 +35,7 @@ void ContentsCore::BeginPlay()
 
 	// 2. 윈도우 사이즈를 반드시 정해야 한다.
 	Global::WindowSize = { 1280, 720 };
-
-	// 3. 윈도우 사이즈를 재설정하는 과정에서 메인 HDC가 아닌 뒤에서 그림을 그릴 BackBuffer를 생성한다.
+	Global::WindowScale = Global::WindowSize;
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, Global::WindowSize);
 
 
