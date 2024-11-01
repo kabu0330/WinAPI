@@ -6,6 +6,7 @@
 
 #include "TitleScene.h"
 #include "Global.h"
+#include "TitleScene.h"
 
 ATitleGameMode::ATitleGameMode()
 {
@@ -18,7 +19,7 @@ ATitleGameMode::~ATitleGameMode()
 void ATitleGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
+	ATitleScene* Scene = GetWorld()->SpawnActor<ATitleScene>();
 }
 
 void ATitleGameMode::Tick(float _DeltaTime)
