@@ -95,8 +95,8 @@ void ContentsCore::BeginPlay()
 	//UEngineAPICore::GetCore()->CreateLevel("End");
 
 	// 최초 실행될 레벨을 결정한다.
-	UEngineAPICore::GetCore()->OpenLevel("Title");
-	//UEngineAPICore::GetCore()->OpenLevel("Play");
+	//UEngineAPICore::GetCore()->OpenLevel("Title");
+	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
 void ContentsCore::Tick()

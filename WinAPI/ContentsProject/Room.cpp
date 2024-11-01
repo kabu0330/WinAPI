@@ -9,22 +9,16 @@ ARoom::ARoom()
 {
 	SetActorLocation(Global::WindowSize.Half());
 	
-	//SpriteRenderers.push_back(*USpriteRenderers()???);
+ //	SpriteRenderers.push_back(SpriteRenderer);
 
-	std::map<RoomDir, ARoom*>::iterator StartIter = Rooms.begin();
-	std::map<RoomDir, ARoom*>::iterator EndIter   = Rooms.end();
+	//for (int i = 0; i < SpriteRenderers.size(); i++)
+	//{
+	//	SpriteRenderers[i] = CreateDefaultSubObject<USpriteRenderer>();
+	//	SpriteRenderers[i]->SetSprite("SampleMap(848,536).png");
+	//	SpriteRenderers[i]->SetComponentScale(Global::WindowSize * 0.5);
+	//	SpriteRenderers[i]->SetOrder(ERenderOrder::BACKGROUND);
 
-	for (; StartIter != EndIter; ++StartIter)
-	{
-		for (int i = 0; i < SpriteRenderers.size(); i++)
-		{
-			StartIter->second->SpriteRenderers[i] = CreateDefaultSubObject<USpriteRenderer>();
-			StartIter->second->SpriteRenderers[i]->SetSprite("SampleMap(848,536).png");
-			StartIter->second->SpriteRenderers[i]->SetComponentScale(Global::WindowSize * 0.5);
-			StartIter->second->SpriteRenderers[i]->SetOrder(ERenderOrder::BACKGROUND);
-
-		}
-	}
+	//}
 
 	SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	SpriteRenderer->SetSprite("SampleMap(848,536).png");
@@ -113,9 +107,8 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 	}
 	else if (RoomDir::UP == _Room->Directon)
 	{
-		float Result0 = GetDownPos().Y;
-		float Result1 = GetActorScale().Half().Y;
-		_Room->SetActorLocation({ GetActorLocation().X, GetDownPos().Y + GetActorScale().Half().Y });
+		//_Room->SetActorLocation({ GetActorLocation().X, GetDownPos().Y + GetActorScale().Half().Y });
+		_Room->SetActorLocation({ 0 , 0});
 	}
 	else if (RoomDir::DOWN == _Room->Directon)
 	{
