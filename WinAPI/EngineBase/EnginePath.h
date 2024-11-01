@@ -21,9 +21,14 @@ public:
 	void MoveParent();
 
 	std::string GetPathToString();
+
+	// 파일명 + 확장자 포함
 	std::string GetFileName();
+	std::string GetDirectoryName();
+
 	std::string GetExtension();
 
+	void Append(std::string_view _AppendName);
 
 	bool MoveParentToDirectory(std::string_view _Path);
 	bool IsDirectory();

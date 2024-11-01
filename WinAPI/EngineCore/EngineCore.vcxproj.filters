@@ -22,6 +22,18 @@
     <ClInclude Include="EngineSprite.h">
       <Filter>03_Resources</Filter>
     </ClInclude>
+    <ClInclude Include="SceneComponent.h">
+      <Filter>02_Object\02_Actor\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorComponent.h">
+      <Filter>02_Object\02_Actor\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderer.h">
+      <Filter>02_Object\02_Actor\Component\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="2DCollision.h">
+      <Filter>02_Object\02_Actor\Component\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp">
@@ -45,6 +57,18 @@
     <ClCompile Include="EngineSprite.cpp">
       <Filter>03_Resources</Filter>
     </ClCompile>
+    <ClCompile Include="SceneComponent.cpp">
+      <Filter>02_Object\02_Actor\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorComponent.cpp">
+      <Filter>02_Object\02_Actor\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRenderer.cpp">
+      <Filter>02_Object\02_Actor\Component\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="2DCollision.cpp">
+      <Filter>02_Object\02_Actor\Component\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -64,6 +88,15 @@
     </Filter>
     <Filter Include="03_Resources">
       <UniqueIdentifier>{b12d3f76-8710-4fc9-935e-2cc65d1be9d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_Object\02_Actor\Component">
+      <UniqueIdentifier>{bda07c96-8bac-4385-b087-49a31ad40cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_Object\02_Actor\Component\Rendering">
+      <UniqueIdentifier>{dbffccf3-56d9-4a7d-b9a3-489866a58522}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02_Object\02_Actor\Component\Collision">
+      <UniqueIdentifier>{4a82ed32-37c3-4bc8-b4e6-23a266aadcff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

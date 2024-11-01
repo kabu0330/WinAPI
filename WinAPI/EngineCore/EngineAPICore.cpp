@@ -96,7 +96,7 @@ void UEngineAPICore::Tick()
 	}
 
 	CurLevel->Tick(DeltaTime);
-	CurLevel->Render();
+	CurLevel->Render(DeltaTime);
 }
 
 void UEngineAPICore::OpenLevel(std::string_view _LevelName)

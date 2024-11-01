@@ -9,6 +9,7 @@ public:
 	// constrcuter destructer
 	UEngineDirectory();
 	UEngineDirectory(std::string_view _Path);
+	UEngineDirectory(std::filesystem::path _Path);
 	~UEngineDirectory();
 
 	// delete Function
@@ -18,6 +19,7 @@ public:
 	//UEngineDirectory& operator=(UEngineDirectory&& _Other) noexcept = delete;
 
 	std::vector<class UEngineFile> GetAllFile(bool _IsRecursive = true);
+	std::vector<class UEngineDirectory> GetAllDirectory();
 
 protected:
 

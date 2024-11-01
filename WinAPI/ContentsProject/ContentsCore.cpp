@@ -61,9 +61,24 @@ void ContentsCore::BeginPlay()
 		// Load 함수 : 이미지의 파일명을 Key / HDC와 위치, 크기를 값으로 저장해주는 함수
 		UImageManager::GetInst().Load(FilePath);
 	}
-
+	
+	// 이미지 한 장에서 스프라이트로 만들 크기가 몇인지
 	UImageManager::GetInst().CuttingSprite("icon.png", { 1024, 1024 });
 	UImageManager::GetInst().CuttingSprite("SampleMap(848,536).png", { 848, 536 });
+	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
+	UImageManager::GetInst().CuttingSprite("Head.png", 5, 2);
+
+
+	//{
+
+	//	UEngineDirectory BombDir;
+	//	BombDir.MoveParentToDirectory("Resources");
+	//	BombDir.Append("bomb");
+
+	//	UImageManager::GetInst().LoadFolder(BombDir.GetPathToString());
+
+	//}
+
 
 
 	// 레벨을 생성한다.

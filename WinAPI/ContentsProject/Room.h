@@ -70,7 +70,7 @@ protected:
 private:
 	std::map<RoomDir, ARoom*> Rooms;
 	RoomDir Directon = RoomDir::NONE;
-	FVector2D Scale = { Global::WindowSize * 0.3};
+	FVector2D Scale = { Global::WindowSize * 0.3f};
 	//FVector2D Direction = FVector2D::ZERO;
 };
 

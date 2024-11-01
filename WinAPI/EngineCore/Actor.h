@@ -9,7 +9,6 @@
 class AActor : public UObject
 {
 public:
-	typedef AActor Super;
 
 	friend class ULevel;
 
@@ -23,9 +22,12 @@ public:
 	AActor& operator=(const AActor& _Other) = delete;
 	AActor& operator=(AActor&& _Other) noexcept = delete;
 
+	// 객체가 레벨에서 처음 Tick을 돌리기 직전에 실행된다.
 	virtual void BeginPlay() {}
+
+
 	virtual void Tick(float _DeltaTime) {}
-	virtual void Render();
+	
 
 	class ULevel* GetWorld()
 	{
@@ -47,6 +49,11 @@ public:
 		Transform.Scale = _Scale;
 	}
 
+	FTransform GetTransform()
+	{
+		return Transform;
+	}
+
 	FVector2D GetActorLocation()
 	{
 		return Transform.Location;
@@ -58,18 +65,42 @@ public:
 		return Transform.Scale;
 	}
 
+	// 컴포넌트의 소유자는 액터이다. 삭제도 액터가 해야한다.
+	// 액터가 가진 컴포넌트를 다른 액터에 넘겨주거나 실행 중에 렌더를 삭제할 수 없다.
+	template<typename ComponentType>
+	ComponentType* CreateDefaultSubObject()
+	{
+		ComponentType* NewComponent = new ComponentType();
+
+		UActorComponent* ComponentPtr = dynamic_cast<UActorComponent*>(NewComponent);
+		// 내가 널 만든 레벨이야.
+		ComponentPtr->ParentActor = this;
+
+		// 호출 지연
+		// NewComponent->BeginPlay();
+		// 만들기만 하고 실행 안한 상태가 된것.
+		Components.push_back(NewComponent);
+
+		// BeginPlay가 실행안된 컴포넌트들을 다 자료구조에 담는다.
+		ComponentList.push_back(NewComponent);
+		return NewComponent;
+	}
+
+
 protected:
 
 private:
+	static void ComponentBeginPlay();
+
+	static bool IsNewActorCreate;
+	static std::list<class UActorComponent*> ComponentList;
+
 	class ULevel* World = nullptr;
 
 	FTransform Transform;
 
-public:
-	class UEngineSprite* Sprite = nullptr;
-	int CurIndex = 0;
+	std::list<class UActorComponent*> Components;
 
-	void SetSprite(std::string_view _Name, int _CurIndex = 0);
 };
 
-
+typedef AActor Super;

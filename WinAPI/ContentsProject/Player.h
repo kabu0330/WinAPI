@@ -18,6 +18,8 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	void RunSoundPlay();
+
 	// 입력 방법 2 : 이벤트 방식으로 처리
 	//void LeftMove(float _DeltaTime);
 	//void RightMove(float _DeltaTime);
@@ -30,6 +32,12 @@ protected:
 private:
 	float Speed = 100;
 	int MySpriteIndex = 0;
+
+	class USpriteRenderer* SpriteRenderer;
+	class USpriteRenderer* HeadRenderer;
+
+	
+
 
 	class ARoom* CurRoom = nullptr;
 };

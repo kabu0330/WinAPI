@@ -5,6 +5,7 @@
 class ULevel
 {
 public:
+	friend class USpriteRenderer; // 렌더러의 모든 기능을 다 넘겨준다.
 	friend class UEngineAPICore;
 
 	// constructer destructer
@@ -18,7 +19,7 @@ public:
 	ULevel& operator=(ULevel&& _Other) noexcept = delete;
 
 	void Tick(float _DeltaTime);
-	void Render();
+	void Render(float _DeltaTime);
 
 	template<typename ActorType>
 	ActorType* SpawnActor()
@@ -27,9 +28,20 @@ public:
 		AActor* ActorPtr = dynamic_cast<AActor*>(NewActor);
 		ActorPtr->World = this;
 
-		NewActor->BeginPlay();
-		AllActors.push_back(NewActor);
+		BeginPlayList.push_back(ActorPtr);
+		// NewActor->BeginPlay();
+		// AllActors.push_back(NewActor);
 		return NewActor;
+	}
+
+	void SetCameraToMainPawn(bool _IsCameraToMainPawn)
+	{
+		IsCameraToMainPawn = _IsCameraToMainPawn;
+	}
+
+	void SetCameraPivot(FVector2D _Pivot)
+	{
+		CameraPivot = _Pivot;
 	}
 
 protected:
@@ -52,16 +64,32 @@ private:
 		GameMode->World = this;
 
 		// 초기 세팅
-		GameMode->BeginPlay();
-		MainPawn->BeginPlay();
+		BeginPlayList.push_back(GameMode);
+		BeginPlayList.push_back(MainPawn);
 
-		AllActors.push_back(GameMode);
-		AllActors.push_back(MainPawn);
+		//GameMode->BeginPlay();
+		//MainPawn->BeginPlay();
+		//AllActors.push_back(GameMode);
+		//AllActors.push_back(MainPawn);
 	}
+
+	// 렌더러는 컨텐츠에서 함부로 호출하지 못하게 하기 위해서 private에 있어야 한다.
+	void PushRenderer(class USpriteRenderer* _Renderer);
+	void ChangeRenderOrder(class USpriteRenderer* _Renderer, int _PrevOrder);
 
 	AGameMode* GameMode = nullptr;
 
 	AActor* MainPawn = nullptr;
 	std::list<AActor*> AllActors;
+
+	std::list<AActor*> BeginPlayList;
+
+	// 오더링한다. : 불필요한 정렬을 하지 않도록 Key 값이 int인 map, 만들어진 순서대로
+	std::map<int, std::list<class USpriteRenderer*>> Renderers;
+
+	// 카메라
+	bool IsCameraToMainPawn = true;
+	FVector2D CameraPos;
+	FVector2D CameraPivot;
 };
 

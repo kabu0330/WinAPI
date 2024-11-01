@@ -120,6 +120,7 @@ void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path
 
 	HBITMAP NewBitmap = nullptr;
 
+	// PNG
 	if (".PNG" == UpperExt)
 	{
 		ULONG_PTR GdiPlusToken = 0; // GdiPlus용 핸들을 표현할 때 사용
@@ -152,6 +153,15 @@ void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path
 		delete pBitMap;
 		delete pImage;
 	}
+
+
+	// 비트맵
+	else if (".BMP" == UpperExt)
+	{
+		HANDLE NewHandle = LoadImageA(nullptr, _Path.data(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+		NewBitmap = reinterpret_cast<HBITMAP>(NewHandle);
+	}
+
 
 	// 비트맵 변환에 실패하면
 	if (nullptr == NewBitmap)

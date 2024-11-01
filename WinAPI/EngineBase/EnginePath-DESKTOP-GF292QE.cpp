@@ -28,34 +28,12 @@ std::string UEnginePath::GetPathToString()
 
 std::string UEnginePath::GetFileName()
 {
-	if (true == IsDirectory())
-	{
-		MSGASSERT("파일 경로일때만 GetFileName을 호출할수 있습니다." + Path.string());
-		return "";
-	}
-
-	return Path.filename().string();
-}
-
-std::string UEnginePath::GetDirectoryName()
-{
-	if (false == IsDirectory())
-	{
-		MSGASSERT("디렉토리 경로일때만 GetDirectoryName을 호출할수 있습니다." + Path.string());
-		return "";
-	}
-
 	return Path.filename().string();
 }
 
 std::string UEnginePath::GetExtension()
 {
 	return Path.extension().string();
-}
-
-void UEnginePath::Append(std::string_view _AppendName)
-{
-	Path.append(_AppendName);
 }
 
 bool UEnginePath::IsExists()
@@ -92,7 +70,6 @@ bool UEnginePath::MoveParentToDirectory(std::string_view _Path)
 	bool Result = false;
 	std::filesystem::path CurPath = DummyPath.Path;
 
-	// root_path : 드라이브 위치(C:\\ 이나 D:\\과 같이 '내 컴퓨터'에서 보이는) 
 	std::filesystem::path Root = CurPath.root_path();
 	while (true)
 	{
