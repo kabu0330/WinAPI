@@ -74,7 +74,6 @@ private:
 	FVector2D Scale = { Global::WindowSize * 0.3f};
 	//FVector2D Direction = FVector2D::ZERO;
 
-	//std::vector<USpriteRenderer*> SpriteRenderers;
 	class USpriteRenderer* SpriteRenderer = nullptr; // 임시 방 하나 생성
 };
 

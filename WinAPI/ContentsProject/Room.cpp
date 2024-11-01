@@ -8,21 +8,11 @@
 ARoom::ARoom()
 {
 	SetActorLocation(Global::WindowSize.Half());
-	
- //	SpriteRenderers.push_back(SpriteRenderer);
-
-	//for (int i = 0; i < SpriteRenderers.size(); i++)
-	//{
-	//	SpriteRenderers[i] = CreateDefaultSubObject<USpriteRenderer>();
-	//	SpriteRenderers[i]->SetSprite("SampleMap(848,536).png");
-	//	SpriteRenderers[i]->SetComponentScale(Global::WindowSize * 0.5);
-	//	SpriteRenderers[i]->SetOrder(ERenderOrder::BACKGROUND);
-
-	//}
+	SetActorScale(Global::WindowScale);
 
 	SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	SpriteRenderer->SetSprite("SampleMap(848,536).png");
-	SpriteRenderer->SetComponentScale(Global::WindowSize * 0.5);
+	SpriteRenderer->SetComponentScale(GetActorScale());
 	SpriteRenderer->SetOrder(ERenderOrder::BACKGROUND);
 	 
 	//SpriteRenderer->CreateAnimation("BaseRoom", "SampleMap(848,536).png",0, 0);

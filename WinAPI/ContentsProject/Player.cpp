@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "Player.h"
 #include <string>
+#include <vector>
 
 #include <EngineCore/EngineAPICore.h>
 #include <EnginePlatform/EngineInput.h>
@@ -18,13 +19,15 @@ void APlayer::RunSoundPlay()
 
 APlayer::APlayer()
 {
-	// Actor의 위치는 의미가 있어도 크기는 의미가 없다.
+	// 1. Actor의 위치는 의미가 있어도 크기는 의미가 없다.
 	SetActorLocation(Global::WindowSize.Half());
 
-	// 상태에 따른 애니메이션 동작을 정의한다.
+	// 2. 상태에 따른 애니메이션 동작을 정의한다.
 	AnimationSetting();
 
-
+	// 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다.
+ 
+	// 4. 캐릭터의 히트박스를 설정할 충돌체를 생성한다.
 	// CreateDefaultSubObject<U2DCollision>();
 }
 
@@ -54,33 +57,31 @@ void APlayer::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	EngineDebug();
-	this;
+
 	// 입력 방법 1
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
-		//SpriteRenderer->ChangeAnimation("Run_Right");
+		BodyRenderer->ChangeAnimation("Body_Left");
+		HeadRenderer->ChangeAnimation("Head_Left");
 		AddActorLocation(FVector2D::LEFT * _DeltaTime * Speed);
 	}
 	if (true == UEngineInput::GetInst().IsPress('D'))
 	{
+		BodyRenderer->ChangeAnimation("Body_Right");
+		HeadRenderer->ChangeAnimation("Head_RIght");
 		AddActorLocation(FVector2D::RIGHT * _DeltaTime * Speed);
 	}
 	if (true == UEngineInput::GetInst().IsPress('W'))
 	{
-		BodyRenderer->ChangeAnimation("Idle_Left");
+		BodyRenderer->ChangeAnimation("Body_Up");
+		HeadRenderer->ChangeAnimation("Head_Up");
 		AddActorLocation(FVector2D::UP * _DeltaTime * Speed);
 	}
 	if (true == UEngineInput::GetInst().IsPress('S'))
 	{
+		BodyRenderer->ChangeAnimation("Body_Down");
+		HeadRenderer->ChangeAnimation("Head_Down");
 		AddActorLocation(FVector2D::DOWN * _DeltaTime * Speed);
-	}
-
-	if (1.0f < UEngineInput::GetInst().IsPressTime(VK_SPACE))
-	{
-		// 플레이어가 속한 레벨에 Bullet을 생성한다.
-        ATear* Ptr = GetWorld()->SpawnActor<ATear>();
-		Ptr->SetActorLocation(GetActorLocation());
-		return;
 	}
 
 	if (false == UEngineInput::GetInst().IsPress('A') &&
@@ -88,7 +89,18 @@ void APlayer::Tick(float _DeltaTime)
 		false == UEngineInput::GetInst().IsPress('W') &&
 		false == UEngineInput::GetInst().IsPress('S'))
 	{
-		//SpriteRenderer->ChangeAnimation("Idle_Right");
+		BodyRenderer->ChangeAnimation("Body_Idle");
+		HeadRenderer->ChangeAnimation("Head_Down");
+	}
+
+	// 대각선 이동은 어떻게 할 것인가?
+
+	if (1.0f < UEngineInput::GetInst().IsPressTime(VK_SPACE))
+	{
+		// 플레이어가 속한 레벨에 Bullet을 생성한다.
+		ATear* Ptr = GetWorld()->SpawnActor<ATear>();
+		Ptr->SetActorLocation(GetActorLocation());
+		return;
 	}
 
 	//if (true == UEngineInput::GetInst().IsDown('R'))
@@ -108,17 +120,22 @@ void APlayer::AnimationSetting()
 	// 6. SetOrder로 정렬 순서를 정할 수 있다.
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BodyRenderer->CreateAnimation("Idle_Left", "Body.png", 1, 9, 0.1f);
-	BodyRenderer->CreateAnimation("Idle_Right", "Body.png", 1, 9, 0.1f);
-	BodyRenderer->CreateAnimation("Idle_Down", "Body.png", 20, 29, 0.1f);
+	BodyRenderer->CreateAnimation("Body_Left", "Body.png", 1, 9, 0.1f);
+	BodyRenderer->CreateAnimation("Body_Right", "Body.png", 10, 19, 0.1f);
+	BodyRenderer->CreateAnimation("Body_Down", "Body.png", 20, 29, 0.1f);
+	BodyRenderer->CreateAnimation("Body_Up", "Body.png", { 29, 28, 27, 26, 25, 24, 23, 22, 21, 20 }, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f });
+	BodyRenderer->CreateAnimation("Body_Idle", "Body.png", 29, 29, 0.1f);
 	BodyRenderer->SetComponentScale({ 45, 45 });
-	BodyRenderer->ChangeAnimation("Idle_Left");
+	BodyRenderer->ChangeAnimation("Body_Idle");
 
 	HeadRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	HeadRenderer->CreateAnimation("Head_Left", "Head.png", 0, 1, 0.5f);
-	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 2 });
+	HeadRenderer->CreateAnimation("Head_Right", "Head.png", 2, 3, 0.5f);
+	HeadRenderer->CreateAnimation("Head_Down", "Head.png", 6, 7, 0.5f);
+	HeadRenderer->CreateAnimation("Head_Up", "Head.png", 4, 5, 0.5f);
+	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 3 });
 	HeadRenderer->SetComponentScale({ 45, 45 });
-	HeadRenderer->ChangeAnimation("Head_Left");
+	HeadRenderer->ChangeAnimation("Head_Down");
 
 
 	BodyRenderer->SetOrder(ERenderOrder::PLAYER);
