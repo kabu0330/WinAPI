@@ -8,12 +8,29 @@
 ARoom::ARoom()
 {
 	SetActorLocation(Global::WindowSize.Half());
+	
+	//SpriteRenderers.push_back(*USpriteRenderers()???);
+
+	std::map<RoomDir, ARoom*>::iterator StartIter = Rooms.begin();
+	std::map<RoomDir, ARoom*>::iterator EndIter   = Rooms.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		for (int i = 0; i < SpriteRenderers.size(); i++)
+		{
+			StartIter->second->SpriteRenderers[i] = CreateDefaultSubObject<USpriteRenderer>();
+			StartIter->second->SpriteRenderers[i]->SetSprite("SampleMap(848,536).png");
+			StartIter->second->SpriteRenderers[i]->SetComponentScale(Global::WindowSize * 0.5);
+			StartIter->second->SpriteRenderers[i]->SetOrder(ERenderOrder::BACKGROUND);
+
+		}
+	}
 
 	SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	SpriteRenderer->SetSprite("SampleMap(848,536).png"); 
-	SpriteRenderer->SetComponentScale(Global::WindowSize);
+	SpriteRenderer->SetSprite("SampleMap(848,536).png");
+	SpriteRenderer->SetComponentScale(Global::WindowSize * 0.5);
 	SpriteRenderer->SetOrder(ERenderOrder::BACKGROUND);
-	// 
+	 
 	//SpriteRenderer->CreateAnimation("BaseRoom", "SampleMap(848,536).png",0, 0);
 	//SpriteRenderer->ChangeAnimation("BaseRoom");
 
@@ -36,7 +53,7 @@ void ARoom::BeginPlay()
 
 void ARoom::Tick(float _DeltaTime)
 {
-
+	Super::Tick(_DeltaTime);
 }
 
 bool ARoom::IsLinking(ARoom* _Room)

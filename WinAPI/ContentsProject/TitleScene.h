@@ -15,9 +15,12 @@ public:
 	ATitleScene& operator=(const ATitleScene& _Other) = delete;
 	ATitleScene& operator=(ATitleScene&& _Other) noexcept = delete;
 
+	void BeginPlay() override;
+	void Tick(float _DeltaTime);
+
 protected:
 
 private:
-
+	class USpriteRenderer* TitleRenderer;
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <map>
+#include <vector>
 #include "Global.h"
 
 enum class RoomDir
@@ -73,6 +74,7 @@ private:
 	FVector2D Scale = { Global::WindowSize * 0.3f};
 	//FVector2D Direction = FVector2D::ZERO;
 
-	class USpriteRenderer* SpriteRenderer;
+	std::vector<class USpriteRenderer*> SpriteRenderers;
+	class USpriteRenderer* SpriteRenderer; // 임시 방 하나 생성
 };
 

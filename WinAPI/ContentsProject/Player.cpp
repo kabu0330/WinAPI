@@ -51,6 +51,8 @@ void APlayer::BeginPlay()
 
 void APlayer::Tick(float _DeltaTime)
 {
+	Super::Tick(_DeltaTime);
+
 	EngineDebug();
 	this;
 	// 입력 방법 1
