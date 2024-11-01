@@ -23,6 +23,12 @@
       <Filter>03_Global</Filter>
     </ClInclude>
     <ClInclude Include="ContentsEnum.h" />
+    <ClInclude Include="TitleGameMode.h">
+      <Filter>02_GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>05_Title</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -47,6 +53,12 @@
       <Filter>03_Global</Filter>
     </ClCompile>
     <ClCompile Include="ContentsEnum.cpp" />
+    <ClCompile Include="TitleGameMode.cpp">
+      <Filter>02_GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>05_Title</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -63,6 +75,9 @@
     </Filter>
     <Filter Include="04_Play">
       <UniqueIdentifier>{6dfcefa1-122c-4926-907e-1e8189ea5436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05_Title">
+      <UniqueIdentifier>{914c6b2b-b9ce-41fc-a2bf-cd28f0a76036}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

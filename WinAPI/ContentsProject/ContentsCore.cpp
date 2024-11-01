@@ -1,5 +1,5 @@
 #include "PreCompile.h"
-#include "Player.h"
+#include "ContentsCore.h"
 
 #include <EngineBase/EngineDebug.h>
 #include <EngineBase/EngineDirectory.h>
@@ -7,9 +7,11 @@
 #include <EngineCore/EngineAPICore.h>
 #include <EngineCore/ImageManager.h>
 
-#include "ContentsCore.h"
 #include "PlayGameMode.h"
+#include "TitleGameMode.h"
+
 #include "Global.h"
+#include "Player.h"
 #include "Room.h"
 
 ContentsCore::ContentsCore()
@@ -82,12 +84,13 @@ void ContentsCore::BeginPlay()
 
 
 	// 레벨을 생성한다.
-	//UEngineAPICore::GetCore()->CreateLevel("Title");
+	UEngineAPICore::GetCore()->CreateLevel<ATitleGameMode, AActor>("Title");
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
 	//UEngineAPICore::GetCore()->CreateLevel("End");
 
 	// 최초 실행될 레벨을 결정한다.
-	UEngineAPICore::GetCore()->OpenLevel("Play");
+	UEngineAPICore::GetCore()->OpenLevel("Title");
+	//UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
 void ContentsCore::Tick()

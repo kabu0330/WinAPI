@@ -69,7 +69,7 @@ void APlayer::BeginPlay()
 void APlayer::Tick(float _DeltaTime)
 {
 	EngineDebug();
-	//this;
+	this;
 	// 입력 방법 1
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
