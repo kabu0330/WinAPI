@@ -20,8 +20,11 @@ public:
 protected:
 	void BeginPlay() override;
 	void Tick() override;
+	void SpriteSetting();
+	void FolderSetting();
+	void LevelSetting();
 
 private:
-	ULevel* TitleLevel = nullptr;
+
 };
 

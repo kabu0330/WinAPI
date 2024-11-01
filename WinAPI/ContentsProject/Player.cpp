@@ -55,32 +55,32 @@ void APlayer::BeginPlay()
 void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+	EngineDebug(_DeltaTime);
 
-	EngineDebug();
+	// 대각선 이동은 어떻게 할 것인가?
+	FVector2D CurPos = GetActorLocation();
 
 	// 입력 방법 1
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
-		BodyRenderer->ChangeAnimation("Body_Left");
-		HeadRenderer->ChangeAnimation("Head_Left");
+		State = State::LEFT;
 		AddActorLocation(FVector2D::LEFT * _DeltaTime * Speed);
+
 	}
 	if (true == UEngineInput::GetInst().IsPress('D'))
 	{
-		BodyRenderer->ChangeAnimation("Body_Right");
-		HeadRenderer->ChangeAnimation("Head_RIght");
+		State = State::RIGHT;
 		AddActorLocation(FVector2D::RIGHT * _DeltaTime * Speed);
 	}
 	if (true == UEngineInput::GetInst().IsPress('W'))
 	{
-		BodyRenderer->ChangeAnimation("Body_Up");
-		HeadRenderer->ChangeAnimation("Head_Up");
+		State = State::UP;
 		AddActorLocation(FVector2D::UP * _DeltaTime * Speed);
+
 	}
 	if (true == UEngineInput::GetInst().IsPress('S'))
 	{
-		BodyRenderer->ChangeAnimation("Body_Down");
-		HeadRenderer->ChangeAnimation("Head_Down");
+		State = State::DOWN;
 		AddActorLocation(FVector2D::DOWN * _DeltaTime * Speed);
 	}
 
@@ -89,11 +89,63 @@ void APlayer::Tick(float _DeltaTime)
 		false == UEngineInput::GetInst().IsPress('W') &&
 		false == UEngineInput::GetInst().IsPress('S'))
 	{
-		BodyRenderer->ChangeAnimation("Body_Idle");
-		HeadRenderer->ChangeAnimation("Head_Down");
+		State = State::IDLE;
 	}
 
-	// 대각선 이동은 어떻게 할 것인가?
+	FVector2D Dir = FVector2D::ZERO;
+
+	switch (State)
+	{
+	case APlayer::State::IDLE:
+	{
+		Dir = FVector2D::ZERO;
+		BodyRenderer->ChangeAnimation("Body_Idle");
+		HeadRenderer->ChangeAnimation("Head_Down");
+		break;
+	}
+	case APlayer::State::LEFT:
+	{
+		Dir = FVector2D::LEFT;
+		BodyRenderer->ChangeAnimation("Body_Left");
+		HeadRenderer->ChangeAnimation("Head_Left");
+		break;
+	}
+	case APlayer::State::RIGHT:
+	{
+		Dir = FVector2D::RIGHT;
+		BodyRenderer->ChangeAnimation("Body_Right");
+		HeadRenderer->ChangeAnimation("Head_RIght");
+		break;
+	}
+	case APlayer::State::UP:
+	{
+		Dir = FVector2D::UP;
+		BodyRenderer->ChangeAnimation("Body_Up");
+		HeadRenderer->ChangeAnimation("Head_Up");
+		break;
+	}
+	case APlayer::State::DOWN:
+	{
+		Dir = FVector2D::DOWN;
+		BodyRenderer->ChangeAnimation("Body_Down");
+		HeadRenderer->ChangeAnimation("Head_Down");
+		break;
+	}
+	case APlayer::State::MAX:
+		break;
+	default:
+		break;
+	}
+
+	//State::IDLE != State
+	//if (Dir != FVector2D::ZERO)
+	//{
+	//	FVector2D CurPos = GetActorLocation();
+	//	FVector2D TargetPos = CurPos + Dir * Speed;
+	//	FVector2D Destination = Lerp(CurPos, TargetPos, _DeltaTime);
+	//	SetActorLocation(Destination);
+	//}
+
 
 	if (1.0f < UEngineInput::GetInst().IsPressTime(VK_SPACE))
 	{
@@ -102,13 +154,8 @@ void APlayer::Tick(float _DeltaTime)
 		Ptr->SetActorLocation(GetActorLocation());
 		return;
 	}
-
-	//if (true == UEngineInput::GetInst().IsDown('R'))
-	//{
-	//	SetSprite("icon.png", MySpriteIndex);
-	//	++MySpriteIndex;
-	//}
 }
+
 
 void APlayer::AnimationSetting()
 {
@@ -125,31 +172,29 @@ void APlayer::AnimationSetting()
 	BodyRenderer->CreateAnimation("Body_Down", "Body.png", 20, 29, 0.1f);
 	BodyRenderer->CreateAnimation("Body_Up", "Body.png", { 29, 28, 27, 26, 25, 24, 23, 22, 21, 20 }, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f });
 	BodyRenderer->CreateAnimation("Body_Idle", "Body.png", 29, 29, 0.1f);
-	BodyRenderer->SetComponentScale({ 45, 45 });
+
+	BodyRenderer->SetComponentScale({ 55, 55 });
 	BodyRenderer->ChangeAnimation("Body_Idle");
+
 
 	HeadRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	HeadRenderer->CreateAnimation("Head_Left", "Head.png", 0, 1, 0.5f);
 	HeadRenderer->CreateAnimation("Head_Right", "Head.png", 2, 3, 0.5f);
 	HeadRenderer->CreateAnimation("Head_Down", "Head.png", 6, 7, 0.5f);
 	HeadRenderer->CreateAnimation("Head_Up", "Head.png", 4, 5, 0.5f);
-	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 3 });
-	HeadRenderer->SetComponentScale({ 45, 45 });
+
+	HeadRenderer->SetComponentLocation({ -1, -BodyRenderer->GetComponentScale().Half().iY() + 5 });
+	HeadRenderer->SetComponentScale({ 50, 50 });
 	HeadRenderer->ChangeAnimation("Head_Down");
 
 
 	BodyRenderer->SetOrder(ERenderOrder::PLAYER);
 	HeadRenderer->SetOrder(ERenderOrder::PLAYER);
-	//SpriteRenderer->SetComponentLocation({ -100, 0 });
-
-
-	//SpriteRenderer->CreateAnimation("Run_Right", "Player_Right.png", { 2, 3, 4 }, { 0.1f, 0.1f, 0.1f });
-	//SpriteRenderer->ChangeAnimation("Idle_Right");
-	//SpriteRenderer->ChangeAnimation("Idle_Right");
 }
 
-void APlayer::EngineDebug()
+void APlayer::EngineDebug(float _DeltaTime)
 {
+	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(static_cast<int>(1.0f / _DeltaTime)));
 	UEngineDebug::CoreOutPutString("Player : " + GetActorLocation().ToString());
 
 	if (true == UEngineInput::GetInst().IsDown('B'))
@@ -157,6 +202,13 @@ void APlayer::EngineDebug()
 		UEngineDebug::SwitchIsDebug();
 	}
 }
+
+FVector2D APlayer::Lerp(FVector2D _Start, FVector2D _Dest, float _DeltaTime)
+{
+	return (1.0f - _DeltaTime) * _Start + _DeltaTime * _Dest;
+}
+
+
 
 // 입력 방법 2 : 이벤트 방식으로 처리
 //void APlayer::LeftMove(float _DeltaTime)

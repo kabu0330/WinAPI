@@ -85,6 +85,31 @@ public:
 		return Result;
 	}
 
+	FVector2D operator*(FVector2D _Other) const
+	{
+		FVector2D Result;
+		Result.X = X * _Other.X;
+		Result.Y = Y * _Other.Y;
+		return Result;
+	}
+
+	friend FVector2D operator*(float _Value, FVector2D& _Other) 
+	{
+		FVector2D Result;
+		Result.X = _Other.X * _Value;
+		Result.Y = _Other.Y * _Value;
+		return Result;
+	}
+
+	FVector2D operator/(FVector2D _Other) const
+	{
+		FVector2D Result;
+		Result.X = X / _Other.X;
+		Result.Y = Y / _Other.Y;
+		return Result;
+	}
+
+
 	bool operator==(FVector2D _Other) const
 	{
 		return X == _Other.X && Y == _Other.Y;
@@ -100,6 +125,22 @@ public:
 		X += _Other.X;
 		Y += _Other.Y;
 		return *this;
+	}
+
+	float Length() const
+	{
+		return sqrtf(X * X + Y * Y);
+	}
+
+	void Normalize()
+	{
+		float Len = Length();
+		if (0.0f < Len && false == isnan(Len))
+		{
+			X = X / Len;
+			X = Y / Len;
+		}
+		return;
 	}
 
 	std::string ToString()

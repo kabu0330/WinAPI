@@ -63,31 +63,15 @@ void ContentsCore::BeginPlay()
 		UImageManager::GetInst().Load(FilePath);
 	}
 	
-	// 이미지 한 장에서 스프라이트를 몇 개로 만들 것인지 자른다.
-	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
-	UImageManager::GetInst().CuttingSprite("Head.png", 5, 2);
+	SpriteSetting(); // 이미지 한 장에 모여있는 스프라이트 자르기(.png / .bmp)
+	FolderSetting(); // 하위 폴더 안에 모여있는 이미지들을 스프라이트로 묶기 (폴더)
 
+	// 레벨을 생성하고 최초 화면에 출력될 레벨을 결정한다.
+	LevelSetting();
+}
 
-
-	UEngineDirectory TitleDir;
-	TitleDir.MoveParentToDirectory("Resources");
-	TitleDir.Append("Title");
-
-	UImageManager::GetInst().LoadFolder(TitleDir.GetPathToString());
-
-
-	//{
-
-	//	UEngineDirectory BombDir;
-	//	BombDir.MoveParentToDirectory("Resources");
-	//	BombDir.Append("bomb");
-
-	//	UImageManager::GetInst().LoadFolder(BombDir.GetPathToString());
-
-	//}
-
-
-
+void ContentsCore::LevelSetting()
+{
 	// 레벨을 생성한다.
 	UEngineAPICore::GetCore()->CreateLevel<ATitleGameMode, AActor>("Title");
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
@@ -98,8 +82,25 @@ void ContentsCore::BeginPlay()
 	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
+void ContentsCore::SpriteSetting()
+{
+	// 이미지 한 장에서 스프라이트를 몇 개로 만들 것인지 자른다.
+	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
+	UImageManager::GetInst().CuttingSprite("Head.png", 5, 2);
+	UImageManager::GetInst().CuttingSprite("NormalRoomDoor.png", 4, 2);
+
+}
+
+void ContentsCore::FolderSetting()
+{
+	UEngineDirectory TitleDir;
+	TitleDir.MoveParentToDirectory("Resources");
+	TitleDir.Append("Title");
+
+	UImageManager::GetInst().LoadFolder(TitleDir.GetPathToString());
+}
+
 void ContentsCore::Tick()
 {
 	// 현재 사용 용도가 없음
 }
-

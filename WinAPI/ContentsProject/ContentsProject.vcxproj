@@ -151,6 +151,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Door.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Global.h">
       <SubType>
       </SubType>
@@ -190,6 +194,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Door.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Global.cpp">
       <SubType>
       </SubType>

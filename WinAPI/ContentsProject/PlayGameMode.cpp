@@ -1,8 +1,11 @@
 #include "PreCompile.h"
 #include "PlayGameMode.h"
-#include "Room.h"
+
 #include <EngineCore/EngineAPICore.h>
+
 #include "Global.h"
+#include "Room.h"
+#include "Door.h"
 
 APlayGameMode::APlayGameMode()
 {
@@ -37,6 +40,8 @@ void APlayGameMode::BeginPlay()
 	   BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::UP   );
 	   BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN );
 	MinionRoom3->InterLinkRoom(BossRoom   , RoomDir::DOWN );
+
+	//ADoor* Door = GetWorld()->SpawnActor<ADoor>();
 
 	int a = 0;
 }
