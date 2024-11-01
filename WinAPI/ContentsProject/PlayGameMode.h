@@ -28,6 +28,7 @@ public:
 		return CurRoom;
 	}
 
+	void EngineDebug(float _DeltaTime);
 protected:
 
 private:

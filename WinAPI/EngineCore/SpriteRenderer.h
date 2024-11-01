@@ -72,6 +72,8 @@ public:
 	// _Loop = true면 반복 false면 마지막 프레임에서 정지
 	void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, std::vector<float> _Frame, bool _Loop = true);
 
+	void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, float _Frame, bool _Loop = true);
+
 	// 내가 Idle인데 Idle 바꾸라고 했다. 
 	void ChangeAnimation(std::string_view _AnimationName, bool _Force = false);
 	

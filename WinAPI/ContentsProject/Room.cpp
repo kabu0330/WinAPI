@@ -10,18 +10,21 @@ ARoom::ARoom()
 	SetActorLocation(Global::WindowSize.Half());
 	SetActorScale(Global::WindowScale);
 
-	SpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	SpriteRenderer->SetSprite("SampleMap(848,536).png");
-	SpriteRenderer->SetComponentScale(GetActorScale());
-	SpriteRenderer->SetOrder(ERenderOrder::BACKGROUND);
+	float ScaleX = Global::WindowSize.X / 960;
+	float ScaleY = Global::WindowSize.Y / 540;
+	FVector2D RoomScale = { 848.0f * ScaleX * GetActorScale().X / Global::WindowScale.X , 536 * ScaleY * GetActorScale().Y / Global::WindowScale.Y };
+
+	RoomRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	RoomRenderer->SetSprite("SampleMap(848,536).png");
+	RoomRenderer->SetComponentScale(RoomScale);
+	RoomRenderer->SetOrder(ERenderOrder::BACKGROUND);
+
+	BolderLineRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BolderLineRenderer->SetSprite("BolderLine.png");
+	BolderLineRenderer->SetComponentScale(GetActorScale());
+	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().iX(), RoomRenderer->GetComponentLocation().iY() - 1});
+	BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
 	 
-	//SpriteRenderer->CreateAnimation("BaseRoom", "SampleMap(848,536).png",0, 0);
-	//SpriteRenderer->ChangeAnimation("BaseRoom");
-
-	//FVector2D WindowSize =  UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
-	//SetActorScale(WindowSize.Half());
-	//SetActorLocation(WindowSize.Half());
-
 }
 
 ARoom::~ARoom()

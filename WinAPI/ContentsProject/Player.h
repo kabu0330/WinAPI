@@ -30,10 +30,9 @@ public:
 
 	void RunSoundPlay();
 
+	void Move(float _DeltaTime);
+	void CameraRoomMove(float _DeltaTime);
 	void AnimationSetting();
-	void EngineDebug(float _DeltaTime);
-
-	FVector2D Lerp(FVector2D _Start, FVector2D _Dest, float _DeltaTime);
 
 
 
@@ -46,7 +45,7 @@ public:
 protected:
 
 private:
-	float Speed = 150;
+	float Speed = 350;
 	int MySpriteIndex = 0;
 
 	class USpriteRenderer* BodyRenderer = nullptr;
@@ -54,6 +53,7 @@ private:
 
 	State State = State::IDLE;
 	float CameraMoveTime = 0.0f;
+	float CameraElapsedTime = 0.0f;
 	bool CameraMove = false;
 };
 

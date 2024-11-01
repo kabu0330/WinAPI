@@ -56,6 +56,11 @@ public:
 		CameraPos = _Pos;
 	}
 
+	FVector2D GetCameraPivot()
+	{
+		return CameraPivot;
+	}
+
 	FVector2D GetCameraPos()
 	{
 		return CameraPos;

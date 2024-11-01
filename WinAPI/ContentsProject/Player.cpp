@@ -57,11 +57,22 @@ void APlayer::BeginPlay()
 void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
-	EngineDebug(_DeltaTime);
 
-	// 대각선 이동은 어떻게 할 것인가?
-	FVector2D CurPos = GetActorLocation();
+	Move(_DeltaTime);
+	CameraRoomMove(_DeltaTime);
 
+
+	if (1.0f < UEngineInput::GetInst().IsPressTime(VK_SPACE))
+	{
+		// 플레이어가 속한 레벨에 Bullet을 생성한다.
+		ATear* Ptr = GetWorld()->SpawnActor<ATear>();
+		Ptr->SetActorLocation(GetActorLocation());
+		return;
+	}
+}
+
+void APlayer::Move(float _DeltaTime)
+{
 	// 입력 방법 1
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
@@ -94,7 +105,8 @@ void APlayer::Tick(float _DeltaTime)
 		State = State::IDLE;
 	}
 
-	FVector2D Dir = FVector2D::ZERO;
+	FVector2D Dir = GetTransform().Location;
+	Dir = FVector2D::ZERO;
 
 	switch (State)
 	{
@@ -138,35 +150,36 @@ void APlayer::Tick(float _DeltaTime)
 	default:
 		break;
 	}
+}
 
-	//State::IDLE != State
-	//if (Dir != FVector2D::ZERO)
-	//{
-	//	FVector2D CurPos = GetActorLocation();
-	//	FVector2D TargetPos = CurPos + Dir * Speed;
-	//	FVector2D Destination = Lerp(CurPos, TargetPos, _DeltaTime);
-	//	SetActorLocation(Destination);
-	//}
-
+void APlayer::CameraRoomMove(float _DeltaTime)
+{
+	FVector2D CurPos = GetActorLocation();
+	FVector2D CameraTargetPos = APlayGameMode::GetCurRoom()->GetActorScale();
 	FVector2D CameraMoveDir = FVector2D::ZERO;
-	FVector2D CameraPos = APlayGameMode::GetCurRoom()->GetActorScale();
+	CameraMoveTime = 2.0f;
+
 	if (UEngineInput::GetInst().IsDown('U'))
 	{
-		CameraMove = true;
 		CameraMoveDir = FVector2D::UP;
+		CameraMove = true;
 
-		GetWorld()->SetCameraPos({ GetActorLocation().iX(), -CameraPos.iY()});
+		CameraElapsedTime += _DeltaTime;
+		float Alpha = CameraElapsedTime / CameraMoveTime;
+		FVector2D Distance;
+		Alpha = Distance.Clamp(Alpha, 0.0f, 1.0f);
+		FVector2D Result = Distance.Lerp(CurPos, CameraTargetPos, CameraElapsedTime, CameraMoveTime);
 		
-	}
+		GetWorld()->SetCameraPos(CameraMoveDir * Result);
 
-	if (1.0f < UEngineInput::GetInst().IsPressTime(VK_SPACE))
-	{
-		// 플레이어가 속한 레벨에 Bullet을 생성한다.
-		ATear* Ptr = GetWorld()->SpawnActor<ATear>();
-		Ptr->SetActorLocation(GetActorLocation());
-		return;
+		if (CameraElapsedTime >= CameraMoveTime)
+		{
+			CameraMove = false;
+			CameraElapsedTime = 0.0f;
+		}
 	}
 }
+
 
 
 void APlayer::AnimationSetting()
@@ -179,47 +192,33 @@ void APlayer::AnimationSetting()
 	// 6. SetOrder로 정렬 순서를 정할 수 있다.
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BodyRenderer->CreateAnimation("Body_Left", "Body.png", 1, 9, 0.1f);
-	BodyRenderer->CreateAnimation("Body_Right", "Body.png", 10, 19, 0.1f);
-	BodyRenderer->CreateAnimation("Body_Down", "Body.png", 20, 29, 0.1f);
-	BodyRenderer->CreateAnimation("Body_Up", "Body.png", { 29, 28, 27, 26, 25, 24, 23, 22, 21, 20 }, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f });
-	BodyRenderer->CreateAnimation("Body_Idle", "Body.png", 29, 29, 0.1f);
+	BodyRenderer->CreateAnimation("Body_Left", "Body.png", 1, 9, 0.05f);
+	BodyRenderer->CreateAnimation("Body_Right", "Body.png", 10, 19, 0.05f);
+	BodyRenderer->CreateAnimation("Body_Down", "Body.png", 20, 29, 0.05f);
+	BodyRenderer->CreateAnimation("Body_Up", "Body.png", { 29, 28, 27, 26, 25, 24, 23, 22, 21, 20 }, 0.05f);
+	BodyRenderer->CreateAnimation("Body_Idle", "Body.png", 29, 29, 0.05f);
 
-	BodyRenderer->SetComponentScale({ 55, 55 });
+	BodyRenderer->SetComponentScale({ 67, 72 });
 	BodyRenderer->ChangeAnimation("Body_Idle");
 
 
 	HeadRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	HeadRenderer->CreateAnimation("Head_Left", "Head.png", 0, 1, 0.5f);
-	HeadRenderer->CreateAnimation("Head_Right", "Head.png", 2, 3, 0.5f);
-	HeadRenderer->CreateAnimation("Head_Down", "Head.png", 6, 7, 0.5f);
-	HeadRenderer->CreateAnimation("Head_Up", "Head.png", 4, 5, 0.5f);
+	HeadRenderer->CreateAnimation("Head_Left", "Head.png", 1, 1, 0.5f, false);
+	HeadRenderer->CreateAnimation("Head_Right", "Head.png", 3, 3, 0.5f, false);
+	HeadRenderer->CreateAnimation("Head_Down", "Head.png", 7, 7, 0.5f, false);
+	HeadRenderer->CreateAnimation("Head_Up", "Head.png", 5, 5, 0.5f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Left", "Head.png", 0, 1, 0.5f);
+	HeadRenderer->CreateAnimation("Head_Attack_Right", "Head.png", 2, 3, 0.5f);
+	HeadRenderer->CreateAnimation("Head_Attack_Down", "Head.png", 6, 7, 0.5f);
+	HeadRenderer->CreateAnimation("Head_Attack_Up", "Head.png", 4, 5, 0.5f);
 
-	HeadRenderer->SetComponentLocation({ -1, -BodyRenderer->GetComponentScale().Half().iY() + 5 });
-	HeadRenderer->SetComponentScale({ 50, 50 });
+	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 7 });
+	HeadRenderer->SetComponentScale({ 67, 67 }); 
 	HeadRenderer->ChangeAnimation("Head_Down");
 
 
 	BodyRenderer->SetOrder(ERenderOrder::PLAYER);
 	HeadRenderer->SetOrder(ERenderOrder::PLAYER);
-}
-
-void APlayer::EngineDebug(float _DeltaTime)
-{
-	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(static_cast<int>(1.0f / _DeltaTime)));
-	UEngineDebug::CoreOutPutString("Player Pos : " + GetActorLocation().ToString());
-	UEngineDebug::CoreOutPutString("Camera Pos : " + GetWorld()->GetCameraPos().ToString());
-	UEngineDebug::CoreOutPutString("Room : " + APlayGameMode::GetCurRoom()->GetName());
-
-	if (true == UEngineInput::GetInst().IsDown('B'))
-	{
-		UEngineDebug::SwitchIsDebug();
-	}
-}
-
-FVector2D APlayer::Lerp(FVector2D _Start, FVector2D _Dest, float _DeltaTime)
-{
-	return (1.0f - _DeltaTime) * _Start + _DeltaTime * _Dest;
 }
 
 

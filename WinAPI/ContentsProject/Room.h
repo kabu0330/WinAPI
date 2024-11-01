@@ -72,9 +72,9 @@ protected:
 private:
 	std::map<RoomDir, ARoom*> Rooms;
 	RoomDir Directon = RoomDir::NONE;
-	FVector2D Scale = { Global::WindowSize * 0.3f};
-	//FVector2D Direction = FVector2D::ZERO;
+	
 
-	class USpriteRenderer* SpriteRenderer = nullptr; // 임시 방 하나 생성
+	class USpriteRenderer* RoomRenderer = nullptr; // 임시 방 하나 생성
+	class USpriteRenderer* BolderLineRenderer = nullptr;
 };
 

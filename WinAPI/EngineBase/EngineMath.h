@@ -93,14 +93,6 @@ public:
 		return Result;
 	}
 
-	friend FVector2D operator*(float _Value, FVector2D& _Other) 
-	{
-		FVector2D Result;
-		Result.X = _Other.X * _Value;
-		Result.Y = _Other.Y * _Value;
-		return Result;
-	}
-
 	FVector2D operator/(FVector2D _Other) const
 	{
 		FVector2D Result;
@@ -108,7 +100,6 @@ public:
 		Result.Y = Y / _Other.Y;
 		return Result;
 	}
-
 
 	bool operator==(FVector2D _Other) const
 	{
@@ -154,6 +145,50 @@ public:
 		Stream += "]";
 		return Stream;
 	}
+
+	friend FVector2D operator*(float _Value, FVector2D& _Other)
+	{
+		FVector2D Result;
+		Result.X = _Other.X * _Value;
+		Result.Y = _Other.Y * _Value;
+		return Result;
+	}
+
+	float Clamp(float _Value, float _Min, float _Max)
+	{
+		if (_Value < _Min)
+		{
+			return _Min;
+		}
+		else if (_Value > _Max)
+		{
+			return _Max;
+		}
+		else
+		{
+			return _Value;
+		}
+	}
+
+	// Lerp : 선형보간법 : 시작점과 끝점 사이의 중간 값(비율)을 찾는 방법
+	// _Start : 현재 위치, _End : 목적지, _ElapsedTime : DeltaTime을 누적시킬 변수, _Duration : 이동할 시간
+	FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _ElapsedTime, float _Duration)
+	{
+		float Alpha = _ElapsedTime / _Duration;
+		      Alpha = Clamp(Alpha, 0.0f, 1.0f);
+
+		FVector2D Result = ((1.0f - Alpha) * _Start) + (Alpha * _End);
+		return Result;
+
+	}
+
+	FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _Alpha)
+	{
+		FVector2D Result = ((1.0f - _Alpha) * _Start) + (_Alpha * _End);
+		return Result;
+
+	}
+
 };
 
 class FTransform

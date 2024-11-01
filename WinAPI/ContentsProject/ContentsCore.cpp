@@ -34,7 +34,7 @@ void ContentsCore::BeginPlay()
 
 
 	// 2. 윈도우 사이즈를 반드시 정해야 한다.
-	Global::WindowSize = { 1280, 720 };
+	Global::WindowSize = { 960, 538 };
 	Global::WindowScale = Global::WindowSize;
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, Global::WindowSize);
 

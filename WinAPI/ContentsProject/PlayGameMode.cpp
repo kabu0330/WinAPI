@@ -2,6 +2,8 @@
 #include "PlayGameMode.h"
 
 #include <EngineCore/EngineAPICore.h>
+#include <EngineCore/EngineCoreDebug.h>
+#include <EnginePlatform/EngineInput.h>
 
 #include "Global.h"
 #include "Room.h"
@@ -44,12 +46,12 @@ void APlayGameMode::BeginPlay()
 	   BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN );
 	MinionRoom3->InterLinkRoom(BossRoom   , RoomDir::DOWN );
 
-	BaseRoom->SetName("BaseRoom");
+	   BaseRoom->SetName("BaseRoom"   );
 	MinionRoom0->SetName("MinionRoom0");
 	MinionRoom1->SetName("MinionRoom1");
 	MinionRoom2->SetName("MinionRoom2");
 	MinionRoom3->SetName("MinionRoom3");
-	BossRoom->SetName("BossRoom");
+	   BossRoom->SetName("BossRoom"   );
 
 	//ADoor* Door = GetWorld()->SpawnActor<ADoor>();
 	CurRoom = BaseRoom;
@@ -60,5 +62,20 @@ void APlayGameMode::BeginPlay()
 void APlayGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+	EngineDebug(_DeltaTime);
+}
+
+void APlayGameMode::EngineDebug(float _DeltaTime)
+{
+	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(static_cast<int>(1.0f / _DeltaTime)));
+	UEngineDebug::CoreOutPutString("Player Pos : " + GetWorld()->GetPlayer()->GetActorLocation().ToString());
+	UEngineDebug::CoreOutPutString("Camera Pos : " + GetWorld()->GetCameraPos().ToString());
+	UEngineDebug::CoreOutPutString("Room : " + APlayGameMode::GetCurRoom()->GetName());
+
+	if (true == UEngineInput::GetInst().IsDown('B'))
+	{
+		UEngineDebug::SwitchIsDebug();
+	}
 }
 
