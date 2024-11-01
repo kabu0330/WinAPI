@@ -129,9 +129,20 @@ public:
 		if (0.0f < Len && false == isnan(Len))
 		{
 			X = X / Len;
-			X = Y / Len;
+			Y = Y / Len;
 		}
 		return;
+	}
+
+	FVector2D& Normal()
+	{
+		float Len = Length();
+		if (0.0f < Len && false == isnan(Len))
+		{
+			X = X / Len;
+			Y = Y / Len;
+		}
+		return *this;
 	}
 
 	std::string ToString()

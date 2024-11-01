@@ -54,6 +54,7 @@ private:
 	State State = State::IDLE;
 	float CameraMoveTime = 0.0f;
 	float CameraElapsedTime = 0.0f;
+	float Alpha = 0.0f;
 	bool CameraMove = false;
 };
 
