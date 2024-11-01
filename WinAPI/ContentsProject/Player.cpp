@@ -11,6 +11,8 @@
 #include "Tear.h"
 #include "Global.h"
 #include "ContentsEnum.h"
+#include "Room.h"
+#include "PlayGameMode.h"
 
 void APlayer::RunSoundPlay()
 {
@@ -146,6 +148,16 @@ void APlayer::Tick(float _DeltaTime)
 	//	SetActorLocation(Destination);
 	//}
 
+	FVector2D CameraMoveDir = FVector2D::ZERO;
+	FVector2D CameraPos = APlayGameMode::GetCurRoom()->GetActorScale();
+	if (UEngineInput::GetInst().IsDown('U'))
+	{
+		CameraMove = true;
+		CameraMoveDir = FVector2D::UP;
+
+		GetWorld()->SetCameraPos({ GetActorLocation().iX(), -CameraPos.iY()});
+		
+	}
 
 	if (1.0f < UEngineInput::GetInst().IsPressTime(VK_SPACE))
 	{
@@ -195,7 +207,9 @@ void APlayer::AnimationSetting()
 void APlayer::EngineDebug(float _DeltaTime)
 {
 	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(static_cast<int>(1.0f / _DeltaTime)));
-	UEngineDebug::CoreOutPutString("Player : " + GetActorLocation().ToString());
+	UEngineDebug::CoreOutPutString("Player Pos : " + GetActorLocation().ToString());
+	UEngineDebug::CoreOutPutString("Camera Pos : " + GetWorld()->GetCameraPos().ToString());
+	UEngineDebug::CoreOutPutString("Room : " + APlayGameMode::GetCurRoom()->GetName());
 
 	if (true == UEngineInput::GetInst().IsDown('B'))
 	{

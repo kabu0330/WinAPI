@@ -35,6 +35,8 @@ public:
 
 	FVector2D Lerp(FVector2D _Start, FVector2D _Dest, float _DeltaTime);
 
+
+
 	// 입력 방법 2 : 이벤트 방식으로 처리
 	//void LeftMove(float _DeltaTime);
 	//void RightMove(float _DeltaTime);
@@ -51,7 +53,7 @@ private:
 	class USpriteRenderer* HeadRenderer = nullptr;
 
 	State State = State::IDLE;
-
-	class ARoom* CurRoom = nullptr;
+	float CameraMoveTime = 0.0f;
+	bool CameraMove = false;
 };
 

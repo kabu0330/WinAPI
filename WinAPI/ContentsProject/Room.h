@@ -66,6 +66,7 @@ public:
 		int Result = PosY + HalfScaleY;
 		return { GetActorLocation().iX() , Result };
 	}
+
 protected:
 
 private:

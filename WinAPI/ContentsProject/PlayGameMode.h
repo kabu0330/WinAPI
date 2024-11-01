@@ -17,10 +17,21 @@ public:
 
 	void BeginPlay();
 
+	void Tick(float _DeltaTime);
+
+	static void SetCurRoom(class ARoom* _Room)
+	{
+		CurRoom = _Room;
+	}
+	static ARoom* GetCurRoom()
+	{
+		return CurRoom;
+	}
+
 protected:
 
 private:
-
+	static class ARoom* CurRoom;
 };
 
 

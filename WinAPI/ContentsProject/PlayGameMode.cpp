@@ -6,6 +6,9 @@
 #include "Global.h"
 #include "Room.h"
 #include "Door.h"
+#include "Player.h"
+
+ARoom* APlayGameMode::CurRoom = nullptr;
 
 APlayGameMode::APlayGameMode()
 {
@@ -41,8 +44,21 @@ void APlayGameMode::BeginPlay()
 	   BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN );
 	MinionRoom3->InterLinkRoom(BossRoom   , RoomDir::DOWN );
 
+	BaseRoom->SetName("BaseRoom");
+	MinionRoom0->SetName("MinionRoom0");
+	MinionRoom1->SetName("MinionRoom1");
+	MinionRoom2->SetName("MinionRoom2");
+	MinionRoom3->SetName("MinionRoom3");
+	BossRoom->SetName("BossRoom");
+
 	//ADoor* Door = GetWorld()->SpawnActor<ADoor>();
+	CurRoom = BaseRoom;
 
 	int a = 0;
+}
+
+void APlayGameMode::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
 }
 

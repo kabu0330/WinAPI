@@ -56,6 +56,21 @@ public:
 		CameraPos = _Pos;
 	}
 
+	FVector2D GetCameraPos()
+	{
+		return CameraPos;
+	}
+
+	void AddCameraPos(FVector2D _Pos)
+	{
+		CameraPos += _Pos;
+	}
+
+	AActor* GetPlayer()
+	{
+		return MainPawn;
+	}
+
 protected:
 
 private:
