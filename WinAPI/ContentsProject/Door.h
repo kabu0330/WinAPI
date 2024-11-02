@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <string>
+#include "Room.h"
 
 // Ό³Έν :
 class ADoor : public AActor
@@ -16,19 +17,22 @@ public:
 	ADoor& operator=(const ADoor& _Other) = delete;
 	ADoor& operator=(ADoor&& _Other) noexcept = delete;
 	
-	void BeginPlay() override;
-	void Tick(float _DeltaTime) override;
-
+	bool Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _ConnectedRoom);
 	void NormalDoorSetting();
 
-	void SetDoorLock(std::string_view _Dir)
+	ARoom* GetConnectedRoom() const
 	{
-
+		return ConnectedRoom;
 	}
+
+	void BeginPlay() override;
+	void Tick(float _DeltaTime) override;
 
 protected:
 
 private:
 	class USpriteRenderer* DoorRenderer = nullptr;
+	RoomDir Direction = RoomDir::NONE;
+	ARoom* ConnectedRoom = nullptr;
 };
 

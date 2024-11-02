@@ -3,7 +3,6 @@
 #include <map>
 #include <vector>
 #include "Global.h"
-#include "Door.h"
 
 enum class RoomDir
 {
@@ -32,6 +31,8 @@ public:
 	bool IsLinking(ARoom* _Room);
 	bool InterLinkRoom(ARoom* _Room, RoomDir _Dir);
 	ARoom* LinkRoom(ARoom* _Room, RoomDir _Dir);
+
+	void AddDoor(RoomDir _Dir, ARoom* ConnectedRoom);
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -68,10 +69,7 @@ public:
 		return { GetActorLocation().iX() , Result };
 	}
 
-	void SpawnDoorAtPosition(const FVector2D& Position)
-	{
-		AActor* NewDoor = GetWorld()->SpawnActor<AActor>();
-	}
+	ARoom* GetConnectedRoom(RoomDir _Direction);
 
 protected:
 
@@ -79,7 +77,7 @@ private:
 	std::map<RoomDir, ARoom*> Rooms;
 	RoomDir Directon = RoomDir::NONE;
 
-	std::vector<ADoor*> Doors;
+	std::map<RoomDir, class ADoor*> Doors;
 
 	class USpriteRenderer* RoomRenderer = nullptr; // 임시 방 하나 생성
 	class USpriteRenderer* BolderLineRenderer = nullptr;

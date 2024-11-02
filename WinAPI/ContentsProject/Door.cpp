@@ -13,8 +13,16 @@ ADoor::ADoor()
 
 	NormalDoorSetting();
 
+}
 
 
+bool ADoor::Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _ConnectedRoom)
+{
+	SetActorLocation(_Location);
+	this->Direction = _Direction;
+	this->ConnectedRoom = _ConnectedRoom;
+
+	return true;
 }
 
 void ADoor::NormalDoorSetting()

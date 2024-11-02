@@ -20,6 +20,8 @@ public:
 protected:
 	void BeginPlay() override;
 	void Tick() override;
+	void WindowSetting();
+	void ResourceLoad();
 	void SpriteSetting();
 	void FolderSetting();
 	void LevelSetting();

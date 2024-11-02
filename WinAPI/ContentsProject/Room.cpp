@@ -1,9 +1,13 @@
 #include "PreCompile.h"
 #include "Room.h"
+
 #include <EngineBase/EngineDebug.h>
 #include <EngineCore/EngineAPICore.h>
 #include <EngineCore/SpriteRenderer.h>
+
 #include "ContentsEnum.h"
+#include "PlayGameMode.h"
+#include "Door.h"
 
 ARoom::ARoom()
 {
@@ -25,22 +29,6 @@ ARoom::ARoom()
 	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().iX(), RoomRenderer->GetComponentLocation().iY() - 1});
 	BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
 	
-}
-
-ARoom::~ARoom()
-{
-	// map에서 insert한 자료들을 모두 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
-}
-
-void ARoom::BeginPlay()
-{
-	Super::BeginPlay();
-
-}
-
-void ARoom::Tick(float _DeltaTime)
-{
-	Super::Tick(_DeltaTime);
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
@@ -165,8 +153,68 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
     return nullptr;
 }
 
+void ARoom::AddDoor(RoomDir _Dir, ARoom* ConnectedRoom)
+{
+	FVector2D DoorPos = FVector2D::ZERO;
 
+	switch (_Dir)
+	{
+	case RoomDir::NONE:
+		break;
+	case RoomDir::LEFT:
+		DoorPos = GetActorLocation() + FVector2D(-GetActorLocation().iX() / 2, 0);
+		break;
+	case RoomDir::RIGHT:
+		DoorPos = GetActorLocation() + FVector2D(GetActorLocation().iX() / 2, 0);
+		break;
+	case RoomDir::UP:
+		DoorPos = GetActorLocation() + FVector2D(0, -GetActorLocation().iY() / 2);
+		break;
+	case RoomDir::DOWN:
+		DoorPos = GetActorLocation() + FVector2D(0, GetActorLocation().iY() / 2);
+		break;
+	case RoomDir::MAX:
+		break;
+	default:
+		break;
+	}
 
+	ADoor* Door = GetWorld()->SpawnActor<ADoor>();
+	if (nullptr != Door)
+	{
+		Door->Initialize(DoorPos, _Dir, ConnectedRoom);
+		Doors[_Dir] = Door;
+	}
+}
+
+ARoom* ARoom::GetConnectedRoom(RoomDir _Direction)
+{
+	std::map<RoomDir, ADoor*>::iterator FindIter = Doors.find(_Direction);
+	std::map<RoomDir, ADoor*>::iterator EndIter = Doors.end();
+
+	if (FindIter != EndIter)
+	{
+		return Doors[_Direction]->GetConnectedRoom();
+	}
+
+	return nullptr;
+}
+
+ARoom::~ARoom()
+{
+	// map에서 insert한 자료들을 모두 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
+}
+
+void ARoom::BeginPlay()
+{
+	Super::BeginPlay();
+
+}
+
+void ARoom::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
+}
 
 
 

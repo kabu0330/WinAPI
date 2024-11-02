@@ -55,7 +55,7 @@ void APlayGameMode::BeginPlay()
 	
 	   CurRoom = BaseRoom;
 
-	//ADoor* Door = GetWorld()->SpawnActor<ADoor>();
+	
 
 	int a = 0;
 }
