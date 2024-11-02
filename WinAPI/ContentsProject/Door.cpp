@@ -8,10 +8,13 @@ ADoor::ADoor()
 {
 	DoorRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DoorRenderer->SetComponentLocation(Global::WindowSize.Half());
-	DoorRenderer->SetComponentScale({120, 80});
+	DoorRenderer->SetComponentScale({300, 150});
 	DoorRenderer->SetOrder(ERenderOrder::DOOR);
 
 	NormalDoorSetting();
+
+
+
 }
 
 void ADoor::NormalDoorSetting()
@@ -28,7 +31,7 @@ void ADoor::NormalDoorSetting()
 	DoorRenderer->CreateAnimation("Door_Down_Open", "NormalRoomDoor.png", 3, 3, 0.1f, false);
 	DoorRenderer->CreateAnimation("Door_Down_Lock", "NormalRoomDoor.png", 7, 7, 0.1f, false);
 
-	DoorRenderer->ChangeAnimation("Door_Left_Lock");
+	DoorRenderer->ChangeAnimation("Door_Up_Lock");
 }
 
 ADoor::~ADoor()

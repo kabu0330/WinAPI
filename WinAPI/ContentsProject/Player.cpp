@@ -59,7 +59,55 @@ void APlayer::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	Move(_DeltaTime);
-	CameraRoomMove(_DeltaTime);
+
+
+	CurCameraPos = GetWorld()->GetCameraPos();
+	PrevCameraPos = CurCameraPos;
+	CameraTargetPos = FVector2D::ZERO;
+	CameraMoveDir = FVector2D::ZERO;
+	Lerp = FVector2D::ZERO;
+	CameraMoveTime = 2.0f;
+
+	if (UEngineInput::GetInst().IsDown('U'))
+	{
+		CameraMoveDir = FVector2D::UP;
+		CameraMove = true;
+	}
+
+	if (true == CameraMove)
+	{
+		CameraTargetPos = CameraMoveDir * APlayGameMode::GetCurRoom()->GetActorScale();
+		CameraElapsedTime += _DeltaTime;
+		if (CameraElapsedTime > 1.0f)
+		{
+			CameraElapsedTime = 1.0f;
+		}
+		FVector2D LerpSpeed = Lerp.Lerp(CurCameraPos, CameraTargetPos, CameraElapsedTime);
+		if (0 > LerpSpeed.X || 0 > LerpSpeed.Y)
+		{
+			LerpSpeed = LerpSpeed * -1;
+		}
+		FVector2D NewCameraPos = CurCameraPos + (CameraTargetPos - CurCameraPos) * LerpSpeed * _DeltaTime;
+		
+		GetWorld()->SetCameraPos(NewCameraPos);
+		//GetWorld()->AddCameraPos(NewCameraPos);
+		// 
+		//Alpha = CameraElapsedTime / CameraMoveTime;
+	/*	Normal = (CameraTargetPos - CurCameraPos).Normal() ;
+		Alpha = Clamp.Clamp(Alpha, 0.0f, 1.0f);
+		FVector2D CameraCurMovePos = CurCameraPos + (CameraTargetPos - CurCameraPos) * Alpha * Normal.Length();
+		FVector2D Destination = CurCameraPos + (CameraTargetPos - CurCameraPos) * 1 * Normal.Length();*/
+
+
+		if (CurCameraPos == CameraTargetPos)
+		{
+			FVector2D Result10 = GetWorld()->GetCameraPos();
+			CameraMove = false;
+			CameraElapsedTime = 0.0f;
+			CameraTargetPos = FVector2D::ZERO;
+			CameraMoveDir = FVector2D::ZERO;
+		}
+	}
 
 
 	if (1.0f < UEngineInput::GetInst().IsPressTime(VK_SPACE))
@@ -154,44 +202,8 @@ void APlayer::Move(float _DeltaTime)
 
 void APlayer::CameraRoomMove(float _DeltaTime)
 {
-	FVector2D CurCameraPos = GetWorld()->GetCameraPos();
-	FVector2D CameraTargetPos = APlayGameMode::GetCurRoom()->GetActorScale();
-	FVector2D CameraMoveDir = FVector2D::ZERO;
-	FVector2D Normal = FVector2D::ZERO;
-	
-	CameraMoveTime = 2.0f;
 
-	if (UEngineInput::GetInst().IsDown('U'))
-	{
-		CameraMoveDir = FVector2D::UP;
-		CameraMove = true;
-	}
-
-
-	if (true == CameraMove)
-	{
-		CameraElapsedTime += _DeltaTime;
-		Alpha = CameraElapsedTime / CameraMoveTime;
-		Normal = (CameraTargetPos - CurCameraPos).Normal() ;
-
-		FVector2D Clamp;
-		Alpha = Clamp.Clamp(Alpha, 0.0f, 1.0f);
-		FVector2D Lerp;
-		FVector2D Result = CurCameraPos + (CameraTargetPos - CurCameraPos) * Alpha * Normal.Length() * CameraMoveDir;
-		FVector2D Result0 = CurCameraPos + (CameraTargetPos - CurCameraPos) * 1.0f * Normal.Length() * CameraMoveDir;
-		GetWorld()->SetCameraPos({0, Result.iY()});
-
-		if (Alpha >= 1.0f)
-		{
-			FVector2D Result10 = GetWorld()->GetCameraPos();
-			CameraMove = false;
-			CameraElapsedTime = 0.0f;
-			FVector2D CameraMoveDir = FVector2D::ZERO;
-		}
-	}
 }
-
-
 
 void APlayer::AnimationSetting()
 {
@@ -209,7 +221,7 @@ void APlayer::AnimationSetting()
 	BodyRenderer->CreateAnimation("Body_Up", "Body.png", { 29, 28, 27, 26, 25, 24, 23, 22, 21, 20 }, 0.05f);
 	BodyRenderer->CreateAnimation("Body_Idle", "Body.png", 29, 29, 0.05f);
 
-	BodyRenderer->SetComponentScale({ 67, 72 });
+	BodyRenderer->SetComponentScale({ 64, 64 });
 	BodyRenderer->ChangeAnimation("Body_Idle");
 
 
@@ -223,8 +235,8 @@ void APlayer::AnimationSetting()
 	HeadRenderer->CreateAnimation("Head_Attack_Down", "Head.png", 6, 7, 0.5f);
 	HeadRenderer->CreateAnimation("Head_Attack_Up", "Head.png", 4, 5, 0.5f);
 
-	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 7 });
-	HeadRenderer->SetComponentScale({ 67, 67 }); 
+	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
+	HeadRenderer->SetComponentScale({ 64, 64 }); 
 	HeadRenderer->ChangeAnimation("Head_Down");
 
 

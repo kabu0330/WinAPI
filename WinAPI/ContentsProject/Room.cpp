@@ -24,7 +24,7 @@ ARoom::ARoom()
 	BolderLineRenderer->SetComponentScale(GetActorScale());
 	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().iX(), RoomRenderer->GetComponentLocation().iY() - 1});
 	BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
-	 
+	
 }
 
 ARoom::~ARoom()
@@ -63,7 +63,7 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 	this->LinkRoom(_Room, _Dir);
 	FVector2D CurLocation = this->GetActorLocation();
 
-	// _Room과 this의 문 위치는 서로 정반대가 되어야 한다.
+	// this와 _Room의 문 위치는 서로 정반대가 되어야 한다.
 	if (RoomDir::LEFT == _Dir)
 	{
 		_Dir = RoomDir::RIGHT;

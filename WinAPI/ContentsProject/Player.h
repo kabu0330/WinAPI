@@ -52,9 +52,17 @@ private:
 	class USpriteRenderer* HeadRenderer = nullptr;
 
 	State State = State::IDLE;
+
+
 	float CameraMoveTime = 0.0f;
 	float CameraElapsedTime = 0.0f;
 	float Alpha = 0.0f;
 	bool CameraMove = false;
+
+	FVector2D CurCameraPos = FVector2D::ZERO;
+	FVector2D PrevCameraPos = FVector2D::ZERO;
+	FVector2D CameraTargetPos = FVector2D::ZERO;
+	FVector2D CameraMoveDir = FVector2D::ZERO;
+	FVector2D Lerp = FVector2D::ZERO;
 };
 

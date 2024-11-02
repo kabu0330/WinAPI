@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include "Global.h"
+#include "Door.h"
 
 enum class RoomDir
 {
@@ -67,12 +68,18 @@ public:
 		return { GetActorLocation().iX() , Result };
 	}
 
+	void SpawnDoorAtPosition(const FVector2D& Position)
+	{
+		AActor* NewDoor = GetWorld()->SpawnActor<AActor>();
+	}
+
 protected:
 
 private:
 	std::map<RoomDir, ARoom*> Rooms;
 	RoomDir Directon = RoomDir::NONE;
-	
+
+	std::vector<ADoor*> Doors;
 
 	class USpriteRenderer* RoomRenderer = nullptr; // 임시 방 하나 생성
 	class USpriteRenderer* BolderLineRenderer = nullptr;

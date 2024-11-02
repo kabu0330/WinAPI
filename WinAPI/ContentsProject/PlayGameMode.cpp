@@ -52,9 +52,10 @@ void APlayGameMode::BeginPlay()
 	MinionRoom2->SetName("MinionRoom2");
 	MinionRoom3->SetName("MinionRoom3");
 	   BossRoom->SetName("BossRoom"   );
+	
+	   CurRoom = BaseRoom;
 
 	//ADoor* Door = GetWorld()->SpawnActor<ADoor>();
-	CurRoom = BaseRoom;
 
 	int a = 0;
 }
