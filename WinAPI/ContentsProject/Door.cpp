@@ -18,7 +18,7 @@ ADoor::ADoor()
 
 bool ADoor::Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _ConnectedRoom)
 {
-	SetActorLocation(_Location);
+	DoorRenderer->SetComponentLocation(_Location);
 	this->Direction = _Direction;
 	this->ConnectedRoom = _ConnectedRoom;
 

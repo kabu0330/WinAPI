@@ -32,7 +32,7 @@ public:
 	bool InterLinkRoom(ARoom* _Room, RoomDir _Dir);
 	ARoom* LinkRoom(ARoom* _Room, RoomDir _Dir);
 
-	void AddDoor(RoomDir _Dir, ARoom* ConnectedRoom);
+	void AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom);
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
