@@ -227,6 +227,9 @@ void UImageManager::CuttingSprite(std::string_view _KeyName, FVector2D _CuttingS
 	// 기존에 가지고 있던 스프라이트 이미지 지워.
 	Sprite->ClearSpriteData();
 
+	Sprite->SetName(UpperName);
+	Image->SetName(UpperName);
+
 	if (0 != (Image->GetImageScale().iX() % _CuttingSize.iX()))
 	{
 		MSGASSERT("스프라이트 컷팅의 x값이 0으로 나눠지지 않습니다. " + std::string(_KeyName));

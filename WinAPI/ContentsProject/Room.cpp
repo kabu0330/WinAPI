@@ -88,8 +88,7 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 	_Room->LinkRoom(this, _Dir);
 
 
-	// 위치 조정
-	// 문제점 1. 방을 연결한 횟수만큼 중복해서 그려지는 문제?
+	// Room 상대 위치 조정
 	if (RoomDir::LEFT == _Room->Directon)
 	{
 		_Room->SetActorLocation({ GetRightPos().X + GetActorScale().Half().X, GetActorLocation().Y });

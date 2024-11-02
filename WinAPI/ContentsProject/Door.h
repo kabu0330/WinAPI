@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include <string>
 
 // Ό³Έν :
 class ADoor : public AActor
@@ -19,6 +20,11 @@ public:
 	void Tick(float _DeltaTime) override;
 
 	void NormalDoorSetting();
+
+	void SetDoorLock(std::string_view _Dir)
+	{
+
+	}
 
 protected:
 

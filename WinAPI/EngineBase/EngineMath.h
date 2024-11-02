@@ -85,7 +85,7 @@ public:
 		return Result;
 	}
 
-	FVector2D operator*(FVector2D _Other) const
+	FVector2D operator*(const FVector2D& _Other) const
 	{
 		FVector2D Result;
 		Result.X = X * _Other.X;
@@ -93,7 +93,7 @@ public:
 		return Result;
 	}
 
-	FVector2D operator/(FVector2D _Other) const
+	FVector2D operator/(const FVector2D& _Other) const
 	{
 		FVector2D Result;
 		Result.X = X / _Other.X;
