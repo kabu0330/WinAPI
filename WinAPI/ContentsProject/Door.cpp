@@ -13,25 +13,31 @@ ADoor::ADoor()
 void ADoor::Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _ConnectedRoom)
 {
 	SpriteSetting();
-	switch (_Direction)
-	{
+	DoorRendererX->SetComponentLocation(Global::WindowSize.Half());
+	DoorRendererX->SetComponentScale({ 250, 200 });
+	DoorRendererX->SetOrder(ERenderOrder::DOOR);
+	DoorRendererY->SetComponentLocation(Global::WindowSize.Half());
+	DoorRendererY->SetComponentScale({ 250, 200 });
+	DoorRendererY->SetOrder(ERenderOrder::DOOR);
+	//switch (_Direction)
+	//{
 
-	case RoomDir::LEFT:
-	case RoomDir::RIGHT:
-		DoorRendererX->SetComponentLocation(Global::WindowSize.Half());
-		DoorRendererX->SetComponentScale({ 250, 200 });
-		DoorRendererX->SetOrder(ERenderOrder::DOOR);
-		break;
-	case RoomDir::UP:
-	case RoomDir::DOWN:
-		DoorRendererY->SetComponentLocation(Global::WindowSize.Half());
-		DoorRendererY->SetComponentScale({ 250, 200 });
-		DoorRendererY->SetOrder(ERenderOrder::DOOR);
-		break;
+	//case RoomDir::LEFT:
+	//case RoomDir::RIGHT:
+	//	DoorRendererX->SetComponentLocation(Global::WindowSize.Half());
+	//	DoorRendererX->SetComponentScale({ 250, 200 });
+	//	DoorRendererX->SetOrder(ERenderOrder::DOOR);
+	//	break;
+	//case RoomDir::UP:
+	//case RoomDir::DOWN:
+	//	DoorRendererY->SetComponentLocation(Global::WindowSize.Half());
+	//	DoorRendererY->SetComponentScale({ 250, 200 });
+	//	DoorRendererY->SetOrder(ERenderOrder::DOOR);
+	//	break;
 
-	default:
-		break;
-	}
+	//default:
+	//	break;
+	//}
 
 
 	DoorRendererX->SetComponentLocation(_Location);
