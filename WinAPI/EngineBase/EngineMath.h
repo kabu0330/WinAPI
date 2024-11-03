@@ -154,6 +154,11 @@ public:
 		return *this;
 	}
 
+	float Dot(const FVector2D& other) const
+	{
+		return X * other.X + Y * other.Y;
+	}
+
 	std::string ToString()
 	{
 		std::string Stream;
