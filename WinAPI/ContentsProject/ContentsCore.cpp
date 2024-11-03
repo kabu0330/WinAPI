@@ -21,7 +21,7 @@ void ContentsCore::WindowSetting()
 
 
 	// 2. 윈도우 사이즈를 반드시 정의해야 한다.
-	Global::WindowSize = { 960, 538 };
+	Global::WindowSize = { 960, 540 };
 	Global::WindowScale = Global::WindowSize;
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, Global::WindowSize);
 }
@@ -54,7 +54,7 @@ void ContentsCore::LevelSetting()
 
 	// 최초 실행될 레벨을 결정한다.
 	UEngineAPICore::GetCore()->OpenLevel("Title");
-	//UEngineAPICore::GetCore()->OpenLevel("Play");
+	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
 void ContentsCore::SpriteSetting()

@@ -92,8 +92,11 @@ void USpriteRenderer::BeginPlay()
 	Super::BeginPlay();
 
 	AActor* Actor = GetActor();
+
+	// 액터가 생성된 레벨의 정보를 받고,
 	ULevel* Level = Actor->GetWorld();
 
+	// 그 레벨에서 렌더를 돌린다.
 	Level->PushRenderer(this);
 }
 

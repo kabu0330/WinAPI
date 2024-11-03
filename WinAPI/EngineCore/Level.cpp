@@ -91,7 +91,7 @@ void ULevel::Tick(float _DeltaTime)
 
 		BeginPlayList.clear();
 
-		// todtjdtl 
+		// »ý¼º ½Ã
 		AActor::ComponentBeginPlay();
 	}
 
@@ -116,7 +116,7 @@ void ULevel::Render(float _DeltaTime)
 
 	if (true == IsCameraToMainPawn)
 	{
-		// CameraPivot = FVector2D(-1280, -720) * 0.5f;
+		//CameraPivot = { -960.0f * 0.5f, -538.0f * 0.5f };
 		CameraPos = MainPawn->GetTransform().Location + CameraPivot;
 	}
 

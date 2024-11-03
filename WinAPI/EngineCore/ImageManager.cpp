@@ -102,7 +102,7 @@ void UImageManager::Load(std::string_view _KeyName, std::string_view Path)
 	// 이미지를 자르는 기준이 되는 위치는 LeftTop이다.
 	FTransform Trans;
 	Trans.Location = { 0,0 }; // LeftTop
-	Trans.Scale = NewImage->GetImageScale();
+	Trans.Scale = NewImage->GetImageScale(); // 본래 이미지 크기를 저장한다.
 
 	// HDC랑 위치, 크기를 엔진Sprite::SpriteData에 저장
 	NewSprite->PushData(NewImage, Trans);

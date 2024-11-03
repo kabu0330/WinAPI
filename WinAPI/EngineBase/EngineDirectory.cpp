@@ -22,7 +22,7 @@ UEngineDirectory::~UEngineDirectory()
 {
 }
 
-// 특정 디렉토리에 있는 모든 파일을 가져온다.
+// 특정 디렉토리(리소스 폴더)에 있는 모든 파일을 가져온다.
 std::vector<class UEngineFile> UEngineDirectory::GetAllFile(bool _IsRecursive /*= true*/)
 {															
 	std::vector<class UEngineFile> Result;
@@ -36,7 +36,7 @@ std::vector<class UEngineFile> UEngineDirectory::GetAllFile(bool _IsRecursive /*
 		std::filesystem::path FilePath = *Diriter;
 
 		UEnginePath Path = UEnginePath(FilePath);
-		if (true == Path.IsDirectory())
+		if (true == Path.IsDirectory()) // 경로가 폴더라면
 		{
 			// 하위 폴더의 리소스도 모두 저장하길 원한다면 true
 			if (true == _IsRecursive)
@@ -93,7 +93,7 @@ void UEngineDirectory::GetAllFileRecursive(std::filesystem::path _Path, std::vec
 		std::filesystem::path FilePath = *Diriter;
 
 		UEnginePath Path = UEnginePath(FilePath);
-		if (true == Path.IsDirectory())
+		if (true == Path.IsDirectory()) // 하위 폴더에서 또 하위 폴더가 있다면
 		{
 			GetAllFileRecursive(FilePath, _Result);
 			++Diriter;

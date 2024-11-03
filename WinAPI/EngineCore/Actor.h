@@ -69,13 +69,14 @@ public:
 
 	// 컴포넌트의 소유자는 액터이다. 삭제도 액터가 해야한다.
 	// 액터가 가진 컴포넌트를 다른 액터에 넘겨주거나 실행 중에 렌더를 삭제할 수 없다.
-	template<typename ComponentType>
+	template<typename ComponentType> // SpriteRenderer
 	ComponentType* CreateDefaultSubObject()
 	{
 		ComponentType* NewComponent = new ComponentType();
 
 		UActorComponent* ComponentPtr = dynamic_cast<UActorComponent*>(NewComponent);
-		// 내가 널 만든 레벨이야.
+
+		// 내가 널 만든 액터야.
 		ComponentPtr->ParentActor = this;
 
 		// 호출 지연
