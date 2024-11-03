@@ -25,7 +25,7 @@ APlayer::APlayer()
 	SetActorLocation(Global::WindowSize.Half());
 
 	// 2. 상태에 따른 애니메이션 동작을 정의한다.
-	AnimationSetting();
+	SpriteSetting();
 
 	// 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다.
  
@@ -206,7 +206,7 @@ void APlayer::CameraRoomMove(float _DeltaTime)
 
 }
 
-void APlayer::AnimationSetting()
+void APlayer::SpriteSetting()
 {
 	// 1. 헤더에 랜더러를 하나 만든다.
 	// 2. CreateDefualtSubObject 함수를 사용하여 렌더러 컴포넌트를 만든다.
@@ -225,6 +225,7 @@ void APlayer::AnimationSetting()
 	BodyRenderer->SetComponentScale({ 64, 64 });
 	BodyRenderer->ChangeAnimation("Body_Idle");
 
+	/////////////////////////////////////////////////////////////////////////////// 
 
 	HeadRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	HeadRenderer->CreateAnimation("Head_Left", "Head.png", 1, 1, 0.5f, false);

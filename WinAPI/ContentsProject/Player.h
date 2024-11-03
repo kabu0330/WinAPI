@@ -32,7 +32,7 @@ public:
 
 	void Move(float _DeltaTime);
 	void CameraRoomMove(float _DeltaTime);
-	void AnimationSetting();
+	void SpriteSetting();
 
 
 

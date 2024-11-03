@@ -12,7 +12,7 @@ ADoor::ADoor()
 
 void ADoor::Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _ConnectedRoom)
 {
-	DoorSetting();
+	SpriteSetting();
 	switch (_Direction)
 	{
 
@@ -64,7 +64,7 @@ void ADoor::Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _C
 	return;
 }
 
-void ADoor::DoorSetting()
+void ADoor::SpriteSetting()
 {
 	DoorRendererX = CreateDefaultSubObject<USpriteRenderer>();
 	DoorRendererY = CreateDefaultSubObject<USpriteRenderer>();

@@ -18,7 +18,7 @@ public:
 	ADoor& operator=(ADoor&& _Other) noexcept = delete;
 	
 	void Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _ConnectedRoom);
-	void DoorSetting();
+	void SpriteSetting();
 
 	ARoom* GetConnectedRoom() const
 	{
