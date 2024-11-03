@@ -16,7 +16,7 @@ void ATitleScene::BeginPlay()
 {
 	Super::BeginPlay();
 	TitleRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	TitleRenderer->CreateAnimation("Background", "Title", 0, 6, 0.25f);
+	TitleRenderer->CreateAnimation("Background", "Title", 0, 7, 0.2f);
 	TitleRenderer->SetComponentScale(Global::WindowSize);
 	TitleRenderer->ChangeAnimation("Background");
 
