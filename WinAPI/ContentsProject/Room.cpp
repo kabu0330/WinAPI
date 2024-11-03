@@ -11,11 +11,11 @@
 ARoom::ARoom()
 {
 	SetActorLocation({ Global::WindowSize.Half().iX(), Global::WindowSize.Half().iY()});
-	SetActorScale(Global::WindowScale );
+	SetActorScale(Global::WindowScale  );
 
 	float ScaleX = Global::WindowSize.X / 960;
 	float ScaleY = Global::WindowSize.Y / 540;
-	RoomScale = { 848.0f * ScaleX * GetActorScale().X / Global::WindowScale.X , 536 * ScaleY * GetActorScale().Y / Global::WindowScale.Y };
+	RoomScale = { 848.0f * ScaleX * GetActorScale().X / Global::WindowScale.X , 536.0f * ScaleY * GetActorScale().Y / Global::WindowScale.Y };
 
 	RoomRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	RoomRenderer->SetSprite("SampleMap(848,536).png");
@@ -25,7 +25,7 @@ ARoom::ARoom()
 	BolderLineRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BolderLineRenderer->SetSprite("BolderLine.png");
 	BolderLineRenderer->SetComponentScale(GetActorScale());
-	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().X, RoomRenderer->GetComponentLocation().Y });
+	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().X, RoomRenderer->GetComponentLocation().Y});
 	BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
 
 	DoorSpriteSetting();
