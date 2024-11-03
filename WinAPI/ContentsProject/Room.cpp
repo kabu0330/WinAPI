@@ -50,7 +50,7 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 {
 	this->LinkRoom(_Room, _Dir);
 	FVector2D CurLocation = this->GetActorLocation();
-	AddDoor(CurLocation, _Dir, _Room);
+	AddDoor(CurLocation, _Dir, this);
 
 	// this와 _Room의 문 위치는 서로 정반대가 되어야 한다.
 	if (RoomDir::LEFT == _Dir)
@@ -156,24 +156,34 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
 
 void ARoom::AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom)
 {
-	FVector2D DoorPos = FVector2D::ZERO;
+	FVector2D DoorPos = _RoomLocation;
 
 	switch (_Dir)
 	{
 	case RoomDir::NONE:
 		break;
 	case RoomDir::LEFT:
-		DoorPos = _RoomLocation + FVector2D(-_RoomLocation.iX() / 2, GetLeftPos().iY());
+	{
+		//DoorPos = _RoomLocation + FVector2D(-_RoomLocation.iX() / 2, GetLeftPos().iY());
+		FVector2D Test = FVector2D(-GetActorScale().Half().iX(), 0);
+		DoorPos = _RoomLocation + FVector2D(-GetActorScale().Half().iX(), 0);
 		break;
+	}
 	case RoomDir::RIGHT:
-		DoorPos = _RoomLocation + FVector2D(_RoomLocation.iX() / 2, GetRightPos().iY());
+	{
+		DoorPos = _RoomLocation + FVector2D(GetActorScale().Half().iX(), 0);
 		break;
+	}
 	case RoomDir::UP:
-		DoorPos = _RoomLocation + FVector2D(GetUpPos().iX(), -_RoomLocation.iY() / 2);
+	{
+		DoorPos = _RoomLocation + FVector2D(0, -GetActorScale().Half().iY());
 		break;
+	}
 	case RoomDir::DOWN:
-		DoorPos = _RoomLocation + FVector2D(GetDownPos().iX(), _RoomLocation.iY() / 2);
+	{
+		DoorPos = _RoomLocation + FVector2D(0, GetActorScale().Half().iY());
 		break;
+	}
 	case RoomDir::MAX:
 		break;
 	default:
