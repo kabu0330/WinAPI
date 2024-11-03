@@ -14,7 +14,7 @@ enum class RoomDir
 	MAX
 };
 
-// 설명 : 스테이지 하나의 맵
+// 설명 : 플레이 레벨에 존재하는 맵 
 class ARoom : public AActor
 {
 public:
@@ -31,6 +31,7 @@ public:
 	bool IsLinking(ARoom* _Room);
 	bool InterLinkRoom(ARoom* _Room, RoomDir _Dir);
 	ARoom* LinkRoom(ARoom* _Room, RoomDir _Dir);
+	void DoorSpriteSetting();
 
 	void AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom);
 
@@ -69,7 +70,6 @@ public:
 		return { GetActorLocation().iX() , Result };
 	}
 
-	ARoom* GetConnectedRoom(RoomDir _Direction);
 
 protected:
 
@@ -78,10 +78,12 @@ private:
 	RoomDir Directon = RoomDir::NONE;
 
 	std::map<RoomDir, class ADoor*> Doors;
+	std::map<RoomDir, class USpriteRenderer*> DoorRenderers;
+	USpriteRenderer* DoorRenderer;
 
-	class USpriteRenderer* RoomRenderer = nullptr; // 임시 방 하나 생성
-	class USpriteRenderer* BolderLineRenderer = nullptr;
-	class USpriteRenderer* ControlsRenderer = nullptr;
+	class USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
+	class USpriteRenderer* BolderLineRenderer = nullptr; // 화면 가장자리 검은 배경
+	class USpriteRenderer* ControlsRenderer   = nullptr;
 	
 };
 

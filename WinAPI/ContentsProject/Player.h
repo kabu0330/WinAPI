@@ -1,7 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
-// 설명 :
+// 설명 : 아이작
 class APlayer : public AActor
 {
 	enum class State
@@ -31,7 +31,7 @@ public:
 	void RunSoundPlay();
 
 	void Move(float _DeltaTime);
-	void CameraRoomMove(float _DeltaTime);
+	void CameraPosMove(float _DeltaTime);
 	void SpriteSetting();
 
 
@@ -54,7 +54,9 @@ private:
 	State State = State::IDLE;
 
 
+	// 카메라 이동관련 멤버
 	float CameraMoveTime = 0.0f;
+	float LerpAlpha = 0.0f;
 	bool CameraMove = false;
 	FVector2D CameraMoveDir  = FVector2D::ZERO;
 	FVector2D StartCameraPos = FVector2D::ZERO;

@@ -42,7 +42,7 @@ ULevel::~ULevel()
 	}
 }
 
-// ³»°¡ CurLevel µÆÀ»´ë
+// ³»°¡ CurLevel µÆÀ» ¶§ 
 void ULevel::LevelChangeStart()
 {
 	{

@@ -26,8 +26,10 @@ ARoom::ARoom()
 	BolderLineRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BolderLineRenderer->SetSprite("BolderLine.png");
 	BolderLineRenderer->SetComponentScale(GetActorScale());
-	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().iX(), RoomRenderer->GetComponentLocation().iY() - 1});
+	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().X, RoomRenderer->GetComponentLocation().Y - 1.2f});
 	BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
+
+	DoorSpriteSetting();
 
 	// BaseRoom에만 생성되도록 코드를 수정하여야 함.
 	//ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
@@ -129,6 +131,7 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
 	{
 		//Direction = FVector2D::LEFT;
 		Rooms.insert({ RoomDir::LEFT, _Room });
+		
 		return Rooms.find(RoomDir::LEFT)->second;
 		break;
 	}
@@ -162,6 +165,29 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
     return nullptr;
 }
 
+void ARoom::DoorSpriteSetting()
+{
+	DoorRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	DoorRenderer->SetComponentLocation(Global::WindowSize.Half());
+	DoorRenderer->SetComponentScale({ 250, 200 });
+	DoorRenderer->SetOrder(ERenderOrder::DOOR);
+
+	DoorRenderer->CreateAnimation("Door_Left_Open", "NormalRoomDoor.png", 0, 0, 0.1f, false);
+	DoorRenderer->CreateAnimation("Door_Left_Lock", "NormalRoomDoor.png", 4, 4, 0.1f, false);
+
+	DoorRenderer->CreateAnimation("Door_Right_Open", "NormalRoomDoor.png", 1, 1, 0.1f, false);
+	DoorRenderer->CreateAnimation("Door_Right_Lock", "NormalRoomDoor.png", 5, 5, 0.1f, false);
+
+	DoorRenderer->CreateAnimation("Door_Up_Open", "NormalRoomDoor.png", 2, 2, 0.1f, false);
+	DoorRenderer->CreateAnimation("Door_Up_Lock", "NormalRoomDoor.png", 6, 6, 0.1f, false);
+
+	DoorRenderer->CreateAnimation("Door_Down_Open", "NormalRoomDoor.png", 3, 3, 0.1f, false);
+	DoorRenderer->CreateAnimation("Door_Down_Lock", "NormalRoomDoor.png", 7, 7, 0.1f, false);
+
+	DoorRenderer->ChangeAnimation("Door_Left_Open");
+	DoorRenderer->ChangeAnimation("Door_Down_Open");
+}
+
 void ARoom::AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom)
 {
 	FVector2D DoorPos = _RoomLocation;
@@ -175,57 +201,41 @@ void ARoom::AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom)
 	case RoomDir::NONE:
 		break;
 	case RoomDir::LEFT:
-	{
-		//DoorPos = _RoomLocation + FVector2D(-_RoomLocation.iX() / 2, GetLeftPos().iY());
-		
+		DoorRenderer->ChangeAnimation("Door_Left_Open");
 		DoorPos = _RoomLocation - DoorOffestX + OffestX;
 		break;
-	}
 	case RoomDir::RIGHT:
-	{
+		DoorRenderer->ChangeAnimation("Door_Right_Open");
 		DoorPos = _RoomLocation + DoorOffestX - OffestX;
 		break;
-	}
 	case RoomDir::UP:
-	{
+		DoorRenderer->ChangeAnimation("Door_Up_Open");
 		DoorPos = _RoomLocation - DoorOffestY + OffestY;
 		break;
-	}
 	case RoomDir::DOWN:
-	{
+		DoorRenderer->ChangeAnimation("Door_Down_Open");
 		DoorPos = _RoomLocation + DoorOffestY - OffestY;
 		break;
-	}
 	case RoomDir::MAX:
 		break;
 	default:
 		break;
 	}
 
-	ADoor* Door = GetWorld()->SpawnActor<ADoor>();
-	if (nullptr != Door)
-	{
-		Door->Initialize(DoorPos, _Dir, ConnectedRoom);
-		Doors[_Dir] = Door;
-	}
+		//ADoor* Door = GetWorld()->SpawnActor<ADoor>();
+		//if (nullptr != Door)
+		//{
+		//	Door->Initialize(DoorPos, _Dir, ConnectedRoom);
+		//	Doors[_Dir] = Door;
+		//}
+
 }
 
-ARoom* ARoom::GetConnectedRoom(RoomDir _Direction)
-{
-	std::map<RoomDir, ADoor*>::iterator FindIter = Doors.find(_Direction);
-	std::map<RoomDir, ADoor*>::iterator EndIter = Doors.end();
 
-	if (FindIter != EndIter)
-	{
-		return Doors[_Direction]->GetConnectedRoom();
-	}
-
-	return nullptr;
-}
 
 ARoom::~ARoom()
 {
-	// map에서 insert한 자료들을 모두 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
+	// map에서 insert한 자료들을 모두 map에서 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
 }
 
 void ARoom::BeginPlay()
