@@ -28,6 +28,13 @@ ARoom::ARoom()
 	BolderLineRenderer->SetComponentScale(GetActorScale());
 	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().iX(), RoomRenderer->GetComponentLocation().iY() - 1});
 	BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
+
+	// BaseRoom에만 생성되도록 코드를 수정하여야 함.
+	//ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	//ControlsRenderer->SetSprite("controls.png");
+	//ControlsRenderer->SetComponentLocation(GetActorLocation());
+	//ControlsRenderer->SetComponentScale({ 325, 85 });
+	//ControlsRenderer->SetOrder(ERenderOrder::CONTROLS);
 	
 }
 
@@ -157,6 +164,10 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
 void ARoom::AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom)
 {
 	FVector2D DoorPos = _RoomLocation;
+	FVector2D DoorOffestX = FVector2D(RoomRenderer->GetComponentScale().Half().iX(), 0);
+	FVector2D DoorOffestY = FVector2D(0, RoomRenderer->GetComponentScale().Half().iY());
+	FVector2D OffestX = { 40, 0 };
+	FVector2D OffestY = { 0, 40 };
 
 	switch (_Dir)
 	{
@@ -165,23 +176,23 @@ void ARoom::AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom)
 	case RoomDir::LEFT:
 	{
 		//DoorPos = _RoomLocation + FVector2D(-_RoomLocation.iX() / 2, GetLeftPos().iY());
-		FVector2D Test = FVector2D(-GetActorScale().Half().iX(), 0);
-		DoorPos = _RoomLocation + FVector2D(-GetActorScale().Half().iX(), 0);
+	
+		DoorPos = _RoomLocation - DoorOffestX + OffestX;
 		break;
 	}
 	case RoomDir::RIGHT:
 	{
-		DoorPos = _RoomLocation + FVector2D(GetActorScale().Half().iX(), 0);
+		DoorPos = _RoomLocation + DoorOffestX - OffestX;
 		break;
 	}
 	case RoomDir::UP:
 	{
-		DoorPos = _RoomLocation + FVector2D(0, -GetActorScale().Half().iY());
+		DoorPos = _RoomLocation - DoorOffestY + OffestY;
 		break;
 	}
 	case RoomDir::DOWN:
 	{
-		DoorPos = _RoomLocation + FVector2D(0, GetActorScale().Half().iY());
+		DoorPos = _RoomLocation + DoorOffestY - OffestY;
 		break;
 	}
 	case RoomDir::MAX:

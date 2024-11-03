@@ -57,7 +57,7 @@ void APlayGameMode::BeginPlay()
 	   BossRoom->SetName("BossRoom"   );
 	
 	   CurRoom = BaseRoom;
-
+	   
 	
 
 	int a = 0;

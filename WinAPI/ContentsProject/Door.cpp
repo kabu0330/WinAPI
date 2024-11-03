@@ -39,7 +39,7 @@ void ADoor::NormalDoorSetting()
 	DoorRenderer->CreateAnimation("Door_Down_Open", "NormalRoomDoor.png", 3, 3, 0.1f, false);
 	DoorRenderer->CreateAnimation("Door_Down_Lock", "NormalRoomDoor.png", 7, 7, 0.1f, false);
 
-	DoorRenderer->ChangeAnimation("Door_Up_Lock");
+	DoorRenderer->ChangeAnimation("Door_Left_Open");
 }
 
 ADoor::~ADoor()

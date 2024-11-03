@@ -81,5 +81,7 @@ private:
 
 	class USpriteRenderer* RoomRenderer = nullptr; // 임시 방 하나 생성
 	class USpriteRenderer* BolderLineRenderer = nullptr;
+	class USpriteRenderer* ControlsRenderer = nullptr;
+	
 };
 

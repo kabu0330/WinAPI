@@ -77,7 +77,7 @@ void APlayer::Tick(float _DeltaTime)
 	if (true == CameraMove)
 	{
 		CameraTargetPos = CameraMoveDir * APlayGameMode::GetCurRoom()->GetActorScale();
-		CameraElapsedTime += _DeltaTime;
+		CameraElapsedTime += _DeltaTime ;
 		if (CameraElapsedTime > 1.0f)
 		{
 			CameraElapsedTime = 1.0f;
@@ -93,11 +93,12 @@ void APlayer::Tick(float _DeltaTime)
 		//GetWorld()->AddCameraPos(NewCameraPos);
 		// 
 		//Alpha = CameraElapsedTime / CameraMoveTime;
-	/*	Normal = (CameraTargetPos - CurCameraPos).Normal() ;
-		Alpha = Clamp.Clamp(Alpha, 0.0f, 1.0f);
-		FVector2D CameraCurMovePos = CurCameraPos + (CameraTargetPos - CurCameraPos) * Alpha * Normal.Length();
-		FVector2D Destination = CurCameraPos + (CameraTargetPos - CurCameraPos) * 1 * Normal.Length();*/
+		//Alpha = Clamp.Clamp(Alpha, 0.0f, 1.0f);
+		//FVector2D CameraCurMovePos = CurCameraPos + (CameraTargetPos - CurCameraPos) * Alpha * Normal.Length();
+		FVector2D Normal = (CameraTargetPos - CurCameraPos).Normal() ;
+		FVector2D Destination = CurCameraPos + (CameraTargetPos - CurCameraPos) * 1 * Normal.Length();
 
+		int a = 0;
 
 		if (CurCameraPos == CameraTargetPos)
 		{
