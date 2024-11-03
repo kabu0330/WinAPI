@@ -17,8 +17,8 @@ public:
 	ADoor& operator=(const ADoor& _Other) = delete;
 	ADoor& operator=(ADoor&& _Other) noexcept = delete;
 	
-	bool Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _ConnectedRoom);
-	void NormalDoorSetting();
+	void Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _ConnectedRoom);
+	void DoorSetting();
 
 	ARoom* GetConnectedRoom() const
 	{
@@ -31,7 +31,8 @@ public:
 protected:
 
 private:
-	class USpriteRenderer* DoorRenderer = nullptr;
+	class USpriteRenderer* DoorRendererX = nullptr;
+	class USpriteRenderer* DoorRendererY = nullptr;
 	RoomDir Direction = RoomDir::NONE;
 	ARoom* ConnectedRoom = nullptr;
 };

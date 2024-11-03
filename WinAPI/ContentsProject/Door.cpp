@@ -6,40 +6,82 @@
 
 ADoor::ADoor()
 {
-	DoorRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DoorRenderer->SetComponentLocation(Global::WindowSize.Half());
-	DoorRenderer->SetComponentScale({300, 150});
-	DoorRenderer->SetOrder(ERenderOrder::DOOR);
-
-	NormalDoorSetting();
 
 }
 
 
-bool ADoor::Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _ConnectedRoom)
+void ADoor::Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _ConnectedRoom)
 {
-	DoorRenderer->SetComponentLocation(_Location);
+	DoorSetting();
+	switch (_Direction)
+	{
+
+	case RoomDir::LEFT:
+	case RoomDir::RIGHT:
+		DoorRendererX->SetComponentLocation(Global::WindowSize.Half());
+		DoorRendererX->SetComponentScale({ 300, 150 });
+		DoorRendererX->SetOrder(ERenderOrder::DOOR);
+		break;
+	case RoomDir::UP:
+	case RoomDir::DOWN:
+		DoorRendererY->SetComponentLocation(Global::WindowSize.Half());
+		DoorRendererY->SetComponentScale({ 300, 150 });
+		DoorRendererY->SetOrder(ERenderOrder::DOOR);
+		break;
+
+	default:
+		break;
+	}
+
+
+	DoorRendererX->SetComponentLocation(_Location);
+	DoorRendererY->SetComponentLocation(_Location);
 	this->Direction = _Direction;
 	this->ConnectedRoom = _ConnectedRoom;
+	
+	switch (_Direction)
+	{
+	case RoomDir::NONE:
+		break;
+	case RoomDir::LEFT:
+		DoorRendererX->ChangeAnimation("Door_Left_Open");
+		break;
+	case RoomDir::RIGHT:
+		DoorRendererX->ChangeAnimation("Door_Right_Open");
+		break;
+	case RoomDir::UP:
+		DoorRendererY->ChangeAnimation("Door_Up_Open");
+		break;
+	case RoomDir::DOWN:
+		DoorRendererY->ChangeAnimation("Door_Down_Open");
+		break;
+	case RoomDir::MAX:
+		break;
+	default:
+		break;
+	}
 
-	return true;
+	return;
 }
 
-void ADoor::NormalDoorSetting()
+void ADoor::DoorSetting()
 {
-	DoorRenderer->CreateAnimation("Door_Left_Open", "NormalRoomDoor.png", 0, 0, 0.1f, false);
-	DoorRenderer->CreateAnimation("Door_Left_Lock", "NormalRoomDoor.png", 4, 4, 0.1f, false);
+	DoorRendererX = CreateDefaultSubObject<USpriteRenderer>();
+	DoorRendererY = CreateDefaultSubObject<USpriteRenderer>();
+	DoorRendererX->CreateAnimation("Door_Left_Open", "NormalRoomDoor.png", 0, 0, 0.1f, false);
+	DoorRendererX->CreateAnimation("Door_Left_Lock", "NormalRoomDoor.png", 4, 4, 0.1f, false);
 
-	DoorRenderer->CreateAnimation("Door_Right_Open", "NormalRoomDoor.png", 1, 1, 0.1f, false);
-	DoorRenderer->CreateAnimation("Door_Right_Lock", "NormalRoomDoor.png", 5, 5, 0.1f, false);
+	DoorRendererX->CreateAnimation("Door_Right_Open", "NormalRoomDoor.png", 1, 1, 0.1f, false);
+	DoorRendererX->CreateAnimation("Door_Right_Lock", "NormalRoomDoor.png", 5, 5, 0.1f, false);
 
-	DoorRenderer->CreateAnimation("Door_Up_Open", "NormalRoomDoor.png", 2, 2, 0.1f, false);
-	DoorRenderer->CreateAnimation("Door_Up_Lock", "NormalRoomDoor.png", 6, 6, 0.1f, false);
+	DoorRendererY->CreateAnimation("Door_Up_Open", "NormalRoomDoor.png", 2, 2, 0.1f, false);
+	DoorRendererY->CreateAnimation("Door_Up_Lock", "NormalRoomDoor.png", 6, 6, 0.1f, false);
 
-	DoorRenderer->CreateAnimation("Door_Down_Open", "NormalRoomDoor.png", 3, 3, 0.1f, false);
-	DoorRenderer->CreateAnimation("Door_Down_Lock", "NormalRoomDoor.png", 7, 7, 0.1f, false);
+	DoorRendererY->CreateAnimation("Door_Down_Open", "NormalRoomDoor.png", 3, 3, 0.1f, false);
+	DoorRendererY->CreateAnimation("Door_Down_Lock", "NormalRoomDoor.png", 7, 7, 0.1f, false);
 
-	DoorRenderer->ChangeAnimation("Door_Left_Open");
+	DoorRendererX->ChangeAnimation("Door_Left_Open");
+	DoorRendererY->ChangeAnimation("Door_Down_Open");
 }
 
 ADoor::~ADoor()

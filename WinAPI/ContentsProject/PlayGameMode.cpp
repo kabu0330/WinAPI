@@ -39,22 +39,22 @@ void APlayGameMode::BeginPlay()
 	ARoom* BaseRoom    = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* BossRoom    = GetWorld()->SpawnActor<ARoom>();
+	//ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
+	//ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
+	//ARoom* BossRoom    = GetWorld()->SpawnActor<ARoom>();
 
 	   BaseRoom->InterLinkRoom(MinionRoom0, RoomDir::LEFT );
 	   BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::RIGHT);
-	   BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::UP   );
-	   BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN );
-	MinionRoom3->InterLinkRoom(BossRoom   , RoomDir::DOWN );
+	//   BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::UP   );
+	//   BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN );
+	//MinionRoom3->InterLinkRoom(BossRoom   , RoomDir::DOWN );
 
 	   BaseRoom->SetName("BaseRoom"   );
 	MinionRoom0->SetName("MinionRoom0");
-	MinionRoom1->SetName("MinionRoom1");
-	MinionRoom2->SetName("MinionRoom2");
-	MinionRoom3->SetName("MinionRoom3");
-	   BossRoom->SetName("BossRoom"   );
+	//MinionRoom1->SetName("MinionRoom1");
+	//MinionRoom2->SetName("MinionRoom2");
+	//MinionRoom3->SetName("MinionRoom3");
+	//   BossRoom->SetName("BossRoom"   );
 	
 	   CurRoom = BaseRoom;
 	   

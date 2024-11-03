@@ -101,6 +101,7 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 		_Room->SetActorLocation({ GetActorLocation().X, GetUpPos().Y - GetActorScale().Half().Y });
 	}
 
+	// 방향이 바뀐 위치로 방의 위치가 조정된 뒤 문 추가
 	_Room->AddDoor(_Room->GetActorLocation(), _Dir, _Room);
 
 	return true;
@@ -176,7 +177,7 @@ void ARoom::AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom)
 	case RoomDir::LEFT:
 	{
 		//DoorPos = _RoomLocation + FVector2D(-_RoomLocation.iX() / 2, GetLeftPos().iY());
-	
+		
 		DoorPos = _RoomLocation - DoorOffestX + OffestX;
 		break;
 	}
