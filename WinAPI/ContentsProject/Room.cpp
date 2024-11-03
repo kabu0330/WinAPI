@@ -7,16 +7,15 @@
 
 #include "ContentsEnum.h"
 #include "PlayGameMode.h"
-#include "Door.h"
 
 ARoom::ARoom()
 {
 	SetActorLocation(Global::WindowSize.Half());
-	SetActorScale(Global::WindowScale);
+	SetActorScale(Global::WindowScale * 0.2);
 
 	float ScaleX = Global::WindowSize.X / 960;
 	float ScaleY = Global::WindowSize.Y / 540;
-	FVector2D RoomScale = { 848.0f * ScaleX * GetActorScale().X / Global::WindowScale.X , 536 * ScaleY * GetActorScale().Y / Global::WindowScale.Y };
+	RoomScale = { 848.0f * ScaleX * GetActorScale().X / Global::WindowScale.X , 536 * ScaleY * GetActorScale().Y / Global::WindowScale.Y };
 
 	RoomRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	RoomRenderer->SetSprite("SampleMap(848,536).png");
@@ -59,7 +58,7 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 {
 	this->LinkRoom(_Room, _Dir);
 	FVector2D CurLocation = this->GetActorLocation();
-	AddDoor(CurLocation, _Dir, this);
+	AddDoor(_Dir, this);
 
 	// this와 _Room의 문 위치는 서로 정반대가 되어야 한다.
 	if (RoomDir::LEFT == _Dir)
@@ -104,7 +103,7 @@ bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 	}
 
 	// 방향이 바뀐 위치로 방의 위치가 조정된 뒤 문 추가
-	_Room->AddDoor(_Room->GetActorLocation(), _Dir, _Room);
+	_Room->AddDoor(_Dir, _Room);
 
 	return true;
 }
@@ -129,29 +128,24 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
 		break;
 	case RoomDir::LEFT:
 	{
-		//Direction = FVector2D::LEFT;
-		Rooms.insert({ RoomDir::LEFT, _Room });
-		
+		Rooms.insert({ RoomDir::LEFT, _Room });	
 		return Rooms.find(RoomDir::LEFT)->second;
 		break;
 	}
 	case RoomDir::RIGHT:
 	{
-		//Direction = FVector2D::RIGHT;
 		Rooms.insert({ RoomDir::RIGHT, _Room });
 		return Rooms.find(RoomDir::RIGHT)->second;
 		break;
 	}
 	case RoomDir::UP:
 	{
-		//Direction = FVector2D::UP;
 		Rooms.insert({ RoomDir::UP, _Room });
 		return Rooms.find(RoomDir::UP)->second;
 		break;
 	}
 	case RoomDir::DOWN:
 	{
-		//Direction = FVector2D::DOWN;
 		Rooms.insert({ RoomDir::DOWN, _Room });
 		return Rooms.find(RoomDir::DOWN)->second;
 		break;
@@ -168,7 +162,7 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
 void ARoom::DoorSpriteSetting()
 {
 	DoorRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DoorRenderer->SetComponentLocation(Global::WindowSize.Half());
+	//DoorRenderer->GetActorTransform().Location;
 	DoorRenderer->SetComponentScale({ 250, 200 });
 	DoorRenderer->SetOrder(ERenderOrder::DOOR);
 
@@ -185,49 +179,45 @@ void ARoom::DoorSpriteSetting()
 	DoorRenderer->CreateAnimation("Door_Down_Lock", "NormalRoomDoor.png", 7, 7, 0.1f, false);
 
 	DoorRenderer->ChangeAnimation("Door_Left_Open");
-	DoorRenderer->ChangeAnimation("Door_Down_Open");
+	//DoorRenderer->ChangeAnimation("Door_Down_Open");
 }
 
-void ARoom::AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom)
+void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 {
-	FVector2D DoorPos = _RoomLocation;
-	FVector2D DoorOffestX = FVector2D(RoomRenderer->GetComponentScale().Half().iX(), 0);
-	FVector2D DoorOffestY = FVector2D(0, RoomRenderer->GetComponentScale().Half().iY());
+	FVector2D DoorPos = FVector2D::ZERO;
+	FVector2D RoomPos = _ConnectedRoom->GetActorLocation();
+	FVector2D DoorOffestX = FVector2D(RoomScale.Half().iX(), 0);
+	FVector2D DoorOffestY = FVector2D(0, RoomScale.Half().iY());
 	FVector2D OffestX = { 50, 0 };
 	FVector2D OffestY = { 0, 50 };
 
 	switch (_Dir)
 	{
-	case RoomDir::NONE:
-		break;
 	case RoomDir::LEFT:
+		DoorPos = -1 * DoorOffestX  + OffestX;
 		DoorRenderer->ChangeAnimation("Door_Left_Open");
-		DoorPos = _RoomLocation - DoorOffestX + OffestX;
 		break;
 	case RoomDir::RIGHT:
+		DoorPos = DoorOffestX - OffestX;
 		DoorRenderer->ChangeAnimation("Door_Right_Open");
-		DoorPos = _RoomLocation + DoorOffestX - OffestX;
 		break;
 	case RoomDir::UP:
+		DoorPos = -1 * DoorOffestY + OffestY;
 		DoorRenderer->ChangeAnimation("Door_Up_Open");
-		DoorPos = _RoomLocation - DoorOffestY + OffestY;
 		break;
 	case RoomDir::DOWN:
+		DoorPos = DoorOffestY - OffestY;
 		DoorRenderer->ChangeAnimation("Door_Down_Open");
-		DoorPos = _RoomLocation + DoorOffestY - OffestY;
-		break;
-	case RoomDir::MAX:
 		break;
 	default:
 		break;
 	}
+	this;
+	FVector2D Result = RoomPos + DoorPos;
+	DoorRenderer->SetComponentLocation(DoorPos);
+	DoorRenderers.push_back(DoorRenderer);
 
-		//ADoor* Door = GetWorld()->SpawnActor<ADoor>();
-		//if (nullptr != Door)
-		//{
-		//	Door->Initialize(DoorPos, _Dir, ConnectedRoom);
-		//	Doors[_Dir] = Door;
-		//}
+	int a = 0;
 
 }
 

@@ -18,3 +18,5 @@ FTransform USceneComponent::GetActorTransform()
 	Result.Scale = Transform.Scale;
 	return Result;
 }
+
+

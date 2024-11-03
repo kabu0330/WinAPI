@@ -8,7 +8,6 @@
 #include "Global.h"
 #include "ContentsCore.h"
 #include "Room.h"
-#include "Door.h"
 #include "Player.h"
 
 ARoom* APlayGameMode::CurRoom = nullptr;
@@ -52,9 +51,9 @@ void APlayGameMode::BeginPlay()
 	   BaseRoom->SetName("BaseRoom"   );
 	MinionRoom0->SetName("MinionRoom0");
 	MinionRoom1->SetName("MinionRoom1");
-	MinionRoom2->SetName("MinionRoom2");
-	MinionRoom3->SetName("MinionRoom3");
-	   BossRoom->SetName("BossRoom"   );
+	//MinionRoom2->SetName("MinionRoom2");
+	//MinionRoom3->SetName("MinionRoom3");
+	//   BossRoom->SetName("BossRoom"   );
 	
 	   CurRoom = BaseRoom;
 	   

@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include "Global.h"
+#include <EngineCore/SpriteRenderer.h>
 
 enum class RoomDir
 {
@@ -33,7 +34,7 @@ public:
 	ARoom* LinkRoom(ARoom* _Room, RoomDir _Dir);
 	void DoorSpriteSetting();
 
-	void AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom);
+	void AddDoor(RoomDir _Dir, ARoom* ConnectedRoom);
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -76,14 +77,14 @@ protected:
 private:
 	std::map<RoomDir, ARoom*> Rooms;
 	RoomDir Directon = RoomDir::NONE;
+	FVector2D RoomScale = FVector2D::ZERO;
 
-	std::map<RoomDir, class ADoor*> Doors;
-	std::map<RoomDir, class USpriteRenderer*> DoorRenderers;
+	std::vector<USpriteRenderer*> DoorRenderers;
 	USpriteRenderer* DoorRenderer;
 
-	class USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
-	class USpriteRenderer* BolderLineRenderer = nullptr; // 화면 가장자리 검은 배경
-	class USpriteRenderer* ControlsRenderer   = nullptr;
+	USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
+	USpriteRenderer* BolderLineRenderer = nullptr; // 화면 가장자리 검은 배경
+	USpriteRenderer* ControlsRenderer   = nullptr;
 	
 };
 
