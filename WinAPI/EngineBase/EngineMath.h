@@ -12,6 +12,15 @@ public:
 	static const FVector2D UP;
 	static const FVector2D DOWN;
 
+	// Lerp : 선형보간법 : 시작점과 끝점 사이의 중간 값(비율)을 찾는 방법
+	// _Start : 현재 위치, _End : 목적지, _ElapsedTime : DeltaTime을 누적시킬 변수, _Duration : 이동할 시간
+	static FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _ElapsedTime, float _Duration);
+	static FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _Alpha);
+
+	// _Value 값이  _Min ~ _Max 사잇값으로 고정되게 만듦.
+	static float Clamp(float _Value, float _Min = 0.0f, float _Max = 1.0f);
+
+
 	FVector2D()
 	{
 
@@ -163,41 +172,6 @@ public:
 		Result.X = _Other.X * _Value;
 		Result.Y = _Other.Y * _Value;
 		return Result;
-	}
-
-	float Clamp(float _Value, float _Min, float _Max)
-	{
-		if (_Value < _Min)
-		{
-			return _Min;
-		}
-		else if (_Value > _Max)
-		{
-			return _Max;
-		}
-		else
-		{
-			return _Value;
-		}
-	}
-
-	// Lerp : 선형보간법 : 시작점과 끝점 사이의 중간 값(비율)을 찾는 방법
-	// _Start : 현재 위치, _End : 목적지, _ElapsedTime : DeltaTime을 누적시킬 변수, _Duration : 이동할 시간
-	FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _ElapsedTime, float _Duration)
-	{
-		float Alpha = _ElapsedTime / _Duration;
-		      Alpha = Clamp(Alpha, 0.0f, 1.0f);
-
-		FVector2D Result = ((1.0f - Alpha) * _Start) + (Alpha * _End);
-		return Result;
-
-	}
-
-	FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _Alpha)
-	{
-		FVector2D Result = ((1.0f - _Alpha) * _Start) + (_Alpha * _End);
-		return Result;
-
 	}
 
 };

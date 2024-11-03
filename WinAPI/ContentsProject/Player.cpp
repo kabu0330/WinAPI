@@ -60,54 +60,47 @@ void APlayer::Tick(float _DeltaTime)
 
 	Move(_DeltaTime);
 
-
-	CurCameraPos = GetWorld()->GetCameraPos();
-	PrevCameraPos = CurCameraPos;
-	CameraTargetPos = FVector2D::ZERO;
-	CameraMoveDir = FVector2D::ZERO;
-	Lerp = FVector2D::ZERO;
-	CameraMoveTime = 2.0f;
+	CameraMoveTime = 1.0f;
 
 	if (UEngineInput::GetInst().IsDown('U'))
 	{
 		CameraMoveDir = FVector2D::UP;
 		CameraMove = true;
+		FVector2D RoomScale = Global::WindowScale;
+		StartCameraPos = GetWorld()->GetCameraPos();
+		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+	}
+	if (UEngineInput::GetInst().IsDown('H'))
+	{
+		CameraMoveDir = FVector2D::LEFT;
+		CameraMove = true;
+		FVector2D RoomScale = Global::WindowScale;
+		StartCameraPos = GetWorld()->GetCameraPos();
+		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+	}
+	if (UEngineInput::GetInst().IsDown('K'))
+	{
+		CameraMoveDir = FVector2D::RIGHT;
+		CameraMove = true;
+		FVector2D RoomScale = Global::WindowScale;
+		StartCameraPos = GetWorld()->GetCameraPos();
+		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+	}
+	if (UEngineInput::GetInst().IsDown('J'))
+	{
+		CameraMoveDir = FVector2D::DOWN;
+		CameraMove = true;
+		FVector2D RoomScale = Global::WindowScale;
+		StartCameraPos = GetWorld()->GetCameraPos();
+		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
 	}
 
 	if (true == CameraMove)
 	{
-		CameraTargetPos = CameraMoveDir * APlayGameMode::GetCurRoom()->GetActorScale();
-		CameraElapsedTime += _DeltaTime ;
-		if (CameraElapsedTime > 1.0f)
-		{
-			CameraElapsedTime = 1.0f;
-		}
-		FVector2D LerpSpeed = Lerp.Lerp(CurCameraPos, CameraTargetPos, CameraElapsedTime);
-		if (0 > LerpSpeed.X || 0 > LerpSpeed.Y)
-		{
-			LerpSpeed = LerpSpeed * -1;
-		}
-		FVector2D NewCameraPos = CurCameraPos + (CameraTargetPos - CurCameraPos) * LerpSpeed * _DeltaTime;
-		
-		GetWorld()->SetCameraPos(NewCameraPos);
-		//GetWorld()->AddCameraPos(NewCameraPos);
-		// 
-		//Alpha = CameraElapsedTime / CameraMoveTime;
-		//Alpha = Clamp.Clamp(Alpha, 0.0f, 1.0f);
-		//FVector2D CameraCurMovePos = CurCameraPos + (CameraTargetPos - CurCameraPos) * Alpha * Normal.Length();
-		FVector2D Normal = (CameraTargetPos - CurCameraPos).Normal() ;
-		FVector2D Destination = CurCameraPos + (CameraTargetPos - CurCameraPos) * 1 * Normal.Length();
+		FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, CameraMoveTime);
 
-		int a = 0;
+		GetWorld()->SetCameraPos(CamPos);
 
-		if (CurCameraPos == CameraTargetPos)
-		{
-			FVector2D Result10 = GetWorld()->GetCameraPos();
-			CameraMove = false;
-			CameraElapsedTime = 0.0f;
-			CameraTargetPos = FVector2D::ZERO;
-			CameraMoveDir = FVector2D::ZERO;
-		}
 	}
 
 
