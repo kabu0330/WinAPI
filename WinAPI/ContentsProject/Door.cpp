@@ -19,13 +19,13 @@ void ADoor::Initialize(const FVector2D& _Location, RoomDir _Direction, ARoom* _C
 	case RoomDir::LEFT:
 	case RoomDir::RIGHT:
 		DoorRendererX->SetComponentLocation(Global::WindowSize.Half());
-		DoorRendererX->SetComponentScale({ 300, 150 });
+		DoorRendererX->SetComponentScale({ 250, 200 });
 		DoorRendererX->SetOrder(ERenderOrder::DOOR);
 		break;
 	case RoomDir::UP:
 	case RoomDir::DOWN:
 		DoorRendererY->SetComponentLocation(Global::WindowSize.Half());
-		DoorRendererY->SetComponentScale({ 300, 150 });
+		DoorRendererY->SetComponentScale({ 250, 200 });
 		DoorRendererY->SetOrder(ERenderOrder::DOOR);
 		break;
 

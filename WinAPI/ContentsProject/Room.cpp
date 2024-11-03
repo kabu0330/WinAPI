@@ -167,8 +167,8 @@ void ARoom::AddDoor(FVector2D _RoomLocation, RoomDir _Dir, ARoom* ConnectedRoom)
 	FVector2D DoorPos = _RoomLocation;
 	FVector2D DoorOffestX = FVector2D(RoomRenderer->GetComponentScale().Half().iX(), 0);
 	FVector2D DoorOffestY = FVector2D(0, RoomRenderer->GetComponentScale().Half().iY());
-	FVector2D OffestX = { 40, 0 };
-	FVector2D OffestY = { 0, 40 };
+	FVector2D OffestX = { 50, 0 };
+	FVector2D OffestY = { 0, 50 };
 
 	switch (_Dir)
 	{
