@@ -15,10 +15,17 @@ public:
 	ATear& operator=(const ATear& _Other) = delete;
 	ATear& operator=(ATear&& _Other) noexcept = delete;
 
+	
+
 protected:
+	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
 private:
+	float Speed = 100.0f;
+	float TimeElapesd = 0;
+	bool IsFire = false;
 
+	class USpriteRenderer* TearEffectRenderer = nullptr;
 };
 

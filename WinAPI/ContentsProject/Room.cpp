@@ -176,7 +176,7 @@ void ARoom::DoorSpriteSetting()
 
 	for (int i = 0; i < DoorRenderers.size(); i++)
 	{
-		DoorRenderers[i]->SetComponentScale({ 250, 200 });
+		DoorRenderers[i]->SetComponentScale({ 250, 240 });
 		DoorRenderers[i]->SetOrder(ERenderOrder::DOOR);
 	}
 
@@ -210,8 +210,8 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	//FVector2D RoomPos = _ConnectedRoom->GetActorLocation();
 	FVector2D DoorOffestX = FVector2D(RoomScale.Half().iX(), 0);
 	FVector2D DoorOffestY = FVector2D(0, RoomScale.Half().iY());
-	FVector2D OffestX = { 50, 0 };
-	FVector2D OffestY = { 0, 50 };
+	FVector2D OffestX = { 55, 0 };
+	FVector2D OffestY = { 0, 50};
 
 	switch (_Dir)
 	{
@@ -266,6 +266,7 @@ void ARoom::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 }
+
 
 
 

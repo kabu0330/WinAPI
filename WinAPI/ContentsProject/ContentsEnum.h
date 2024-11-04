@@ -8,5 +8,6 @@ enum class ERenderOrder
 	CONTROLS = -990,
 	DOOR = -800,
 	PLAYER = 0,
+	TEAR = 1000,
 };
 

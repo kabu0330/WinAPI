@@ -63,11 +63,13 @@ void APlayer::Tick(float _DeltaTime)
 
 
 
-	if (1.0f < UEngineInput::GetInst().IsPressTime(VK_SPACE))
+	if (UEngineInput::GetInst().IsPressTime(VK_SPACE))  
 	{
 		// 플레이어가 속한 레벨에 Bullet을 생성한다.
-		ATear* Ptr = GetWorld()->SpawnActor<ATear>();
-		Ptr->SetActorLocation(GetActorLocation());
+ 		ATear* Ptr = GetWorld()->SpawnActor<ATear>();
+		FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() - HeadRenderer->GetComponentScale().Half().iY() + 10 };
+		Ptr->SetActorLocation(TearPos);
+		int a = 0;
 		return;
 	}
 }
@@ -118,40 +120,34 @@ void APlayer::Move(float _DeltaTime)
 	}
 
 	// 렌더
-	//FVector2D Dir = FVector2D::ZERO;
 	switch (State)
 	{
 	case APlayer::State::IDLE:
 	{
-		//Dir = FVector2D::ZERO;
 		BodyRenderer->ChangeAnimation("Body_Idle");
 		HeadRenderer->ChangeAnimation("Head_Down");
 		break;
 	}
 	case APlayer::State::LEFT:
 	{
-		//Dir = FVector2D::LEFT;
 		BodyRenderer->ChangeAnimation("Body_Left");
 		HeadRenderer->ChangeAnimation("Head_Left");
 		break;
 	}
 	case APlayer::State::RIGHT:
 	{
-		//Dir = FVector2D::RIGHT;
 		BodyRenderer->ChangeAnimation("Body_Right");
 		HeadRenderer->ChangeAnimation("Head_RIght");
 		break;
 	}
 	case APlayer::State::UP:
 	{
-		//Dir = FVector2D::UP;
 		BodyRenderer->ChangeAnimation("Body_Up");
 		HeadRenderer->ChangeAnimation("Head_Up");
 		break;
 	}
 	case APlayer::State::DOWN:
 	{
-		//Dir = FVector2D::DOWN;
 		BodyRenderer->ChangeAnimation("Body_Down");
 		HeadRenderer->ChangeAnimation("Head_Down");
 		break;
@@ -166,14 +162,9 @@ void APlayer::Move(float _DeltaTime)
 void APlayer::CameraPosMove(float _DeltaTime)
 {
 	FVector2D RoomScale = Global::WindowScale;
+	FVector2D PlayerMovePos = GetActorLocation();
 	StartCameraPos = GetWorld()->GetCameraPos();
 
-	if (UEngineInput::GetInst().IsDown('U'))
-	{
-		CameraMove    = true;
-		CameraMoveDir = FVector2D::UP;
-		EndCameraPos  = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
-	}
 	if (UEngineInput::GetInst().IsDown('H'))
 	{
 		CameraMove    = true;
@@ -185,6 +176,12 @@ void APlayer::CameraPosMove(float _DeltaTime)
 		CameraMove    = true;
 		CameraMoveDir = FVector2D::RIGHT;
 		EndCameraPos  = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+	}
+	if (UEngineInput::GetInst().IsDown('U'))
+	{
+		CameraMove = true;
+		CameraMoveDir = FVector2D::UP;
+		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
 	}
 	if (UEngineInput::GetInst().IsDown('J'))
 	{
@@ -199,6 +196,8 @@ void APlayer::CameraPosMove(float _DeltaTime)
 		FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
 
 		GetWorld()->SetCameraPos(CamPos);
+		SetActorLocation(PlayerMovePos);
+
 
 		CameraMoveTime += _DeltaTime;
 		if (1.0f <= CameraMoveTime)
@@ -231,6 +230,7 @@ void APlayer::SpriteSetting()
 	BodyRenderer->CreateAnimation("Body_Idle" , "Body.png", 29, 29, 0.05f);
 
 	BodyRenderer->SetComponentScale({ 64, 64 });
+	//BodyRenderer->SetComponentLocation(GetActorLocation());
 	BodyRenderer->ChangeAnimation("Body_Idle");
 
 	// Body

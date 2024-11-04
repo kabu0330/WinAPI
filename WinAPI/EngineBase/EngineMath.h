@@ -17,6 +17,11 @@ public:
 	static FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _ElapsedTime, float _Duration);
 	static FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _Alpha);
 
+	// 절댓값
+	static FVector2D Abs(FVector2D& _Vector);
+	static int       Abs(int&   _Value);
+	static float     Abs(float& _Value);
+
 	// _Value 값이  _Min ~ _Max 사잇값으로 고정되게 만듦.
 	static float Clamp(float _Value, float _Min = 0.0f, float _Max = 1.0f);
 

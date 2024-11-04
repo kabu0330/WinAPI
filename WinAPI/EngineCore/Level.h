@@ -72,7 +72,7 @@ public:
 		CameraPos += _Pos;
 	}
 
-	AActor* GetPlayer()
+	AActor* GetPawn()
 	{
 		return MainPawn;
 	}

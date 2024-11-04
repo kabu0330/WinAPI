@@ -63,6 +63,7 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
 	UImageManager::GetInst().CuttingSprite("Head.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("NormalRoomDoor.png", 4, 2);
+	UImageManager::GetInst().CuttingSprite("effect_tearpoofa.png", 4, 4);
 
 }
 

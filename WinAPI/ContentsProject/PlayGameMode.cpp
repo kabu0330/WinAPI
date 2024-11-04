@@ -31,7 +31,7 @@ void APlayGameMode::BeginPlay()
 	// Player의 BeginPlay 함수에서도 만들어도 동일한 효과를 볼 수 있지만
 	// Player로서의 순수한 독립성을 지켜주기 위해서 Player의 기능이 아니면 모두 여기서 만든다.
 	GetWorld()->SetCameraPos({0, 0});
-	//GetWorld()->SetCameraPos(GetWorld()->GetPlayer()->GetActorLocation());
+	//GetWorld()->SetCameraPos(GetWorld()->GetPawn()->GetActorLocation());
 	GetWorld()->SetCameraToMainPawn(false);
 
 
@@ -50,30 +50,63 @@ void APlayGameMode::BeginPlay()
 
 	   BaseRoom->SetName("BaseRoom"   );
 	MinionRoom0->SetName("MinionRoom0");
-	//MinionRoom1->SetName("MinionRoom1");
-	//MinionRoom2->SetName("MinionRoom2");
-	//MinionRoom3->SetName("MinionRoom3");
-	//   BossRoom->SetName("BossRoom"   );
+	MinionRoom1->SetName("MinionRoom1");
+	MinionRoom2->SetName("MinionRoom2");
+	MinionRoom3->SetName("MinionRoom3");
+	   BossRoom->SetName("BossRoom"   );
 	
-	   CurRoom = BaseRoom;
-	   
-	
+	// 플레이어가 현재 속한 방 위치 구하기 위한 코드 중 일부
+	CurRoom = BaseRoom;
 
-	int a = 0;
+	AllRooms.push_back(BaseRoom);
+	AllRooms.push_back(MinionRoom0);
+	AllRooms.push_back(MinionRoom1);
+	AllRooms.push_back(MinionRoom2);
+	AllRooms.push_back(MinionRoom3);
+	AllRooms.push_back(BossRoom);
+	
 }
 
 void APlayGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	PlayerCurRoom();
 	EngineDebug(_DeltaTime);
+}
+
+// 일단 보류
+void APlayGameMode::PlayerCurRoom()
+{
+	FVector2D PlayerPos = GetWorld()->GetPawn()->GetActorLocation();
+	FVector2D RoomSize = CurRoom->GetActorScale();
+	PlayerPos = PlayerPos / RoomSize;
+	
+
+	for (int i = 0; i < AllRooms.size(); i++)
+	{
+		FVector2D RoomPos = AllRooms[i]->GetActorLocation() / RoomSize;
+
+		int a = 0;
+		if (true)
+		{
+			std::string CurRoomName = AllRooms[i]->GetName();
+			CurRoom->SetName(CurRoomName);
+
+			int a = 0;
+		}
+
+
+	}
 }
 
 void APlayGameMode::EngineDebug(float _DeltaTime)
 {
+	FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
 	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(static_cast<int>(1.0f / _DeltaTime)));
-	UEngineDebug::CoreOutPutString("Player Pos : " + GetWorld()->GetPlayer()->GetActorLocation().ToString());
+	UEngineDebug::CoreOutPutString("Player Pos : " + GetWorld()->GetPawn()->GetActorLocation().ToString());
 	UEngineDebug::CoreOutPutString("Camera Pos : " + GetWorld()->GetCameraPos().ToString());
+	//UEngineDebug::CoreOutPutString("Mouse Pos : " + MousePos.ToString());
 	UEngineDebug::CoreOutPutString("Room : " + APlayGameMode::GetCurRoom()->GetName());
 
 	if (true == UEngineInput::GetInst().IsDown('B'))
@@ -81,4 +114,7 @@ void APlayGameMode::EngineDebug(float _DeltaTime)
 		UEngineDebug::SwitchIsDebug();
 	}
 }
+
+
+
 
