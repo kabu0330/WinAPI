@@ -143,6 +143,8 @@ void ULevel::Render(float _DeltaTime)
 
 	// BackBuffer 렌더링 2 : 화면 그리기
 	DoubleBuffering();
+
+	int a = 0;
 }
 
 // 화면을 깨끗하게 화이트로 지운다.

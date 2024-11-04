@@ -84,6 +84,15 @@ public:
 	
 	void SetAnimationEvent(std::string_view _AnimationName, int _Frame, std::function<void()> _Function);
 
+	void SetRender(bool _OnAndOff)
+	{
+		if (true)
+		{
+			this->SetComponentScale({ 0, 0 });
+
+		}
+	}
+
 protected:
 
 public:

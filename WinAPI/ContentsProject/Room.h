@@ -80,7 +80,6 @@ private:
 	FVector2D RoomScale = FVector2D::ZERO;
 
 	std::vector<USpriteRenderer*> DoorRenderers;
-	USpriteRenderer* DoorRenderer;
 
 	USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
 	USpriteRenderer* BolderLineRenderer = nullptr; // 화면 가장자리 검은 배경
