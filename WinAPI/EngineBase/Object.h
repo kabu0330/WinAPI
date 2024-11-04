@@ -33,9 +33,66 @@ public:
 		Name = _Name.data();
 	}
 
+
+	// Tick이 꺼지거나, 액터가 죽었거나
+	virtual bool IsActive()
+	{
+		return IsActiveValue && false == IsDestroyValue;
+	}
+
+	virtual bool IsDestroy()
+	{
+		return IsDestroyValue;
+	}
+
+	// _Time 시간 후에 죽어라.
+	void Destroy(float _Time = 0.0f)
+	{
+		DeathTime = _Time;
+
+		if (0.0f < _Time)
+		{
+			IsDeathTimeCheck = true;
+			return;
+		}
+
+		IsDestroyValue = true;
+	}
+
+	// 
+	virtual void ReleaseCheck(float _DeltaTime)
+	{
+		if (false == IsDeathTimeCheck)
+		{
+			return;
+		}
+
+		CurDeathTime += _DeltaTime;
+
+		if (DeathTime <= CurDeathTime)
+		{
+			IsDestroyValue = true;
+		}
+	}
+
+	// 모든 기능 정지.
+	// IsActive가 false가 된 객체는 더 이상 Tick이 돌지 않기 때문에 외부에서 다른 객체가 풀어줘야 한다.
+	void SetActive(bool _IsActive)
+	{
+		IsActiveValue = _IsActive;
+	}
+
+
 protected:
 
 private:
+	bool IsDestroyValue = false; // 죽었냐
+	bool IsActiveValue = true; // Tick을 끌 거냐
+
+	bool IsDeathTimeCheck = false; // 완전히 Tick이 꺼질 때까지 걸리는 시간
+	float DeathTime = 0.0f;
+	float CurDeathTime = 0.0f;
+
 	std::string Name;
 };
 

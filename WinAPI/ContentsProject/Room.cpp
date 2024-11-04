@@ -161,7 +161,6 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
 
 void ARoom::DoorSpriteSetting()
 {
-	//DoorRenderers.resize(4);
 	USpriteRenderer* Door = nullptr;
 	Door = CreateDefaultSubObject<USpriteRenderer>();
 	DoorRenderers.push_back(Door);
@@ -197,6 +196,12 @@ void ARoom::DoorSpriteSetting()
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->ChangeAnimation("Door_Right_Open");
 	DoorRenderers[static_cast<int>(RoomDir::UP)    - 1]->ChangeAnimation("Door_Up_Open"   );
 	DoorRenderers[static_cast<int>(RoomDir::DOWN)  - 1]->ChangeAnimation("Door_Down_Open" );
+
+	// 세팅해두고 일단 렌더를 끈다. AddDoor 함수에서 호출되는 RoomDir 방향의 문만 렌더한다.
+	for (int i = 0; i < DoorRenderers.size(); i++)
+	{
+		DoorRenderers[i]->SetActive(false);
+	}
 }
 
 void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
@@ -214,26 +219,30 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 		DoorPos = -1 * DoorOffestX  + OffestX;
 		DoorRenderers[0]->ChangeAnimation("Door_Left_Open");
 		DoorRenderers[0]->SetComponentLocation(DoorPos);
+		DoorRenderers[0]->SetActive(true);
 		break;
 	case RoomDir::RIGHT:
 		DoorPos = DoorOffestX - OffestX;
 		DoorRenderers[1]->ChangeAnimation("Door_Right_Open");
 		DoorRenderers[1]->SetComponentLocation(DoorPos);
+		DoorRenderers[1]->SetActive(true);
 		break;
 	case RoomDir::UP:
 		DoorPos = -1 * DoorOffestY + OffestY;
 		DoorRenderers[2]->ChangeAnimation("Door_Up_Open");
 		DoorRenderers[2]->SetComponentLocation(DoorPos);
+		DoorRenderers[2]->SetActive(true);
 		break;
 	case RoomDir::DOWN:
 		DoorPos = DoorOffestY - OffestY;
 		DoorRenderers[3]->ChangeAnimation("Door_Down_Open");
 		DoorRenderers[3]->SetComponentLocation(DoorPos);
+		DoorRenderers[3]->SetActive(true);
 		break;
 	default:
 		break;
 	}
-	//FVector2D Result = RoomPos + DoorPos;
+	
 
 
 	int a = 0;

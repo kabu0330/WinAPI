@@ -115,6 +115,9 @@ void UEngineAPICore::Tick()
 
 	CurLevel->Tick(DeltaTime);
 	CurLevel->Render(DeltaTime);
+
+	// 틱돌고 랜더돌고 릴리즈
+	CurLevel->Release(DeltaTime);
 }
 
 void UEngineAPICore::OpenLevel(std::string_view _LevelName)

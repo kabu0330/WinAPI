@@ -53,6 +53,7 @@ void ULevel::LevelChangeStart()
 		{
 			AActor* CurActor = *StartIter;
 
+			// 다음 레벨로 넘어갔다가 이전 레벨로 넘어오면 모든 레벨의 액터들이 살아난다.
 			CurActor->LevelChangeStart();
 		}
 	}
@@ -103,6 +104,12 @@ void ULevel::Tick(float _DeltaTime)
 		{
 			AActor* CurActor = *StartIter;
 
+			// 액터가 죽으면 Tick을 돌리지 않는다.
+			if (false == CurActor->IsActive())
+			{
+				continue;
+			}
+
 			CurActor->Tick(_DeltaTime);
 		}
 	}
@@ -134,6 +141,11 @@ void ULevel::Render(float _DeltaTime)
 
 		for (; RenderStartIter != RenderEndIter; ++RenderStartIter)
 		{
+			if (false == (*RenderStartIter)->IsActive())
+			{
+				continue;
+			}
+
 			(*RenderStartIter)->Render(_DeltaTime);
 		}
 
@@ -145,6 +157,59 @@ void ULevel::Render(float _DeltaTime)
 	DoubleBuffering();
 
 	int a = 0;
+}
+
+void ULevel::Release(float _DeltaTime)
+{
+	// 릴리즈 순서는 말단부터 돌려야 합니다.
+
+	std::map<int, std::list<class USpriteRenderer*>>::iterator StartOrderIter = Renderers.begin();
+	std::map<int, std::list<class USpriteRenderer*>>::iterator EndOrderIter = Renderers.end();
+
+	for (; StartOrderIter != EndOrderIter; ++StartOrderIter)
+	{
+		std::list<class USpriteRenderer*>& RendererList = StartOrderIter->second;
+
+		std::list<class USpriteRenderer*>::iterator RenderStartIter = RendererList.begin();
+		std::list<class USpriteRenderer*>::iterator RenderEndIter = RendererList.end();
+
+		// 언리얼과 달리 중간에 렌더러를 삭제할 수 있다.
+		for (; RenderStartIter != RenderEndIter; )
+		{
+			if (false == (*RenderStartIter)->IsDestroy())
+			{
+				++RenderStartIter;
+				continue;
+			}
+
+			// 랜더러는 지울 필요가 없습니다.
+			// (*RenderStartIter) 누가 지울 권한을 가졌느냐.
+			// 컴포넌트의 메모리를 삭제할수 권한은 오로지 액터만 가지고 있다.
+			RenderStartIter = RendererList.erase(RenderStartIter);
+		}
+	}
+
+	{
+		std::list<AActor*>::iterator StartIter = AllActors.begin();
+		std::list<AActor*>::iterator EndIter = AllActors.end();
+
+		for (; StartIter != EndIter; )
+		{
+			AActor* CurActor = *StartIter;
+
+
+			if (false == CurActor->IsDestroy())
+			{
+				CurActor->ReleaseCheck(_DeltaTime);
+				++StartIter;
+				continue;
+			}
+
+			// 레벨은 액터의 삭제권한을 가지고 있으니 액터는 진짜 지워 준다.
+			delete CurActor;
+			StartIter = AllActors.erase(StartIter);
+		}
+	}
 }
 
 // 화면을 깨끗하게 화이트로 지운다.
