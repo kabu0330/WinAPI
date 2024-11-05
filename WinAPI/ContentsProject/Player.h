@@ -5,21 +5,7 @@
 // 설명 : 아이작
 class APlayer : public AActor
 {
-	enum class State
-	{
-		IDLE,
-		LEFT,
-		RIGHT,
-		UP,
-		DOWN,
-		ATTACK_LEFT,
-		ATTACK_RIGHT,
-		ATTACK_UP,
-		ATTACK_DOWN,
-		MAX
-	};
-
-	enum class BodyState
+	enum class LowerState
 	{
 		IDLE,
 		LEFT,
@@ -29,7 +15,7 @@ class APlayer : public AActor
 		MAX
 	};
 
-	enum class HeadState
+	enum class UpperState
 	{
 		IDLE,
 		LEFT,
@@ -61,8 +47,9 @@ public:
 
 	void Move(float _DeltaTime);
 	void CameraPosMove(float _DeltaTime);
-	void InpuAttack(float _DeltaTime);
+	void InputAttack(float _DeltaTime);
 	void Attack(float _DeltaTime);
+	void CurStateAnimation();
 
 
 	void SpriteSetting();
@@ -83,9 +70,8 @@ private:
 	float Speed = 350;
 	int MySpriteIndex = 0;
 
-	HeadState UpperState = HeadState::IDLE;
-	BodyState LowerState = BodyState::IDLE;
-	State State = State::IDLE;
+	UpperState HeadState = UpperState::IDLE;
+	LowerState BodyState = LowerState::IDLE;
 
 	// Renderer
 	class USpriteRenderer* BodyRenderer = nullptr;

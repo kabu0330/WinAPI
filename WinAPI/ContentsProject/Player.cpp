@@ -43,7 +43,6 @@ void APlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-
 	// 직접 카메라 피봇을 설정해줘야 한다.
 	//FVector2D Size = UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
 	//GetWorld()->SetCameraPivot(Size.Half() * -1.0f);
@@ -61,13 +60,9 @@ void APlayer::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	Move(_DeltaTime);
+	InputAttack(_DeltaTime);
 
-	InpuAttack(_DeltaTime);
-
-
-
-
-
+	CurStateAnimation();
 
 	CameraPosMove(_DeltaTime);
 }
@@ -77,7 +72,6 @@ void APlayer::Move(float _DeltaTime)
 	// 방 이동을 중에 캐릭터는 움직일 수 없다.
 	if (true == CameraMove)
 	{
-		State = State::IDLE;
 		return;
 	}
 
@@ -88,24 +82,28 @@ void APlayer::Move(float _DeltaTime)
 	// 이동
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
-		State = State::LEFT;
+		BodyState = LowerState::LEFT;
+		HeadState = UpperState::LEFT;
 		AddActorLocation(FVector2D::LEFT * _DeltaTime * Speed);
 
 	}
 	if (true == UEngineInput::GetInst().IsPress('D'))
 	{
-		State = State::RIGHT;
+		BodyState = LowerState::RIGHT;
+		HeadState = UpperState::RIGHT;
 		AddActorLocation(FVector2D::RIGHT * _DeltaTime * Speed);
 	}
 	if (true == UEngineInput::GetInst().IsPress('W'))
 	{
-		State = State::UP;
+		BodyState = LowerState::UP;
+		HeadState = UpperState::UP;
 		AddActorLocation(FVector2D::UP * _DeltaTime * Speed);
 
 	}
 	if (true == UEngineInput::GetInst().IsPress('S'))
 	{
-		State = State::DOWN;
+		BodyState = LowerState::DOWN;
+		HeadState = UpperState::DOWN;
 		AddActorLocation(FVector2D::DOWN * _DeltaTime * Speed);
 	}
 
@@ -114,46 +112,9 @@ void APlayer::Move(float _DeltaTime)
 		false == UEngineInput::GetInst().IsPress('W') &&
 		false == UEngineInput::GetInst().IsPress('S'))
 	{
-		State = State::IDLE;
-	}
-
-	// 렌더
-	switch (State)
-	{
-	case APlayer::State::IDLE:
-	{
-		BodyRenderer->ChangeAnimation("Body_Idle");
-		HeadRenderer->ChangeAnimation("Head_Down");
-		break;
-	}
-	case APlayer::State::LEFT:
-	{
-		BodyRenderer->ChangeAnimation("Body_Left");
-		HeadRenderer->ChangeAnimation("Head_Left");
-		break;
-	}
-	case APlayer::State::RIGHT:
-	{
-		BodyRenderer->ChangeAnimation("Body_Right");
-		HeadRenderer->ChangeAnimation("Head_RIght");
-		break;
-	}
-	case APlayer::State::UP:
-	{
-		BodyRenderer->ChangeAnimation("Body_Up");
-		HeadRenderer->ChangeAnimation("Head_Up");
-		break;
-	}
-	case APlayer::State::DOWN:
-	{
-		BodyRenderer->ChangeAnimation("Body_Down");
-		HeadRenderer->ChangeAnimation("Head_Down");
-		break;
-	}
-	case APlayer::State::MAX:
-		break;
-	default:
-		break;
+		BodyState = LowerState::IDLE;
+		//asddHeadState = UpperState::IDLE;
+		
 	}
 }
 
@@ -208,7 +169,7 @@ void APlayer::CameraPosMove(float _DeltaTime)
 	}
 }
 
-void APlayer::InpuAttack(float _DeltaTime)
+void APlayer::InputAttack(float _DeltaTime)
 {
 	if (false == TearFire && (UEngineInput::GetInst().IsDown(VK_LEFT) ||
 		UEngineInput::GetInst().IsDown(VK_RIGHT) ||
@@ -241,39 +202,78 @@ void APlayer::Attack(float _DeltaTime)
 	{
 		Tear = GetWorld()->SpawnActor<ATear>();
 		Tear->Fire(TearPos, FVector2D::RIGHT);
-		State = State::ATTACK_RIGHT;
+		HeadState = UpperState::ATTACK_RIGHT;
 	}
 	if (UEngineInput::GetInst().IsDown(VK_LEFT))
 	{
 		Tear = GetWorld()->SpawnActor<ATear>();
 		Tear->Fire(TearPos, FVector2D::LEFT);
-		State = State::ATTACK_LEFT;
+		HeadState = UpperState::ATTACK_LEFT;
 	}
 	if (UEngineInput::GetInst().IsDown(VK_UP))
 	{
 		Tear = GetWorld()->SpawnActor<ATear>();
 		Tear->Fire(TearPos, FVector2D::UP);
-		State = State::ATTACK_UP;
+		HeadState = UpperState::ATTACK_UP;
 	}
 	if (UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
 		Tear = GetWorld()->SpawnActor<ATear>();
 		Tear->Fire(TearPos, FVector2D::DOWN);
-		State = State::ATTACK_DOWN;
+		HeadState = UpperState::ATTACK_DOWN;
+	}
+}
+
+void APlayer::CurStateAnimation()
+{
+	switch (BodyState)
+	{
+	case APlayer::LowerState::IDLE:
+		BodyRenderer->ChangeAnimation("Body_Idle");
+		break;
+	case APlayer::LowerState::LEFT:
+		BodyRenderer->ChangeAnimation("Body_Left");
+		break;
+	case APlayer::LowerState::RIGHT:
+		BodyRenderer->ChangeAnimation("Body_Right");
+		break;
+	case APlayer::LowerState::UP:
+		BodyRenderer->ChangeAnimation("Body_Up");
+		break;
+	case APlayer::LowerState::DOWN:
+		BodyRenderer->ChangeAnimation("Body_Down");
+		break;
+	default:
+		break;
 	}
 
-	switch (State)
+	switch (HeadState)
 	{
-	case APlayer::State::ATTACK_LEFT:
+	case APlayer::UpperState::IDLE:
+		HeadRenderer->ChangeAnimation("Head_Down");
+		break;
+	case APlayer::UpperState::LEFT:
+		HeadRenderer->ChangeAnimation("Head_Left");
+		break;
+	case APlayer::UpperState::RIGHT:
+		HeadRenderer->ChangeAnimation("Head_RIght");
+		break;
+	case APlayer::UpperState::UP:
+		HeadRenderer->ChangeAnimation("Head_Up");
+		break;
+	case APlayer::UpperState::DOWN:
+		HeadRenderer->ChangeAnimation("Head_Down");
+		break;
+	case APlayer::UpperState::ATTACK_LEFT:
 		HeadRenderer->ChangeAnimation("Head_Attack_Left");
 		break;
-	case APlayer::State::ATTACK_RIGHT:
+	case APlayer::UpperState::ATTACK_RIGHT:
 		HeadRenderer->ChangeAnimation("Head_Attack_Right");
 		break;
-	case APlayer::State::ATTACK_UP:
+	case APlayer::UpperState::ATTACK_UP:
 		HeadRenderer->ChangeAnimation("Head_Attack_Up");
 		break;
-	case APlayer::State::ATTACK_DOWN:
+	case APlayer::UpperState::ATTACK_DOWN:
 		HeadRenderer->ChangeAnimation("Head_Attack_Down");
 		break;
 	default:
@@ -310,10 +310,10 @@ void APlayer::SpriteSetting()
 	HeadRenderer->CreateAnimation("Head_Right"       , "Head.png", 3, 3, 0.5f, false);
 	HeadRenderer->CreateAnimation("Head_Down"        , "Head.png", 7, 7, 0.5f, false);
 	HeadRenderer->CreateAnimation("Head_Up"          , "Head.png", 5, 5, 0.5f, false);
-	HeadRenderer->CreateAnimation("Head_Attack_Left" , "Head.png", 0, 1, 0.1f, false);
-	HeadRenderer->CreateAnimation("Head_Attack_Right", "Head.png", 2, 3, 0.1f, false);
-	HeadRenderer->CreateAnimation("Head_Attack_Down" , "Head.png", 6, 7, 0.1f, false);
-	HeadRenderer->CreateAnimation("Head_Attack_Up"   , "Head.png", 4, 5, 0.1f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Left" , "Head.png", 0, 1, 0.2f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Right", "Head.png", 2, 3, 0.2f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Down" , "Head.png", 6, 7, 0.2f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Up"   , "Head.png", 4, 5, 0.2f, false);
 
 	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
 	HeadRenderer->SetComponentScale({ 64, 64 }); 
