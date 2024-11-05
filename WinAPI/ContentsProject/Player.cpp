@@ -17,6 +17,7 @@
 void APlayer::RunSoundPlay()
 {
 	UEngineDebug::OutPutString("SoundPlay");
+
 }
 
 APlayer::APlayer()
@@ -41,6 +42,8 @@ void APlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
+
+
 	// 직접 카메라 피봇을 설정해줘야 한다.
 	//FVector2D Size = UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
 	//GetWorld()->SetCameraPivot(Size.Half() * -1.0f);
@@ -63,12 +66,12 @@ void APlayer::Tick(float _DeltaTime)
 
 
 
-	if (UEngineInput::GetInst().IsPressTime(VK_SPACE))  
+	if (UEngineInput::GetInst().IsDown(VK_SPACE))  
 	{
-		// 플레이어가 속한 레벨에 Bullet을 생성한다.
- 		ATear* Ptr = GetWorld()->SpawnActor<ATear>();
+		// 플레이어가 속한 레벨에 Bullet을 생성한다. Object Pooling
+		Tear = GetWorld()->SpawnActor<ATear>();
 		FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() - HeadRenderer->GetComponentScale().Half().iY() + 10 };
-		Ptr->SetActorLocation(TearPos);
+		Tear->SetActorLocation(TearPos);
 		int a = 0;
 		return;
 	}

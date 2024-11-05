@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include "Tear.h"
 
 // 설명 : 아이작
 class APlayer : public AActor
@@ -52,6 +53,9 @@ private:
 	class USpriteRenderer* HeadRenderer = nullptr;
 
 	State State = State::IDLE;
+
+	//Bullet
+	ATear* Tear = nullptr;
 
 
 	// 카메라 이동관련 멤버
