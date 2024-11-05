@@ -75,38 +75,30 @@ void APlayer::Move(float _DeltaTime)
 		return;
 	}
 
-	// 자연스럽게 이동하게 보이는 법 : 이동(로직)과 렌더를 분리할 것
-
 	// 입력 방법 1 : 단순 키 입력에 로직을 추가하여 처리
 	
+	// 자연스럽게 이동하게 보이는 법 : 이동(로직)과 렌더를 분리할 것
 	// 이동
 	FVector2D Dir = FVector2D::ZERO;
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
 		Dir = FVector2D::LEFT;
 		BodyState = LowerState::LEFT;
-		//HeadState = UpperState::ATTACK_LEFT;
-		//HeadState = UpperState::LEFT;
 	}
 	if (true == UEngineInput::GetInst().IsPress('D'))
 	{
 		Dir = FVector2D::RIGHT;
 		BodyState = LowerState::RIGHT;
-		//HeadState = UpperState::ATTACK_RIGHT;
-		//HeadState = UpperState::RIGHT;
 	}
 	if (true == UEngineInput::GetInst().IsPress('W'))
 	{
 		Dir = FVector2D::UP;
 		BodyState = LowerState::UP;
-		//HeadState = UpperState::ATTACK_UP;
-		//HeadState = UpperState::UP;
 	}
 	if (true == UEngineInput::GetInst().IsPress('S'))
 	{
 		Dir = FVector2D::DOWN;
 		BodyState = LowerState::DOWN;
-		//HeadState = UpperState::DOWN;
 	}
 
 	AddActorLocation(Dir * _DeltaTime * Speed);
@@ -133,8 +125,7 @@ void APlayer::Move(float _DeltaTime)
 		if (false == IsAttack())
 		{
 			HeadState = UpperState::IDLE; 
-		}
-		
+		}	
 	}
 }
 
@@ -256,7 +247,6 @@ void APlayer::SetAttackDir(UpperState _HeadState)
 	}
 
 	CurAttackHeadDir = static_cast<int>(_HeadState);
-
 }
 
 void APlayer::CurStateAnimation(float _DeltaTime)
@@ -373,7 +363,6 @@ void APlayer::SpriteSetting()
 	BodyRenderer->SetOrder(ERenderOrder::PLAYER);
 	HeadRenderer->SetOrder(ERenderOrder::PLAYER);
 }
-
 
 // 입력 방법 2 : 이벤트 방식으로 처리
 //void APlayer::LeftMove(float _DeltaTime)
