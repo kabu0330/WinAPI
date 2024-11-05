@@ -23,9 +23,9 @@ public:
 protected:
 
 private:
-	float Speed = 100.0f;
+	float Speed = 200.0f;
 	float TimeElapesd = 0.0f;
-	float Duration = 5.0f;
+	float Duration = 1.0f;
 
 	FVector2D Dir = FVector2D::ZERO;
 

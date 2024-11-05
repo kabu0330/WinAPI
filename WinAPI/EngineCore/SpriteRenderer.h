@@ -91,7 +91,6 @@ public:
 		return UObject::IsActive() && GetActor()->IsActive();
 	}
 
-
 	bool IsDestroy() override
 	{
 		// ºÎ¸ðµµ        true            true

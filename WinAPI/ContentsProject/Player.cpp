@@ -43,9 +43,6 @@ void APlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// 
-	ULevel* Ptr = GetWorld();
-	Tears = GetWorld()->SpawnActor<ATearManager>();
 
 	// 직접 카메라 피봇을 설정해줘야 한다.
 	//FVector2D Size = UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
@@ -64,22 +61,15 @@ void APlayer::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	Move(_DeltaTime);
+
+	InpuAttack(_DeltaTime);
+
+
+
+
+
+
 	CameraPosMove(_DeltaTime);
-
-	if (nullptr != Tears)
-	{
-		Tears->Tick(_DeltaTime);
-	}
-
-
-	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() - HeadRenderer->GetComponentScale().Half().iY() + 10 };
-	if (UEngineInput::GetInst().IsDown(VK_RIGHT))  
-	{
-		Tear = GetWorld()->SpawnActor<ATear>();
-		Tear->Fire(TearPos, FVector2D::RIGHT);
-		int a = 0;
-		return;
-	}
 }
 
 void APlayer::Move(float _DeltaTime)
@@ -216,7 +206,80 @@ void APlayer::CameraPosMove(float _DeltaTime)
 			//SetActorLocation(다음 방 문 앞);
 		}
 	}
-} 
+}
+
+void APlayer::InpuAttack(float _DeltaTime)
+{
+	if (false == TearFire && (UEngineInput::GetInst().IsDown(VK_LEFT) ||
+		UEngineInput::GetInst().IsDown(VK_RIGHT) ||
+		UEngineInput::GetInst().IsDown(VK_UP) ||
+		UEngineInput::GetInst().IsDown(VK_DOWN)))
+	{
+		Attack(_DeltaTime);
+	}
+
+	// false니까 공격. true로 변환.
+	if (true == TearFire)
+	{
+		CoolDownElapsed += _DeltaTime;
+
+		//    0.0   > 0.5 = false
+		if (CoolDownElapsed > Cooldown)
+		{
+			TearFire = false;
+			CoolDownElapsed = 0.0f;
+		}
+	}
+}
+
+void APlayer::Attack(float _DeltaTime)
+{
+	TearFire = true;
+
+	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() - HeadRenderer->GetComponentScale().Half().iY() + 10 };
+	if (UEngineInput::GetInst().IsDown(VK_RIGHT))
+	{
+		Tear = GetWorld()->SpawnActor<ATear>();
+		Tear->Fire(TearPos, FVector2D::RIGHT);
+		State = State::ATTACK_RIGHT;
+	}
+	if (UEngineInput::GetInst().IsDown(VK_LEFT))
+	{
+		Tear = GetWorld()->SpawnActor<ATear>();
+		Tear->Fire(TearPos, FVector2D::LEFT);
+		State = State::ATTACK_LEFT;
+	}
+	if (UEngineInput::GetInst().IsDown(VK_UP))
+	{
+		Tear = GetWorld()->SpawnActor<ATear>();
+		Tear->Fire(TearPos, FVector2D::UP);
+		State = State::ATTACK_UP;
+	}
+	if (UEngineInput::GetInst().IsDown(VK_DOWN))
+	{
+		Tear = GetWorld()->SpawnActor<ATear>();
+		Tear->Fire(TearPos, FVector2D::DOWN);
+		State = State::ATTACK_DOWN;
+	}
+
+	switch (State)
+	{
+	case APlayer::State::ATTACK_LEFT:
+		HeadRenderer->ChangeAnimation("Head_Attack_Left");
+		break;
+	case APlayer::State::ATTACK_RIGHT:
+		HeadRenderer->ChangeAnimation("Head_Attack_Right");
+		break;
+	case APlayer::State::ATTACK_UP:
+		HeadRenderer->ChangeAnimation("Head_Attack_Up");
+		break;
+	case APlayer::State::ATTACK_DOWN:
+		HeadRenderer->ChangeAnimation("Head_Attack_Down");
+		break;
+	default:
+		break;
+	}
+}
 
 void APlayer::SpriteSetting()
 {
@@ -247,10 +310,10 @@ void APlayer::SpriteSetting()
 	HeadRenderer->CreateAnimation("Head_Right"       , "Head.png", 3, 3, 0.5f, false);
 	HeadRenderer->CreateAnimation("Head_Down"        , "Head.png", 7, 7, 0.5f, false);
 	HeadRenderer->CreateAnimation("Head_Up"          , "Head.png", 5, 5, 0.5f, false);
-	HeadRenderer->CreateAnimation("Head_Attack_Left" , "Head.png", 0, 1, 0.5f);
-	HeadRenderer->CreateAnimation("Head_Attack_Right", "Head.png", 2, 3, 0.5f);
-	HeadRenderer->CreateAnimation("Head_Attack_Down" , "Head.png", 6, 7, 0.5f);
-	HeadRenderer->CreateAnimation("Head_Attack_Up"   , "Head.png", 4, 5, 0.5f);
+	HeadRenderer->CreateAnimation("Head_Attack_Left" , "Head.png", 0, 1, 0.1f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Right", "Head.png", 2, 3, 0.1f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Down" , "Head.png", 6, 7, 0.1f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Up"   , "Head.png", 4, 5, 0.1f, false);
 
 	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
 	HeadRenderer->SetComponentScale({ 64, 64 }); 
@@ -260,7 +323,6 @@ void APlayer::SpriteSetting()
 	BodyRenderer->SetOrder(ERenderOrder::PLAYER);
 	HeadRenderer->SetOrder(ERenderOrder::PLAYER);
 }
-
 
 
 // 입력 방법 2 : 이벤트 방식으로 처리

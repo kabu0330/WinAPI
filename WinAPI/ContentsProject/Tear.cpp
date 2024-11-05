@@ -9,7 +9,7 @@ ATear::ATear()
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
 	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.025f, false);
-	TearEffectRenderer->SetComponentScale({ 64, 64 });
+	TearEffectRenderer->SetComponentScale({ 80, 80 }); // 64, 64
 	TearEffectRenderer->SetOrder(ERenderOrder::TEAR);
 	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
 	TearEffectRenderer->SetActive(true);
