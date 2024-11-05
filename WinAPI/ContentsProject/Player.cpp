@@ -62,7 +62,7 @@ void APlayer::Tick(float _DeltaTime)
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
 
-	CurStateAnimation();
+	CurStateAnimation(_DeltaTime);
 
 	CameraPosMove(_DeltaTime);
 }
@@ -113,7 +113,7 @@ void APlayer::Move(float _DeltaTime)
 		false == UEngineInput::GetInst().IsPress('S'))
 	{
 		BodyState = LowerState::IDLE;
-		//asddHeadState = UpperState::IDLE;
+		// HeadState = UpperState::IDLE; // 이걸 고치면 바로 얼굴이 원래대로 돌아옴
 		
 	}
 }
@@ -224,7 +224,7 @@ void APlayer::Attack(float _DeltaTime)
 	}
 }
 
-void APlayer::CurStateAnimation()
+void APlayer::CurStateAnimation(float _DeltaTime)
 {
 	switch (BodyState)
 	{
@@ -278,6 +278,21 @@ void APlayer::CurStateAnimation()
 		break;
 	default:
 		break;
+	}
+
+	// HeadState가 공격 중 모션이라면
+	if (static_cast<int>(UpperState::ATTACK_LEFT) <= static_cast<int>(HeadState))
+	{
+		StateElapesd += _DeltaTime;
+		
+		// 0.5초 이상이 경과한다면 BodyState 따라가.
+		if (StateElapesd >= StateTime)
+		{
+			StateElapesd = 0.0f;
+			HeadState = static_cast<UpperState>(BodyState);
+
+			
+		}		
 	}
 }
 

@@ -49,7 +49,7 @@ public:
 	void CameraPosMove(float _DeltaTime);
 	void InputAttack(float _DeltaTime);
 	void Attack(float _DeltaTime);
-	void CurStateAnimation();
+	void CurStateAnimation(float _DeltaTime);
 
 
 	void SpriteSetting();
@@ -76,6 +76,8 @@ private:
 	// Renderer
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* HeadRenderer = nullptr;
+	float StateElapesd = 0.0f;
+	float StateTime = 0.2f;
 
 	//Bullet
 	ATear* Tear = nullptr;
