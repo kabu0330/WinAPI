@@ -15,20 +15,8 @@ ATear::ATear()
 
 }
 
-ATear::~ATear()
+void ATear::Fire(float _DeltaTime)
 {
-}
-
-void ATear::BeginPlay()
-{
-}
-
-void ATear::Tick(float _DeltaTime)
-{
-	if (true)
-	{
-
-	}
 	AddActorLocation(FVector2D::RIGHT * _DeltaTime * Speed);
 
 	TimeElapesd += _DeltaTime;
@@ -37,7 +25,27 @@ void ATear::Tick(float _DeltaTime)
 	{
 		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
 		//this->Destroy(2.0f);
-		
+
 	}
 }
 
+void ATear::Reset()
+{
+}
+
+void ATear::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void ATear::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
+
+	//Fire(_DeltaTime);
+
+}
+
+ATear::~ATear()
+{
+}

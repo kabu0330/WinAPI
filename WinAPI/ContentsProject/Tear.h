@@ -15,7 +15,8 @@ public:
 	ATear& operator=(const ATear& _Other) = delete;
 	ATear& operator=(ATear&& _Other) noexcept = delete;
 
-	
+	void Fire(float _DeltaTime);
+	void Reset();
 
 protected:
 	void BeginPlay() override;
@@ -24,7 +25,7 @@ protected:
 private:
 	float Speed = 200.0f;
 	float TimeElapesd = 0;
-	bool IsFire = false;
+
 
 	class USpriteRenderer* TearEffectRenderer = nullptr;
 };

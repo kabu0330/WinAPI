@@ -80,7 +80,11 @@ void USpriteRenderer::Render(float _DeltaTime)
 
 	ULevel* Level = GetActor()->GetWorld();
 
-	Trans.Location = Trans.Location - Level->CameraPos;
+
+	if (true == IsCameraEffect)
+	{
+		Trans.Location = Trans.Location - (Level->CameraPos * CameraEffectScale);
+	}
 
 	// Trans.Location -= 카메라포스
 
@@ -284,4 +288,9 @@ void USpriteRenderer::SetAnimationEvent(std::string_view _AnimationName, int _Fr
 
 	ChangeAnimation->Events[_Frame] += _Function;
 
+}
+
+void USpriteRenderer::SetCameraEffectScale(float _Effect)
+{
+	CameraEffectScale = _Effect;
 }

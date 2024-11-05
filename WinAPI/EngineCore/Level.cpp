@@ -58,6 +58,18 @@ void ULevel::LevelChangeStart()
 		}
 	}
 
+	{
+		// 레벨 체인지가 될 때 BeginPlay 호출
+		std::list<AActor*>::iterator StartIter = BeginPlayList.begin();
+		std::list<AActor*>::iterator EndIter = BeginPlayList.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			AActor* CurActor = *StartIter;
+
+			CurActor->LevelChangeStart();
+		}
+	}
 }
 
 // 나 이제 새로운 레벨로 바뀔거야.
@@ -75,7 +87,18 @@ void ULevel::LevelChangeEnd()
 		}
 	}
 
+	{
+		std::list<AActor*>::iterator StartIter = BeginPlayList.begin();
+		std::list<AActor*>::iterator EndIter = BeginPlayList.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			AActor* CurActor = *StartIter;
+			CurActor->LevelChangeEnd();
+		}
+	}
 }
+
 
 void ULevel::Tick(float _DeltaTime)
 {

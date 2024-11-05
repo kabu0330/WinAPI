@@ -98,15 +98,25 @@ public:
 		return UObject::IsDestroy() || GetActor()->IsDestroy();
 	}
 
+	void SetCameraEffect(bool _Value)
+	{
+		IsCameraEffect = _Value;
+	}
+
+	void SetCameraEffectScale(float _Effect);
+	void SetSprite(std::string_view _Name, int _CurIndex = 0);
+
 protected:
 
-public:
+private:
 	int Order = 0;
 	int CurIndex = 0;
+	bool IsCameraEffect = true;
+	float CameraEffectScale = 1.0f;
+
 
 	class UEngineSprite* Sprite = nullptr;
 
-	void SetSprite(std::string_view _Name, int _CurIndex = 0);
 
 	std::map<std::string, FrameAnimation> FrameAnimations;
 	FrameAnimation* CurAnimation = nullptr;

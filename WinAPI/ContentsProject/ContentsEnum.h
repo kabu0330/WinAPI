@@ -9,5 +9,6 @@ enum class ERenderOrder
 	DOOR = -800,
 	PLAYER = 0,
 	TEAR = 1000,
+	UI = 9999,
 };
 

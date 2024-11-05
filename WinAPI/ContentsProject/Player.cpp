@@ -14,6 +14,8 @@
 #include "Room.h"
 #include "PlayGameMode.h"
 
+int APlayer::Hp = 6;
+
 void APlayer::RunSoundPlay()
 {
 	UEngineDebug::OutPutString("SoundPlay");
@@ -42,7 +44,14 @@ void APlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	Tears.resize(poolCount);
+	Tears.clear();
+	for (int i = 0; i < poolCount; i++)
+	{
+		ATear* Taer = GetWorld()->SpawnActor<ATear>();
+		Tears.push_back(Taer);
+		Tears[i]->SetActive(false);
+	}
 
 	// 직접 카메라 피봇을 설정해줘야 한다.
 	//FVector2D Size = UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
@@ -67,9 +76,20 @@ void APlayer::Tick(float _DeltaTime)
 	if (UEngineInput::GetInst().IsDown(VK_RIGHT))  
 	{
 		// 플레이어가 속한 레벨에 Bullet을 생성한다. Object Pooling
-		Tear = GetWorld()->SpawnActor<ATear>();
-		FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() - HeadRenderer->GetComponentScale().Half().iY() + 10 };
-		Tear->SetActorLocation(TearPos);
+		
+		
+
+		for (int i = 0; i < poolCount; i++)
+		{
+			FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() - HeadRenderer->GetComponentScale().Half().iY() + 10 };
+			Tears[i]->SetActorLocation(TearPos);
+		}
+		for (int i = 0; i < poolCount; i++)
+		{
+			Tears[i]->Fire(_DeltaTime);
+		}
+
+
 		int a = 0;
 		return;
 	}

@@ -46,6 +46,8 @@ public:
 protected:
 
 private:
+	static int Hp;
+
 	float Speed = 350;
 	int MySpriteIndex = 0;
 
@@ -55,7 +57,8 @@ private:
 	State State = State::IDLE;
 
 	//Bullet
-	ATear* Tear = nullptr;
+	std::vector<ATear*> Tears;
+	int poolCount = 30;
 
 
 	// 카메라 이동관련 멤버
