@@ -20,6 +20,8 @@ public:
 
 	void Tick(float _DeltaTime);
 
+	void UIRender();
+
 	static void SetCurRoom(class ARoom* _Room)
 	{
 		CurRoom = _Room;

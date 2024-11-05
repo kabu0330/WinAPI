@@ -31,6 +31,7 @@
     <ClInclude Include="ContentsEnum.h">
       <Filter>03_Global</Filter>
     </ClInclude>
+    <ClInclude Include="PlaySceneUI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -63,6 +64,7 @@
     <ClCompile Include="ContentsEnum.cpp">
       <Filter>03_Global</Filter>
     </ClCompile>
+    <ClCompile Include="PlaySceneUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">

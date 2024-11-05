@@ -59,11 +59,13 @@ void ContentsCore::LevelSetting()
 
 void ContentsCore::SpriteSetting()
 {
-	// 이미지 한 장에서 스프라이트를 몇 개로 만들 것인지 자른다.
+	// 이미지 한 장에서 스프라이트를 몇 개로 만들 것인지 자른다. (가로, 세로)
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
 	UImageManager::GetInst().CuttingSprite("Head.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("NormalRoomDoor.png", 4, 2);
 	UImageManager::GetInst().CuttingSprite("effect_tearpoofa.png", 4, 4);
+	UImageManager::GetInst().CuttingSprite("pickup.png", 10, 1); // (10, 12)
+	UImageManager::GetInst().CuttingSprite("banner.png", 26, 1); // (12, 10)
 
 }
 

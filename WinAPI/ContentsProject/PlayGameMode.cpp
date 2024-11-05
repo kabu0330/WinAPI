@@ -9,6 +9,8 @@
 #include "ContentsCore.h"
 #include "Room.h"
 #include "Player.h"
+#include "PlaySceneUI.h"
+#include "ContentsEnum.h"
 
 ARoom* APlayGameMode::CurRoom = nullptr;
 
@@ -72,7 +74,22 @@ void APlayGameMode::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	PlayerCurRoom();
+
+
+	UIRender();
 	EngineDebug(_DeltaTime);
+}
+
+void APlayGameMode::UIRender()
+{
+	APlaySceneUI* PickUpNumber = GetWorld()->SpawnActor<APlaySceneUI>();
+	PickUpNumber->SetTextSpriteName("pickup.png");
+	//PickUpNumber->SetTextSpriteName("banner.png");
+	//PickUpNumber->SetTextSpriteName("Body.png");
+	PickUpNumber->SetOrder(ERenderOrder::UI);
+	PickUpNumber->SetTextScale({ 10, 12 });
+	PickUpNumber->SetActorLocation({ 200, 200 });
+	PickUpNumber->SetValue(1);
 }
 
 // 일단 보류
