@@ -64,9 +64,7 @@ void APlayer::Tick(float _DeltaTime)
 	Move(_DeltaTime);
 	CameraPosMove(_DeltaTime);
 
-
-
-	if (UEngineInput::GetInst().IsDown(VK_SPACE))  
+	if (UEngineInput::GetInst().IsDown(VK_RIGHT))  
 	{
 		// 플레이어가 속한 레벨에 Bullet을 생성한다. Object Pooling
 		Tear = GetWorld()->SpawnActor<ATear>();
@@ -201,7 +199,6 @@ void APlayer::CameraPosMove(float _DeltaTime)
 		GetWorld()->SetCameraPos(CamPos);
 		SetActorLocation(PlayerMovePos);
 
-
 		CameraMoveTime += _DeltaTime;
 		if (1.0f <= CameraMoveTime)
 		{
@@ -211,10 +208,8 @@ void APlayer::CameraPosMove(float _DeltaTime)
 			// 플레이어를 어떻게 다음 방의 문 앞에 배치시킬지 생각해보기
 			//SetActorLocation(다음 방 문 앞);
 		}
-
 	}
-
-}
+} 
 
 void APlayer::SpriteSetting()
 {

@@ -77,6 +77,13 @@ public:
 		return MainPawn;
 	}
 
+	template<typename ConvertType>
+	ConvertType* GetPawn()
+	{
+		return dynamic_cast<ConvertType*>(MainPawn);
+	}
+
+
 protected:
 
 private:

@@ -182,3 +182,34 @@ void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path
 	GetObject(hBitMap, sizeof(BITMAP), &Info);
 }
 
+UColor UEngineWinImage::GetColor(FIntPoint _Point, UColor _DefaultColor = UColor::WHITE)
+{
+	if (0 > _Point.X)
+	{
+		return _DefaultColor;
+	}
+
+	if (0 > _Point.Y)
+	{
+		return _DefaultColor;
+	}
+
+	if (Info.bmWidth <= _Point.X)
+	{
+		return _DefaultColor;
+	}
+
+	if (Info.bmHeight <= _Point.Y)
+	{
+		return _DefaultColor;
+	}
+
+	// ::꼭 붙여야 한다. 명시적으로 전역에 존재하는 윈도우
+	// UEngineWinImage::GetPixel 혼돈이 올수 있다.
+
+	// RGBA
+	// 1111
+	UColor ResultColor = ::GetPixel(ImageDC, _Point.X, _Point.Y);
+	return ResultColor;
+}
+

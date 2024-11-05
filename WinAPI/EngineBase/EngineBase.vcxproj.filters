@@ -37,6 +37,9 @@
     <ClInclude Include="EngineSerializer.h">
       <Filter>02_IO</Filter>
     </ClInclude>
+    <ClInclude Include="FSMStateManager.h">
+      <Filter>03_Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineDebug.cpp">
@@ -74,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="EngineSerializer.cpp">
       <Filter>02_IO</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMStateManager.cpp">
+      <Filter>03_Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

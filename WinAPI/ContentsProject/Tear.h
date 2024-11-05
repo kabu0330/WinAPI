@@ -22,7 +22,7 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-	float Speed = 100.0f;
+	float Speed = 200.0f;
 	float TimeElapesd = 0;
 	bool IsFire = false;
 
