@@ -1,6 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
-#include "Tear.h"
+#include "TearManager.h"
 
 // 설명 : 아이작
 class APlayer : public AActor
@@ -51,15 +51,14 @@ private:
 	float Speed = 350;
 	int MySpriteIndex = 0;
 
+	State State = State::IDLE;
+
+	// Renderer
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* HeadRenderer = nullptr;
 
-	State State = State::IDLE;
-
 	//Bullet
-	std::vector<ATear*> Tears;
-	int poolCount = 30;
-
+	ATearManager* Tears = nullptr;
 
 	// 카메라 이동관련 멤버
 	float CameraMoveTime = 0.0f;

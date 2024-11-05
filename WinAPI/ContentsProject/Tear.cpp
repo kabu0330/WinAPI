@@ -12,25 +12,23 @@ ATear::ATear()
 	TearEffectRenderer->SetComponentScale({ 64, 64 });
 	TearEffectRenderer->SetOrder(ERenderOrder::TEAR);
 	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
-
+	TearEffectRenderer->SetActive(true);
 }
 
-void ATear::Fire(float _DeltaTime)
+// 값만 받아서 멤버에 저장한다.
+void ATear::Fire(FVector2D _StartPos, FVector2D _Dir)
 {
-	AddActorLocation(FVector2D::RIGHT * _DeltaTime * Speed);
+	TearEffectRenderer->SetActive(true);
+	SetActorLocation(_StartPos);
+	Dir = _Dir;
 
-	TimeElapesd += _DeltaTime;
-
-	if (1.0f < TimeElapesd)
-	{
-		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
-		//this->Destroy(2.0f);
-
-	}
+	// Debug
+	//FVector2D Offset = GetActorLocation();
 }
 
 void ATear::Reset()
 {
+	TearEffectRenderer->SetActive(false);
 }
 
 void ATear::BeginPlay()
@@ -42,7 +40,29 @@ void ATear::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-	//Fire(_DeltaTime);
+	if (false == TearEffectRenderer->IsActive())
+	{
+		return;
+	}
+
+	AddActorLocation(Dir * _DeltaTime * Speed);
+
+	// Tear 비활성화 조건
+	// 1. 일정 시간이 지나면
+	TimeElapesd += _DeltaTime;
+	if (1.0f < TimeElapesd)
+	{
+		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
+		Dir = FVector2D::ZERO; // 그 자리에서 더 이상 이동않고 터뜨린다.
+
+		if (1.5f < TimeElapesd)
+		{
+			Reset();
+		}
+	}
+
+	// 2. 맵 밖으로 벗어나면
+	// 3. 액터와 충돌하면
 
 }
 

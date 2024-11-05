@@ -15,17 +15,18 @@ public:
 	ATear& operator=(const ATear& _Other) = delete;
 	ATear& operator=(ATear&& _Other) noexcept = delete;
 
-	void Fire(float _DeltaTime);
+	void Fire(FVector2D _StartPos, FVector2D _Dir);
 	void Reset();
-
-protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
+
+protected:
 
 private:
 	float Speed = 200.0f;
 	float TimeElapesd = 0;
 
+	FVector2D Dir = FVector2D::ZERO;
 
 	class USpriteRenderer* TearEffectRenderer = nullptr;
 };
