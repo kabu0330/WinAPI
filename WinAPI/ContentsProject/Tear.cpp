@@ -9,7 +9,7 @@ ATear::ATear()
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
 	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.025f, false);
-	TearEffectRenderer->SetComponentScale({ 80, 80 }); // 64, 64
+	TearEffectRenderer->SetComponentScale({ 88, 88 }); // 64, 64
 	TearEffectRenderer->SetOrder(ERenderOrder::TEAR);
 	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
 	TearEffectRenderer->SetActive(true);
@@ -21,9 +21,6 @@ void ATear::Fire(FVector2D _StartPos, FVector2D _Dir)
 	TearEffectRenderer->SetActive(true);
 	SetActorLocation(_StartPos);
 	Dir = _Dir;
-
-	// Debug
-	//FVector2D Offset = GetActorLocation();
 }
 
 void ATear::Reset()
@@ -55,7 +52,7 @@ void ATear::Tick(float _DeltaTime)
 		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
 		Dir = FVector2D::ZERO; // 그 자리에서 더 이상 이동않고 터뜨린다.
 
-		if (Duration + 0.5f < TimeElapesd)
+		if (Duration + 0.5f < TimeElapesd) // 마지막 애니메이션까지 렌더될 시간을 번다.
 		{
 			Reset();
 		}

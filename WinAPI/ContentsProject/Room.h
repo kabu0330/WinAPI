@@ -39,7 +39,7 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
-	FVector2D GetLeftPos()
+	FVector2D GetLeftPos() 
 	{
 		int PosX = GetActorLocation().iX();
 		int HalfScaleX = GetActorScale().Half().iX();
@@ -71,8 +71,6 @@ public:
 		return { GetActorLocation().iX() , Result };
 	}
 
-
-
 protected:
 
 private:
@@ -84,7 +82,7 @@ private:
 
 	USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
 	USpriteRenderer* BolderLineRenderer = nullptr; // 화면 가장자리 검은 배경
-	USpriteRenderer* ControlsRenderer   = nullptr;
+	USpriteRenderer* ControlsRenderer   = nullptr; // BaseRoom 컨트롤러 이미지
 	
 };
 

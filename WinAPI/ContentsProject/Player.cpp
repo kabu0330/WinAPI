@@ -59,11 +59,16 @@ void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	// 로직
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
 
+
+
+	// 렌더
 	CurStateAnimation(_DeltaTime);
 
+	// 카메라
 	CameraPosMove(_DeltaTime);
 }
 
@@ -103,14 +108,15 @@ void APlayer::Move(float _DeltaTime)
 
 	AddActorLocation(Dir * _DeltaTime * Speed);
 
+	// HeadState 설정 : 공격 중인지, 아닌지
 	if (true == IsAttack())
 	{
-		int BodyDir = GetAttackDir(); 
+		int BodyDir = GetAttackDir(); // 공격방향을 Attack 함수에서 int로 받아와서 전달
 		  HeadState = static_cast<UpperState>(BodyDir);
 	}
 	else
 	{
-		int BodyDir = static_cast<int>(BodyState); // 이동 방향대로 얼굴이 전환
+		int BodyDir = static_cast<int>(BodyState); // 이동방향 그대로 얼굴이 전환
 		  HeadState = static_cast<UpperState>(BodyDir);
 	}
 
@@ -121,7 +127,7 @@ void APlayer::Move(float _DeltaTime)
 	{
 		BodyState = LowerState::IDLE;
 
-		// 공격 상태가 아니면 키입력 없으면 IDLE로 전환
+		// 공격 상태가 아니고, 키입력 없으면 IDLE로 전환
 		if (false == IsAttack())
 		{
 			HeadState = UpperState::IDLE; 
@@ -182,10 +188,12 @@ void APlayer::CameraPosMove(float _DeltaTime)
 
 void APlayer::InputAttack(float _DeltaTime)
 {
-	if (false == TearFire && (UEngineInput::GetInst().IsDown(VK_LEFT) ||
+	// 공격 입력이 처음 들어왔을 때 동작
+	if (false == TearFire && 
+	   (UEngineInput::GetInst().IsDown(VK_LEFT)  ||
 		UEngineInput::GetInst().IsDown(VK_RIGHT) ||
-		UEngineInput::GetInst().IsDown(VK_UP) ||
-		UEngineInput::GetInst().IsDown(VK_DOWN)))
+		UEngineInput::GetInst().IsDown(VK_UP)    ||
+		UEngineInput::GetInst().IsDown(VK_DOWN)  ))
 	{
 		Attack(_DeltaTime);
 	}
@@ -208,33 +216,78 @@ void APlayer::InputAttack(float _DeltaTime)
 
 void APlayer::Attack(float _DeltaTime)
 {
-	TearFire = true;
+	TearFire = true; // true일 때, Cooldown시간 동안 Attack 함수가 호출될 수 없다.
 
 	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() - HeadRenderer->GetComponentScale().Half().iY() + 10 };
+
+	// 눈물이 좌/우로 번갈아 발사되는 디테일을 위해 Pos를 한번 더 조정한다.
+	if (UEngineInput::GetInst().IsDown(VK_LEFT))
+	{ 
+		Tear      = GetWorld()->SpawnActor<ATear>();
+		if (true == LeftFire)
+		{
+			TearPos = TearPos + FVector2D{ -15, -3 };
+			LeftFire = false;
+		}
+		else if (false == LeftFire)
+		{
+			TearPos = TearPos + FVector2D{ -15, 3 };
+			LeftFire = true;
+		}
+		TearDir   = FVector2D::LEFT;
+		HeadState = UpperState::ATTACK_LEFT;
+	}
 	if (UEngineInput::GetInst().IsDown(VK_RIGHT))
 	{
-		Tear = GetWorld()->SpawnActor<ATear>();
-		Tear->Fire(TearPos, FVector2D::RIGHT);
+		Tear      = GetWorld()->SpawnActor<ATear>();
+		if (true == LeftFire)
+		{
+			TearPos = TearPos + FVector2D{ +15, -3 };
+			LeftFire = false;
+		}
+		else if (false == LeftFire)
+		{
+			TearPos = TearPos + FVector2D{ +15, 3 };
+			LeftFire = true;
+		}
+		TearDir   = FVector2D::RIGHT;
 		HeadState = UpperState::ATTACK_RIGHT;
-	}
-	if (UEngineInput::GetInst().IsDown(VK_LEFT))
-	{
-		Tear = GetWorld()->SpawnActor<ATear>();
-		Tear->Fire(TearPos, FVector2D::LEFT);
-		HeadState = UpperState::ATTACK_LEFT;
 	}
 	if (UEngineInput::GetInst().IsDown(VK_UP))
 	{
 		Tear = GetWorld()->SpawnActor<ATear>();
-		Tear->Fire(TearPos, FVector2D::UP);
+		if (true == LeftFire)
+		{
+			 TearPos = TearPos + FVector2D{-7, -15};
+			LeftFire = false;
+		}
+		else if(false == LeftFire)
+		{
+			 TearPos = TearPos + FVector2D{ +7, -15 };
+			LeftFire = true;
+		}
+		  TearDir = FVector2D::UP;
 		HeadState = UpperState::ATTACK_UP;
 	}
 	if (UEngineInput::GetInst().IsDown(VK_DOWN))
 	{
 		Tear = GetWorld()->SpawnActor<ATear>();
-		Tear->Fire(TearPos, FVector2D::DOWN);
+		if (true == LeftFire)
+		{
+		 	 TearPos = TearPos + FVector2D{ -7, 0 };
+			LeftFire = false;
+		}
+		else if (false == LeftFire)
+		{
+			 TearPos = TearPos + FVector2D{ +7, 0 };
+			LeftFire = true;
+		}
+		  TearDir = FVector2D::DOWN;
 		HeadState = UpperState::ATTACK_DOWN;
 	}
+
+	Tear->Fire(TearPos, TearDir);
+
 	SetAttackDir(HeadState);
 }
 

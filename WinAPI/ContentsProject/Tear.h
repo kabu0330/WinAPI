@@ -1,7 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
-// 설명 :
+// 설명 : 눈물공격 
 class ATear : public AActor
 {
 public:
@@ -25,7 +25,7 @@ protected:
 private:
 	float Speed = 400.0f;
 	float TimeElapesd = 0.0f;
-	float Duration = 1.0f;
+	float Duration = 0.85f;
 
 	FVector2D Dir = FVector2D::ZERO;
 

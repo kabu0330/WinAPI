@@ -50,13 +50,14 @@ public:
 
 	void InputAttack(float _DeltaTime);
 	void Attack(float _DeltaTime);
-	bool IsAttack()
+	bool IsAttack() const
 	{
 		return true == TearFire;
 	}
 
 	void SetAttackDir(UpperState _HeadState);
-	int GetAttackDir()
+
+	int GetAttackDir() const
 	{
 		return CurAttackHeadDir;
 	}
@@ -88,14 +89,16 @@ private:
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* HeadRenderer = nullptr;
 	float StateElapesd = 0.0f;
-	float StateTime = 0.2f;
+	float StateTime = 0.15f;
 	int CurAttackHeadDir = 0;
 
 	//Bullet
 	ATear* Tear = nullptr;
 	float Cooldown = 0.3f;
 	float CoolDownElapsed = 0.0f;
+	FVector2D TearDir = FVector2D::ZERO;
 	bool TearFire = false;
+	bool LeftFire = true;
 
 	// 카메라 이동관련 멤버
 	float CameraMoveTime = 0.0f;
