@@ -16,10 +16,10 @@
 
 int APlayer::Hp = 6;
 
-void APlayer::RunSoundPlay()
-{
-	UEngineDebug::OutPutString("SoundPlay");
-}
+//void APlayer::RunSoundPlay()
+//{
+//	UEngineDebug::OutPutString("SoundPlay");
+//}
 
 APlayer::APlayer()
 {
@@ -80,31 +80,46 @@ void APlayer::Move(float _DeltaTime)
 	// 입력 방법 1 : 단순 키 입력에 로직을 추가하여 처리
 	
 	// 이동
+	FVector2D Dir = FVector2D::ZERO;
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
+		Dir = FVector2D::LEFT;
 		BodyState = LowerState::LEFT;
-		HeadState = UpperState::LEFT;
-		AddActorLocation(FVector2D::LEFT * _DeltaTime * Speed);
-
+		//HeadState = UpperState::ATTACK_LEFT;
+		//HeadState = UpperState::LEFT;
 	}
 	if (true == UEngineInput::GetInst().IsPress('D'))
 	{
+		Dir = FVector2D::RIGHT;
 		BodyState = LowerState::RIGHT;
-		HeadState = UpperState::RIGHT;
-		AddActorLocation(FVector2D::RIGHT * _DeltaTime * Speed);
+		//HeadState = UpperState::ATTACK_RIGHT;
+		//HeadState = UpperState::RIGHT;
 	}
 	if (true == UEngineInput::GetInst().IsPress('W'))
 	{
+		Dir = FVector2D::UP;
 		BodyState = LowerState::UP;
-		HeadState = UpperState::UP;
-		AddActorLocation(FVector2D::UP * _DeltaTime * Speed);
-
+		//HeadState = UpperState::ATTACK_UP;
+		//HeadState = UpperState::UP;
 	}
 	if (true == UEngineInput::GetInst().IsPress('S'))
 	{
+		Dir = FVector2D::DOWN;
 		BodyState = LowerState::DOWN;
-		HeadState = UpperState::DOWN;
-		AddActorLocation(FVector2D::DOWN * _DeltaTime * Speed);
+		//HeadState = UpperState::DOWN;
+	}
+
+	AddActorLocation(Dir * _DeltaTime * Speed);
+
+	if (true == IsAttack())
+	{
+		int BodyDir = GetAttackDir(); 
+		  HeadState = static_cast<UpperState>(BodyDir);
+	}
+	else
+	{
+		int BodyDir = static_cast<int>(BodyState); // 이동 방향대로 얼굴이 전환
+		  HeadState = static_cast<UpperState>(BodyDir);
 	}
 
 	if (false == UEngineInput::GetInst().IsPress('A') &&
@@ -113,7 +128,12 @@ void APlayer::Move(float _DeltaTime)
 		false == UEngineInput::GetInst().IsPress('S'))
 	{
 		BodyState = LowerState::IDLE;
-		// HeadState = UpperState::IDLE; // 이걸 고치면 바로 얼굴이 원래대로 돌아옴
+
+		// 공격 상태가 아니면 키입력 없으면 IDLE로 전환
+		if (false == IsAttack())
+		{
+			HeadState = UpperState::IDLE; 
+		}
 		
 	}
 }
@@ -182,11 +202,13 @@ void APlayer::InputAttack(float _DeltaTime)
 	// false니까 공격. true로 변환.
 	if (true == TearFire)
 	{
+		// 공격했으면 쿨타임 계산 시작
 		CoolDownElapsed += _DeltaTime;
 
-		//    0.0   > 0.5 = false
+		//  쿨타임이 경과되면, 
 		if (CoolDownElapsed > Cooldown)
 		{
+			//TearFire를 false로 되돌려 공격 가능 상태로 바꾸고 쿨타임 초기화
 			TearFire = false;
 			CoolDownElapsed = 0.0f;
 		}
@@ -222,6 +244,19 @@ void APlayer::Attack(float _DeltaTime)
 		Tear->Fire(TearPos, FVector2D::DOWN);
 		HeadState = UpperState::ATTACK_DOWN;
 	}
+	SetAttackDir(HeadState);
+}
+
+void APlayer::SetAttackDir(UpperState _HeadState)
+{
+	// 공격 중이 아니라면 Head의 State를 수정할 이유가 없다.
+	if (false == TearFire)
+	{
+		return;
+	}
+
+	CurAttackHeadDir = static_cast<int>(_HeadState);
+
 }
 
 void APlayer::CurStateAnimation(float _DeltaTime)
@@ -265,16 +300,16 @@ void APlayer::CurStateAnimation(float _DeltaTime)
 		HeadRenderer->ChangeAnimation("Head_Down");
 		break;
 	case APlayer::UpperState::ATTACK_LEFT:
-		HeadRenderer->ChangeAnimation("Head_Attack_Left");
+		HeadRenderer->ChangeAnimation("Head_Attack_Left", true);
 		break;
 	case APlayer::UpperState::ATTACK_RIGHT:
-		HeadRenderer->ChangeAnimation("Head_Attack_Right");
+		HeadRenderer->ChangeAnimation("Head_Attack_Right", true);
 		break;
 	case APlayer::UpperState::ATTACK_UP:
-		HeadRenderer->ChangeAnimation("Head_Attack_Up");
+		HeadRenderer->ChangeAnimation("Head_Attack_Up", true);
 		break;
 	case APlayer::UpperState::ATTACK_DOWN:
-		HeadRenderer->ChangeAnimation("Head_Attack_Down");
+		HeadRenderer->ChangeAnimation("Head_Attack_Down", true);
 		break;
 	default:
 		break;
@@ -285,13 +320,13 @@ void APlayer::CurStateAnimation(float _DeltaTime)
 	{
 		StateElapesd += _DeltaTime;
 		
-		// 0.5초 이상이 경과한다면 BodyState 따라가.
+		// 0.2초 이상이 경과한다면 BodyState 따라가.
 		if (StateElapesd >= StateTime)
 		{
 			StateElapesd = 0.0f;
 			HeadState = static_cast<UpperState>(BodyState);
 
-			
+			int a = 0;
 		}		
 	}
 }
@@ -325,10 +360,10 @@ void APlayer::SpriteSetting()
 	HeadRenderer->CreateAnimation("Head_Right"       , "Head.png", 3, 3, 0.5f, false);
 	HeadRenderer->CreateAnimation("Head_Down"        , "Head.png", 7, 7, 0.5f, false);
 	HeadRenderer->CreateAnimation("Head_Up"          , "Head.png", 5, 5, 0.5f, false);
-	HeadRenderer->CreateAnimation("Head_Attack_Left" , "Head.png", 0, 1, 0.2f, false);
-	HeadRenderer->CreateAnimation("Head_Attack_Right", "Head.png", 2, 3, 0.2f, false);
-	HeadRenderer->CreateAnimation("Head_Attack_Down" , "Head.png", 6, 7, 0.2f, false);
-	HeadRenderer->CreateAnimation("Head_Attack_Up"   , "Head.png", 4, 5, 0.2f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Left" , "Head.png", 0, 1, 0.05f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Right", "Head.png", 2, 3, 0.05f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Down" , "Head.png", 6, 7, 0.05f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Up"   , "Head.png", 4, 5, 0.05f, false);
 
 	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
 	HeadRenderer->SetComponentScale({ 64, 64 }); 

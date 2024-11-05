@@ -43,14 +43,25 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
-	void RunSoundPlay();
+	//void RunSoundPlay();
 
 	void Move(float _DeltaTime);
 	void CameraPosMove(float _DeltaTime);
+
 	void InputAttack(float _DeltaTime);
 	void Attack(float _DeltaTime);
-	void CurStateAnimation(float _DeltaTime);
+	bool IsAttack()
+	{
+		return true == TearFire;
+	}
 
+	void SetAttackDir(UpperState _HeadState);
+	int GetAttackDir()
+	{
+		return CurAttackHeadDir;
+	}
+
+	void CurStateAnimation(float _DeltaTime);
 
 	void SpriteSetting();
 
@@ -78,10 +89,11 @@ private:
 	class USpriteRenderer* HeadRenderer = nullptr;
 	float StateElapesd = 0.0f;
 	float StateTime = 0.2f;
+	int CurAttackHeadDir = 0;
 
 	//Bullet
 	ATear* Tear = nullptr;
-	float Cooldown = 0.5f;
+	float Cooldown = 0.3f;
 	float CoolDownElapsed = 0.0f;
 	bool TearFire = false;
 

@@ -23,7 +23,7 @@ public:
 protected:
 
 private:
-	float Speed = 200.0f;
+	float Speed = 400.0f;
 	float TimeElapesd = 0.0f;
 	float Duration = 1.0f;
 
