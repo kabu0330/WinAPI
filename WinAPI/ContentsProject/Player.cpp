@@ -71,11 +71,12 @@ void APlayer::Tick(float _DeltaTime)
 		Tears->Tick(_DeltaTime);
 	}
 
+
 	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() - HeadRenderer->GetComponentScale().Half().iY() + 10 };
 	if (UEngineInput::GetInst().IsDown(VK_RIGHT))  
 	{
-		Tears->Fire(TearPos, FVector2D::RIGHT);
-
+		Tear = GetWorld()->SpawnActor<ATear>();
+		Tear->Fire(TearPos, FVector2D::RIGHT);
 		int a = 0;
 		return;
 	}

@@ -28,15 +28,7 @@ ARoom::ARoom()
 	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().X, RoomRenderer->GetComponentLocation().Y});
 	BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
 
-	DoorSpriteSetting();
-
-	// BaseRoom에만 생성되도록 코드를 수정하여야 함.
-	//ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	//ControlsRenderer->SetSprite("controls.png");
-	//ControlsRenderer->SetComponentLocation(GetActorLocation());
-	//ControlsRenderer->SetComponentScale({ 325, 85 });
-	//ControlsRenderer->SetOrder(ERenderOrder::CONTROLS);
-	
+	DoorSpriteSetting();	
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
@@ -171,9 +163,6 @@ void ARoom::DoorSpriteSetting()
 	Door = CreateDefaultSubObject<USpriteRenderer>();
 	DoorRenderers.push_back(Door);
 
-	// DoorRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	//DoorRenderer->GetActorTransform().Location;
-
 	for (int i = 0; i < DoorRenderers.size(); i++)
 	{
 		DoorRenderers[i]->SetComponentScale({ 250, 240 });
@@ -242,14 +231,7 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	default:
 		break;
 	}
-	
-
-
-	int a = 0;
-
 }
-
-
 
 ARoom::~ARoom()
 {
@@ -260,6 +242,15 @@ void ARoom::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// BaseRoom에만 생성되도록 코드를 수정하여야 함.
+	if ("BaseRoom" == GetName())
+	{
+		ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
+		ControlsRenderer->SetSprite("controls.png");
+		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowScale.Half().iX(), GetActorLocation().iY() - Global::WindowScale.Half().iY() - 20 });
+		ControlsRenderer->SetComponentScale({ 655, 145 }); // 385, 85
+		ControlsRenderer->SetOrder(ERenderOrder::CONTROLS);
+	}
 }
 
 void ARoom::Tick(float _DeltaTime)

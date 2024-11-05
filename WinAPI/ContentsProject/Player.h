@@ -1,6 +1,5 @@
 #pragma once
 #include <EngineCore/Actor.h>
-#include "TearManager.h"
 
 // 설명 : 아이작
 class APlayer : public AActor
@@ -58,7 +57,8 @@ private:
 	class USpriteRenderer* HeadRenderer = nullptr;
 
 	//Bullet
-	ATearManager* Tears = nullptr;
+
+	ATear* Tear;
 
 	// 카메라 이동관련 멤버
 	float CameraMoveTime = 0.0f;

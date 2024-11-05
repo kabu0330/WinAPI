@@ -50,12 +50,12 @@ void ATear::Tick(float _DeltaTime)
 	// Tear 비활성화 조건
 	// 1. 일정 시간이 지나면
 	TimeElapesd += _DeltaTime;
-	if (1.0f < TimeElapesd)
+	if (Duration < TimeElapesd)
 	{
 		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
 		Dir = FVector2D::ZERO; // 그 자리에서 더 이상 이동않고 터뜨린다.
 
-		if (1.5f < TimeElapesd)
+		if (Duration + 0.5f < TimeElapesd)
 		{
 			Reset();
 		}
