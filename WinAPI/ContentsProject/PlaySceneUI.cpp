@@ -43,6 +43,10 @@ void APlaySceneUI::SetValue(int _Value)
 	for (int i = 0; i < Number.size(); i++)
 	{
 		char Value = Number[i] - '0';
+		if (true == IsSingleDigit(_Value))
+		{
+			return;
+		}
 		Renders[i]->SetSprite(TextSpriteName, Value);
 		Renders[i]->SetComponentScale(UIScale);
 		Renders[i]->SetComponentLocation(Pos);
@@ -55,18 +59,30 @@ void APlaySceneUI::SetValue(int _Value)
 		Renders[i]->SetActive(false);
 	}
 	
-	int RenderActiveCount = 0;
-	for (int i = 0; i < Renders.size(); i++)
+}
+
+bool APlaySceneUI::IsSingleDigit(int _Value)
+{
+	if (10 > _Value)
 	{
-		if (true == Renders[i]->IsActive())
-		{
-			++RenderActiveCount;
-		}
+		FVector2D Pos = FVector2D::ZERO;
+
+		Renders[0]->SetSprite(TextSpriteName, 0);
+		Renders[0]->SetComponentScale(UIScale);
+		Renders[0]->SetComponentLocation(Pos);
+		Renders[0]->SetActive(true);
+
+		std::string Number = std::to_string(_Value);
+		char Value = Number[0] - '0';
+		Renders[1]->SetSprite(TextSpriteName, Value);
+		Renders[1]->SetComponentScale(UIScale);
+		Pos.X += UIScale.X - 5;
+		Renders[1]->SetComponentLocation(Pos);
+		Renders[1]->SetActive(true);
+		return true;
 	}
-	if (1 <= RenderActiveCount)
-	{
-		
-	}
+	
+	return false;
 }
 
 void APlaySceneUI::BeginPlay()

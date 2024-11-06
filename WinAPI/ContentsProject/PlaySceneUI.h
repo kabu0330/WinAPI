@@ -38,6 +38,8 @@ public:
 
 	void SetValue(int _Value);
 
+	bool IsSingleDigit(int _Value);
+
 
 protected:
 	void BeginPlay() override;

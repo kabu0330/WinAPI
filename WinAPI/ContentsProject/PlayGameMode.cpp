@@ -89,7 +89,7 @@ void APlayGameMode::UISetting()
 	PickUpNumber->SetOrder(ERenderOrder::UI);
 	PickUpNumber->SetTextScale({ 18, 21 }); // 10, 12
 	PickUpNumber->SetActorLocation({ 200, 200 });
-	PickUpNumber->SetValue(15);
+	PickUpNumber->SetValue(2);
 }
 
 // 일단 보류
