@@ -30,6 +30,15 @@ public:
 	{
 		return CurRoom;
 	}
+	
+	static std::string GetCurRoomName() 
+	{
+		if (nullptr != CurRoom)
+		{
+			return CurRoom->GetName();
+		}
+		return "Unknown Room";
+	}
 
 	void EngineDebug(float _DeltaTime);
 

@@ -172,17 +172,19 @@ void ARoom::DoorSpriteSetting()
 
 	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_Open", "NormalRoomDoor.png", 0, 0, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_Lock", "NormalRoomDoor.png", 4, 4, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_LockAnim", "NormalDoor", 12, 15, 0.15f/*, false*/);
 
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_Open", "NormalRoomDoor.png", 1, 1, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_Lock", "NormalRoomDoor.png", 5, 5, 0.1f, false);
-	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_LockAnim", "NormalDoor", 4, 7, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_LockAnim", "NormalDoor", 4, 7, 0.15f/*, false*/);
 
 	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_Open", "NormalRoomDoor.png", 2, 2, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_Lock", "NormalRoomDoor.png", 6, 6, 0.1f, false);
-	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_LockAnim", "NormalDoor", 0, 3, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_LockAnim", "NormalDoor", 0, 3, 0.15f/*, false*/);
 
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_Open", "NormalRoomDoor.png", 3, 3, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_Lock", "NormalRoomDoor.png", 7, 7, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_LockAnim", "NormalDoor", 8, 11, 0.15f/*, false*/);
 
 	DoorRenderers[static_cast<int>(RoomDir::LEFT)  - 1]->ChangeAnimation("Door_Left_Open" );
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->ChangeAnimation("Door_Right_Open");
@@ -209,7 +211,8 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	{
 	case RoomDir::LEFT:
 		DoorPos = -1 * DoorOffestX  + OffestX;
-		DoorRenderers[0]->ChangeAnimation("Door_Left_Open");
+		//DoorRenderers[0]->ChangeAnimation("Door_Left_Open");
+		DoorRenderers[0]->ChangeAnimation("Door_Left_LockAnim");
 		DoorRenderers[0]->SetComponentLocation(DoorPos);
 		DoorRenderers[0]->SetActive(true);
 		break;
@@ -229,7 +232,8 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 		break;
 	case RoomDir::DOWN:
 		DoorPos = DoorOffestY - OffestY;
-		DoorRenderers[3]->ChangeAnimation("Door_Down_Open");
+		//DoorRenderers[3]->ChangeAnimation("Door_Down_Open");
+		DoorRenderers[3]->ChangeAnimation("Door_Down_LockAnim");
 		DoorRenderers[3]->SetComponentLocation(DoorPos);
 		DoorRenderers[3]->SetActive(true);
 		break;
