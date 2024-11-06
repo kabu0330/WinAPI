@@ -22,7 +22,7 @@ public:
 	static int       Abs(int&   _Value);
 	static float     Abs(float& _Value);
 
-	// _Value 값이  _Min ~ _Max 사잇값으로 고정되게 만듦.
+	// _Value 값이  _Min ~ _Max 사잇값으로만 고정
 	static float Clamp(float _Value, float _Min = 0.0f, float _Max = 1.0f);
 
 

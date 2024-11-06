@@ -159,6 +159,14 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="HeartUI.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="PickupItemUI.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Tear.h">
       <SubType>
       </SubType>
@@ -188,7 +196,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="PlaySceneUI.h">
+    <ClInclude Include="PickupNumberUI.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -199,6 +207,14 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="ContentsEnum.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="HeartUI.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="PickupItemUI.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -234,7 +250,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="PlaySceneUI.cpp">
+    <ClCompile Include="PickupNumberUI.cpp">
       <SubType>
       </SubType>
     </ClCompile>

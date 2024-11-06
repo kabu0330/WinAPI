@@ -5,12 +5,14 @@
 #include <EngineCore/EngineCoreDebug.h>
 #include <EnginePlatform/EngineInput.h>
 
+#include "ContentsEnum.h"
 #include "Global.h"
 #include "ContentsCore.h"
 #include "Room.h"
 #include "Player.h"
-#include "PlaySceneUI.h"
-#include "ContentsEnum.h"
+#include "PickupNumberUI.h"
+#include "HeartUI.h"
+#include "PickupItemUI.h"
 
 ARoom* APlayGameMode::CurRoom = nullptr;
 
@@ -83,13 +85,27 @@ void APlayGameMode::Tick(float _DeltaTime)
 
 void APlayGameMode::UISetting()
 {
-	APlaySceneUI* PickUpNumber = GetWorld()->SpawnActor<APlaySceneUI>();
+	APickupNumberUI* PickUpNumber = GetWorld()->SpawnActor<APickupNumberUI>();
 	PickUpNumber->SetTextSpriteName("pickup.png");
 	//PickUpNumber->SetTextSpriteName("banner.png");
 	PickUpNumber->SetOrder(ERenderOrder::UI);
 	PickUpNumber->SetTextScale({ 18, 21 }); // 10, 12
-	PickUpNumber->SetActorLocation({ 200, 200 });
+	PickUpNumber->SetActorLocation({ 80, 100 });
 	PickUpNumber->SetValue(2);
+
+	AHeartUI* PlayerHpToHeart = GetWorld()->SpawnActor<AHeartUI>();
+	PlayerHpToHeart->SetTextSpriteName("hearts.png");
+	PlayerHpToHeart->SetOrder(ERenderOrder::UI);
+	PlayerHpToHeart->SetTextScale({ 34, 34 }); 
+	PlayerHpToHeart->SetActorLocation({ 200, 100 });
+	PlayerHpToHeart->SetPlayerHp(3);
+
+	APickupItemUI* PennyUI = GetWorld()->SpawnActor<APickupItemUI>();
+	PennyUI->SetTextSpriteName("ui_crafting.png");
+	PennyUI->SetOrder(ERenderOrder::UI);
+	PennyUI->SetTextScale({ 34, 34 });
+	PennyUI->SetActorLocation({ 60, 100 });
+	PennyUI->SetValue(8);
 }
 
 // 일단 보류

@@ -67,21 +67,38 @@ public:
 	void SpriteSetting();
 
 
-
-	// 입력 방법 2 : 이벤트 방식으로 처리
-	//void LeftMove(float _DeltaTime);
-	//void RightMove(float _DeltaTime);
-	//void UpMove(float _DeltaTime);
-	//void DownMove(float _DeltaTime);
+	// Heart
+	static int GetPlayerHeart()
+	{
+		return Heart;
+	}
+	static void SetPlayerHeart(int _Value)
+	{
+		Heart = _Value;
+	}
+	static void ChangePlayerHeart(int _Value)
+	{
+		Heart += _Value;
+	}
+	static int GetHeartMax()
+	{
+		return HeartMax;
+	}
 
 protected:
 
 private:
-	static int Hp;
+	// Heart
+	static int Heart;
+	static int HeartMax;
+	//static int SoulHeart;
+	//static int AllHeartMax;
 
+	// Stat
 	float Speed = 350;
 	int MySpriteIndex = 0;
 
+	// Animation State
 	UpperState HeadState = UpperState::IDLE;
 	LowerState BodyState = LowerState::IDLE;
 
@@ -107,5 +124,12 @@ private:
 	FVector2D CameraMoveDir  = FVector2D::ZERO;
 	FVector2D StartCameraPos = FVector2D::ZERO;
 	FVector2D EndCameraPos   = FVector2D::ZERO;
+
+
+	// 입력 방법 2 : 이벤트 방식으로 처리
+	//void LeftMove(float _DeltaTime);
+	//void RightMove(float _DeltaTime);
+	//void UpMove(float _DeltaTime);
+	//void DownMove(float _DeltaTime);
 };
 

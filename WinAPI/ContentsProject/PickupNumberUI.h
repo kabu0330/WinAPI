@@ -3,23 +3,20 @@
 #include <vector>
 
 #include <EngineCore/Actor.h>
-#include <EngineCore/SpriteRenderer.h>
-#include <EngineBase/EngineMath.h>
 
-
-// 설명  PlayGameMode에서 존재하는 UI들을 정의하는 클래스
-class APlaySceneUI : public AActor
+// 설명  Pickup Item 습득 개수 표기 UI
+class APickupNumberUI : public AActor
 {
 public:
 	// constrcuter destructer
-	APlaySceneUI();
-	~APlaySceneUI();
+	APickupNumberUI();
+	~APickupNumberUI();
 
 	// delete Function
-	APlaySceneUI(const APlaySceneUI& _Other) = delete;
-	APlaySceneUI(APlaySceneUI&& _Other) noexcept = delete;
-	APlaySceneUI& operator=(const APlaySceneUI& _Other) = delete;
-	APlaySceneUI& operator=(APlaySceneUI&& _Other) noexcept = delete;
+	APickupNumberUI(const APickupNumberUI& _Other) = delete;
+	APickupNumberUI(APickupNumberUI&& _Other) noexcept = delete;
+	APickupNumberUI& operator=(const APickupNumberUI& _Other) = delete;
+	APickupNumberUI& operator=(APickupNumberUI&& _Other) noexcept = delete;
 
 	void SetTextSpriteName(const std::string _Text);
 
@@ -48,6 +45,6 @@ protected:
 private:
 	std::string TextSpriteName;
 	FVector2D UIScale;
-	std::vector<USpriteRenderer*> Renders;
+	std::vector<class USpriteRenderer*> Renders;
 };
 

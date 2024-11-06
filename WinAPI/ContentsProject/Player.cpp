@@ -14,7 +14,10 @@
 #include "Room.h"
 #include "PlayGameMode.h"
 
-int APlayer::Hp = 6;
+int APlayer::Heart       = 6;
+int APlayer::HeartMax    = 8;
+//int APlayer::SoulHeart   = 0;
+//int APlayer::AllHeartMax = 24;
 
 //void APlayer::RunSoundPlay()
 //{

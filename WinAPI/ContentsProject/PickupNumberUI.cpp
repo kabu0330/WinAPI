@@ -1,8 +1,9 @@
 #include "PreCompile.h"
-#include "PlaySceneUI.h"
-#include "EngineBase/EngineDebug.h"
+#include "PickupNumberUI.h"
+#include <EngineBase/EngineDebug.h>
+#include <EngineCore/SpriteRenderer.h>
 
-APlaySceneUI::APlaySceneUI()
+APickupNumberUI::APickupNumberUI()
 {
 	for (int i = 0; i < 10; i++)
 	{
@@ -13,7 +14,7 @@ APlaySceneUI::APlaySceneUI()
 	int a = 0;
 }
 
-void APlaySceneUI::SetTextSpriteName(const std::string _Text)
+void APickupNumberUI::SetTextSpriteName(const std::string _Text)
 {
 	TextSpriteName = _Text;
 	for (int i = 0; i < Renders.size(); i++)
@@ -22,7 +23,7 @@ void APlaySceneUI::SetTextSpriteName(const std::string _Text)
 	}
 }
 
-void APlaySceneUI::SetOrder(int _Order)
+void APickupNumberUI::SetOrder(int _Order)
 {
 	for (int i = 0; i < Renders.size(); i++)
 	{
@@ -30,7 +31,7 @@ void APlaySceneUI::SetOrder(int _Order)
 	}
 }
 
-void APlaySceneUI::SetValue(int _Value)
+void APickupNumberUI::SetValue(int _Value)
 {
 	std::string Number = std::to_string(_Value);
 	if (Renders.size() <= Number.size())
@@ -61,7 +62,7 @@ void APlaySceneUI::SetValue(int _Value)
 	
 }
 
-bool APlaySceneUI::IsSingleDigit(int _Value)
+bool APickupNumberUI::IsSingleDigit(int _Value)
 {
 	if (10 > _Value)
 	{
@@ -85,16 +86,16 @@ bool APlaySceneUI::IsSingleDigit(int _Value)
 	return false;
 }
 
-void APlaySceneUI::BeginPlay()
+void APickupNumberUI::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-void APlaySceneUI::Tick(float _DeltaTime)
+void APickupNumberUI::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 }
 
-APlaySceneUI::~APlaySceneUI()
+APickupNumberUI::~APickupNumberUI()
 {
 }
