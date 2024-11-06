@@ -33,11 +33,11 @@ void AHeartUI::SetOrder(int _Order)
 void AHeartUI::SetPlayerHp(int _PlayerHp)
 {
 	int HeartMax = APlayer::GetHeartMax() / 2;
-	if (Renders.size() <= _PlayerHp)
-	{
-		MSGASSERT("함수 호출 이전에 PlayerHp가 최대체력 이상으로 설정된 값이 있습니다.");
-		return;
-	}
+	//if (Renders.size() <= _PlayerHp)
+	//{
+	//	MSGASSERT("함수 호출 이전에 PlayerHp가 최대체력 이상으로 설정된 값이 있습니다.");
+	//	return;
+	//}
 
 	// 최대 Hp를 먼저 보여주고
 	FVector2D Pos = FVector2D::ZERO;

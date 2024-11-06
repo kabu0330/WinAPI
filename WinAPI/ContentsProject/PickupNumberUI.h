@@ -1,7 +1,4 @@
 #pragma once
-#include <string>
-#include <vector>
-
 #include <EngineCore/Actor.h>
 
 // 설명  Pickup Item 습득 개수 표기 UI

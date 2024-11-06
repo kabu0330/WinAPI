@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 #include <EngineCore/Actor.h>
 
 // 설명 : Player의 HP와 연동하여 현재 체력을 표기해주는 UI

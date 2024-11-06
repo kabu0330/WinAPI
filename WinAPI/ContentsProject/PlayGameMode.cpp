@@ -8,11 +8,11 @@
 #include "ContentsEnum.h"
 #include "Global.h"
 #include "ContentsCore.h"
-#include "Room.h"
 #include "Player.h"
 #include "PickupNumberUI.h"
 #include "HeartUI.h"
 #include "PickupItemUI.h"
+#include "BannerTextUI.h"
 
 ARoom* APlayGameMode::CurRoom = nullptr;
 
@@ -124,13 +124,21 @@ void APlayGameMode::EngineDebug(float _DeltaTime)
 
 void APlayGameMode::UISetting()
 {
+	// Text
+	ABannerTextUI* TextUI = GetWorld()->SpawnActor<ABannerTextUI>();
+	TextUI->SetTextSpriteName("banner.png");
+	TextUI->SetOrder(ERenderOrder::UI);
+	TextUI->SetTextScale({ 16, 10 });
+	TextUI->SetActorLocation({ 400, 100 });
+	//TextUI->SetTextOut("HelloWorld"); // 띄어쓰기 문제 해결 어떻게?
+
 	// Heart
 	AHeartUI* PlayerHpToHeart = GetWorld()->SpawnActor<AHeartUI>();
 	PlayerHpToHeart->SetTextSpriteName("hearts.png");
 	PlayerHpToHeart->SetOrder(ERenderOrder::UI);
 	PlayerHpToHeart->SetTextScale({ 32, 32 });
 	PlayerHpToHeart->SetActorLocation({ 135, 45 });
-	PlayerHpToHeart->SetPlayerHp(3);
+	PlayerHpToHeart->SetPlayerHp(6);
 
 	// Penny
 	APickupItemUI* PennyUI = GetWorld()->SpawnActor<APickupItemUI>();
@@ -138,7 +146,7 @@ void APlayGameMode::UISetting()
 	PennyUI->SetOrder(ERenderOrder::UI);
 	PennyUI->SetTextScale({ 34, 38 });
 	PennyUI->SetActorLocation({ 57, 95 });
-	PennyUI->SetValue(8);
+	PennyUI->SetValue(8); // SetSpriteIndex
 
 	APickupNumberUI* PennyPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
 	PennyPickupNumber->SetTextSpriteName("pickup.png");
@@ -154,7 +162,7 @@ void APlayGameMode::UISetting()
 	BombUI->SetOrder(ERenderOrder::UI);
 	BombUI->SetTextScale({ 32, 32 });
 	BombUI->SetActorLocation(FVector2D(55, 95) + Offset);
-	BombUI->SetValue(15);
+	BombUI->SetValue(15); //SetSpriteIndex
 
 	APickupNumberUI* BombPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
 	BombPickupNumber->SetTextSpriteName("pickup.png");
@@ -169,7 +177,7 @@ void APlayGameMode::UISetting()
 	KeyUI->SetOrder(ERenderOrder::UI);
 	KeyUI->SetTextScale({ 32, 32 });
 	KeyUI->SetActorLocation(BombUI->GetActorLocation() + Offset);
-	KeyUI->SetValue(12);
+	KeyUI->SetValue(12); //SetSpriteIndex
 
 	APickupNumberUI* KeyPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
 	KeyPickupNumber->SetTextSpriteName("pickup.png");

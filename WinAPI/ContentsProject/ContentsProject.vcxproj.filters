@@ -40,6 +40,9 @@
     <ClInclude Include="PickupItemUI.h">
       <Filter>04_Play\UI</Filter>
     </ClInclude>
+    <ClInclude Include="BannerTextUI.h">
+      <Filter>04_Play\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -79,6 +82,9 @@
       <Filter>04_Play\UI</Filter>
     </ClCompile>
     <ClCompile Include="PickupItemUI.cpp">
+      <Filter>04_Play\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BannerTextUI.cpp">
       <Filter>04_Play\UI</Filter>
     </ClCompile>
   </ItemGroup>

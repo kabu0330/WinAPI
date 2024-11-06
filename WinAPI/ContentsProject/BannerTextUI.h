@@ -2,18 +2,18 @@
 #include <EngineCore/Actor.h>
 
 // Ό³Έν :
-class APickupItemUI : public AActor
+class ABannerTextUI : public AActor
 {
 public:
 	// constrcuter destructer
-	APickupItemUI();
-	~APickupItemUI();
+	ABannerTextUI();
+	~ABannerTextUI();
 
 	// delete Function
-	APickupItemUI(const APickupItemUI& _Other) = delete;
-	APickupItemUI(APickupItemUI&& _Other) noexcept = delete;
-	APickupItemUI& operator=(const APickupItemUI& _Other) = delete;
-	APickupItemUI& operator=(APickupItemUI&& _Other) noexcept = delete;
+	ABannerTextUI(const ABannerTextUI& _Other) = delete;
+	ABannerTextUI(ABannerTextUI&& _Other) noexcept = delete;
+	ABannerTextUI& operator=(const ABannerTextUI& _Other) = delete;
+	ABannerTextUI& operator=(ABannerTextUI&& _Other) noexcept = delete;
 
 	void SetTextSpriteName(const std::string _Text);
 
@@ -30,7 +30,7 @@ public:
 
 	void SetOrder(int _Order);
 
-	void SetValue(int _Value);
+	void SetTextOut(std::string_view _Text);
 
 
 
@@ -41,6 +41,6 @@ protected:
 private:
 	std::string TextSpriteName;
 	FVector2D UIScale;
-	class USpriteRenderer* Render;
+	std::vector<class USpriteRenderer*> Renders;
 };
 
