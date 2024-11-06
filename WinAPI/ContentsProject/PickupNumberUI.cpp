@@ -77,7 +77,7 @@ bool APickupNumberUI::IsSingleDigit(int _Value)
 		char Value = Number[0] - '0';
 		Renders[1]->SetSprite(TextSpriteName, Value);
 		Renders[1]->SetComponentScale(UIScale);
-		Pos.X += UIScale.X - 5;
+		Pos.X += UIScale.X - 7;
 		Renders[1]->SetComponentLocation(Pos);
 		Renders[1]->SetActive(true);
 		return true;

@@ -41,12 +41,13 @@ void AHeartUI::SetPlayerHp(int _PlayerHp)
 
 	// 최대 Hp를 먼저 보여주고
 	FVector2D Pos = FVector2D::ZERO;
+	int Offset = -9;
 	for (int i = 0; i < HeartMax; i++)
 	{
 		Renders[i]->SetSprite(TextSpriteName, 2); // Full Heart
 		Renders[i]->SetComponentScale(UIScale);
 		Renders[i]->SetComponentLocation(Pos);
-		Pos.X += UIScale.X;
+		Pos.X += UIScale.X + Offset;
 		Renders[i]->SetActive(true);
 	}
 
@@ -70,7 +71,7 @@ void AHeartUI::SetPlayerHp(int _PlayerHp)
 		Renders[i]->SetSprite(TextSpriteName, 0); // Full Heart
 		Renders[i]->SetComponentScale(UIScale);
 		Renders[i]->SetComponentLocation(Pos);
-		Pos.X += UIScale.X;
+		Pos.X += UIScale.X + Offset;
 		Renders[i]->SetActive(true);
 	}
 
@@ -83,7 +84,7 @@ void AHeartUI::SetPlayerHp(int _PlayerHp)
 		Renders[i]->SetSprite(TextSpriteName, 1); // Half Heart
 		Renders[i]->SetComponentScale(UIScale);
 		Renders[i]->SetComponentLocation(Pos);
-		Pos.X += UIScale.X;
+		Pos.X += UIScale.X + Offset;
 		Renders[i]->SetActive(true);
 	}
 

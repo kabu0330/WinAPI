@@ -79,33 +79,7 @@ void APlayGameMode::Tick(float _DeltaTime)
 	PlayerCurRoom();
 
 
-	
 	EngineDebug(_DeltaTime);
-}
-
-void APlayGameMode::UISetting()
-{
-	APickupNumberUI* PickUpNumber = GetWorld()->SpawnActor<APickupNumberUI>();
-	PickUpNumber->SetTextSpriteName("pickup.png");
-	//PickUpNumber->SetTextSpriteName("banner.png");
-	PickUpNumber->SetOrder(ERenderOrder::UI);
-	PickUpNumber->SetTextScale({ 18, 21 }); // 10, 12
-	PickUpNumber->SetActorLocation({ 80, 100 });
-	PickUpNumber->SetValue(2);
-
-	AHeartUI* PlayerHpToHeart = GetWorld()->SpawnActor<AHeartUI>();
-	PlayerHpToHeart->SetTextSpriteName("hearts.png");
-	PlayerHpToHeart->SetOrder(ERenderOrder::UI);
-	PlayerHpToHeart->SetTextScale({ 34, 34 }); 
-	PlayerHpToHeart->SetActorLocation({ 200, 100 });
-	PlayerHpToHeart->SetPlayerHp(3);
-
-	APickupItemUI* PennyUI = GetWorld()->SpawnActor<APickupItemUI>();
-	PennyUI->SetTextSpriteName("ui_crafting.png");
-	PennyUI->SetOrder(ERenderOrder::UI);
-	PennyUI->SetTextScale({ 34, 34 });
-	PennyUI->SetActorLocation({ 60, 100 });
-	PennyUI->SetValue(8);
 }
 
 // 일단 보류
@@ -137,10 +111,10 @@ void APlayGameMode::EngineDebug(float _DeltaTime)
 {
 	FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
 	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(static_cast<int>(1.0f / _DeltaTime)));
-	UEngineDebug::CoreOutPutString("Player Pos : " + GetWorld()->GetPawn()->GetActorLocation().ToString());
-	UEngineDebug::CoreOutPutString("Camera Pos : " + GetWorld()->GetCameraPos().ToString());
-	//UEngineDebug::CoreOutPutString("Mouse Pos : " + MousePos.ToString());
-	UEngineDebug::CoreOutPutString("Room : " + APlayGameMode::GetCurRoom()->GetName());
+	UEngineDebug::CoreOutPutString("Player Pos : " + GetWorld()->GetPawn()->GetActorLocation().ToString(), { 0, Global::WindowSize.iY() - 60 });
+	UEngineDebug::CoreOutPutString("Camera Pos : " + GetWorld()->GetCameraPos().ToString(), { 0, Global::WindowSize.iY() - 40 });
+	UEngineDebug::CoreOutPutString("Mouse Pos : " + MousePos.ToString(), { 0, Global::WindowSize.iY() - 20 });
+	UEngineDebug::CoreOutPutString("Room : " + APlayGameMode::GetCurRoom()->GetName(), { Global::WindowSize.iX() - 200, 0});
 
 	if (true == UEngineInput::GetInst().IsDown('B'))
 	{
@@ -148,6 +122,61 @@ void APlayGameMode::EngineDebug(float _DeltaTime)
 	}
 }
 
+void APlayGameMode::UISetting()
+{
+	// Heart
+	AHeartUI* PlayerHpToHeart = GetWorld()->SpawnActor<AHeartUI>();
+	PlayerHpToHeart->SetTextSpriteName("hearts.png");
+	PlayerHpToHeart->SetOrder(ERenderOrder::UI);
+	PlayerHpToHeart->SetTextScale({ 32, 32 });
+	PlayerHpToHeart->SetActorLocation({ 135, 45 });
+	PlayerHpToHeart->SetPlayerHp(3);
 
+	// Penny
+	APickupItemUI* PennyUI = GetWorld()->SpawnActor<APickupItemUI>();
+	PennyUI->SetTextSpriteName("ui_crafting.png");
+	PennyUI->SetOrder(ERenderOrder::UI);
+	PennyUI->SetTextScale({ 34, 38 });
+	PennyUI->SetActorLocation({ 57, 95 });
+	PennyUI->SetValue(8);
+
+	APickupNumberUI* PennyPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
+	PennyPickupNumber->SetTextSpriteName("pickup.png");
+	PennyPickupNumber->SetOrder(ERenderOrder::UI);
+	PennyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
+	PennyPickupNumber->SetActorLocation({ 77, 95 });
+	PennyPickupNumber->SetValue(0);
+
+	// Bomb
+	FVector2D Offset = FVector2D(0, +25);
+	APickupItemUI* BombUI = GetWorld()->SpawnActor<APickupItemUI>();
+	BombUI->SetTextSpriteName("ui_crafting.png");
+	BombUI->SetOrder(ERenderOrder::UI);
+	BombUI->SetTextScale({ 32, 32 });
+	BombUI->SetActorLocation(FVector2D(55, 95) + Offset);
+	BombUI->SetValue(15);
+
+	APickupNumberUI* BombPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
+	BombPickupNumber->SetTextSpriteName("pickup.png");
+	BombPickupNumber->SetOrder(ERenderOrder::UI);
+	BombPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
+	BombPickupNumber->SetActorLocation(PennyPickupNumber->GetActorLocation() + Offset);
+	BombPickupNumber->SetValue(1);
+
+	// Key
+	APickupItemUI* KeyUI = GetWorld()->SpawnActor<APickupItemUI>();
+	KeyUI->SetTextSpriteName("ui_crafting.png");
+	KeyUI->SetOrder(ERenderOrder::UI);
+	KeyUI->SetTextScale({ 32, 32 });
+	KeyUI->SetActorLocation(BombUI->GetActorLocation() + Offset);
+	KeyUI->SetValue(12);
+
+	APickupNumberUI* KeyPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
+	KeyPickupNumber->SetTextSpriteName("pickup.png");
+	KeyPickupNumber->SetOrder(ERenderOrder::UI);
+	KeyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
+	KeyPickupNumber->SetActorLocation(BombPickupNumber->GetActorLocation() + Offset);
+	KeyPickupNumber->SetValue(2);
+}
 
 
