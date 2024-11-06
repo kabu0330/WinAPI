@@ -78,6 +78,12 @@ void ContentsCore::FolderSetting()
 	TitleDir.Append("Title");
 
 	UImageManager::GetInst().LoadFolder(TitleDir.GetPathToString());
+
+	UEngineDirectory DoorUpSprite;
+	DoorUpSprite.MoveParentToDirectory("Resources//Play");
+	DoorUpSprite.Append("NormalDoor");
+
+	UImageManager::GetInst().LoadFolder(DoorUpSprite.GetPathToString());
 }
 
 void ContentsCore::ResourceLoad()

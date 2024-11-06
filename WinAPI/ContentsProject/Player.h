@@ -106,12 +106,12 @@ private:
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* HeadRenderer = nullptr;
 	float StateElapesd = 0.0f;
-	float StateTime = 0.15f;
+	float StateTime = 0.10f;
 	int CurAttackHeadDir = 0;
 
 	//Bullet
 	ATear* Tear = nullptr;
-	float Cooldown = 0.3f;
+	float Cooldown = 0.4f;
 	float CoolDownElapsed = 0.0f;
 	FVector2D TearDir = FVector2D::ZERO;
 	bool TearFire = false;
@@ -119,11 +119,11 @@ private:
 
 	// 카메라 이동관련 멤버
 	float CameraMoveTime = 0.0f;
-	float LerpAlpha      = 0.0f;
-	bool  CameraMove     = false;
-	FVector2D CameraMoveDir  = FVector2D::ZERO;
+	float LerpAlpha = 0.0f;
+	bool  CameraMove = false;
+	FVector2D CameraMoveDir = FVector2D::ZERO;
 	FVector2D StartCameraPos = FVector2D::ZERO;
-	FVector2D EndCameraPos   = FVector2D::ZERO;
+	FVector2D EndCameraPos = FVector2D::ZERO;
 
 
 	// 입력 방법 2 : 이벤트 방식으로 처리

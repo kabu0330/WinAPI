@@ -165,7 +165,8 @@ void ARoom::DoorSpriteSetting()
 
 	for (int i = 0; i < DoorRenderers.size(); i++)
 	{
-		DoorRenderers[i]->SetComponentScale({ 250, 240 });
+		//DoorRenderers[i]->SetComponentScale({ 250, 240 });
+		DoorRenderers[i]->SetComponentScale({ 128, 128 });
 		DoorRenderers[i]->SetOrder(ERenderOrder::DOOR);
 	}
 
@@ -174,9 +175,11 @@ void ARoom::DoorSpriteSetting()
 
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_Open", "NormalRoomDoor.png", 1, 1, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_Lock", "NormalRoomDoor.png", 5, 5, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_LockAnim", "NormalDoor", 4, 7, 0.15f, false);
 
 	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_Open", "NormalRoomDoor.png", 2, 2, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_Lock", "NormalRoomDoor.png", 6, 6, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_LockAnim", "NormalDoor", 0, 3, 0.15f, false);
 
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_Open", "NormalRoomDoor.png", 3, 3, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_Lock", "NormalRoomDoor.png", 7, 7, 0.1f, false);
@@ -212,13 +215,15 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 		break;
 	case RoomDir::RIGHT:
 		DoorPos = DoorOffestX - OffestX;
-		DoorRenderers[1]->ChangeAnimation("Door_Right_Open");
+		//DoorRenderers[1]->ChangeAnimation("Door_Right_Open");
+		DoorRenderers[1]->ChangeAnimation("Door_Right_LockAnim");
 		DoorRenderers[1]->SetComponentLocation(DoorPos);
 		DoorRenderers[1]->SetActive(true);
 		break;
 	case RoomDir::UP:
 		DoorPos = -1 * DoorOffestY + OffestY;
-		DoorRenderers[2]->ChangeAnimation("Door_Up_Open");
+		//DoorRenderers[2]->ChangeAnimation("Door_Up_Open");
+		DoorRenderers[2]->ChangeAnimation("Door_Up_LockAnim");
 		DoorRenderers[2]->SetComponentLocation(DoorPos);
 		DoorRenderers[2]->SetActive(true);
 		break;
