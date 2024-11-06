@@ -86,7 +86,7 @@ void USpriteRenderer::Render(float _DeltaTime)
 		Trans.Location = Trans.Location - (Level->CameraPos * CameraEffectScale);
 	}
 
-	// Trans.Location -= 카메라포스
+	Trans.Location += Pivot;
 
 	CurData.Image->CopyToTrans(BackBufferImage, Trans, CurData.Transform);
 }
@@ -288,6 +288,37 @@ void USpriteRenderer::SetAnimationEvent(std::string_view _AnimationName, int _Fr
 
 	ChangeAnimation->Events[_Frame] += _Function;
 
+}
+
+void USpriteRenderer::SetPivotType(PivotType _Type)
+{
+	if (PivotType::CENTER == _Type)
+	{
+		Pivot = FVector2D::ZERO;
+		return;
+	}
+
+	if (nullptr == Sprite)
+	{
+		MSGASSERT("이미지를 기반으로한 피봇설정은 스프라이트가 세팅되지 않은 상태에서는 호출할수 없습니다");
+		return;
+	}
+
+	UEngineSprite::USpriteData CurData = Sprite->GetSpriteData(CurIndex);
+
+	switch (_Type)
+	{
+	case PivotType::BOT:
+		Pivot.X = 0.0f;
+		Pivot.Y -= CurData.Transform.Scale.Y * 0.5f;
+		break;
+	case PivotType::TOP:
+		Pivot.X = 0.0f;
+		Pivot.Y += CurData.Transform.Scale.Y * 0.5f;
+		break;
+	default:
+		break;
+	}
 }
 
 void USpriteRenderer::SetCameraEffectScale(float _Effect)

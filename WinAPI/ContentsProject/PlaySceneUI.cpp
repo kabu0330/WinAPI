@@ -46,13 +46,26 @@ void APlaySceneUI::SetValue(int _Value)
 		Renders[i]->SetSprite(TextSpriteName, Value);
 		Renders[i]->SetComponentScale(UIScale);
 		Renders[i]->SetComponentLocation(Pos);
-		Pos.X += UIScale.X;
+		Pos.X += UIScale.X - 5;
 		Renders[i]->SetActive(true);
 	}
 
 	for (int i = Number.size(); i < Renders.size() ; i++)
 	{
 		Renders[i]->SetActive(false);
+	}
+	
+	int RenderActiveCount = 0;
+	for (int i = 0; i < Renders.size(); i++)
+	{
+		if (true == Renders[i]->IsActive())
+		{
+			++RenderActiveCount;
+		}
+	}
+	if (1 <= RenderActiveCount)
+	{
+		
 	}
 }
 

@@ -66,7 +66,8 @@ void APlayGameMode::BeginPlay()
 	AllRooms.push_back(MinionRoom2);
 	AllRooms.push_back(MinionRoom3);
 	AllRooms.push_back(BossRoom);
-	
+
+	UISetting();
 }
 
 void APlayGameMode::Tick(float _DeltaTime)
@@ -76,20 +77,19 @@ void APlayGameMode::Tick(float _DeltaTime)
 	PlayerCurRoom();
 
 
-	UIRender();
+	
 	EngineDebug(_DeltaTime);
 }
 
-void APlayGameMode::UIRender()
+void APlayGameMode::UISetting()
 {
 	APlaySceneUI* PickUpNumber = GetWorld()->SpawnActor<APlaySceneUI>();
 	PickUpNumber->SetTextSpriteName("pickup.png");
 	//PickUpNumber->SetTextSpriteName("banner.png");
-	//PickUpNumber->SetTextSpriteName("Body.png");
 	PickUpNumber->SetOrder(ERenderOrder::UI);
-	PickUpNumber->SetTextScale({ 10, 12 });
+	PickUpNumber->SetTextScale({ 18, 21 }); // 10, 12
 	PickUpNumber->SetActorLocation({ 200, 200 });
-	PickUpNumber->SetValue(1);
+	PickUpNumber->SetValue(15);
 }
 
 // 일단 보류

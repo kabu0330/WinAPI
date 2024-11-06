@@ -20,7 +20,7 @@ public:
 
 	void Tick(float _DeltaTime);
 
-	void UIRender();
+	void UISetting();
 
 	static void SetCurRoom(class ARoom* _Room)
 	{

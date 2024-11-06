@@ -4,6 +4,13 @@
 #include "SceneComponent.h"
 #include "EngineSprite.h"
 
+enum class PivotType
+{
+	CENTER,
+	BOT,
+	TOP
+};
+
 // 설명 : 화면에 이미지를 띄우기 위한 모든 기능을 수행
 // 이미지, 스프라이트, 애니메이션 모두 구분없이 렌더러 하나로 통합한다.
 class USpriteRenderer : public USceneComponent
@@ -102,6 +109,13 @@ public:
 		IsCameraEffect = _Value;
 	}
 
+	void SetPivot(FVector2D _Pivot)
+	{
+		Pivot = _Pivot;
+	}
+
+	void SetPivotType(PivotType _Type);
+
 	void SetCameraEffectScale(float _Effect);
 	void SetSprite(std::string_view _Name, int _CurIndex = 0);
 
@@ -112,7 +126,7 @@ private:
 	int CurIndex = 0;
 	bool IsCameraEffect = true;
 	float CameraEffectScale = 1.0f;
-
+	FVector2D Pivot = FVector2D::ZERO;
 
 	class UEngineSprite* Sprite = nullptr;
 
