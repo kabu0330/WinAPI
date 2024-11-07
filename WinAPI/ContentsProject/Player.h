@@ -93,17 +93,14 @@ private:
 	//static int AllHeartMax;
 
 	// Stat
-	float Speed = 250;
-	int MySpriteIndex = 0;
-
-	// MoveAcc
+	// Speed : MoveAcc
+	FVector2D Dir = FVector2D::ZERO;
 	FVector2D FinalSpeed = FVector2D::ZERO;
 	float MoveAcc = 1000.0f;
-	float SpeedMax = 350.0f;
+	float SpeedMax = 400.0f; // Speed
 	bool IsMove = false;
-	FVector2D InverseDir = FVector2D::ZERO;
-	FVector2D Deceleration = FVector2D::ZERO;
-	float MoveDec = 0.0f;
+	float TimeElapsed = 0.0f;
+
 
 	// Item
 	int PennyCount = 0;
@@ -119,6 +116,7 @@ private:
 	int CurAttackHeadDir = 0;
 	float StateElapesd   = 0.0f;
 	float StateTime      = 0.10f;
+	int MySpriteIndex = 0;
 
 	// Renderer
 	class USpriteRenderer* BodyRenderer = nullptr;

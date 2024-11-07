@@ -7,6 +7,7 @@ public:
 	{
 		return ::sqrtf(_Value);
 	}
+
 };
 
 class FVector2D
@@ -23,17 +24,36 @@ public:
 
 	// Lerp : 선형보간법 : 시작점과 끝점 사이의 중간 값(비율)을 찾는 방법
 	// _Start : 현재 위치, _End : 목적지, _ElapsedTime : DeltaTime을 누적시킬 변수, _Duration : 이동할 시간
-	static FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _ElapsedTime, float _Duration);
-	static FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _Alpha);
+	static FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _ElapsedTime, float _Duration)
+	{
+		float Alpha = _ElapsedTime / _Duration;
+		Alpha = Clamp(Alpha, 0.0f, 1.0f);
+		return Lerp(_Start, _End, Alpha);
+	}
+
+	// _Start : 현재 위치, _End : 목적지, _Alpha : 두 값 사이의 보간 비율(0 ~ 1)
+	static FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _Alpha)
+	{
+		FVector2D Result = ((1.0f - _Alpha) * _Start) + (_Alpha * _End);
+		return Result;
+	}
 
 	// 절댓값
 	static FVector2D Abs(FVector2D& _Vector);
 	static int       Abs(int&   _Value);
 	static float     Abs(float& _Value);
 
+	// vector의 내적
+	static float DotProduct(const FVector2D& _Vec1, const FVector2D& _Vec2);
+
 	// _Value 값이  _Min ~ _Max 사잇값으로만 고정
 	static float Clamp(float _Value, float _Min = 0.0f, float _Max = 1.0f);
 
+	FVector2D& GetNormal()
+	{
+		this->Normalize();
+		return *this;
+	}
 
 	FVector2D() {}
 
@@ -231,6 +251,8 @@ public:
 		return Location + Scale.Half();
 	}
 };
+
+
 
 class FIntPoint
 {

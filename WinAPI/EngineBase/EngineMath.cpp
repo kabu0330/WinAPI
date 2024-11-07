@@ -7,22 +7,6 @@ const FVector2D FVector2D::RIGHT = {  1,  0 };
 const FVector2D FVector2D::UP    = {  0, -1 };
 const FVector2D FVector2D::DOWN  = {  0,  1 };
 
-FVector2D FVector2D::Lerp(FVector2D& _Start, FVector2D& _End, float _ElapsedTime, float _Duration)
-{
-	float Alpha = _ElapsedTime / _Duration;
-	Alpha = Clamp(Alpha, 0.0f, 1.0f);
-
-	FVector2D Result = ((1.0f - Alpha) * _Start) + (Alpha * _End);
-	return Result;
-
-}
-
-FVector2D FVector2D::Lerp(FVector2D& _Start, FVector2D& _End, float _Alpha)
-{
-	FVector2D Result = ((1.0f - _Alpha) * _Start) + (_Alpha * _End);
-	return Result;
-
-}
 
 FVector2D FVector2D::Abs(FVector2D& _Vector)
 {
@@ -55,6 +39,11 @@ float FVector2D::Abs(float& _Value)
 	}
 
 	return _Value;
+}
+
+float FVector2D::DotProduct(const FVector2D& _Vec1, const FVector2D& _Vec2)
+{
+	return _Vec1.X * _Vec2.X + _Vec1.Y * _Vec2.Y;
 }
 
 float FVector2D::Clamp(float _Value, float _Min, float _Max)

@@ -3,16 +3,17 @@
 #include <string>
 #include <vector>
 
+#include <EngineBase/EngineMath.h>
 #include <EngineCore/EngineAPICore.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/EngineCoreDebug.h>
 
-#include "Tear.h"
-#include "Global.h"
 #include "ContentsEnum.h"
-#include "Room.h"
 #include "PlayGameMode.h"
+#include "Global.h"
+#include "Room.h"
+#include "Tear.h"
 
 #include "HeartUI.h"
 #include "PickupItemUI.h"
@@ -63,9 +64,6 @@ void APlayer::Tick(float _DeltaTime)
 	UITick(_DeltaTime);
 
 	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
-	UEngineDebug::CoreOutPutString("MoveAcc : " + std::to_string(MoveAcc));
-	//UEngineDebug::CoreOutPutString("Deceleration : " + Deceleration.ToString());
-	UEngineDebug::CoreOutPutString("Deceleration : " + std::to_string(MoveDec));
 
 	DeathCheck();
 
@@ -134,7 +132,7 @@ void APlayer::Move(float _DeltaTime)
 
 	// 자연스럽게 이동하게 보이는 법 : 이동(로직)과 렌더를 분리할 것
 	// 이동
-	FVector2D Dir = FVector2D::ZERO;
+
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
 		Dir += FVector2D::LEFT;
@@ -160,22 +158,21 @@ void APlayer::Move(float _DeltaTime)
 		IsMove = true;
 	}
 
-	Dir.Normalize();
 	if (true == IsMove)
 	{
-		// 가속도
-		FinalSpeed += Dir * MoveAcc * _DeltaTime;
-		//Deceleration = FVector2D::ZERO;
-		MoveDec = 0;
-	}
-	else
-	{
-		FinalSpeed *= 0.99f;
+		Dir.Normalize();
+		FVector2D TargetSpeed = Dir * SpeedMax;
 
+		FinalSpeed += Dir * MoveAcc * _DeltaTime; 	// 가속도
+		FinalSpeed = FVector2D::Lerp(FinalSpeed, TargetSpeed, MoveAcc * _DeltaTime);
+		FVector2D Result = FinalSpeed;
 		int a = 0;
 	}
 
-
+	{
+		FinalSpeed *= 700.0f * _DeltaTime;
+		int a = 0;
+	}
 
 	// 최대속도 제한 : 항상 절댓값으로
 	if (abs(FinalSpeed.X) > SpeedMax || abs(FinalSpeed.Y) > SpeedMax)
@@ -186,8 +183,8 @@ void APlayer::Move(float _DeltaTime)
 	}
 
 	AddActorLocation(FinalSpeed * _DeltaTime);
-
-
+	FVector2D Result = FinalSpeed* _DeltaTime;
+	int a = 0;
 	// HeadState 설정 : 공격 중인지, 아닌지
 	if (true == IsAttack())
 	{
@@ -206,8 +203,6 @@ void APlayer::Move(float _DeltaTime)
 		false == UEngineInput::GetInst().IsPress('W') &&
 		false == UEngineInput::GetInst().IsPress('S'))
 	{
-
-		BodyState = LowerState::IDLE;
 		IsMove = false;
 
 		// 공격 상태가 아니고, 키입력 없으면 IDLE로 전환
@@ -215,6 +210,14 @@ void APlayer::Move(float _DeltaTime)
 		{
 			HeadState = UpperState::IDLE;
 		}
+
+		TimeElapsed += _DeltaTime;
+		if (TimeElapsed > StateTime)
+		{
+			BodyState = LowerState::IDLE;
+			TimeElapsed = 0.0f;
+		}
+
 	}
 }
 
@@ -376,7 +379,7 @@ void APlayer::Attack(float _DeltaTime)
 		HeadState = UpperState::ATTACK_DOWN;
 	}
 
-	Tear->Fire(TearPos, TearDir, Speed);
+	Tear->Fire(TearPos, TearDir, SpeedMax);
 
 	SetAttackDir(HeadState);
 }
