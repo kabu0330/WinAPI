@@ -170,11 +170,12 @@ void APlayer::Move(float _DeltaTime)
 	}
 	else
 	{
-		MoveDec = SpeedMax;
-		FinalSpeed += InverseDir * MoveDec * _DeltaTime;
+		FinalSpeed *= 0.99f;
 
 		int a = 0;
 	}
+
+
 
 	// 최대속도 제한 : 항상 절댓값으로
 	if (abs(FinalSpeed.X) > SpeedMax || abs(FinalSpeed.Y) > SpeedMax)
