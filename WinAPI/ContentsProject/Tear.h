@@ -23,13 +23,13 @@ public:
 protected:
 
 private:
-	float Speed = 450.0f;
-	float SpeedMax = 500.0f;
+	float Speed = 380.0f;
+	float SpeedMax = 600.0f;
 	float TimeElapesd = 0.0f;
-	float Duration = 0.9f;
+	float Duration = 0.85f;
 
-	float ResistanceActivationTime = 0.25f;
-	float Resistance = 0.9f;
+	float ResistanceActivationTime = 0.4f;
+	float Resistance = 0.8f;
 
 	float GravityActivationTime = 0.65f;
 	FVector2D Gravity = FVector2D(Resistance * 0.75f, 0.18f);

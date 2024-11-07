@@ -205,12 +205,6 @@ void APlayer::Move(float _DeltaTime)
 	{
 		IsMove = false;
 
-		// 공격 상태가 아니고, 키입력 없으면 IDLE로 전환
-		if (false == IsAttack())
-		{
-			HeadState = UpperState::IDLE;
-		}
-
 		TimeElapsed += _DeltaTime;
 		if (TimeElapsed > StateTime)
 		{
@@ -218,6 +212,11 @@ void APlayer::Move(float _DeltaTime)
 			TimeElapsed = 0.0f;
 		}
 
+		// 공격 상태가 아니고, 키입력 없으면 IDLE로 전환
+		if (false == IsAttack())
+		{
+			HeadState = UpperState::IDLE;
+		}
 	}
 }
 

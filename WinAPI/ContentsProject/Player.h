@@ -65,6 +65,11 @@ public:
 		return CurAttackHeadDir;
 	}
 
+	bool PlayerIsMove()
+	{
+		return IsMove;
+	}
+
 	void Collision();
 
 	bool DeathCheck();
@@ -97,7 +102,7 @@ private:
 	FVector2D Dir = FVector2D::ZERO;
 	FVector2D FinalSpeed = FVector2D::ZERO;
 	float MoveAcc = 1000.0f;
-	float SpeedMax = 400.0f; // Speed
+	float SpeedMax = 350.0f; // Speed
 	bool IsMove = false;
 	float TimeElapsed = 0.0f;
 
@@ -124,7 +129,7 @@ private:
 
 	//Bullet
 	ATear* Tear = nullptr;
-	float Cooldown = 0.4f;
+	float Cooldown = 0.5f;
 	float CoolDownElapsed = 0.0f;
 	FVector2D TearDir = FVector2D::ZERO;
 	bool TearFire = false;

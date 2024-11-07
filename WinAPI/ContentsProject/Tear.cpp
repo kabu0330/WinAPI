@@ -2,6 +2,8 @@
 #include "Tear.h"
 #include <EngineCore/SpriteRenderer.h>
 #include "ContentsEnum.h"
+#include <EngineCore/Actor.h>
+#include "Player.h"
 
 
 ATear::ATear()
@@ -22,12 +24,26 @@ void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed)
 	TearEffectRenderer->SetActive(true);
 	SetActorLocation(_StartPos);
 	Dir = _Dir;
-	float PlayerSpeed = _Speed;
-	Speed = (PlayerSpeed + Speed) / Duration;
+
+	APlayer* Player = dynamic_cast<APlayer*>(GetWorld()->GetPawn());
+	float FinalSpeed = 0.0f;
+	if (true == Player->PlayerIsMove())
+	{
+		FinalSpeed = Speed + _Speed;
+		Duration = 0.8f;
+	}
+	else
+	{
+		FinalSpeed = Speed;
+	}
+
+	Speed = FinalSpeed / Duration;
 	if (Speed > SpeedMax)
 	{
 		Speed = SpeedMax;
-
+		ResistanceActivationTime = 0.2f;
+		Resistance = 0.7f;
+		GravityActivationTime = 0.5f;
 	}
 }
 
