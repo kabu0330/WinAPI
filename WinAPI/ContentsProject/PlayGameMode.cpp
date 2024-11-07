@@ -130,61 +130,7 @@ void APlayGameMode::UISetting()
 	TextUI->SetOrder(ERenderOrder::UI);
 	TextUI->SetTextScale({ 16, 10 });
 	TextUI->SetActorLocation({ 400, 100 });
-	//TextUI->SetTextOut("HelloWorld"); // 띄어쓰기 문제 해결 어떻게?
-
-	// Heart
-	AHeartUI* PlayerHpToHeart = GetWorld()->SpawnActor<AHeartUI>();
-	PlayerHpToHeart->SetTextSpriteName("hearts.png");
-	PlayerHpToHeart->SetOrder(ERenderOrder::UI);
-	PlayerHpToHeart->SetTextScale({ 32, 32 });
-	PlayerHpToHeart->SetActorLocation({ 135, 45 });
-	PlayerHpToHeart->SetPlayerHp(6);
-
-	// Penny
-	APickupItemUI* PennyUI = GetWorld()->SpawnActor<APickupItemUI>();
-	PennyUI->SetTextSpriteName("ui_crafting.png");
-	PennyUI->SetOrder(ERenderOrder::UI);
-	PennyUI->SetTextScale({ 34, 38 });
-	PennyUI->SetActorLocation({ 57, 95 });
-	PennyUI->SetValue(8); // SetSpriteIndex
-
-	APickupNumberUI* PennyPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
-	PennyPickupNumber->SetTextSpriteName("pickup.png");
-	PennyPickupNumber->SetOrder(ERenderOrder::UI);
-	PennyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
-	PennyPickupNumber->SetActorLocation({ 77, 95 });
-	PennyPickupNumber->SetValue(0);
-
-	// Bomb
-	FVector2D Offset = FVector2D(0, +25);
-	APickupItemUI* BombUI = GetWorld()->SpawnActor<APickupItemUI>();
-	BombUI->SetTextSpriteName("ui_crafting.png");
-	BombUI->SetOrder(ERenderOrder::UI);
-	BombUI->SetTextScale({ 32, 32 });
-	BombUI->SetActorLocation(FVector2D(55, 95) + Offset);
-	BombUI->SetValue(15); //SetSpriteIndex
-
-	APickupNumberUI* BombPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
-	BombPickupNumber->SetTextSpriteName("pickup.png");
-	BombPickupNumber->SetOrder(ERenderOrder::UI);
-	BombPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
-	BombPickupNumber->SetActorLocation(PennyPickupNumber->GetActorLocation() + Offset);
-	BombPickupNumber->SetValue(1);
-
-	// Key
-	APickupItemUI* KeyUI = GetWorld()->SpawnActor<APickupItemUI>();
-	KeyUI->SetTextSpriteName("ui_crafting.png");
-	KeyUI->SetOrder(ERenderOrder::UI);
-	KeyUI->SetTextScale({ 32, 32 });
-	KeyUI->SetActorLocation(BombUI->GetActorLocation() + Offset);
-	KeyUI->SetValue(12); //SetSpriteIndex
-
-	APickupNumberUI* KeyPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
-	KeyPickupNumber->SetTextSpriteName("pickup.png");
-	KeyPickupNumber->SetOrder(ERenderOrder::UI);
-	KeyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
-	KeyPickupNumber->SetActorLocation(BombPickupNumber->GetActorLocation() + Offset);
-	KeyPickupNumber->SetValue(2);
+	//TextUI->SetTextOut("TheBindingOfIsaac"); // 띄어쓰기 문제 해결 어떻게?
 }
 
 
