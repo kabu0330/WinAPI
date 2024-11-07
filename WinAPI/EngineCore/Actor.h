@@ -26,7 +26,7 @@ public:
 	virtual void BeginPlay() {}
 
 
-	virtual void Tick(float _DeltaTime) {}
+	virtual void Tick(float _DeltaTime);
 	
 	virtual void LevelChangeStart() {}
 	virtual void LevelChangeEnd() {}
@@ -89,6 +89,20 @@ public:
 		return NewComponent;
 	}
 
+	void DebugOn()
+	{
+		IsDebug = true;
+	}
+
+	void DebugOff()
+	{
+		IsDebug = false;
+	}
+
+	void DebugSwitch()
+	{
+		IsDebug = !IsDebug;
+	}
 
 protected:
 
@@ -106,6 +120,8 @@ private:
 
 	std::list<class UActorComponent*> Components;
 
+
+	bool IsDebug = false;
 };
 
 typedef AActor Super;

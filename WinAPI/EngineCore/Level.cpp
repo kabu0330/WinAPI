@@ -174,7 +174,7 @@ void ULevel::Render(float _DeltaTime)
 
 	}
 
-	UEngineDebug::PrintEngineDebugText();
+	UEngineDebug::PrintEngineDebugRender();
 
 	// BackBuffer 렌더링 2 : 화면 그리기
 	DoubleBuffering();
