@@ -12,3 +12,16 @@ enum class ERenderOrder
 	UI = 9999,
 };
 
+enum class ECollisionGroup
+{
+	PLAYER_WARPGATE,
+	PLAYER_BODY,
+	PLAYER_ATTACK,
+	MONSTER_BODY,
+	MONSTER_ATTACK,
+	OBJECT_WALL,
+	OBJECT_ATTACK, // 오브젝트를 지나갈 수 있지만 닿으면 체력 감소
+	OBJECT_BOMP, // 폭탄
+	
+};
+

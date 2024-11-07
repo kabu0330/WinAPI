@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include <EngineCore/2DCollision.h>
 #include "Tear.h"
 
 // 설명 : 아이작
@@ -45,10 +46,13 @@ public:
 
 	//void RunSoundPlay();
 
+	// 이동관련
 	void Move(float _DeltaTime);
 	void CameraPosMove(float _DeltaTime);
 
+	// 공격관련
 	void InputAttack(float _DeltaTime);
+
 	void Attack(float _DeltaTime);
 	bool IsAttack() const
 	{
@@ -56,20 +60,22 @@ public:
 	}
 
 	void SetAttackDir(UpperState _HeadState);
-
-	int GetAttackDir() const
+	int  GetAttackDir() const
 	{
 		return CurAttackHeadDir;
 	}
 
-	void CurStateAnimation(float _DeltaTime);
-
-	void SpriteSetting();
-
-	void UISetting();
-	void UITick(float _DeltaTime);
+	void Collision();
 
 	bool DeathCheck();
+
+	// 애니메이션
+	void CurStateAnimation(float _DeltaTime);
+	void SpriteSetting();
+
+	// UI
+	void UISetting();
+	void UITick(float _DeltaTime);
 
 	static int GetHeartMax() 
 	{
@@ -94,6 +100,9 @@ private:
 	int PennyCount = 0;
 	int BombCount  = 1;
 	int KeyCount   = 1;
+
+	// Collision
+	U2DCollision* BodyCollision = nullptr;
 
 	// Animation State
 	UpperState HeadState = UpperState::IDLE;

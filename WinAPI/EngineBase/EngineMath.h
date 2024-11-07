@@ -35,26 +35,13 @@ public:
 	static float Clamp(float _Value, float _Min = 0.0f, float _Max = 1.0f);
 
 
-	FVector2D()
-	{
+	FVector2D() {}
 
-	}
+	FVector2D(float _X, float _Y) : X(_X), Y(_Y) {}
 
-	FVector2D(float _X, float _Y) : X(_X), Y(_Y)
-	{
+	FVector2D(int _X, int _Y) : X(static_cast<float>(_X)), Y(static_cast<float>(_Y)) {}
 
-	}
-
-
-	FVector2D(int _X, int _Y) : X(static_cast<float>(_X)), Y(static_cast<float>(_Y))
-	{
-
-	}
-
-	FVector2D(long _X, long _Y) : X(static_cast<float>(_X)), Y(static_cast<float>(_Y))
-	{
-
-	}
+	FVector2D(long _X, long _Y) : X(static_cast<float>(_X)), Y(static_cast<float>(_Y)) {}
 
 	int iX() const
 	{
@@ -76,69 +63,9 @@ public:
 		return { X * 0.5f, Y * 0.5f };
 	}
 
-	FVector2D operator+(FVector2D _Other) const
-	{
-		FVector2D Result;
-		Result.X = X + _Other.X;
-		Result.Y = Y + _Other.Y;
-		return Result;
-	}
-
-	FVector2D operator-(FVector2D _Other) const
-	{
-		FVector2D Result;
-		Result.X = X - _Other.X;
-		Result.Y = Y - _Other.Y;
-		return Result;
-	}
-
-	FVector2D operator*(float _Value) const
-	{
-		FVector2D Result;
-		Result.X = X * _Value;
-		Result.Y = Y * _Value;
-		return Result;
-	}
-
-	FVector2D operator/(int _Value) const
-	{
-		FVector2D Result;
-		Result.X = X / _Value;
-		Result.Y = Y / _Value;
-		return Result;
-	}
-
-	FVector2D operator*(const FVector2D& _Other) const
-	{
-		FVector2D Result;
-		Result.X = X * _Other.X;
-		Result.Y = Y * _Other.Y;
-		return Result;
-	}
-
-	FVector2D operator/(const FVector2D& _Other) const
-	{
-		FVector2D Result;
-		Result.X = X / _Other.X;
-		Result.Y = Y / _Other.Y;
-		return Result;
-	}
-
-	bool operator==(FVector2D _Other) const
-	{
-		return X == _Other.X && Y == _Other.Y;
-	}
-
 	bool EqualToInt(FVector2D _Other) const
 	{
 		return iX() == _Other.iX() && iY() == _Other.iY();
-	}
-
-	FVector2D& operator+=(FVector2D _Other)
-	{
-		X += _Other.X;
-		Y += _Other.Y;
-		return *this;
 	}
 
 	float Length() const
@@ -182,12 +109,100 @@ public:
 		return Stream;
 	}
 
+	FVector2D operator+(FVector2D _Other) const
+	{
+		FVector2D Result;
+		Result.X = X + _Other.X;
+		Result.Y = Y + _Other.Y;
+		return Result;
+	}
+
+	FVector2D operator-(FVector2D _Other) const
+	{
+		FVector2D Result;
+		Result.X = X - _Other.X;
+		Result.Y = Y - _Other.Y;
+		return Result;
+	}
+
+	FVector2D operator*(const FVector2D& _Other) const
+	{
+		FVector2D Result;
+		Result.X = X * _Other.X;
+		Result.Y = Y * _Other.Y;
+		return Result;
+	}
+
+	FVector2D operator*(float _Value) const
+	{
+		FVector2D Result;
+		Result.X = X * _Value;
+		Result.Y = Y * _Value;
+		return Result;
+	}
+
 	friend FVector2D operator*(float _Value, FVector2D& _Other)
 	{
 		FVector2D Result;
 		Result.X = _Other.X * _Value;
 		Result.Y = _Other.Y * _Value;
 		return Result;
+	}
+
+	FVector2D operator/(int _Value) const
+	{
+		FVector2D Result;
+		Result.X = X / _Value;
+		Result.Y = Y / _Value;
+		return Result;
+	}
+
+	FVector2D operator/(const FVector2D& _Other) const
+	{
+		FVector2D Result;
+		Result.X = X / _Other.X;
+		Result.Y = Y / _Other.Y;
+		return Result;
+	}
+
+	bool operator==(FVector2D _Other) const
+	{
+		return X == _Other.X && Y == _Other.Y;
+	}
+
+	FVector2D& operator+=(FVector2D _Other)
+	{
+		X += _Other.X;
+		Y += _Other.Y;
+		return *this;
+	}
+
+	FVector2D& operator-=(FVector2D _Other)
+	{
+		X -= _Other.X;
+		Y -= _Other.Y;
+		return *this;
+	}
+
+	FVector2D& operator*= (FVector2D _Other)
+	{
+		X *= _Other.X;
+		Y *= _Other.Y;
+		return *this;
+	}
+
+	FVector2D& operator*= (float _Value)
+	{
+		X *= _Value;
+		Y *= _Value;
+		return *this;
+	}
+
+	FVector2D& operator/= (float _Value)
+	{
+		X /= _Value;
+		Y /= _Value;
+		return *this;
 	}
 
 };

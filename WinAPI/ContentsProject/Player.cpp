@@ -31,17 +31,16 @@ int APlayer::HeartMax = 8;
 
 APlayer::APlayer()
 {
-	// 1. Actor의 위치는 의미가 있어도 크기는 의미가 없다.
-	SetActorLocation(Global::WindowSize.Half());
+	SetActorLocation(Global::WindowSize.Half()); // 1. Actor의 위치는 의미가 있어도 크기는 의미가 없다.
 
-	// 2. 상태에 따른 애니메이션 동작을 정의한다.
-	SpriteSetting();
+	
+	SpriteSetting(); // 2. 상태에 따른 애니메이션 동작을 정의한다.
 
 	// 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다.
-
+	Collision();
 	// 4. 캐릭터의 히트박스를 설정할 충돌체를 생성한다.
 	// CreateDefaultSubObject<U2DCollision>();
-	DebugOn();
+	DebugOn(); // 디버그 대상에 포함
 }
 
 void APlayer::BeginPlay()
@@ -98,6 +97,14 @@ void APlayer::UITick(float _DeltaTime)
 	PennyPickupNumber->SetValue(PennyCount);
 	BombPickupNumber->SetValue(BombCount);
 	  KeyPickupNumber->SetValue(KeyCount);
+}
+
+void APlayer::Collision()
+{
+	BodyCollision = CreateDefaultSubObject<U2DCollision>();
+	BodyCollision->SetComponentLocation({ 200, 0 });
+	BodyCollision->SetComponentScale({ 50, 50 });
+	BodyCollision->SetCollisionGroup(ECollisionGroup::PLAYER_BODY);
 }
 
 bool APlayer::DeathCheck()
@@ -170,7 +177,6 @@ void APlayer::Move(float _DeltaTime)
 		false == UEngineInput::GetInst().IsPress('S'))
 	{
 		BodyState = LowerState::IDLE;
-		//HeadState = UpperState::IDLE;
 
 		// 공격 상태가 아니고, 키입력 없으면 IDLE로 전환
 		if (false == IsAttack())
@@ -243,14 +249,13 @@ void APlayer::InputAttack(float _DeltaTime)
 		Attack(_DeltaTime);
 	}
 
-	// false니까 공격. true로 변환.
-	if (true == TearFire)
+	if (true == TearFire)				// false니까 공격. true로 변환.
 	{
-		// 공격했으면 쿨타임 계산 시작
-		CoolDownElapsed += _DeltaTime;
 
-		//  쿨타임이 경과되면, 
-		if (CoolDownElapsed > Cooldown)
+		CoolDownElapsed += _DeltaTime; 	// 공격했으면 쿨타임 계산 시작
+
+
+		if (CoolDownElapsed > Cooldown) //  쿨타임이 경과되면, 
 		{
 			//TearFire를 false로 되돌려 공격 가능 상태로 바꾸고 쿨타임 초기화
 			TearFire = false;
@@ -444,7 +449,6 @@ void APlayer::SpriteSetting()
 	BodyRenderer->CreateAnimation("Body_Idle", "Body.png", 29, 29, 0.05f);
 
 	BodyRenderer->SetComponentScale({ 64, 64 });
-	//BodyRenderer->SetComponentLocation(GetActorLocation());
 	BodyRenderer->ChangeAnimation("Body_Idle");
 
 	// Body
@@ -479,7 +483,6 @@ void APlayer::UISetting()
 	PlayerHpToHeart->SetTextScale({ 32, 32 });
 	PlayerHpToHeart->SetActorLocation({ 135, 45 });
 
-
 	// Penny
 	PennyUI = GetWorld()->SpawnActor<APickupItemUI>();
 	PennyUI->SetTextSpriteName("ui_crafting.png");
@@ -493,7 +496,6 @@ void APlayer::UISetting()
 	PennyPickupNumber->SetOrder(ERenderOrder::UI);
 	PennyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
 	PennyPickupNumber->SetActorLocation({ 77, 95 });
-
 
 	// Bomb
 	FVector2D Offset = FVector2D(0, +25);
@@ -524,7 +526,6 @@ void APlayer::UISetting()
 	KeyPickupNumber->SetOrder(ERenderOrder::UI);
 	KeyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
 	KeyPickupNumber->SetActorLocation(BombPickupNumber->GetActorLocation() + Offset);
-
 }
 
 // 입력 방법 2 : 이벤트 방식으로 처리

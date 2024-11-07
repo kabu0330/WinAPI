@@ -78,7 +78,11 @@ namespace UEngineDebug
 
 		// void WinAPIOutPutString(UEngineWinImage * _Image, std::string_view _Text, FVector2D _Pos);
 		UEngineWinImage* BackBuffer = UEngineAPICore::GetCore()->GetMainWindow().GetBackBuffer();
-		HBRUSH hBrushEllipse = CreateSolidBrush(RGB(0, 0 ,255));
+		HDC BackHDC = BackBuffer->GetDC();
+
+
+
+		//HBRUSH hBrushBlue = CreateSolidBrush(RGB(0, 0, 255));
 
 		for (size_t i = 0; i < DebugTexts.size(); i++)
 		{
@@ -104,19 +108,37 @@ namespace UEngineDebug
 			switch (Type)
 			{
 			case UEngineDebug::EDebugPosType::Rect:
-				Rectangle(BackBuffer->GetDC(), LT.iX(), LT.iY(), RB.iX(), RB.iY());
+			{
+				HPEN hPenGreen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
+				HPEN hOldPen = (HPEN)SelectObject(BackHDC, hPenGreen);
+				HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
+				HBRUSH hOldBrush = (HBRUSH)SelectObject(BackHDC, hBrush);
+
+				Rectangle(BackHDC, LT.iX(), LT.iY(), RB.iX(), RB.iY());
+
+				DeleteObject(hPenGreen);
+				DeleteObject(hOldPen);
+				DeleteObject(hBrush);
+				DeleteObject(hOldBrush);
 				break;
+			}
 			case UEngineDebug::EDebugPosType::Circle:
-				SelectObject(BackBuffer->GetDC(), hBrushEllipse);
-				Ellipse(BackBuffer->GetDC(), LT.iX(), LT.iY(), RB.iX(), RB.iY());
+			{
+				HPEN hPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 255));
+				SelectObject(BackHDC, hPen);
+
+				Ellipse(BackHDC, LT.iX(), LT.iY(), RB.iX(), RB.iY());
+
+				DeleteObject(hPen);
 				break;
+			}
 			default:
 				break;
 			}
 		}
 
 		DebugPoses.clear();
-		DeleteObject(hBrushEllipse);
+
 	}
 
 	void CoreDebugBox(FTransform _Trans)
