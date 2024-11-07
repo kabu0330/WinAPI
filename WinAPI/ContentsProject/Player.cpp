@@ -14,11 +14,6 @@
 #include "Room.h"
 #include "PlayGameMode.h"
 
-#include "HeartUI.h"
-#include "PickupItemUI.h"
-#include "PickupNumberUI.h"
-
-
 int APlayer::Heart = 6;
 int APlayer::HeartMax = 8;
 //int APlayer::SoulHeart   = 0;
@@ -41,17 +36,26 @@ APlayer::APlayer()
 
 	// 4. 캐릭터의 히트박스를 설정할 충돌체를 생성한다.
 	// CreateDefaultSubObject<U2DCollision>();
-	DebugOn();
+}
+
+APlayer::~APlayer()
+{
 }
 
 void APlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	UISetting();
 
 	// 직접 카메라 피봇을 설정해줘야 한다.
 	//FVector2D Size = UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
 	//GetWorld()->SetCameraPivot(Size.Half() * -1.0f);
+
+	// 주의사항 : 자기가 자기 자신을 SpawnActor하면 무한 스폰에 빠져 스택 오버플로우
+	// 입력 방법 2 : 이벤트 방식으로 처리
+	//UEngineInput::GetInst().BindAction('A', KeyEvent::PRESS, std::bind(&APlayer::LeftMove , this, std::placeholders::_1));
+	//UEngineInput::GetInst().BindAction('D', KeyEvent::PRESS, std::bind(&APlayer::RightMove, this, std::placeholders::_1));
+	//UEngineInput::GetInst().BindAction('W', KeyEvent::PRESS, std::bind(&APlayer::UpMove   , this, std::placeholders::_1));
+	//UEngineInput::GetInst().BindAction('S', KeyEvent::PRESS, std::bind(&APlayer::DownMove , this, std::placeholders::_1));
 }
 
 void APlayer::Tick(float _DeltaTime)
@@ -61,53 +65,14 @@ void APlayer::Tick(float _DeltaTime)
 	// 로직
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
-	UITick(_DeltaTime);
 
-	DeathCheck();
+
 
 	// 렌더
 	CurStateAnimation(_DeltaTime);
 
 	// 카메라
 	CameraPosMove(_DeltaTime);
-}
-
-void APlayer::UITick(float _DeltaTime)
-{
-	if (UEngineInput::GetInst().IsDown('I'))
-	{
-		Heart -= 1;
-	}		
-	if (UEngineInput::GetInst().IsDown('M'))
-	{
-		Heart = HeartMax;
-	}
-	if (UEngineInput::GetInst().IsDown('O'))
-	{
-		PennyCount += 1;
-	}
-	if (UEngineInput::GetInst().IsDown('P'))
-	{
-		BombCount += 1;
-	}
-	if (UEngineInput::GetInst().IsDown('L'))
-	{
-		KeyCount += 1;
-	}
-	  PlayerHpToHeart->SetPlayerHp(Heart);
-	PennyPickupNumber->SetValue(PennyCount);
-	BombPickupNumber->SetValue(BombCount);
-	  KeyPickupNumber->SetValue(KeyCount);
-}
-
-bool APlayer::DeathCheck()
-{
-	if (Heart < 0)
-	{
-		Heart = 0;
-		return true;
-	}
-	return false;
 }
 
 void APlayer::Move(float _DeltaTime)
@@ -125,26 +90,25 @@ void APlayer::Move(float _DeltaTime)
 	FVector2D Dir = FVector2D::ZERO;
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
-		Dir += FVector2D::LEFT;
+		Dir = FVector2D::LEFT;
 		BodyState = LowerState::LEFT;
 	}
 	if (true == UEngineInput::GetInst().IsPress('D'))
 	{
-		Dir += FVector2D::RIGHT;
+		Dir = FVector2D::RIGHT;
 		BodyState = LowerState::RIGHT;
 	}
 	if (true == UEngineInput::GetInst().IsPress('W'))
 	{
-		Dir += FVector2D::UP;
+		Dir = FVector2D::UP;
 		BodyState = LowerState::UP;
 	}
 	if (true == UEngineInput::GetInst().IsPress('S'))
 	{
-		Dir += FVector2D::DOWN;
+		Dir = FVector2D::DOWN;
 		BodyState = LowerState::DOWN;
 	}
 
-	Dir.Normalize();
 	AddActorLocation(Dir * _DeltaTime * Speed);
 
 	// HeadState 설정 : 공격 중인지, 아닌지
@@ -464,63 +428,6 @@ void APlayer::SpriteSetting()
 
 	BodyRenderer->SetOrder(ERenderOrder::PLAYER);
 	HeadRenderer->SetOrder(ERenderOrder::PLAYER);
-}
-
-void APlayer::UISetting()
-{
-	// Heart
-	PlayerHpToHeart = GetWorld()->SpawnActor<AHeartUI>();
-	PlayerHpToHeart->SetTextSpriteName("hearts.png");
-	PlayerHpToHeart->SetOrder(ERenderOrder::UI);
-	PlayerHpToHeart->SetTextScale({ 32, 32 });
-	PlayerHpToHeart->SetActorLocation({ 135, 45 });
-
-
-	// Penny
-	PennyUI = GetWorld()->SpawnActor<APickupItemUI>();
-	PennyUI->SetTextSpriteName("ui_crafting.png");
-	PennyUI->SetOrder(ERenderOrder::UI);
-	PennyUI->SetTextScale({ 34, 38 });
-	PennyUI->SetActorLocation({ 57, 95 });
-	PennyUI->SetValue(8); // SetSpriteIndex
-
-	PennyPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
-	PennyPickupNumber->SetTextSpriteName("pickup.png");
-	PennyPickupNumber->SetOrder(ERenderOrder::UI);
-	PennyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
-	PennyPickupNumber->SetActorLocation({ 77, 95 });
-
-
-	// Bomb
-	FVector2D Offset = FVector2D(0, +25);
-	BombUI = GetWorld()->SpawnActor<APickupItemUI>();
-	BombUI->SetTextSpriteName("ui_crafting.png");
-	BombUI->SetOrder(ERenderOrder::UI);
-	BombUI->SetTextScale({ 32, 32 });
-	BombUI->SetActorLocation(FVector2D(55, 95) + Offset);
-	BombUI->SetValue(15); //SetSpriteIndex
-
-	BombPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
-	BombPickupNumber->SetTextSpriteName("pickup.png");
-	BombPickupNumber->SetOrder(ERenderOrder::UI);
-	BombPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
-	BombPickupNumber->SetActorLocation(PennyPickupNumber->GetActorLocation() + Offset);
-	BombPickupNumber->SetValue(BombCount);
-
-	// Key
-	KeyUI = GetWorld()->SpawnActor<APickupItemUI>();
-	KeyUI->SetTextSpriteName("ui_crafting.png");
-	KeyUI->SetOrder(ERenderOrder::UI);
-	KeyUI->SetTextScale({ 32, 32 });
-	KeyUI->SetActorLocation(BombUI->GetActorLocation() + Offset);
-	KeyUI->SetValue(12); //SetSpriteIndex
-
-	KeyPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
-	KeyPickupNumber->SetTextSpriteName("pickup.png");
-	KeyPickupNumber->SetOrder(ERenderOrder::UI);
-	KeyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
-	KeyPickupNumber->SetActorLocation(BombPickupNumber->GetActorLocation() + Offset);
-
 }
 
 // 입력 방법 2 : 이벤트 방식으로 처리

@@ -32,7 +32,7 @@ class APlayer : public AActor
 public:
 	// constrcuter destructer
 	APlayer();
-	~APlayer() {}
+	~APlayer();
 
 	// delete Function
 	APlayer(const APlayer& _Other) = delete;
@@ -66,16 +66,24 @@ public:
 
 	void SpriteSetting();
 
-	void UISetting();
-	void UITick(float _DeltaTime);
 
-	bool DeathCheck();
-
-	static int GetHeartMax() 
+	// Heart
+	static int GetPlayerHeart()
+	{
+		return Heart;
+	}
+	static void SetPlayerHeart(int _Value)
+	{
+		Heart = _Value;
+	}
+	static void ChangePlayerHeart(int _Value)
+	{
+		Heart += _Value;
+	}
+	static int GetHeartMax()
 	{
 		return HeartMax;
 	}
-
 
 protected:
 
@@ -89,11 +97,6 @@ private:
 	// Stat
 	float Speed = 350;
 	int MySpriteIndex = 0;
-
-	// Item
-	int PennyCount = 0;
-	int BombCount  = 1;
-	int KeyCount   = 1;
 
 	// Animation State
 	UpperState HeadState = UpperState::IDLE;
@@ -114,15 +117,6 @@ private:
 	bool TearFire = false;
 	bool LeftFire = true;
 
-	// UI
-	class AHeartUI* PlayerHpToHeart;
-	class APickupItemUI* PennyUI;
-	class APickupNumberUI* PennyPickupNumber;
-	class APickupItemUI* BombUI;
-	class APickupNumberUI* BombPickupNumber;
-	class APickupItemUI* KeyUI;
-	class APickupNumberUI* KeyPickupNumber;
-
 	// 카메라 이동관련 멤버
 	float CameraMoveTime = 0.0f;
 	float LerpAlpha = 0.0f;
@@ -132,17 +126,10 @@ private:
 	FVector2D EndCameraPos = FVector2D::ZERO;
 
 
-
+	// 입력 방법 2 : 이벤트 방식으로 처리
+	//void LeftMove(float _DeltaTime);
+	//void RightMove(float _DeltaTime);
+	//void UpMove(float _DeltaTime);
+	//void DownMove(float _DeltaTime);
 };
-// 입력 방법 2 : 이벤트 방식으로 처리
-//void LeftMove(float _DeltaTime);
-//void RightMove(float _DeltaTime);
-//void UpMove(float _DeltaTime);
-//void DownMove(float _DeltaTime);
 
-// 주의사항 : 자기가 자기 자신을 SpawnActor하면 무한 스폰에 빠져 스택 오버플로우
-// 입력 방법 2 : 이벤트 방식으로 처리
-//UEngineInput::GetInst().BindAction('A', KeyEvent::PRESS, std::bind(&APlayer::LeftMove , this, std::placeholders::_1));
-//UEngineInput::GetInst().BindAction('D', KeyEvent::PRESS, std::bind(&APlayer::RightMove, this, std::placeholders::_1));
-//UEngineInput::GetInst().BindAction('W', KeyEvent::PRESS, std::bind(&APlayer::UpMove   , this, std::placeholders::_1));
-//UEngineInput::GetInst().BindAction('S', KeyEvent::PRESS, std::bind(&APlayer::DownMove , this, std::placeholders::_1));

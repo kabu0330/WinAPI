@@ -54,22 +54,7 @@ namespace UEngineDebug
 // #endif
 	}
 
-	class DebugPosInfo
-	{
-	public:
-		FVector2D Pos;
-		EDebugPosType Type;
-	};
-
-
-	std::vector<DebugPosInfo> DebugPoses;
-
-	void CoreDebugPos(FVector2D _Pos, EDebugPosType _Type)
-	{
-		DebugPoses.push_back({ _Pos, _Type });
-	}
-
-	void PrintEngineDebugRender()
+	void PrintEngineDebugText()
 	{
 		if (false == IsDebug)
 		{
@@ -87,33 +72,6 @@ namespace UEngineDebug
 
 		EngineTextPos = FVector2D::ZERO;
 		DebugTexts.clear();
-
-		FTransform Trans;
-		Trans.Scale = FVector2D(6, 6);
-
-
-		for (size_t i = 0; i < DebugPoses.size(); i++)
-		{
-
-			EDebugPosType Type = DebugPoses[i].Type;
-
-			Trans.Location = DebugPoses[i].Pos;
-			FVector2D LT = Trans.CenterLeftTop();
-			FVector2D RB = Trans.CenterRightBottom();
-			switch (Type)
-			{
-			case UEngineDebug::Rect:
-				Rectangle(BackBuffer->GetDC(), LT.iX(), LT.iY(), RB.iX(), RB.iY());
-				break;
-			case UEngineDebug::Circle:
-				Ellipse(BackBuffer->GetDC(), LT.iX(), LT.iY(), RB.iX(), RB.iY());
-				break;
-			default:
-				break;
-			}
-		}
-
-		DebugPoses.clear();
 	}
 
 }

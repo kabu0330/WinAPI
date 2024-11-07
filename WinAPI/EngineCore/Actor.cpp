@@ -7,7 +7,6 @@
 #include <EnginePlatform/EngineWinImage.h>
 #include <EngineCore/EngineAPICore.h>
 
-#include "EngineCoreDebug.h"
 #include "EngineSprite.h"
 #include "ImageManager.h"
 #include "ActorComponent.h"
@@ -33,12 +32,6 @@ void AActor::ComponentBeginPlay()
 
 AActor::AActor()
 {
-	if (true == IsDebug)
-	{
-		FVector2D Pos = GetActorLocation();
-		FVector2D CameraPos = GetWorld()->GetCameraPos();
-		UEngineDebug::CoreDebugPos(Pos - CameraPos, UEngineDebug::EDebugPosType::Circle);
-	}
 }
 
 AActor::~AActor()
@@ -57,10 +50,6 @@ AActor::~AActor()
 	}
 
 	Components.clear();
-}
-
-void AActor::Tick(float _DeltaTime)
-{
 }
 
 void AActor::ReleaseCheck(float _DeltaTime)
