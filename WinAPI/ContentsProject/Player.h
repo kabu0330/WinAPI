@@ -93,8 +93,17 @@ private:
 	//static int AllHeartMax;
 
 	// Stat
-	float Speed = 350;
+	float Speed = 250;
 	int MySpriteIndex = 0;
+
+	// MoveAcc
+	FVector2D FinalSpeed = FVector2D::ZERO;
+	float MoveAcc = 1000.0f;
+	float SpeedMax = 350.0f;
+	bool IsMove = false;
+	FVector2D InverseDir = FVector2D::ZERO;
+	FVector2D Deceleration = FVector2D::ZERO;
+	float MoveDec = 0.0f;
 
 	// Item
 	int PennyCount = 0;
@@ -107,13 +116,13 @@ private:
 	// Animation State
 	UpperState HeadState = UpperState::IDLE;
 	LowerState BodyState = LowerState::IDLE;
+	int CurAttackHeadDir = 0;
+	float StateElapesd   = 0.0f;
+	float StateTime      = 0.10f;
 
 	// Renderer
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* HeadRenderer = nullptr;
-	float StateElapesd = 0.0f;
-	float StateTime = 0.10f;
-	int CurAttackHeadDir = 0;
 
 	//Bullet
 	ATear* Tear = nullptr;
@@ -124,21 +133,24 @@ private:
 	bool LeftFire = true;
 
 	// UI
-	class AHeartUI* PlayerHpToHeart;
-	class APickupItemUI* PennyUI;
+	class AHeartUI*        PlayerHpToHeart;
+
+	class APickupItemUI*   PennyUI;
 	class APickupNumberUI* PennyPickupNumber;
-	class APickupItemUI* BombUI;
+
+	class APickupItemUI*   BombUI;
 	class APickupNumberUI* BombPickupNumber;
-	class APickupItemUI* KeyUI;
+
+	class APickupItemUI*   KeyUI;
 	class APickupNumberUI* KeyPickupNumber;
 
 	// 카메라 이동관련 멤버
 	float CameraMoveTime = 0.0f;
-	float LerpAlpha = 0.0f;
-	bool  CameraMove = false;
-	FVector2D CameraMoveDir = FVector2D::ZERO;
+	float LerpAlpha      = 0.0f;
+	bool  CameraMove     = false;
+	FVector2D CameraMoveDir  = FVector2D::ZERO;
 	FVector2D StartCameraPos = FVector2D::ZERO;
-	FVector2D EndCameraPos = FVector2D::ZERO;
+	FVector2D EndCameraPos   = FVector2D::ZERO;
 
 
 

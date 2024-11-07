@@ -109,9 +109,9 @@ namespace UEngineDebug
 			{
 			case UEngineDebug::EDebugPosType::Rect:
 			{
-				HPEN hPenGreen = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
-				HPEN hOldPen = (HPEN)SelectObject(BackHDC, hPenGreen);
-				HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
+				HPEN hPenGreen   = CreatePen(PS_SOLID, 1, RGB(0, 255, 0));
+				HBRUSH hBrush    = (HBRUSH)GetStockObject(NULL_BRUSH);
+				HPEN hOldPen     = (HPEN)SelectObject(BackHDC, hPenGreen);
 				HBRUSH hOldBrush = (HBRUSH)SelectObject(BackHDC, hBrush);
 
 				Rectangle(BackHDC, LT.iX(), LT.iY(), RB.iX(), RB.iY());
@@ -124,12 +124,15 @@ namespace UEngineDebug
 			}
 			case UEngineDebug::EDebugPosType::Circle:
 			{
-				HPEN hPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 255));
+				HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
+				HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
 				SelectObject(BackHDC, hPen);
+				SelectObject(BackHDC, hBrush);
 
 				Ellipse(BackHDC, LT.iX(), LT.iY(), RB.iX(), RB.iY());
 
 				DeleteObject(hPen);
+				DeleteObject(hBrush);
 				break;
 			}
 			default:

@@ -50,7 +50,7 @@ void APlayer::BeginPlay()
 
 	// 직접 카메라 피봇을 설정해줘야 한다.
 	//FVector2D Size = UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
-	//GetWorld()->SetCameraPivot(Size.Half() * -1.0f);
+	//GetWorld()->SetCameraPivot(Size.Half());
 }
 
 void APlayer::Tick(float _DeltaTime)
@@ -61,6 +61,11 @@ void APlayer::Tick(float _DeltaTime)
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
 	UITick(_DeltaTime);
+
+	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
+	UEngineDebug::CoreOutPutString("MoveAcc : " + std::to_string(MoveAcc));
+	//UEngineDebug::CoreOutPutString("Deceleration : " + Deceleration.ToString());
+	UEngineDebug::CoreOutPutString("Deceleration : " + std::to_string(MoveDec));
 
 	DeathCheck();
 
@@ -101,10 +106,10 @@ void APlayer::UITick(float _DeltaTime)
 
 void APlayer::Collision()
 {
-	BodyCollision = CreateDefaultSubObject<U2DCollision>();
-	BodyCollision->SetComponentLocation({ 200, 0 });
-	BodyCollision->SetComponentScale({ 50, 50 });
-	BodyCollision->SetCollisionGroup(ECollisionGroup::PLAYER_BODY);
+	//BodyCollision = CreateDefaultSubObject<U2DCollision>();
+	//BodyCollision->SetComponentLocation({ 0, 0 });
+	//BodyCollision->SetComponentScale({ 50, 50 });
+	//BodyCollision->SetCollisionGroup(ECollisionGroup::PLAYER_BODY);
 }
 
 bool APlayer::DeathCheck()
@@ -134,29 +139,53 @@ void APlayer::Move(float _DeltaTime)
 	{
 		Dir += FVector2D::LEFT;
 		BodyState = LowerState::LEFT;
+		IsMove = true;
 	}
 	if (true == UEngineInput::GetInst().IsPress('D'))
 	{
 		Dir += FVector2D::RIGHT;
 		BodyState = LowerState::RIGHT;
+		IsMove = true;
 	}
 	if (true == UEngineInput::GetInst().IsPress('W'))
 	{
 		Dir += FVector2D::UP;
 		BodyState = LowerState::UP;
+		IsMove = true;
 	}
 	if (true == UEngineInput::GetInst().IsPress('S'))
 	{
 		Dir += FVector2D::DOWN;
 		BodyState = LowerState::DOWN;
+		IsMove = true;
 	}
 
 	Dir.Normalize();
+	if (true == IsMove)
+	{
+		// 가속도
+		FinalSpeed += Dir * MoveAcc * _DeltaTime;
+		//Deceleration = FVector2D::ZERO;
+		MoveDec = 0;
+	}
+	else
+	{
+		MoveDec = SpeedMax;
+		FinalSpeed += InverseDir * MoveDec * _DeltaTime;
 
-	// 가속도
-	// MoveAcc += MoveDir * 가속도 * DeltaTime
-	// AddActorLocation(MoveAcc * 뭐더라?)
-	AddActorLocation(Dir * _DeltaTime * Speed);
+		int a = 0;
+	}
+
+	// 최대속도 제한 : 항상 절댓값으로
+	if (abs(FinalSpeed.X) > SpeedMax || abs(FinalSpeed.Y) > SpeedMax)
+	{
+		FinalSpeed.Normalize();
+		FinalSpeed *= SpeedMax;
+
+	}
+
+	AddActorLocation(FinalSpeed * _DeltaTime);
+
 
 	// HeadState 설정 : 공격 중인지, 아닌지
 	if (true == IsAttack())
@@ -176,7 +205,9 @@ void APlayer::Move(float _DeltaTime)
 		false == UEngineInput::GetInst().IsPress('W') &&
 		false == UEngineInput::GetInst().IsPress('S'))
 	{
+
 		BodyState = LowerState::IDLE;
+		IsMove = false;
 
 		// 공격 상태가 아니고, 키입력 없으면 IDLE로 전환
 		if (false == IsAttack())

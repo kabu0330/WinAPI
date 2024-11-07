@@ -205,6 +205,14 @@ public:
 		return *this;
 	}
 
+	FVector2D operator-() const
+	{
+		FVector2D Result;
+		Result.X = -X;
+		Result.Y = -Y;
+		return Result;
+	}
+
 };
 
 class FTransform
