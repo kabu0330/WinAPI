@@ -78,6 +78,7 @@ namespace UEngineDebug
 
 		// void WinAPIOutPutString(UEngineWinImage * _Image, std::string_view _Text, FVector2D _Pos);
 		UEngineWinImage* BackBuffer = UEngineAPICore::GetCore()->GetMainWindow().GetBackBuffer();
+		HBRUSH hBrush = CreateSolidBrush(RGB(0, 0 ,255));
 
 		for (size_t i = 0; i < DebugTexts.size(); i++)
 		{
@@ -106,6 +107,7 @@ namespace UEngineDebug
 				Rectangle(BackBuffer->GetDC(), LT.iX(), LT.iY(), RB.iX(), RB.iY());
 				break;
 			case UEngineDebug::Circle:
+				SelectObject(BackBuffer->GetDC(), hBrush);
 				Ellipse(BackBuffer->GetDC(), LT.iX(), LT.iY(), RB.iX(), RB.iY());
 				break;
 			default:
@@ -114,6 +116,7 @@ namespace UEngineDebug
 		}
 
 		DebugPoses.clear();
+		DeleteObject(hBrush);
 	}
 
 }

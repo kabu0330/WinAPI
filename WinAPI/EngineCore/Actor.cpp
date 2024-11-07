@@ -61,6 +61,12 @@ AActor::~AActor()
 
 void AActor::Tick(float _DeltaTime)
 {
+	if (true == IsDebug)
+	{
+		FVector2D Pos = GetActorLocation();
+		FVector2D CameraPos = GetWorld()->GetCameraPos();
+		UEngineDebug::CoreDebugPos(Pos - CameraPos, UEngineDebug::EDebugPosType::Circle);
+	}
 }
 
 void AActor::ReleaseCheck(float _DeltaTime)

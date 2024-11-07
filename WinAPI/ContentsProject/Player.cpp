@@ -145,6 +145,10 @@ void APlayer::Move(float _DeltaTime)
 	}
 
 	Dir.Normalize();
+
+	// 가속도
+	// MoveAcc += MoveDir * 가속도 * DeltaTime
+	// AddActorLocation(MoveAcc * 뭐더라?)
 	AddActorLocation(Dir * _DeltaTime * Speed);
 
 	// HeadState 설정 : 공격 중인지, 아닌지
