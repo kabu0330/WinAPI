@@ -3,7 +3,7 @@
 // 네임스페이스는 프로젝트별로 똑같은 이름이 있어도 
 namespace UEngineDebug 	// MainWindow에도 동일한 이름의 네임스페이스가 있다. 
 {
-	enum EDebugPosType
+	enum class EDebugPosType
 	{
 		Rect,
 		Circle,
@@ -18,7 +18,7 @@ namespace UEngineDebug 	// MainWindow에도 동일한 이름의 네임스페이스가 있다.
 
 	void CoreOutPutString(std::string_view _Text, FVector2D _Pos);
 
-	void CoreDebugPos(FVector2D _Pos, EDebugPosType _Type);
+	void CoreDebugRender(FTransform _Trans, EDebugPosType _Type);
 
 	void PrintEngineDebugRender();
 }

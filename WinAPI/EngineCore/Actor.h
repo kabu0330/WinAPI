@@ -89,21 +89,6 @@ public:
 		return NewComponent;
 	}
 
-	void DebugOn()
-	{
-		IsDebug = true;
-	}
-
-	void DebugOff()
-	{
-		IsDebug = false;
-	}
-
-	void DebugSwitch()
-	{
-		IsDebug = !IsDebug;
-	}
-
 protected:
 
 private:
@@ -121,7 +106,6 @@ private:
 	std::list<class UActorComponent*> Components;
 
 
-	bool IsDebug = false;
 };
 
 typedef AActor Super;

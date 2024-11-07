@@ -55,7 +55,7 @@ void APickupNumberUI::SetValue(int _Value)
 		Renders[i]->SetActive(true);
 	}
 
-	for (int i = Number.size(); i < Renders.size() ; i++)
+	for (size_t i = Number.size(); i < Renders.size() ; i++)
 	{
 		Renders[i]->SetActive(false);
 	}

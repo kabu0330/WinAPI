@@ -53,7 +53,7 @@ void ABannerTextUI::SetTextOut(std::string_view _Text)
 		Renders[i]->SetActive(true);
 	}
 
-	for (int i = Text.size(); i < Renders.size(); i++)
+	for (size_t i = Text.size(); i < Renders.size(); i++)
 	{
 		Renders[i]->SetActive(false);
 	}

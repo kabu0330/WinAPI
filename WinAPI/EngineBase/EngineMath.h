@@ -1,5 +1,14 @@
 #pragma once
 
+class UEngineMath
+{
+public:
+	static float Sqrt(float _Value)
+	{
+		return ::sqrtf(_Value);
+	}
+};
+
 class FVector2D
 {
 public:
@@ -134,7 +143,7 @@ public:
 
 	float Length() const
 	{
-		return sqrtf(X * X + Y * Y);
+		return UEngineMath::Sqrt(X * X + Y * Y);
 	}
 
 	class FIntPoint ConvertToPoint() const;
@@ -150,15 +159,10 @@ public:
 		return;
 	}
 
-	FVector2D& Normal()
+	FVector2D& Normalize(FVector2D _Value)
 	{
-		float Len = Length();
-		if (0.0f < Len && false == isnan(Len))
-		{
-			X = X / Len;
-			Y = Y / Len;
-		}
-		return *this;
+		_Value.Normalize();
+		return _Value;
 	}
 
 	float Dot(const FVector2D& other) const
@@ -253,10 +257,6 @@ public:
 		Y += _Other.Y;
 		return *this;
 	}
-};
-
-class EngineMath
-{
 };
 
 class UColor

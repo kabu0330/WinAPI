@@ -29,6 +29,7 @@ ARoom::ARoom()
 	BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
 
 	DoorSpriteSetting();	
+	DebugOn();
 }
 
 bool ARoom::IsLinking(ARoom* _Room)

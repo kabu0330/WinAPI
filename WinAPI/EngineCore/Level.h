@@ -6,6 +6,7 @@
 class ULevel
 {
 public:
+	friend class U2DCollision;
 	friend class USpriteRenderer; // 렌더러의 모든 기능을 다 넘겨준다.
 	friend class UEngineAPICore;
 
@@ -116,6 +117,7 @@ private:
 	// 렌더러는 컨텐츠에서 함부로 호출하지 못하게 하기 위해서 private에 있어야 한다.
 	void PushRenderer(class USpriteRenderer* _Renderer);
 	void ChangeRenderOrder(class USpriteRenderer* _Renderer, int _PrevOrder);
+	void PushCollision(class U2DCollision* _Collision);
 
 	AGameMode* GameMode = nullptr;
 
@@ -126,6 +128,9 @@ private:
 
 	// 오더링한다. : 불필요한 정렬을 하지 않도록 Key 값이 int인 map, 만들어진 순서대로
 	std::map<int, std::list<class USpriteRenderer*>> Renderers;
+
+	// 충돌체 그룹
+	std::map<int, std::list<class U2DCollision*>> Collisions;
 
 	// 카메라
 	bool IsCameraToMainPawn = true;

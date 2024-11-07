@@ -4,6 +4,7 @@
 #include <EnginePlatform/EngineWindow.h>
 #include "SpriteRenderer.h"
 #include "EngineCoreDebug.h"
+#include "2DCollision.h"
 
 ULevel::ULevel()
 {
@@ -269,6 +270,12 @@ void ULevel::PushRenderer(USpriteRenderer* _Renderer)
 	Renderers[Order].push_back(_Renderer);
 }
 
+void ULevel::PushCollision(U2DCollision* _Collision)
+{
+	int Order = _Collision->GetGroup();
+	Collisions[Order].push_back(_Collision);
+}
+
 void ULevel::ChangeRenderOrder(USpriteRenderer* _Renderer, int _PrevOrder)
 {
 	//std::vector<int> Value;
@@ -283,4 +290,5 @@ void ULevel::ChangeRenderOrder(USpriteRenderer* _Renderer, int _PrevOrder)
 
 
 }
+
 

@@ -265,6 +265,55 @@ void UImageManager::CuttingSprite(std::string_view _KeyName, FVector2D _CuttingS
 	}
 }
 
+void UImageManager::CuttingSprite(std::string_view _NewSpriteName, std::string_view _Image, FVector2D _CuttingSize)
+{
+	std::string SpriteUpperName = UEngineString::ToUpper(_NewSpriteName);
+	std::string ImageUpperName = UEngineString::ToUpper(_Image);
+
+	if (false == Images.contains(ImageUpperName))
+	{
+		MSGASSERT("존재하지 않은 이미지를 기반으로 스프라이트를 자르려고 했습니다" + std::string(_Image));
+		return;
+	}
+
+	UEngineSprite* Sprite = new UEngineSprite();
+
+	if (false == Sprites.contains(SpriteUpperName))
+	{
+		Sprite = new UEngineSprite();;
+		Sprites.insert({ SpriteUpperName, Sprite });
+	}
+	else {
+		Sprite = Sprites[SpriteUpperName];
+	}
+
+	UEngineWinImage* Image = Images[ImageUpperName];
+
+	Sprite->ClearSpriteData();
+	Sprite->SetName(SpriteUpperName);
+	Image->SetName(ImageUpperName);
+
+	int SpriteX = Image->GetImageScale().iX() / _CuttingSize.iX();
+	int SpriteY = Image->GetImageScale().iY() / _CuttingSize.iY();
+
+	FTransform CuttingTrans;
+
+	CuttingTrans.Location = FVector2D::ZERO;
+	CuttingTrans.Scale = _CuttingSize;
+
+	for (size_t y = 0; y < SpriteY; ++y)
+	{
+		for (size_t x = 0; x < SpriteX; ++x)
+		{
+			Sprite->PushData(Image, CuttingTrans);
+			CuttingTrans.Location.X += _CuttingSize.X;
+		}
+
+		CuttingTrans.Location.X = 0.0f;
+		CuttingTrans.Location.Y += _CuttingSize.Y;
+	}
+}
+
 // 기존의 이미지를 찾아 잘라낸 후 새로운 스프라이트 이미지를 만듭니다.
 // _NewSpriteKeyName : 새로운 키 값
 // _StartPos : 기존 이미지에서 잘라낼 좌상단 값

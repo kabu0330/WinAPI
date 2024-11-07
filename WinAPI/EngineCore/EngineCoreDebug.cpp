@@ -54,19 +54,19 @@ namespace UEngineDebug
 // #endif
 	}
 
-	class DebugPosInfo
+	class DebugRenderInfo
 	{
 	public:
-		FVector2D Pos;
+		FTransform Trans;
 		EDebugPosType Type;
 	};
 
 
-	std::vector<DebugPosInfo> DebugPoses;
+	std::vector<DebugRenderInfo> DebugPoses;
 
-	void CoreDebugPos(FVector2D _Pos, EDebugPosType _Type)
+	void CoreDebugRender(FTransform _Trans, EDebugPosType _Type)
 	{
-		DebugPoses.push_back({ _Pos, _Type });
+		DebugPoses.push_back({ _Trans, _Type });
 	}
 
 	void PrintEngineDebugRender()
@@ -78,7 +78,7 @@ namespace UEngineDebug
 
 		// void WinAPIOutPutString(UEngineWinImage * _Image, std::string_view _Text, FVector2D _Pos);
 		UEngineWinImage* BackBuffer = UEngineAPICore::GetCore()->GetMainWindow().GetBackBuffer();
-		HBRUSH hBrush = CreateSolidBrush(RGB(0, 0 ,255));
+		HBRUSH hBrushEllipse = CreateSolidBrush(RGB(0, 0 ,255));
 
 		for (size_t i = 0; i < DebugTexts.size(); i++)
 		{
@@ -98,16 +98,16 @@ namespace UEngineDebug
 
 			EDebugPosType Type = DebugPoses[i].Type;
 
-			Trans.Location = DebugPoses[i].Pos;
-			FVector2D LT = Trans.CenterLeftTop();
-			FVector2D RB = Trans.CenterRightBottom();
+			FVector2D LT = DebugPoses[i].Trans.CenterLeftTop();
+			FVector2D RB = DebugPoses[i].Trans.CenterRightBottom();
+
 			switch (Type)
 			{
-			case UEngineDebug::Rect:
+			case UEngineDebug::EDebugPosType::Rect:
 				Rectangle(BackBuffer->GetDC(), LT.iX(), LT.iY(), RB.iX(), RB.iY());
 				break;
-			case UEngineDebug::Circle:
-				SelectObject(BackBuffer->GetDC(), hBrush);
+			case UEngineDebug::EDebugPosType::Circle:
+				SelectObject(BackBuffer->GetDC(), hBrushEllipse);
 				Ellipse(BackBuffer->GetDC(), LT.iX(), LT.iY(), RB.iX(), RB.iY());
 				break;
 			default:
@@ -116,7 +116,12 @@ namespace UEngineDebug
 		}
 
 		DebugPoses.clear();
-		DeleteObject(hBrush);
+		DeleteObject(hBrushEllipse);
+	}
+
+	void CoreDebugBox(FTransform _Trans)
+	{
+
 	}
 
 }
