@@ -7,6 +7,8 @@
 #include <EngineBase/EngineFile.h>
 #include <EngineBase/EngineDirectory.h>
 #include <EngineCore/EngineAPICore.h>
+#include <EnginePlatform/EngineWinImage.h>
+#include "EngineSprite.h"
 
 UImageManager::UImageManager()
 {

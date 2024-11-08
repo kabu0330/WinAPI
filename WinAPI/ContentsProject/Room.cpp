@@ -11,11 +11,11 @@
 ARoom::ARoom()
 {
 	SetActorLocation({ Global::WindowSize.Half().iX(), Global::WindowSize.Half().iY()});
-	SetActorScale(Global::WindowScale  );
+	SetActorScale(Global::WindowSize);
 
 	float ScaleX = Global::WindowSize.X / 960;
 	float ScaleY = Global::WindowSize.Y / 540;
-	RoomScale = { 848.0f * ScaleX * GetActorScale().X / Global::WindowScale.X , 536.0f * ScaleY * GetActorScale().Y / Global::WindowScale.Y };
+	RoomScale = { 848.0f * ScaleX * GetActorScale().X / Global::WindowSize.X , 536.0f * ScaleY * GetActorScale().Y / Global::WindowSize.Y };
 
 	RoomRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	RoomRenderer->SetSprite("SampleMap(848,536).png");
@@ -30,7 +30,7 @@ ARoom::ARoom()
 
 	DoorSpriteSetting();	
 
-	//DebugOn();
+	DebugOn();
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
@@ -258,7 +258,7 @@ void ARoom::BeginPlay()
 	{
 		ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		ControlsRenderer->SetSprite("controls.png");
-		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowScale.Half().iX(), GetActorLocation().iY() - Global::WindowScale.Half().iY() - 20 });
+		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowHalfScale.iX(), GetActorLocation().iY() - Global::WindowHalfScale.iY() - 20 });
 		ControlsRenderer->SetComponentScale({ 655, 145 }); // 385, 85
 		ControlsRenderer->SetOrder(ERenderOrder::CONTROLS);
 	}

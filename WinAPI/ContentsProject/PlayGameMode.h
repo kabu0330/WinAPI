@@ -27,7 +27,7 @@ public:
 	{
 		CurRoom = _Room;
 	}
-	static ARoom* GetCurRoom()
+	static class ARoom* GetCurRoom()
 	{
 		return CurRoom;
 	}

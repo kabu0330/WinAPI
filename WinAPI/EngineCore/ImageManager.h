@@ -4,9 +4,6 @@
 #include <map>
 #include <string>
 
-#include <EnginePlatform/EngineWinImage.h>
-#include "EngineSprite.h"
-
 // 설명 : 이미지 로드를 관리하고 
 class UImageManager
 {
@@ -42,16 +39,16 @@ public:
 
 	bool IsLoadSprite(std::string_view _KeyName);
 
-	UEngineSprite* FindSprite(std::string_view _KeyName);
-	UEngineWinImage* FindImage(std::string_view _KeyName);
+	class UEngineSprite* FindSprite(std::string_view _KeyName);
+	class UEngineWinImage* FindImage(std::string_view _KeyName);
 
 protected:
 
 private:
 	UImageManager();
 
-	std::map<std::string, UEngineWinImage*> Images;
-	std::map<std::string, UEngineSprite*> Sprites;
+	std::map<std::string, class UEngineWinImage*> Images;
+	std::map<std::string, class UEngineSprite*> Sprites;
 
 };
 

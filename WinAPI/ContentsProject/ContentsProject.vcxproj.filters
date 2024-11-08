@@ -43,6 +43,9 @@
     <ClInclude Include="BannerTextUI.h">
       <Filter>04_Play\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>04_Play\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -87,6 +90,9 @@
     <ClCompile Include="BannerTextUI.cpp">
       <Filter>04_Play\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>04_Play\Monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -109,6 +115,9 @@
     </Filter>
     <Filter Include="04_Play\UI">
       <UniqueIdentifier>{be45ae7b-5a03-47c4-85c9-ec736d1b76b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Play\Monster">
+      <UniqueIdentifier>{4b30e55e-31b8-48c5-b6e9-0684ca68c45e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

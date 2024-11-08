@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "EngineDebug.h"
 
 // 설명 : 이름이 필요한 모든 클래스는 UObject를 상속받아야 한다.
 class UObject

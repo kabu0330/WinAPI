@@ -82,11 +82,34 @@ public:
 	void UISetting();
 	void UITick(float _DeltaTime);
 
-	static int GetHeartMax() 
+	static int GetPlayerHptMax() 
 	{
 		return HeartMax;
 	}
 
+	static int ApplyPlayerHp(int _Att)
+	{
+		Heart -= _Att;
+		if (Heart < 0 )
+		{
+			Heart = 0;
+		}
+		return Heart;
+	}
+
+	float GetPlayerAtt() const
+	{
+		return Att;
+	}
+
+	float ApplyPlayerAtt(float _Value)
+	{
+		return Att += _Value;
+	}
+	float ApplyPlayerAtt(int _Value)
+	{
+		return Att += _Value;
+	}
 
 protected:
 
@@ -101,11 +124,11 @@ private:
 	// Speed : MoveAcc
 	FVector2D Dir = FVector2D::ZERO;
 	FVector2D FinalSpeed = FVector2D::ZERO;
-	float MoveAcc = 1000.0f;
+	float MoveAcc = 1500.0f;
 	float SpeedMax = 350.0f; // Speed
 	bool IsMove = false;
 	float TimeElapsed = 0.0f;
-
+	float Att = 3.5;
 
 	// Item
 	int PennyCount = 0;
@@ -114,14 +137,6 @@ private:
 
 	// Collision
 	U2DCollision* BodyCollision = nullptr;
-
-	// Animation State
-	UpperState HeadState = UpperState::IDLE;
-	LowerState BodyState = LowerState::IDLE;
-	int CurAttackHeadDir = 0;
-	float StateElapesd   = 0.0f;
-	float StateTime      = 0.10f;
-	int MySpriteIndex = 0;
 
 	// Renderer
 	class USpriteRenderer* BodyRenderer = nullptr;
@@ -134,6 +149,14 @@ private:
 	FVector2D TearDir = FVector2D::ZERO;
 	bool TearFire = false;
 	bool LeftFire = true;
+
+	// Animation State
+	UpperState HeadState = UpperState::IDLE;
+	LowerState BodyState = LowerState::IDLE;
+	int CurAttackHeadDir = 0;
+	float StateElapesd = 0.0f;
+	float StateTime = 0.10f;
+	int MySpriteIndex = 0;
 
 	// UI
 	class AHeartUI*        PlayerHpToHeart;

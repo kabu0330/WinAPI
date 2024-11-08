@@ -5,6 +5,7 @@
 #include <EngineCore/EngineCoreDebug.h>
 #include <EnginePlatform/EngineInput.h>
 
+
 #include "ContentsEnum.h"
 #include "Global.h"
 #include "ContentsCore.h"
@@ -13,6 +14,7 @@
 #include "HeartUI.h"
 #include "PickupItemUI.h"
 #include "BannerTextUI.h"
+#include "Monster.h"
 
 ARoom* APlayGameMode::CurRoom = nullptr;
 
@@ -69,6 +71,9 @@ void APlayGameMode::BeginPlay()
 	AllRooms.push_back(MinionRoom2);
 	AllRooms.push_back(MinionRoom3);
 	AllRooms.push_back(BossRoom);
+
+	AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
+
 
 	UISetting();
 }

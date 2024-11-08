@@ -1,14 +1,25 @@
 #include "PreCompile.h"
 #include "Tear.h"
+
+#include <EngineCore/2DCollision.h>
 #include <EngineCore/SpriteRenderer.h>
 #include "ContentsEnum.h"
 #include <EngineCore/Actor.h>
 #include "Player.h"
+#include "Monster.h"
 
 
 ATear::ATear()
 {
 	SetActorLocation(FVector2D::ZERO);
+
+	TearCollision = CreateDefaultSubObject<U2DCollision>();
+	TearCollision->SetComponentLocation({ 0, 0 });
+	TearCollision->SetComponentScale({ 25, 25 });
+	TearCollision->SetCollisionGroup(ECollisionGroup::PLAYER_ATTACK);
+	TearCollision->SetCollisionType(ECollisionType::CirCle);
+	
+
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
 	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.05f, false);
@@ -16,10 +27,18 @@ ATear::ATear()
 	TearEffectRenderer->SetOrder(ERenderOrder::TEAR);
 	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
 	TearEffectRenderer->SetActive(true);
+
+	DebugOn();
+}
+
+void ATear::Attack()
+{
+
+	int a = 0;
 }
 
 // 값만 받아서 멤버에 저장한다.
-void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed)
+void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att)
 {
 	TearEffectRenderer->SetActive(true);
 	SetActorLocation(_StartPos);
@@ -29,8 +48,7 @@ void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed)
 	float FinalSpeed = 0.0f;
 	if (true == Player->PlayerIsMove())
 	{
-		FinalSpeed = Speed + _Speed;
-		Duration = 0.8f;
+		FinalSpeed = SpeedMax;	
 	}
 	else
 	{
@@ -38,18 +56,20 @@ void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed)
 	}
 
 	Speed = FinalSpeed / Duration;
-	if (Speed > SpeedMax)
+	if (Speed >= SpeedMax)
 	{
 		Speed = SpeedMax;
+		//Duration = 0.9f;
 		ResistanceActivationTime = 0.2f;
-		Resistance = 0.7f;
+		Resistance = 0.9f;
 		GravityActivationTime = 0.5f;
 	}
 }
 
 void ATear::Reset()
 {
-	TearEffectRenderer->SetActive(false);
+	Destroy();
+	//TearEffectRenderer->SetActive(false);
 }
 
 void ATear::BeginPlay()
@@ -65,7 +85,7 @@ void ATear::Tick(float _DeltaTime)
 	{
 		return;
 	}
-
+	
 	TimeElapesd += _DeltaTime;
 	if (Dir == FVector2D::LEFT || Dir == FVector2D::RIGHT)
 	{
@@ -101,11 +121,22 @@ void ATear::Tick(float _DeltaTime)
 		}
 	}
 
+	if (false == TearCollision->IsDestroy())
+	{
+		CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::MONSTER_BODY);
+	}
 
-	// Tear 비활성화 조건
+	if (nullptr != CollisionActor)
+	{
+		AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
+		CollisionMonster->Death(_DeltaTime);
+
+	}
+
 	// 1. 일정 시간이 지나면
 	if (Duration < TimeElapesd)
 	{
+		//TearCollision->Destroy();
 		Dir = FVector2D::ZERO;        // 그 자리에서 더 이상 이동않고 터뜨린다.
 		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
 		SetActorLocation(GetActorLocation());
@@ -117,8 +148,9 @@ void ATear::Tick(float _DeltaTime)
 	}
 
 	// 2. 맵 밖으로 벗어나면
-	// 3. 액터와 충돌하면
 
+
+	// 3. 액터와 충돌하면
 }
 
 ATear::~ATear()

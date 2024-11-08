@@ -15,7 +15,9 @@ public:
 	ATear& operator=(const ATear& _Other) = delete;
 	ATear& operator=(ATear&& _Other) noexcept = delete;
 
-	void Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed);
+	void Attack();
+
+	void Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att);
 	void Reset();
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -23,20 +25,23 @@ public:
 protected:
 
 private:
-	float Speed = 380.0f;
-	float SpeedMax = 600.0f;
+	float Speed = 350.0f;
+	float SpeedMax = 500.0f;
 	float TimeElapesd = 0.0f;
 	float Duration = 0.85f;
 
-	float ResistanceActivationTime = 0.4f;
+	float ResistanceActivationTime = 0.6f;
 	float Resistance = 0.8f;
 
-	float GravityActivationTime = 0.65f;
-	FVector2D Gravity = FVector2D(Resistance * 0.75f, 0.18f);
+	float GravityActivationTime = 0.7f;
+	FVector2D Gravity = FVector2D(Resistance * 0.85f, 0.35f);
 	FVector2D GravityDir = FVector2D::ZERO;
 
 	FVector2D Dir = FVector2D::ZERO;
 
 	class USpriteRenderer* TearEffectRenderer = nullptr;
+	class U2DCollision* TearCollision = nullptr;
+
+	AActor* CollisionActor = nullptr;
 };
 

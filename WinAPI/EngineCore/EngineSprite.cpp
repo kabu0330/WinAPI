@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "EngineSprite.h"
 #include <EngineBase/EngineDebug.h>
+#include <EnginePlatform/EngineWinImage.h>
 
 UEngineSprite::UEngineSprite()
 {

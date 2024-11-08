@@ -1,7 +1,6 @@
 #pragma once
 #include <EngineBase/Object.h>
-#include <EngineBase/EngineDebug.h>
-#include <EnginePlatform/EngineWinImage.h>
+
 
 // 설명 :
 class UEngineSprite : public UObject
@@ -11,7 +10,7 @@ public:
 	{
 	public:
 		// 이 이미지의
-		UEngineWinImage* Image;
+		class UEngineWinImage* Image;
 		// 여기서부터 xx 크기까지
 		FTransform Transform;
 		// 잘라서 쓰겠다.
@@ -27,7 +26,7 @@ public:
 	UEngineSprite& operator=(const UEngineSprite& _Other) = delete;
 	UEngineSprite& operator=(UEngineSprite&& _Other) noexcept = delete;
 
-	void PushData(UEngineWinImage* Image, const FTransform& _Trans);
+	void PushData(class UEngineWinImage* Image, const FTransform& _Trans);
 
 	USpriteData GetSpriteData(int _Index = 0)
 	{

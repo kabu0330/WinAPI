@@ -37,10 +37,9 @@ APlayer::APlayer()
 	
 	SpriteSetting(); // 2. 상태에 따른 애니메이션 동작을 정의한다.
 
-	// 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다.
-	Collision();
-	// 4. 캐릭터의 히트박스를 설정할 충돌체를 생성한다.
-	// CreateDefaultSubObject<U2DCollision>();
+	 // 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다.
+	Collision(); // 4. 캐릭터의 히트박스를 설정할 충돌체를 생성한다.
+
 	DebugOn(); // 디버그 대상에 포함
 }
 
@@ -104,10 +103,12 @@ void APlayer::UITick(float _DeltaTime)
 
 void APlayer::Collision()
 {
-	//BodyCollision = CreateDefaultSubObject<U2DCollision>();
-	//BodyCollision->SetComponentLocation({ 0, 0 });
-	//BodyCollision->SetComponentScale({ 50, 50 });
-	//BodyCollision->SetCollisionGroup(ECollisionGroup::PLAYER_BODY);
+	BodyCollision = CreateDefaultSubObject<U2DCollision>();
+	BodyCollision->SetComponentLocation({ 0, 0 });
+	BodyCollision->SetComponentScale({ 50, 50 });
+	BodyCollision->SetCollisionGroup(ECollisionGroup::PLAYER_BODY);
+	BodyCollision->SetCollisionType(ECollisionType::CirCle);
+
 }
 
 bool APlayer::DeathCheck()
@@ -170,7 +171,7 @@ void APlayer::Move(float _DeltaTime)
 	}
 
 	{
-		FinalSpeed *= 700.0f * _DeltaTime;
+		FinalSpeed *= 500.0f * _DeltaTime;
 		int a = 0;
 	}
 
@@ -222,7 +223,7 @@ void APlayer::Move(float _DeltaTime)
 
 void APlayer::CameraPosMove(float _DeltaTime)
 {
-	FVector2D RoomScale = Global::WindowScale;
+	FVector2D RoomScale = Global::WindowSize;
 	FVector2D PlayerMovePos = GetActorLocation();
 	StartCameraPos = GetWorld()->GetCameraPos();
 
@@ -378,7 +379,7 @@ void APlayer::Attack(float _DeltaTime)
 		HeadState = UpperState::ATTACK_DOWN;
 	}
 
-	Tear->Fire(TearPos, TearDir, SpeedMax);
+	Tear->Fire(TearPos, TearDir, SpeedMax, Att);
 
 	SetAttackDir(HeadState);
 }

@@ -30,6 +30,7 @@ public:
 		return CollisionGroup;
 	}
 
+
 	template<typename EnumType>
 	void SetCollisionGroup(EnumType _CollisionGroup)
 	{
@@ -42,41 +43,46 @@ public:
 	}
 
 	template<typename EnumType>
-	bool IsCollision(EnumType _OtherCollisionGroup)
+	AActor* CollisionOnce(EnumType _OtherCollisionGroup)
 	{
-		return IsCollision(static_cast<int>(_OtherCollisionGroup));
+
+		// 한마리랑 충돌체크
+		std::vector<AActor*> Result;
+		Collision(static_cast<int>(_OtherCollisionGroup), Result, 1);
+
+		if (true == Result.empty())
+		{
+			return nullptr;
+		}
+
+		return Result[0];
 	}
 
 	template<typename EnumType>
-	U2DCollision* CollisionOnce(EnumType _OtherCollisionGroup)
+	std::vector<AActor*> CollisionAll(EnumType _OtherCollisionGroup)
 	{
-		return CollisionOnce(static_cast<int>(_OtherCollisionGroup));
+		// 최대 42억개와 충돌체크
+		std::vector<AActor*> Result;
+		Collision(static_cast<int>(_OtherCollisionGroup), Result, -1);
+
+		return Result;
 	}
 
-	template<typename EnumType>
-	bool Collision(EnumType _OtherCollisionGroup, std::vector<U2DCollision*>* _Result = nullptr)
+	// 최대 몇마리랑 충돌할거냐
+	bool Collision(int _OtherCollisionGroup, std::vector<AActor*>& _Result, unsigned int  _Limite);
+
+	void SetCollisionType(ECollisionType _CollisionType)
 	{
-		return Collision(static_cast<int>(_OtherCollisionGroup), _Result);
+		CollisionType = _CollisionType;
 	}
-
-	bool IsCollision(int _OtherCollisionGroup);
-	U2DCollision* Collision(int _OtherCollisionGroup);
-	// 이거쓰면 다되죠.
-	bool Collision(int _OtherCollisionGroup, std::vector<U2DCollision*>* _Result = nullptr);
-
-
 
 protected:
 
 private:
-	// 충돌체 그룹을 만들 것이다.
+	// 충돌체의 오더는 약간 의미가 다르다.
+	// -1 충돌 그룹을 지정해주지 않았다
+	// -1 은 사용하면 안된다.
+	// 양수만 된다.
+	ECollisionType CollisionType = ECollisionType::CirCle;
 	int CollisionGroup = -1;
 };
-
-// enum class ContentsCollision
-// {
-//     PlayerBody,
-//     PlayerAttack,
-//	   MonsterBody,
-//     MonsterAttack,
-// }

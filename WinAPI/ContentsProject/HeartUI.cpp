@@ -5,7 +5,7 @@
 
 AHeartUI::AHeartUI()
 {
-	for (int i = 0; i < APlayer::GetHeartMax() / 2; i++)
+	for (int i = 0; i < APlayer::GetPlayerHptMax() / 2; i++)
 	{
 		USpriteRenderer* Sprite = CreateDefaultSubObject<USpriteRenderer>();
 		Sprite->SetCameraEffect(false); // 카메라 이동에 영향을 받지 않음. 윈도우 위치에 고정
@@ -32,7 +32,7 @@ void AHeartUI::SetOrder(int _Order)
 
 void AHeartUI::SetPlayerHp(int _PlayerHp)
 {
-	int HeartMax = APlayer::GetHeartMax() / 2;
+	int HeartMax = APlayer::GetPlayerHptMax() / 2;
 	//if (Renders.size() <= _PlayerHp)
 	//{
 	//	MSGASSERT("함수 호출 이전에 PlayerHp가 최대체력 이상으로 설정된 값이 있습니다.");

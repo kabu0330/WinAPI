@@ -22,7 +22,7 @@ void ContentsCore::WindowSetting()
 
 	// 2. 윈도우 사이즈를 반드시 정의해야 한다.
 	Global::WindowSize = { 960, 540 };
-	Global::WindowScale = Global::WindowSize;
+	Global::WindowHalfScale = Global::WindowSize.Half();
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, Global::WindowSize);
 }
 
@@ -60,10 +60,18 @@ void ContentsCore::LevelSetting()
 void ContentsCore::SpriteSetting()
 {
 	// 이미지 한 장에서 스프라이트를 몇 개로 만들 것인지 자른다. (가로, 세로)
+	// Player
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
 	UImageManager::GetInst().CuttingSprite("Head.png", 5, 2);
-	UImageManager::GetInst().CuttingSprite("NormalRoomDoor.png", 4, 2);
 	UImageManager::GetInst().CuttingSprite("effect_tearpoofa.png", 4, 4);
+
+	// Monster
+	UImageManager::GetInst().CuttingSprite("Fly.png", 5, 3);
+
+	// Background
+	UImageManager::GetInst().CuttingSprite("NormalRoomDoor.png", 4, 2);
+
+	// UI
 	UImageManager::GetInst().CuttingSprite("pickup.png", 10, 1); // (10, 12)
 	UImageManager::GetInst().CuttingSprite("banner.png", 26, 1); // (12, 10)
 	UImageManager::GetInst().CuttingSprite("hearts.png", 5, 2); // (80, 32)
