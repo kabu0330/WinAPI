@@ -120,7 +120,7 @@ void APlayGameMode::EngineDebug(float _DeltaTime)
 	UEngineDebug::CoreOutPutString("Player Pos : " + GetWorld()->GetPawn()->GetActorLocation().ToString(), { 0, Global::WindowSize.iY() - 60 });
 	UEngineDebug::CoreOutPutString("Camera Pos : " + GetWorld()->GetCameraPos().ToString(), { 0, Global::WindowSize.iY() - 40 });
 	UEngineDebug::CoreOutPutString("Mouse Pos : " + MousePos.ToString(), { 0, Global::WindowSize.iY() - 20 });
-	UEngineDebug::CoreOutPutString("Room : " + APlayGameMode::GetCurRoom()->GetName(), { Global::WindowSize.iX() - 200, 0});
+	//UEngineDebug::CoreOutPutString("Room : " + APlayGameMode::GetCurRoom()->GetName(), { Global::WindowSize.iX() - 200, 0});
 
 	if (true == UEngineInput::GetInst().IsDown('B'))
 	{

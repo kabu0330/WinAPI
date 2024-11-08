@@ -14,7 +14,7 @@ enum class ERenderOrder
 
 enum class ECollisionGroup
 {
-	PLAYER_WARPGATE,
+	WARP,
 	PLAYER_BODY,
 	PLAYER_ATTACK,
 	MONSTER_BODY,

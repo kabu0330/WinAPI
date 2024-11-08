@@ -109,6 +109,11 @@ void APlayer::Collision()
 	BodyCollision->SetCollisionGroup(ECollisionGroup::PLAYER_BODY);
 	BodyCollision->SetCollisionType(ECollisionType::CirCle);
 
+	WarpCollision = CreateDefaultSubObject<U2DCollision>();
+	WarpCollision->SetComponentLocation({ 0, 10 });
+	WarpCollision->SetComponentScale({ 30, 10 });
+	WarpCollision->SetCollisionGroup(ECollisionGroup::WARP);
+	WarpCollision->SetCollisionType(ECollisionType::Rect);
 }
 
 bool APlayer::DeathCheck()

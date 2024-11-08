@@ -82,6 +82,9 @@ public:
 	void UISetting();
 	void UITick(float _DeltaTime);
 
+
+
+
 	static int GetPlayerHptMax() 
 	{
 		return HeartMax;
@@ -137,6 +140,7 @@ private:
 
 	// Collision
 	U2DCollision* BodyCollision = nullptr;
+	U2DCollision* WarpCollision = nullptr;
 
 	// Renderer
 	class USpriteRenderer* BodyRenderer = nullptr;

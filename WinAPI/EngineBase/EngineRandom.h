@@ -23,7 +23,7 @@ public:
 	int RandomInt(int _Min, int _Max)
 	{
 		// _Min ~ _Max 랜덤값 뽑아줘
-		std::uniform_int_distribution<int> RandomCreate(_Min, _Max + 1);
+		std::uniform_int_distribution<int> RandomCreate(_Min, _Max);
 
 		// MtGen 제네레이터 써서
 		// std::mt19937_64 메르헨 트위스터 알고리즘 써서 만들어줘.

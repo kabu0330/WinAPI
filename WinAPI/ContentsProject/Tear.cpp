@@ -19,7 +19,6 @@ ATear::ATear()
 	TearCollision->SetCollisionGroup(ECollisionGroup::PLAYER_ATTACK);
 	TearCollision->SetCollisionType(ECollisionType::CirCle);
 	
-
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
 	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.05f, false);
@@ -87,6 +86,8 @@ void ATear::Tick(float _DeltaTime)
 	}
 	
 	TimeElapesd += _DeltaTime;
+
+	// 좌우 공격만 중력을 준다.
 	if (Dir == FVector2D::LEFT || Dir == FVector2D::RIGHT)
 	{
 		if (GravityActivationTime + 0.1 < TimeElapesd) // 마지막에 중력으로 떨어뜨린다.
@@ -100,7 +101,7 @@ void ATear::Tick(float _DeltaTime)
 			GravityDir = Dir + FVector2D(0, 1);
 			AddActorLocation(GravityDir * _DeltaTime * Speed * Gravity);
 		}
-		else if (ResistanceActivationTime < TimeElapesd)
+		else if (ResistanceActivationTime < TimeElapesd) // 저항력
 		{
 			AddActorLocation(Dir * _DeltaTime * Speed * Resistance);
 		}
@@ -109,9 +110,9 @@ void ATear::Tick(float _DeltaTime)
 			AddActorLocation(Dir * _DeltaTime * Speed);
 		}
 	}
-	else
+	else // 위아래 공격에는 중력이 없다.
 	{
-		if (ResistanceActivationTime < TimeElapesd)
+		if (ResistanceActivationTime < TimeElapesd) // 저항력
 		{
 			AddActorLocation(Dir * _DeltaTime * Speed * Resistance);
 		}

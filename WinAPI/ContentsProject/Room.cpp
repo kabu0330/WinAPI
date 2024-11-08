@@ -2,11 +2,14 @@
 #include "Room.h"
 
 #include <EngineBase/EngineDebug.h>
+#include <EnginePlatform/EngineInput.h>
 #include <EngineCore/EngineAPICore.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/2DCollision.h>
 
 #include "ContentsEnum.h"
 #include "PlayGameMode.h"
+#include "Player.h"
 
 ARoom::ARoom()
 {
@@ -17,6 +20,16 @@ ARoom::ARoom()
 	float ScaleY = Global::WindowSize.Y / 540;
 	RoomScale = { 848.0f * ScaleX * GetActorScale().X / Global::WindowSize.X , 536.0f * ScaleY * GetActorScale().Y / Global::WindowSize.Y };
 
+	SpriteSetting();
+	DoorSpriteSetting();
+
+	CollisionSetting();
+
+	DebugOn();
+}
+
+void ARoom::SpriteSetting()
+{
 	RoomRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	RoomRenderer->SetSprite("SampleMap(848,536).png");
 	RoomRenderer->SetComponentScale(RoomScale);
@@ -25,12 +38,99 @@ ARoom::ARoom()
 	BolderLineRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BolderLineRenderer->SetSprite("BolderLine.png");
 	BolderLineRenderer->SetComponentScale(GetActorScale());
-	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().X, RoomRenderer->GetComponentLocation().Y});
+	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().X, RoomRenderer->GetComponentLocation().Y });
 	BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
+}
 
-	DoorSpriteSetting();	
+void ARoom::CollisionSetting()
+{
+	RoomCollision = CreateDefaultSubObject<U2DCollision>();
+	RoomCollision->SetComponentLocation({ 0, 0 });
+	RoomCollision->SetComponentScale({ RoomScale.X - 150, RoomScale.Y - 140 });
+	RoomCollision->SetCollisionGroup(ECollisionGroup::OBJECT_WALL);
+	RoomCollision->SetCollisionType(ECollisionType::Rect);
 
-	DebugOn();
+	DoorCollisions.resize(4);
+	for (int i = 0; i < DoorCollisions.size(); i++)
+	{
+		DoorCollisions[i] = CreateDefaultSubObject<U2DCollision>();
+		DoorCollisions[i]->SetComponentScale({50, 50});
+		DoorCollisions[i]->SetCollisionGroup(ECollisionGroup::WARP);
+		DoorCollisions[i]->SetCollisionType(ECollisionType::Rect);
+	}
+
+
+	int a = 0;
+}
+
+void ARoom::WarpCollisionCheck(float _DeltaTime)
+{
+	FVector2D RoomScale = Global::WindowSize;
+	StartCameraPos = GetWorld()->GetCameraPos();
+
+	FTransform Player = GetWorld()->GetPawn()->GetTransform();
+	for (int i = 0; i < DoorCollisions.size(); i++)
+	{
+		FTransform Door = DoorCollisions[i]->GetActorTransform();
+		if (true == FTransform::RectToRect(Player, Door))
+		{
+			CameraMove = true;
+			CameraMoveDir = FVector2D::LEFT;
+			EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+			CameraPosMove(_DeltaTime);
+		}
+	}
+
+
+	if (UEngineInput::GetInst().IsDown('H'))
+	{
+		CameraMove = true;
+		CameraMoveDir = FVector2D::LEFT;
+		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+	}
+	if (UEngineInput::GetInst().IsDown('K'))
+	{
+		CameraMove = true;
+		CameraMoveDir = FVector2D::RIGHT;
+		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+	}
+	if (UEngineInput::GetInst().IsDown('U'))
+	{
+		CameraMove = true;
+		CameraMoveDir = FVector2D::UP;
+		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+	}
+	if (UEngineInput::GetInst().IsDown('J'))
+	{
+		CameraMove = true;
+		CameraMoveDir = FVector2D::DOWN;
+		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+	}
+
+
+}
+
+void ARoom::CameraPosMove(float _DeltaTime)
+{
+	if (true == CameraMove)
+	{
+		FVector2D PlayerMovePos = GetActorLocation();
+		LerpAlpha = CameraMoveTime / 1.0f;
+		FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
+
+		GetWorld()->SetCameraPos(CamPos);
+		SetActorLocation(PlayerMovePos);
+
+		CameraMoveTime += _DeltaTime;
+		if (1.0f <= CameraMoveTime)
+		{
+			CameraMove = false;
+			CameraMoveTime = 0.0f;
+
+			// 플레이어를 어떻게 다음 방의 문 앞에 배치시킬지 생각해보기
+			//SetActorLocation(다음 방 문 앞);
+		}
+	}
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
@@ -167,7 +267,6 @@ void ARoom::DoorSpriteSetting()
 
 	for (int i = 0; i < DoorRenderers.size(); i++)
 	{
-		//DoorRenderers[i]->SetComponentScale({ 250, 240 });
 		DoorRenderers[i]->SetComponentScale({ 128, 128 });
 		DoorRenderers[i]->SetOrder(ERenderOrder::DOOR);
 	}
@@ -242,6 +341,10 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	default:
 		break;
 	}
+	for (int i = 0; i < DoorCollisions.size(); i++)
+	{
+		DoorCollisions[i]->SetComponentLocation(DoorRenderers[i]->GetComponentLocation());
+	}
 }
 
 ARoom::~ARoom()
@@ -267,6 +370,8 @@ void ARoom::BeginPlay()
 void ARoom::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+	WarpCollisionCheck(_DeltaTime);
 }
 
 

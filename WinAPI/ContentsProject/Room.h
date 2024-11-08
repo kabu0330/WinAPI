@@ -29,6 +29,9 @@ public:
 	ARoom& operator=(const ARoom& _Other) = delete;
 	ARoom& operator=(ARoom&& _Other) noexcept = delete;
 
+	void BeginPlay() override;
+	void Tick(float _DeltaTime) override;
+
 	bool IsLinking(ARoom* _Room);
 	bool InterLinkRoom(ARoom* _Room, RoomDir _Dir);
 	ARoom* LinkRoom(ARoom* _Room, RoomDir _Dir);
@@ -36,8 +39,17 @@ public:
 
 	void AddDoor(RoomDir _Dir, ARoom* ConnectedRoom);
 
-	void BeginPlay() override;
-	void Tick(float _DeltaTime) override;
+	void SpriteSetting();
+	void CollisionSetting();
+
+	void WarpCollisionCheck(float _DeltaTime);
+	void CameraPosMove(float _DeltaTime);
+	
+	void SetPlayerLocation(FVector2D _Pos)
+	{
+		FVector2D PlayerPos = GetWorld()->GetPawn()->GetActorLocation();
+		PlayerPos = _Pos;
+	}
 
 	FVector2D GetLeftPos() 
 	{
@@ -78,11 +90,24 @@ private:
 	RoomDir Directon = RoomDir::NONE;
 	FVector2D RoomScale = FVector2D::ZERO;
 
-	std::vector<USpriteRenderer*> DoorRenderers;
+	// Room Collision And Renderer
+	class U2DCollision* RoomCollision = nullptr;
 
 	USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
 	USpriteRenderer* BolderLineRenderer = nullptr; // 화면 가장자리 검은 배경
 	USpriteRenderer* ControlsRenderer   = nullptr; // BaseRoom 컨트롤러 이미지
+
+	// Door Collision And Renderer
+	std::vector<class U2DCollision*> DoorCollisions;
+	std::vector<USpriteRenderer*> DoorRenderers;
 	
+
+	// 카메라 이동관련 멤버
+	float CameraMoveTime = 0.0f;
+	float LerpAlpha = 0.0f;
+	bool  CameraMove = false;
+	FVector2D CameraMoveDir = FVector2D::ZERO;
+	FVector2D StartCameraPos = FVector2D::ZERO;
+	FVector2D EndCameraPos = FVector2D::ZERO;
 };
 
