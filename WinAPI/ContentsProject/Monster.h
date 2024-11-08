@@ -44,7 +44,6 @@ protected:
 	class USpriteRenderer* Renderer = nullptr;
 
 
-
 	class ATear* Tear = nullptr;
 
 	int   Hp    = 1;

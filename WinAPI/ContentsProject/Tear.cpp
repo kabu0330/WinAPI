@@ -42,6 +42,7 @@ void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att)
 	TearEffectRenderer->SetActive(true);
 	SetActorLocation(_StartPos);
 	Dir = _Dir;
+	ActorAtt = _Att;
 
 	APlayer* Player = dynamic_cast<APlayer*>(GetWorld()->GetPawn());
 	float FinalSpeed = 0.0f;
@@ -121,7 +122,7 @@ void ATear::Tick(float _DeltaTime)
 			AddActorLocation(Dir * _DeltaTime * Speed);
 		}
 	}
-
+	
 	if (false == TearCollision->IsDestroy())
 	{
 		CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::MONSTER_BODY);
@@ -131,6 +132,8 @@ void ATear::Tick(float _DeltaTime)
 	{
 		AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
 		CollisionMonster->Death(_DeltaTime);
+		// 나중에는 Hp 감소로 만들어야 함.
+		//CollisionMonster->ApplyDamaged(ActorAtt);
 
 	}
 
@@ -149,7 +152,6 @@ void ATear::Tick(float _DeltaTime)
 	}
 
 	// 2. 맵 밖으로 벗어나면
-
 
 	// 3. 액터와 충돌하면
 }

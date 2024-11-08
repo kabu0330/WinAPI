@@ -25,6 +25,8 @@ public:
 protected:
 
 private:
+	float ActorAtt = 0.0f;
+
 	float Speed = 350.0f;
 	float SpeedMax = 500.0f;
 	float TimeElapesd = 0.0f;
