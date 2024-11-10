@@ -11,8 +11,6 @@
 #include "PlayGameMode.h"
 #include "Player.h"
 
-bool  ARoom::CameraMove = false;
-
 ARoom::ARoom()
 {
 	SetActorLocation({ Global::WindowSize.Half().iX(), Global::WindowSize.Half().iY()});
@@ -49,7 +47,7 @@ void ARoom::WarpCollisionCheck(float _DeltaTime)
 			if (false == CameraMove)
 			{
 				EndCameraPos = GetWorld()->GetCameraPos() + RoomScaleA * CameraMoveDir;
-				TargetPlayerPos = CameraMoveDir * RoomScale + this->GetActorLocation();
+				//TargetPlayerPos = CameraMoveDir * RoomScale + this->GetActorLocation();
 			}
 
 			CameraMove = true;
@@ -87,6 +85,7 @@ void ARoom::WarpPlayerSetting(ESpriteDir _Dir)
 {
 	// 플레이어는 즉시 다음 맵 문 위치로 이동
 	
+	TargetPlayerPos = { -600, 200 };
 	AActor* Player = GetWorld()->GetPawn();
 	Player->SetActorLocation(TargetPlayerPos);
 

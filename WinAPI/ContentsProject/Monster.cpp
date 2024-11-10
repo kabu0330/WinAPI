@@ -25,7 +25,7 @@ AMonster::AMonster()
 	Renderer->SetComponentScale({256, 256});
 	Renderer->ChangeAnimation("Fly.IDle");
 
-	SetMonsterHp(5.0f);
+	SetMonsterHp(10.0f);
 	float Result = GetMonsterHp();
 
 
@@ -50,7 +50,6 @@ void AMonster::Tick(float _DeltaTime)
 	DeathCheck(_DeltaTime);
 }
 
-
 void AMonster::DeathCheck(float _DeltaTime)
 {
 	if (false == IsDeath())
@@ -63,8 +62,13 @@ void AMonster::DeathCheck(float _DeltaTime)
 
 void AMonster::Death(float _DeltaTime)
 {
-	Renderer->ChangeAnimation("Fly_Death");
-	BodyCollision->Destroy();
+	if (nullptr != BodyCollision)
+	{
+		BodyCollision->Destroy();
+		BodyCollision = nullptr;
+		Renderer->ChangeAnimation("Fly_Death");
+	}
+
 	Renderer->Destroy(0.3f);
 	this->Destroy(0.4f);
 }

@@ -95,7 +95,6 @@ void APlayGameMode::PlayerCurRoom()
 	FVector2D RoomSize = CurRoom->GetActorScale();
 	PlayerPos = PlayerPos / RoomSize;
 	
-
 	for (int i = 0; i < AllRooms.size(); i++)
 	{
 		FVector2D RoomPos = AllRooms[i]->GetActorLocation() / RoomSize;
@@ -108,8 +107,6 @@ void APlayGameMode::PlayerCurRoom()
 
 			int a = 0;
 		}
-
-
 	}
 }
 

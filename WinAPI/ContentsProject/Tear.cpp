@@ -68,7 +68,6 @@ void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att)
 
 void ATear::Reset()
 {
-	Destroy();
 	//TearEffectRenderer->SetActive(false);
 }
 
@@ -123,37 +122,62 @@ void ATear::Tick(float _DeltaTime)
 		}
 	}
 	
-	if (false == TearCollision->IsDestroy())
+	if (nullptr != TearCollision)
 	{
-		CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::MONSTER_BODY);
+		if (false == TearCollision->IsDestroy()) // Collision을 먼저 끄면 충돌 조건식에서 터진다.
+		{
+			CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::MONSTER_BODY);
+		}
+
+		// 3. 액터와 충돌하면 터진다.
+		if (nullptr != CollisionActor)
+		{
+			TriggerExplosion(_DeltaTime);
+
+
+			AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
+			//CollisionMonster->Death(_DeltaTime);
+			// 나중에는 Hp 감소로 만들어야 함.
+			CollisionMonster->ApplyDamaged(ActorAtt);
+
+		}
 	}
 
-	if (nullptr != CollisionActor)
-	{
-		AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
-		CollisionMonster->Death(_DeltaTime);
-		// 나중에는 Hp 감소로 만들어야 함.
-		//CollisionMonster->ApplyDamaged(ActorAtt);
 
-	}
-
-	// 1. 일정 시간이 지나면
+	// 1. 일정 시간이 지나면 터진다.
 	if (Duration < TimeElapesd)
 	{
-		//TearCollision->Destroy();
+		TriggerExplosion(_DeltaTime);	
+
+		if (Duration + 0.5f < TimeElapesd)
+		{
+			Destroy();
+		}
+	
+	}
+
+	// 2. 맵 밖으로 벗어나면 터진다.
+
+	// 4. 오브젝트와 충돌하면 터진다.
+
+}
+
+void ATear::TriggerExplosion(float _DeltaTime)
+{
+	if (nullptr != TearCollision)
+	{
+		TearCollision->Destroy(); // Collision을 먼저 끄면 충돌 조건식에서 터진다.
+		TearCollision = nullptr;
 		Dir = FVector2D::ZERO;        // 그 자리에서 더 이상 이동않고 터뜨린다.
 		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
 		SetActorLocation(GetActorLocation());
 
-		if (Duration + 0.5f < TimeElapesd) // 마지막 애니메이션까지 렌더될 시간을 번다.
+		if (nullptr != TearEffectRenderer)
 		{
-			Reset();
+			// Destroy(0.4f); // 렌더에서 터진다.
 		}
+
 	}
-
-	// 2. 맵 밖으로 벗어나면
-
-	// 3. 액터와 충돌하면
 }
 
 ATear::~ATear()

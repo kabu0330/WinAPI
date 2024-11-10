@@ -136,7 +136,7 @@ bool APlayer::DeathCheck()
 void APlayer::Move(float _DeltaTime)
 {
 	// 방 이동을 중에 캐릭터는 움직일 수 없다.
-	if (true == ARoom::IsCameraMove() || true == CameraMove)
+	if (true == CameraMove)
 	{
 		return;
 	}

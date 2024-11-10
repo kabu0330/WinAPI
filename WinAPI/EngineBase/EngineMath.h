@@ -24,7 +24,7 @@ public:
 
 	// Lerp : 선형보간법 : 시작점과 끝점 사이의 중간 값(비율)을 찾는 방법
 	// _Start : 현재 위치, _End : 목적지, _ElapsedTime : DeltaTime을 누적시킬 변수, _Duration : 이동할 시간
-	static FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _ElapsedTime, float _Duration)
+	static FVector2D Lerp(const FVector2D& _Start, const FVector2D& _End, float _ElapsedTime, float _Duration)
 	{
 		float Alpha = _ElapsedTime / _Duration;
 		Alpha = Clamp(Alpha, 0.0f, 1.0f);
@@ -32,7 +32,7 @@ public:
 	}
 
 	// _Start : 현재 위치, _End : 목적지, _Alpha : 두 값 사이의 보간 비율(0 ~ 1)
-	static FVector2D Lerp(FVector2D& _Start, FVector2D& _End, float _Alpha)
+	static FVector2D Lerp(const FVector2D& _Start, const FVector2D& _End, float _Alpha)
 	{
 		FVector2D Result = ((1.0f - _Alpha) * _Start) + (_Alpha * _End);
 		return Result;
@@ -171,11 +171,11 @@ public:
 		return Result;
 	}
 
-	friend FVector2D operator*(float _Value, FVector2D& _Other)
+	FVector2D operator*(float _Value)
 	{
 		FVector2D Result;
-		Result.X = _Other.X * _Value;
-		Result.Y = _Other.Y * _Value;
+		Result.X = X * _Value;
+		Result.Y = Y * _Value;
 		return Result;
 	}
 
@@ -240,6 +240,22 @@ public:
 		FVector2D Result;
 		Result.X = -X;
 		Result.Y = -Y;
+		return Result;
+	}
+
+	friend FVector2D operator*(float _Value, FVector2D& _Other)
+	{
+		FVector2D Result;
+		Result.X = _Other.X * _Value;
+		Result.Y = _Other.Y * _Value;
+		return Result;
+	}
+
+	friend FVector2D operator*(float _Value, const FVector2D& _Other)
+	{
+		FVector2D Result;
+		Result.X = _Other.X * _Value;
+		Result.Y = _Other.Y * _Value;
 		return Result;
 	}
 

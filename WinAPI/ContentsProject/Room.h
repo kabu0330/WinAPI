@@ -50,11 +50,6 @@ public:
 		return RoomCollision;
 	}
 
-	static bool IsCameraMove()
-	{
-		return CameraMove;
-	}
-
 	FVector2D GetLeftPos() 
 	{
 		int PosX = GetActorLocation().iX();
@@ -109,7 +104,7 @@ private:
 	// 카메라 이동관련 멤버
 	float CameraMoveTime = 0.0f;
 	float LerpAlpha = 0.0f;
-	static bool  CameraMove;
+	bool  CameraMove = false;
 	bool WarpCollision = false;
 	FVector2D TargetPlayerPos = FVector2D::ZERO;
 	FVector2D CameraMoveDir = FVector2D::ZERO;

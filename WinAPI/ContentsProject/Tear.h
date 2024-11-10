@@ -21,6 +21,7 @@ public:
 	void Reset();
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
+	void TriggerExplosion(float _DeltaTime);
 
 protected:
 
@@ -31,6 +32,7 @@ private:
 	float SpeedMax = 500.0f;
 	float TimeElapesd = 0.0f;
 	float Duration = 0.85f;
+	float ExplosionDelay = 1.0f;
 
 	float ResistanceActivationTime = 0.6f;
 	float Resistance = 0.8f;
