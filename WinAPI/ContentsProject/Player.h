@@ -84,7 +84,7 @@ public:
 
 
 
-
+	// Stat
 	static int GetPlayerHptMax() 
 	{
 		return HeartMax;

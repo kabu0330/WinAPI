@@ -18,17 +18,24 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 	void CreateMonster();
+
+	void DeathCheck(float _DeltaTime);
 	void Death(float _DeltaTime);
 
-	int GetMonsterHp() const
+	bool IsDeath()
+	{
+		return Hp <= 0;
+	}
+
+	float GetMonsterHp() const
 	{
 		return Hp;
 	}
-	int GetMonsterAtt() const
+	void SetMonsterHp(float _Hp) // Hp 세팅
 	{
-		return Att;
+		Hp = _Hp;
 	}
-	int ApplyDamaged(float _PlayerAtt)
+	float ApplyDamaged(float _PlayerAtt) // 피격
 	{
 		Hp -= _PlayerAtt;
 		if (Hp < 0)
@@ -38,15 +45,20 @@ public:
 		return Hp;
 	}
 
+	int GetMonsterAtt() const
+	{
+		return Att;
+	}
+
+
 protected:
 	class U2DCollision* BodyCollision = nullptr;
 
 	class USpriteRenderer* Renderer = nullptr;
 
-
 	class ATear* Tear = nullptr;
 
-	int   Hp    = 1;
+	float Hp    = 1;
 	int   Att   = 1;
 	float Speed = 0;
 	
