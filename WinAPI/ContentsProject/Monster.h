@@ -22,6 +22,8 @@ public:
 	void DeathCheck(float _DeltaTime);
 	void Death(float _DeltaTime);
 
+	void Attack();
+
 	bool IsDeath()
 	{
 		return Hp <= 0;

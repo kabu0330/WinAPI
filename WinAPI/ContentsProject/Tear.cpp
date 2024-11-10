@@ -122,6 +122,8 @@ void ATear::Tick(float _DeltaTime)
 		}
 	}
 	
+	/////////////////////////////////////////////////////////////////////////////////////////
+	// 코드 분석 요청
 	if (nullptr != TearCollision)
 	{
 		if (false == TearCollision->IsDestroy()) // Collision을 먼저 끄면 충돌 조건식에서 터진다.
@@ -152,14 +154,11 @@ void ATear::Tick(float _DeltaTime)
 		if (Duration + 0.5f < TimeElapesd)
 		{
 			Destroy();
-		}
-	
+		}	
 	}
 
 	// 2. 맵 밖으로 벗어나면 터진다.
-
 	// 4. 오브젝트와 충돌하면 터진다.
-
 }
 
 void ATear::TriggerExplosion(float _DeltaTime)
@@ -176,7 +175,6 @@ void ATear::TriggerExplosion(float _DeltaTime)
 		{
 			// Destroy(0.4f); // 렌더에서 터진다.
 		}
-
 	}
 }
 

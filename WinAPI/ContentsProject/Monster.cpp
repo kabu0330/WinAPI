@@ -73,6 +73,10 @@ void AMonster::Death(float _DeltaTime)
 	this->Destroy(0.4f);
 }
 
+void AMonster::Attack()
+{
+}
+
 AMonster::~AMonster()
 {
 }
