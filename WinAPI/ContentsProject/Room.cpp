@@ -11,6 +11,8 @@
 #include "PlayGameMode.h"
 #include "Player.h"
 
+bool  ARoom::CameraMove = false;
+
 ARoom::ARoom()
 {
 	SetActorLocation({ Global::WindowSize.Half().iX(), Global::WindowSize.Half().iY()});
@@ -18,7 +20,7 @@ ARoom::ARoom()
 
 	float ScaleX = Global::WindowSize.X / 960;
 	float ScaleY = Global::WindowSize.Y / 540;
-	RoomScale = { 848.0f * ScaleX * GetActorScale().X / Global::WindowSize.X , 536.0f * ScaleY * GetActorScale().Y / Global::WindowSize.Y };
+	RoomScale = { 960 * ScaleX * GetActorScale().X / Global::WindowSize.X , 540 * ScaleY * GetActorScale().Y / Global::WindowSize.Y };
 
 	SpriteSetting();
 	DoorSpriteSetting();
@@ -28,109 +30,69 @@ ARoom::ARoom()
 	DebugOn();
 }
 
-void ARoom::SpriteSetting()
-{
-	RoomRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	RoomRenderer->SetSprite("SampleMap(848,536).png");
-	RoomRenderer->SetComponentScale(RoomScale);
-	RoomRenderer->SetOrder(ERenderOrder::BACKGROUND);
-
-	BolderLineRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BolderLineRenderer->SetSprite("BolderLine.png");
-	BolderLineRenderer->SetComponentScale(GetActorScale());
-	BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().X, RoomRenderer->GetComponentLocation().Y });
-	BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
-}
-
-void ARoom::CollisionSetting()
-{
-	RoomCollision = CreateDefaultSubObject<U2DCollision>();
-	RoomCollision->SetComponentLocation({ 0, 0 });
-	RoomCollision->SetComponentScale({ RoomScale.X - 150, RoomScale.Y - 140 });
-	RoomCollision->SetCollisionGroup(ECollisionGroup::OBJECT_WALL);
-	RoomCollision->SetCollisionType(ECollisionType::Rect);
-
-	DoorCollisions.resize(4);
-	for (int i = 0; i < DoorCollisions.size(); i++)
-	{
-		DoorCollisions[i] = CreateDefaultSubObject<U2DCollision>();
-		DoorCollisions[i]->SetComponentScale({50, 50});
-		DoorCollisions[i]->SetCollisionGroup(ECollisionGroup::WARP);
-		DoorCollisions[i]->SetCollisionType(ECollisionType::Rect);
-	}
-
-
-	int a = 0;
-}
-
 void ARoom::WarpCollisionCheck(float _DeltaTime)
 {
-	FVector2D RoomScale = Global::WindowSize;
-	StartCameraPos = GetWorld()->GetCameraPos();
+	FTransform PlayerTrans = GetWorld()->GetPawn()->GetTransform();
+	FVector2D RoomScaleA = Global::WindowSize;
 
-	FTransform Player = GetWorld()->GetPawn()->GetTransform();
 	for (int i = 0; i < DoorCollisions.size(); i++)
 	{
-		FTransform Door = DoorCollisions[i]->GetActorTransform();
-		if (true == FTransform::RectToRect(Player, Door))
+		FTransform DoorTrans = DoorCollisions[i]->GetActorTransform();
+		if (true == FTransform::RectToRect(PlayerTrans, DoorTrans) || true == WarpCollision)
 		{
+			WarpCollision = true; // 플레이어 위치를 이동시키고 난 후부터, 카메라 이동이 완료될 때까지 해당 스코프에 진입하도록 하는 변수
+
+			ESpriteDir MoveDir = DoorRenderers[i]->GetSpriteDir();
+			CameraMoveDir = Global::SwitchEnumToDir(MoveDir); // FVector2D:: Left, Right, Up, Down
+
+			// 카메라 이동 도착지점을 고정시키기 위해 만든 조건문
+			if (false == CameraMove)
+			{
+				EndCameraPos = GetWorld()->GetCameraPos() + RoomScaleA * CameraMoveDir;
+				TargetPlayerPos = CameraMoveDir * RoomScale + this->GetActorLocation();
+			}
+
 			CameraMove = true;
-			CameraMoveDir = FVector2D::LEFT;
-			EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
-			CameraPosMove(_DeltaTime);
+			if (true == CameraMove)
+			{
+				WarpPlayerSetting(MoveDir); // 플레이어 위치 이동
+
+				StartCameraPos = GetWorld()->GetCameraPos();
+				LerpAlpha = FVector2D::Clamp(CameraMoveTime / 1.0f, 0.0f, 1.0f);
+
+				FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
+				GetWorld()->SetCameraPos(CamPos);
+
+				CameraMoveTime += _DeltaTime;
+				float CameraLerpTime = 1.0f;
+				if (CameraLerpTime < CameraMoveTime)
+				{
+					CameraMoveDir = FVector2D::ZERO;
+
+					// 카메라 이동이 완료되고도, 잠시동안 플레이어의 움직임을 제한
+					float PlayerMovementCooldown = 2.0f;
+					if (PlayerMovementCooldown < CameraMoveTime)
+					{
+						WarpCollision = false;
+						CameraMove = false;
+						CameraMoveTime = 0.0f;						
+					}		
+				}
+			}
 		}
 	}
-
-
-	if (UEngineInput::GetInst().IsDown('H'))
-	{
-		CameraMove = true;
-		CameraMoveDir = FVector2D::LEFT;
-		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
-	}
-	if (UEngineInput::GetInst().IsDown('K'))
-	{
-		CameraMove = true;
-		CameraMoveDir = FVector2D::RIGHT;
-		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
-	}
-	if (UEngineInput::GetInst().IsDown('U'))
-	{
-		CameraMove = true;
-		CameraMoveDir = FVector2D::UP;
-		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
-	}
-	if (UEngineInput::GetInst().IsDown('J'))
-	{
-		CameraMove = true;
-		CameraMoveDir = FVector2D::DOWN;
-		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
-	}
-
-
 }
 
-void ARoom::CameraPosMove(float _DeltaTime)
+void ARoom::WarpPlayerSetting(ESpriteDir _Dir)
 {
-	if (true == CameraMove)
-	{
-		FVector2D PlayerMovePos = GetActorLocation();
-		LerpAlpha = CameraMoveTime / 1.0f;
-		FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
+	// 플레이어는 즉시 다음 맵 문 위치로 이동
+	
+	AActor* Player = GetWorld()->GetPawn();
+	Player->SetActorLocation(TargetPlayerPos);
 
-		GetWorld()->SetCameraPos(CamPos);
-		SetActorLocation(PlayerMovePos);
-
-		CameraMoveTime += _DeltaTime;
-		if (1.0f <= CameraMoveTime)
-		{
-			CameraMove = false;
-			CameraMoveTime = 0.0f;
-
-			// 플레이어를 어떻게 다음 방의 문 앞에 배치시킬지 생각해보기
-			//SetActorLocation(다음 방 문 앞);
-		}
-	}
+	// 플레이어 렌더러 애니메이션 변경
+	APlayer* CastPlayer = dynamic_cast<APlayer*>(Player);
+	CastPlayer->SetRendererDir(_Dir);
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
@@ -218,8 +180,6 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
 
 	switch (_Dir)
 	{
-	case RoomDir::NONE:
-		break;
 	case RoomDir::LEFT:
 	{
 		Rooms.insert({ RoomDir::LEFT, _Room });	
@@ -244,13 +204,143 @@ ARoom* ARoom::LinkRoom(ARoom* _Room, RoomDir _Dir)
 		return Rooms.find(RoomDir::DOWN)->second;
 		break;
 	}
-	case RoomDir::MAX:
-		break;
 	default:
 		break;
 	}
 
     return nullptr;
+}
+
+void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
+{	
+	FVector2D DoorPos = FVector2D::ZERO;
+	FVector2D DoorOffestX = FVector2D(RoomScale.Half().iX(), 0);
+	FVector2D DoorOffestY = FVector2D(0, RoomScale.Half().iY());
+	FVector2D OffestX = { 110, 0 };
+	FVector2D OffestY = { 0, 57};
+
+	switch (_Dir)
+	{
+	case RoomDir::LEFT:
+		DoorPos = -1 * DoorOffestX  + OffestX;
+		//DoorRenderers[0]->ChangeAnimation("Door_Left_Open");
+		//DoorRenderers[0]->ChangeAnimation("Door_Left_LockAnim");
+		DoorRenderers[0]->ChangeAnimation("Door_Left_OpenAnim");
+		DoorRenderers[0]->SetComponentLocation(DoorPos);
+		DoorRenderers[0]->SetActive(true);
+
+		DoorCollisions[0]->SetComponentScale({ 60, 60 });
+		DoorCollisions[0]->SetActive(true);
+		break;
+	case RoomDir::RIGHT:
+		DoorPos = DoorOffestX - OffestX;
+		//DoorRenderers[1]->ChangeAnimation("Door_Right_Open");
+		//DoorRenderers[1]->ChangeAnimation("Door_Right_LockAnim");
+		DoorRenderers[1]->ChangeAnimation("Door_Right_OpenAnim");
+		DoorRenderers[1]->SetComponentLocation(DoorPos);
+		DoorRenderers[1]->SetActive(true);
+
+		DoorCollisions[1]->SetComponentScale({ 60, 60 });
+		DoorCollisions[1]->SetActive(true);
+		break;
+	case RoomDir::UP:
+		DoorPos = -1 * DoorOffestY + OffestY;
+		//DoorRenderers[2]->ChangeAnimation("Door_Up_Open");
+		//DoorRenderers[2]->ChangeAnimation("Door_Up_LockAnim");
+		DoorRenderers[2]->ChangeAnimation("Door_Up_OpenAnim");
+		DoorRenderers[2]->SetComponentLocation(DoorPos);
+		DoorRenderers[2]->SetActive(true);
+
+		DoorCollisions[2]->SetComponentScale({ 60, 60 });
+		DoorCollisions[2]->SetActive(true);
+		break;
+	case RoomDir::DOWN:
+		DoorPos = DoorOffestY - OffestY;
+		//DoorRenderers[3]->ChangeAnimation("Door_Down_Open");
+		//DoorRenderers[3]->ChangeAnimation("Door_Down_LockAnim");
+		DoorRenderers[3]->ChangeAnimation("Door_Down_OpenAnim");
+		DoorRenderers[3]->SetComponentLocation(DoorPos);
+		DoorRenderers[3]->SetActive(true);
+
+		DoorCollisions[3]->SetComponentScale({ 60, 60 });
+		DoorCollisions[3]->SetActive(true);
+		break;
+	default:
+		break;
+	}
+	for (int i = 0; i < DoorCollisions.size(); i++)
+	{
+		DoorCollisions[i]->SetComponentLocation(DoorRenderers[i]->GetComponentLocation());
+	}
+}
+
+ARoom::~ARoom()
+{
+	// map에서 insert한 자료들을 모두 map에서 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
+}
+
+void ARoom::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// 맵 이름에 따라 이미지를 바꾼다.
+	if ("BaseRoom" == GetName())
+	{
+		ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
+		ControlsRenderer->SetSprite("controls.png");
+		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowHalfScale.iX(), GetActorLocation().iY() - Global::WindowHalfScale.iY() - 20 });
+		ControlsRenderer->SetComponentScale({ 655, 145 }); // 385, 85
+		ControlsRenderer->SetOrder(ERenderOrder::CONTROLS);
+	}
+	else if ("BossRoom" == GetName())
+	{
+		RoomRenderer->SetSprite("Room_03.png");
+	}
+	else // 베이스룸을 제외한 맵의 이미지를 바꿀 수 있다.
+	{
+		RoomRenderer->SetSprite("Room_02.png");
+
+	}
+}
+
+void ARoom::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
+
+	WarpCollisionCheck(_DeltaTime);
+}
+
+void ARoom::SpriteSetting()
+{
+	RoomRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	RoomRenderer->SetSprite("Room_01.png");
+	RoomRenderer->SetComponentScale(RoomScale);
+	RoomRenderer->SetOrder(ERenderOrder::BACKGROUND);
+
+	//BolderLineRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	//BolderLineRenderer->SetSprite("BolderLine.png");
+	//BolderLineRenderer->SetComponentScale(GetActorScale());
+	//BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().X, RoomRenderer->GetComponentLocation().Y });
+	//BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
+}
+
+void ARoom::CollisionSetting()
+{
+	RoomCollision = CreateDefaultSubObject<U2DCollision>();
+	RoomCollision->SetComponentLocation({ 0, 0 });
+	RoomCollision->SetComponentScale({ RoomScale.X - 270, RoomScale.Y - 165 });
+	RoomCollision->SetCollisionGroup(ECollisionGroup::OBJECT_WALL);
+	RoomCollision->SetCollisionType(ECollisionType::Rect);
+
+	DoorCollisions.resize(4);
+	for (int i = 0; i < DoorCollisions.size(); i++)
+	{
+		DoorCollisions[i] = CreateDefaultSubObject<U2DCollision>();
+		DoorCollisions[i]->SetComponentScale({ 0, 0 }); // SetActive를 false로 설정하여도 Collision이 맵 가운데에 생성되는 문제
+		DoorCollisions[i]->SetCollisionGroup(ECollisionGroup::WARP);
+		DoorCollisions[i]->SetCollisionType(ECollisionType::Rect);
+		DoorCollisions[i]->SetActive(false);
+	}
 }
 
 void ARoom::DoorSpriteSetting()
@@ -271,26 +361,34 @@ void ARoom::DoorSpriteSetting()
 		DoorRenderers[i]->SetOrder(ERenderOrder::DOOR);
 	}
 
-	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_Open", "NormalRoomDoor.png", 0, 0, 0.1f, false);
-	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_Lock", "NormalRoomDoor.png", 4, 4, 0.1f, false);
-	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_LockAnim", "NormalDoor", 12, 15, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_Open"    , "NormalRoomDoor.png", 0, 0, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_Lock"    , "NormalRoomDoor.png", 4, 4, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_LockAnim", "NormalDoor"        , 12, 15, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_OpenAnim", "OpenDoor"          , 12, 15, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->SetSpriteDir(RoomDir::LEFT);
 
-	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_Open", "NormalRoomDoor.png", 1, 1, 0.1f, false);
-	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_Lock", "NormalRoomDoor.png", 5, 5, 0.1f, false);
-	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_LockAnim", "NormalDoor", 4, 7, 0.15f, false);
-	
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_Open"    , "NormalRoomDoor.png", 1, 1, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_Lock"    , "NormalRoomDoor.png", 5, 5, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_LockAnim", "NormalDoor"        , 4, 7, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_OpenAnim", "OpenDoor"          , 4, 7, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->SetSpriteDir(RoomDir::RIGHT);
+
 	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_Open", "NormalRoomDoor.png", 2, 2, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_Lock", "NormalRoomDoor.png", 6, 6, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_LockAnim", "NormalDoor", 0, 3, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_OpenAnim", "OpenDoor", 0, 3, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->SetSpriteDir(RoomDir::UP);
 
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_Open", "NormalRoomDoor.png", 3, 3, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_Lock", "NormalRoomDoor.png", 7, 7, 0.1f, false);
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_LockAnim", "NormalDoor", 8, 11, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_OpenAnim", "OpenDoor", 8, 11, 0.15f, false);
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->SetSpriteDir(RoomDir::DOWN);
 
-	DoorRenderers[static_cast<int>(RoomDir::LEFT)  - 1]->ChangeAnimation("Door_Left_Open" );
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1 ]->ChangeAnimation("Door_Left_Open");
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->ChangeAnimation("Door_Right_Open");
-	DoorRenderers[static_cast<int>(RoomDir::UP)    - 1]->ChangeAnimation("Door_Up_Open"   );
-	DoorRenderers[static_cast<int>(RoomDir::DOWN)  - 1]->ChangeAnimation("Door_Down_Open" );
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1   ]->ChangeAnimation("Door_Up_Open");
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1 ]->ChangeAnimation("Door_Down_Open");
 
 	// 세팅해두고 일단 렌더를 끈다. AddDoor 함수에서 호출되는 RoomDir 방향의 문만 렌더한다.
 	for (int i = 0; i < DoorRenderers.size(); i++)
@@ -298,82 +396,6 @@ void ARoom::DoorSpriteSetting()
 		DoorRenderers[i]->SetActive(false);
 	}
 }
-
-void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
-{	
-	FVector2D DoorPos = FVector2D::ZERO;
-	//FVector2D RoomPos = _ConnectedRoom->GetActorLocation();
-	FVector2D DoorOffestX = FVector2D(RoomScale.Half().iX(), 0);
-	FVector2D DoorOffestY = FVector2D(0, RoomScale.Half().iY());
-	FVector2D OffestX = { 55, 0 };
-	FVector2D OffestY = { 0, 50};
-
-	switch (_Dir)
-	{
-	case RoomDir::LEFT:
-		DoorPos = -1 * DoorOffestX  + OffestX;
-		//DoorRenderers[0]->ChangeAnimation("Door_Left_Open");
-		DoorRenderers[0]->ChangeAnimation("Door_Left_LockAnim");
-		DoorRenderers[0]->SetComponentLocation(DoorPos);
-		DoorRenderers[0]->SetActive(true);
-		break;
-	case RoomDir::RIGHT:
-		DoorPos = DoorOffestX - OffestX;
-		//DoorRenderers[1]->ChangeAnimation("Door_Right_Open");
-		DoorRenderers[1]->ChangeAnimation("Door_Right_LockAnim");
-		DoorRenderers[1]->SetComponentLocation(DoorPos);
-		DoorRenderers[1]->SetActive(true);
-		break;
-	case RoomDir::UP:
-		DoorPos = -1 * DoorOffestY + OffestY;
-		//DoorRenderers[2]->ChangeAnimation("Door_Up_Open");
-		DoorRenderers[2]->ChangeAnimation("Door_Up_LockAnim");
-		DoorRenderers[2]->SetComponentLocation(DoorPos);
-		DoorRenderers[2]->SetActive(true);
-		break;
-	case RoomDir::DOWN:
-		DoorPos = DoorOffestY - OffestY;
-		//DoorRenderers[3]->ChangeAnimation("Door_Down_Open");
-		DoorRenderers[3]->ChangeAnimation("Door_Down_LockAnim");
-		DoorRenderers[3]->SetComponentLocation(DoorPos);
-		DoorRenderers[3]->SetActive(true);
-		break;
-	default:
-		break;
-	}
-	for (int i = 0; i < DoorCollisions.size(); i++)
-	{
-		DoorCollisions[i]->SetComponentLocation(DoorRenderers[i]->GetComponentLocation());
-	}
-}
-
-ARoom::~ARoom()
-{
-	// map에서 insert한 자료들을 모두 map에서 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
-}
-
-void ARoom::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// BaseRoom에만 생성되도록 코드를 수정하여야 함.
-	if ("BaseRoom" == GetName())
-	{
-		ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
-		ControlsRenderer->SetSprite("controls.png");
-		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowHalfScale.iX(), GetActorLocation().iY() - Global::WindowHalfScale.iY() - 20 });
-		ControlsRenderer->SetComponentScale({ 655, 145 }); // 385, 85
-		ControlsRenderer->SetOrder(ERenderOrder::CONTROLS);
-	}
-}
-
-void ARoom::Tick(float _DeltaTime)
-{
-	Super::Tick(_DeltaTime);
-
-	WarpCollisionCheck(_DeltaTime);
-}
-
 
 
 

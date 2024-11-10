@@ -43,12 +43,16 @@ public:
 	void CollisionSetting();
 
 	void WarpCollisionCheck(float _DeltaTime);
-	void CameraPosMove(float _DeltaTime);
-	
-	void SetPlayerLocation(FVector2D _Pos)
+	void WarpPlayerSetting(ESpriteDir _Dir);
+
+	class U2DCollision* GetRoomCollision()
 	{
-		FVector2D PlayerPos = GetWorld()->GetPawn()->GetActorLocation();
-		PlayerPos = _Pos;
+		return RoomCollision;
+	}
+
+	static bool IsCameraMove()
+	{
+		return CameraMove;
 	}
 
 	FVector2D GetLeftPos() 
@@ -105,7 +109,9 @@ private:
 	// 카메라 이동관련 멤버
 	float CameraMoveTime = 0.0f;
 	float LerpAlpha = 0.0f;
-	bool  CameraMove = false;
+	static bool  CameraMove;
+	bool WarpCollision = false;
+	FVector2D TargetPlayerPos = FVector2D::ZERO;
 	FVector2D CameraMoveDir = FVector2D::ZERO;
 	FVector2D StartCameraPos = FVector2D::ZERO;
 	FVector2D EndCameraPos = FVector2D::ZERO;

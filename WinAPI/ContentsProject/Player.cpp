@@ -62,8 +62,8 @@ void APlayer::Tick(float _DeltaTime)
 	InputAttack(_DeltaTime);
 	UITick(_DeltaTime);
 
-	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
 
+	ConstrainToRoom();
 	DeathCheck();
 
 	// 렌더
@@ -71,6 +71,9 @@ void APlayer::Tick(float _DeltaTime)
 
 	// 카메라
 	CameraPosMove(_DeltaTime);
+
+	// Debug
+	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
 }
 
 void APlayer::UITick(float _DeltaTime)
@@ -101,6 +104,10 @@ void APlayer::UITick(float _DeltaTime)
 	  KeyPickupNumber->SetValue(KeyCount);
 }
 
+void APlayer::ConstrainToRoom()
+{
+}
+
 void APlayer::Collision()
 {
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
@@ -129,7 +136,7 @@ bool APlayer::DeathCheck()
 void APlayer::Move(float _DeltaTime)
 {
 	// 방 이동을 중에 캐릭터는 움직일 수 없다.
-	if (true == CameraMove)
+	if (true == ARoom::IsCameraMove() || true == CameraMove)
 	{
 		return;
 	}
@@ -167,7 +174,7 @@ void APlayer::Move(float _DeltaTime)
 	if (true == IsMove)
 	{
 		Dir.Normalize();
-		FVector2D TargetSpeed = Dir * SpeedMax;
+		FVector2D TargetSpeed = Dir * SpeedMax * 1.4f;
 
 		FinalSpeed += Dir * MoveAcc * _DeltaTime; 	// 가속도
 		FinalSpeed = FVector2D::Lerp(FinalSpeed, TargetSpeed, MoveAcc * _DeltaTime);
@@ -176,7 +183,7 @@ void APlayer::Move(float _DeltaTime)
 	}
 
 	{
-		FinalSpeed *= 500.0f * _DeltaTime;
+		FinalSpeed *= 700.0f * _DeltaTime;
 		int a = 0;
 	}
 

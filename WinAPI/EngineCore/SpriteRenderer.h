@@ -9,6 +9,16 @@ enum class PivotType
 	TOP
 };
 
+enum class ESpriteDir
+{
+	NONE,
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN,
+	MAX
+};
+
 // 설명 : 화면에 이미지를 띄우기 위한 모든 기능을 수행
 // 이미지, 스프라이트, 애니메이션 모두 구분없이 렌더러 하나로 통합한다.
 class USpriteRenderer : public USceneComponent
@@ -104,6 +114,18 @@ public:
 	void SetCameraEffectScale(float _Effect);
 	void SetSprite(std::string_view _Name, int _CurIndex = 0);
 
+	template<typename EnumType>
+	void SetSpriteDir(EnumType _Dir)
+	{
+		int Direction = static_cast<int>(_Dir);
+		SpriteDir = static_cast<ESpriteDir>(Direction);
+	}
+	ESpriteDir GetSpriteDir()
+	{
+		return SpriteDir;
+	}
+
+
 protected:
 
 private:
@@ -115,9 +137,11 @@ private:
 
 	class UEngineSprite* Sprite = nullptr;
 
-
 	std::map<std::string, FrameAnimation> FrameAnimations;
 	FrameAnimation* CurAnimation = nullptr;
+
+
+	ESpriteDir SpriteDir = ESpriteDir::NONE;
 
 };
 

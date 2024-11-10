@@ -78,10 +78,20 @@ public:
 	void CurStateAnimation(float _DeltaTime);
 	void SpriteSetting();
 
+	template<typename EnumType>
+	void SetRendererDir(EnumType _Dir)
+	{
+		int Direction = static_cast<int>(_Dir);
+		HeadState = static_cast<UpperState>(Direction);
+		BodyState = static_cast<LowerState>(Direction);
+	}
+
 	// UI
 	void UISetting();
 	void UITick(float _DeltaTime);
 
+	// RoomCollision
+	void ConstrainToRoom();
 
 
 	// Stat
@@ -127,8 +137,8 @@ private:
 	// Speed : MoveAcc
 	FVector2D Dir = FVector2D::ZERO;
 	FVector2D FinalSpeed = FVector2D::ZERO;
-	float MoveAcc = 1500.0f;
-	float SpeedMax = 350.0f; // Speed
+	float MoveAcc = 5000.0f;
+	float SpeedMax = 400.0f; // Speed
 	bool IsMove = false;
 	float TimeElapsed = 0.0f;
 	float Att = 3.5;
