@@ -64,6 +64,7 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
 	UImageManager::GetInst().CuttingSprite("Head.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("effect_tearpoofa.png", 4, 4);
+	UImageManager::GetInst().CuttingSprite("effect_bloodtear.png", 4, 4);
 
 	// Monster
 	UImageManager::GetInst().CuttingSprite("Fly.png", 5, 3);

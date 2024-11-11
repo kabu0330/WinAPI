@@ -155,7 +155,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
+    <ClInclude Include="BloodTear.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -218,7 +218,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
+    <ClCompile Include="BloodTear.cpp">
       <SubType>
       </SubType>
     </ClCompile>

@@ -2,23 +2,21 @@
 #include <EngineCore/Actor.h>
 
 // Ό³Έν :
-class ABullet : public AActor
+class ABloodTear : public AActor
 {
 public:
 	// constrcuter destructer
-	ABullet();
-	~ABullet();
+	ABloodTear();
+	~ABloodTear();
 
 	// delete Function
-	ABullet(const ABullet& _Other) = delete;
-	ABullet(ABullet&& _Other) noexcept = delete;
-	ABullet& operator=(const ABullet& _Other) = delete;
-	ABullet& operator=(ABullet&& _Other) noexcept = delete;
+	ABloodTear(const ABloodTear& _Other) = delete;
+	ABloodTear(ABloodTear&& _Other) noexcept = delete;
+	ABloodTear& operator=(const ABloodTear& _Other) = delete;
+	ABloodTear& operator=(ABloodTear&& _Other) noexcept = delete;
 
 	void Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att);
 	void TriggerExplosion(float _DeltaTime);
-
-	void PlayerFireLogic(float _DeltaTime);
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -26,18 +24,12 @@ public:
 protected:
 
 private:
-	float ActorAtt = 0.0f;
+	int ActorAtt = 0;
 
 	float Speed = 350.0f;
-	float SpeedMax = 500.0f;
 	float TimeElapesd = 0.0f;
 	float Duration = 0.85f;
 	float ExplosionDelay = 1.0f;
-
-	float ResistanceActivationTime = 0.6f;
-	float Resistance = 0.8f;
-
-	float GravityActivationTime = 0.7f;
 
 	FVector2D Dir = FVector2D::ZERO;
 

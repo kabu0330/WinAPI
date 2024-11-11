@@ -18,7 +18,6 @@ ARoom::ARoom()
 	SetActorLocation({ Global::WindowSize.Half().iX(), Global::WindowSize.Half().iY()});
 	SetActorScale(Global::WindowSize);
 
-
 	float ScaleX = Global::WindowSize.X / 960;
 	float ScaleY = Global::WindowSize.Y / 540;
 	RoomScale = { 960 * ScaleX * GetActorScale().X / Global::WindowSize.X , 540 * ScaleY * GetActorScale().Y / Global::WindowSize.Y };
@@ -90,7 +89,6 @@ void ARoom::Warp(float _DeltaTime)
 	FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
 	GetWorld()->SetCameraPos(CamPos);
 
-
 	CameraMoveTime += _DeltaTime;
 	if (CameraLerpTime < CameraMoveTime)
 	{
@@ -103,8 +101,6 @@ void ARoom::Warp(float _DeltaTime)
 			CameraMove = false;
 			CameraMoveTime = 0.0f;
 			CurRoom = Rooms[MoveDir];
-
-			int a = 0;
 		}
 	}
 	
