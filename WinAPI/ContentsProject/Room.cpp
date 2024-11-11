@@ -11,10 +11,13 @@
 #include "PlayGameMode.h"
 #include "Player.h"
 
+ARoom* ARoom::CurRoom = nullptr;
+
 ARoom::ARoom()
 {
 	SetActorLocation({ Global::WindowSize.Half().iX(), Global::WindowSize.Half().iY()});
 	SetActorScale(Global::WindowSize);
+
 
 	float ScaleX = Global::WindowSize.X / 960;
 	float ScaleY = Global::WindowSize.Y / 540;
@@ -36,27 +39,30 @@ void ARoom::Tick(float _DeltaTime)
 	WarpCollisionCheck(_DeltaTime);
 	Warp(_DeltaTime);
 
-	int a = 0;
 }
 
 void ARoom::WarpCollisionCheck(float _DeltaTime)
 {
-	FTransform PlayerTrans = GetWorld()->GetPawn()->GetTransform();
-	//APlayer* Player = dynamic_cast<APlayer*>(GetWorld()->GetPawn());
-	//FVector2D PlayerScale = Player->GetWarpCollision()->GetComponentScale();
-	//Player->SetActorScale(PlayerScale);
-	//FTransform PlayerTrans = Player->GetTransform();
+	if (true == CameraMove)
+	{
+		return;
+	}
 
+	FTransform PlayerTrans = GetWorld()->GetPawn()->GetTransform();
 	FVector2D RoomScaleA = Global::WindowSize;
 
-	for (int i = 0; i < DoorCollisions.size(); i++)
+	std::map<RoomDir, U2DCollision*>::iterator StartIter = DoorCollisionMap.begin();
+	std::map<RoomDir, U2DCollision*>::iterator EndIter = DoorCollisionMap.end();
+
+	for (; StartIter != EndIter ; ++StartIter)
 	{
-		FTransform DoorTrans = DoorCollisions[i]->GetActorTransform();
+		U2DCollision* Collision = StartIter->second;
+		USpriteRenderer* Renderer = DoorRendererMap[StartIter->first];
+
+		FTransform DoorTrans = Collision->GetActorTransform();
 		if (true == FTransform::RectToRect(PlayerTrans, DoorTrans))
 		{
-			PlayerPos = Player->GetActorLocation(); // 140, 270
-
-			MoveDir = DoorRenderers[i]->GetSpriteDir();
+			MoveDir = StartIter->first;
 			CameraMoveDir = Global::SwitchEnumToDir(MoveDir); // FVector2D:: Left, Right, Up, Down
 
 			StartCameraPos = GetWorld()->GetCameraPos();
@@ -70,67 +76,65 @@ void ARoom::WarpCollisionCheck(float _DeltaTime)
 
 void ARoom::Warp(float _DeltaTime)
 {
-	if (true == CameraMove)
+	if (false == CameraMove)
 	{
-		// 플레이어 위치 이동
-		WarpPlayerSetting(); 
+		return;
+	}
 
-		float CameraLerpTime = 0.1f;
-		LerpAlpha = FVector2D::Clamp(CameraMoveTime / CameraLerpTime, 0.0f, 1.0f);
+	// 플레이어 위치 이동
+	WarpPlayerSetting(); 
 
-		FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
-		GetWorld()->SetCameraPos(CamPos);
+	float CameraLerpTime = 0.1f;
+	LerpAlpha = FVector2D::Clamp(CameraMoveTime / CameraLerpTime, 0.0f, 1.0f);
+
+	FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
+	GetWorld()->SetCameraPos(CamPos);
 
 
-		CameraMoveTime += _DeltaTime;
-		if (CameraLerpTime < CameraMoveTime)
+	CameraMoveTime += _DeltaTime;
+	if (CameraLerpTime < CameraMoveTime)
+	{
+		CameraMoveDir = FVector2D::ZERO;
+
+		// 카메라 이동이 완료되고도, 잠시동안 플레이어의 움직임을 제한
+		float PlayerMovementCooldown = CameraLerpTime + 0.9f;
+		if (PlayerMovementCooldown < CameraMoveTime)
 		{
-			CameraMoveDir = FVector2D::ZERO;
+			CameraMove = false;
+			CameraMoveTime = 0.0f;
+			CurRoom = Rooms[MoveDir];
 
-			// 카메라 이동이 완료되고도, 잠시동안 플레이어의 움직임을 제한
-			float PlayerMovementCooldown = CameraLerpTime + 0.9f;
-			if (PlayerMovementCooldown < CameraMoveTime)
-			{
-				CameraMove = false;
-				CameraMoveTime = 0.0f;
-			}
+			int a = 0;
 		}
 	}
+	
 }
 
 void ARoom::WarpPlayerSetting()
 {
 	// 플레이어는 즉시 다음 맵 문 위치로 이동
-	FVector2D OffsetX = FVector2D(320, 0);
-	FVector2D OffsetY = FVector2D(0, 200);
+	FVector2D Offset = FVector2D::ZERO;
 
-	if (FVector2D::LEFT == Global::SwitchEnumToDir(MoveDir))
-	{	
-		OffsetX *= -1;
-		OffsetY = FVector2D(1, 0);
-	}
-	if (FVector2D::RIGHT == Global::SwitchEnumToDir(MoveDir))
+	switch (MoveDir)
 	{
-		OffsetX *= 1;
-		OffsetY = FVector2D(1, 0);
-	}	
-	if (FVector2D::UP == Global::SwitchEnumToDir(MoveDir))
-	{
-		OffsetX = FVector2D(0, 1);
-		OffsetY *= -1;
-	}
-	if (FVector2D::DOWN == Global::SwitchEnumToDir(MoveDir))
-	{
-		OffsetX = FVector2D(0, 1);
-		OffsetY *= 1;
+	case RoomDir::LEFT:
+		Offset = -FVector2D(GetActorScale().Half().iX() + 180, 0);
+		break;
+	case RoomDir::RIGHT:
+		Offset = FVector2D(GetActorScale().Half().iX() + 180, 0);
+		break;
+	case RoomDir::UP:
+		Offset = -FVector2D(0, GetActorScale().Half().iY() + 110);
+		break;
+	case RoomDir::DOWN:
+		Offset = FVector2D(0, GetActorScale().Half().iY() + 110);
+		break;
+	default:
+		break;
 	}
 
-	TargetPlayerPos = PlayerPos + OffsetX + OffsetY;
+	TargetPlayerPos = GetActorLocation() + Offset;
 	Player->SetActorLocation(TargetPlayerPos);
-
-	// 플레이어 렌더러 애니메이션 변경
-	//APlayer* CastPlayer = dynamic_cast<APlayer*>(Player);
-	//CastPlayer->SetRendererDir(MoveDir);
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
@@ -151,7 +155,6 @@ bool ARoom::IsLinking(ARoom* _Room)
 bool ARoom::InterLinkRoom(ARoom* _Room, RoomDir _Dir)
 {
 	this->LinkRoom(_Room, _Dir);
-	FVector2D CurLocation = this->GetActorLocation();
 	AddDoor(_Dir, this);
 
 	// this와 _Room의 문 위치는 서로 정반대가 되어야 한다.
@@ -269,6 +272,9 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 
 		DoorCollisions[0]->SetComponentScale({ 60, 60 });
 		DoorCollisions[0]->SetActive(true);
+
+		DoorRendererMap.insert({ _Dir , DoorRenderers[0] });
+		DoorCollisionMap.insert({ _Dir ,DoorCollisions[0] });
 		break;
 	case RoomDir::RIGHT:
 		DoorPos = DoorOffestX - OffestX;
@@ -280,6 +286,9 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 
 		DoorCollisions[1]->SetComponentScale({ 60, 60 });
 		DoorCollisions[1]->SetActive(true);
+
+		DoorRendererMap.insert({ _Dir , DoorRenderers[1] });
+		DoorCollisionMap.insert({ _Dir ,DoorCollisions[1]});
 		break;
 	case RoomDir::UP:
 		DoorPos = -1 * DoorOffestY + OffestY;
@@ -291,6 +300,8 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 
 		DoorCollisions[2]->SetComponentScale({ 60, 60 });
 		DoorCollisions[2]->SetActive(true);
+		DoorRendererMap.insert({ _Dir , DoorRenderers[2] });
+		DoorCollisionMap.insert({ _Dir ,DoorCollisions[2] });
 		break;
 	case RoomDir::DOWN:
 		DoorPos = DoorOffestY - OffestY;
@@ -302,10 +313,14 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 
 		DoorCollisions[3]->SetComponentScale({ 60, 60 });
 		DoorCollisions[3]->SetActive(true);
+
+		DoorRendererMap.insert({ _Dir , DoorRenderers[3] });
+		DoorCollisionMap.insert({ _Dir ,DoorCollisions[3] });
 		break;
 	default:
 		break;
 	}
+
 	for (int i = 0; i < DoorCollisions.size(); i++)
 	{
 		DoorCollisions[i]->SetComponentLocation(DoorRenderers[i]->GetComponentLocation());
@@ -335,8 +350,6 @@ void ARoom::BeginPlay()
 	{
 		RoomRenderer->SetSprite("Room_02.png");
 	}
-
-
 }
 
 void ARoom::SpriteSetting()

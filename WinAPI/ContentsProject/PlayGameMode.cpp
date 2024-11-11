@@ -15,8 +15,6 @@
 #include "BannerTextUI.h"
 #include "Monster.h"
 
-ARoom* APlayGameMode::CurRoom = nullptr;
-
 void APlayGameMode::BeginPlay()
 {
 	// 레벨이 만들어지면 최초 1회 세팅은 여기서 한다.
@@ -48,15 +46,7 @@ void APlayGameMode::BeginPlay()
 	MinionRoom3->SetName("MinionRoom3");
 	   BossRoom->SetName("BossRoom"   );
 	
-	// 플레이어가 현재 속한 방 위치 구하기 위한 코드 중 일부
-	CurRoom = BaseRoom;
-
-	AllRooms.push_back(BaseRoom);
-	AllRooms.push_back(MinionRoom0);
-	AllRooms.push_back(MinionRoom1);
-	AllRooms.push_back(MinionRoom2);
-	AllRooms.push_back(MinionRoom3);
-	AllRooms.push_back(BossRoom);
+	   ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
 	AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
@@ -76,32 +66,9 @@ void APlayGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-	PlayerCurRoom();
 
 
 	EngineDebug(_DeltaTime);
-}
-
-// 일단 보류
-void APlayGameMode::PlayerCurRoom()
-{
-	FVector2D PlayerPos = GetWorld()->GetPawn()->GetActorLocation();
-	FVector2D RoomSize = CurRoom->GetActorScale();
-	PlayerPos = PlayerPos / RoomSize;
-	
-	for (int i = 0; i < AllRooms.size(); i++)
-	{
-		FVector2D RoomPos = AllRooms[i]->GetActorLocation() / RoomSize;
-
-		int a = 0;
-		if (true)
-		{
-			std::string CurRoomName = AllRooms[i]->GetName();
-			CurRoom->SetName(CurRoomName);
-
-			int a = 0;
-		}
-	}
 }
 
 void APlayGameMode::EngineDebug(float _DeltaTime)

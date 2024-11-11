@@ -19,6 +19,7 @@ enum class RoomDir
 class ARoom : public AActor
 {
 public:
+
 	// constrcuter destructer
 	ARoom();
 	~ARoom();
@@ -83,10 +84,38 @@ public:
 		return { GetActorLocation().iX() , Result };
 	}
 
+	static void SetCurRoom(class ARoom* _Room)
+	{
+		CurRoom = _Room;
+	}
+	static class ARoom* GetCurRoom()
+	{
+		return CurRoom;
+	}
+
+	static std::string GetCurRoomName()
+	{
+		if (nullptr != CurRoom)
+		{
+			return CurRoom->GetName();
+		}
+		return "Unknown Room";
+	}
+
+	bool IsCameraMove()
+	{
+		return CameraMove;
+	}
+
 protected:
 
 private:
+	static ARoom* CurRoom;
+
 	std::map<RoomDir, ARoom*> Rooms;
+	std::map<RoomDir, U2DCollision*> DoorCollisionMap;
+	std::map<RoomDir, USpriteRenderer*> DoorRendererMap;
+	
 	RoomDir Directon = RoomDir::NONE;
 	FVector2D RoomScale = FVector2D::ZERO;
 
@@ -94,8 +123,8 @@ private:
 	class U2DCollision* RoomCollision = nullptr;
 
 	USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
-	USpriteRenderer* BolderLineRenderer = nullptr; // 화면 가장자리 검은 배경
 	USpriteRenderer* ControlsRenderer   = nullptr; // BaseRoom 컨트롤러 이미지
+	//USpriteRenderer* BolderLineRenderer = nullptr; // 화면 가장자리 검은 배경
 
 	// Door Collision And Renderer
 	std::vector<class U2DCollision*> DoorCollisions;
@@ -104,7 +133,6 @@ private:
 
 	// 카메라 이동관련 멤버
 	AActor* Player = nullptr;
-	FVector2D PlayerPos = FVector2D::ZERO;
 	float CameraMoveTime = 0.0f;
 	float LerpAlpha = 0.0f;
 	bool  CameraMove = false;
@@ -112,6 +140,6 @@ private:
 	FVector2D CameraMoveDir = FVector2D::ZERO;
 	FVector2D StartCameraPos = FVector2D::ZERO;
 	FVector2D EndCameraPos = FVector2D::ZERO;
-	ESpriteDir MoveDir = ESpriteDir::NONE;
+	RoomDir MoveDir = RoomDir::NONE;
 };
 

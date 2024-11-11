@@ -44,11 +44,11 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
-	//void RunSoundPlay();
-
 	// 이동관련
 	void Move(float _DeltaTime);
 	void CameraPosMove(float _DeltaTime);
+	void IsCameraMove();
+	void RestoreInitialRenderState(float _DeltaTime);
 
 	// 공격관련
 	void InputAttack(float _DeltaTime);
@@ -136,8 +136,6 @@ private:
 	// Heart
 	static int Heart;
 	static int HeartMax;
-	//static int SoulHeart;
-	//static int AllHeartMax;
 
 	// Stat
 	// Speed : MoveAcc
@@ -162,6 +160,7 @@ private:
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* HeadRenderer = nullptr;
 	class USpriteRenderer* FullRenderer = nullptr;
+	float StateElapsed = 0.0f;
 
 	//Bullet
 	ATear* Tear = nullptr;

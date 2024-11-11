@@ -19,16 +19,8 @@
 #include "PickupItemUI.h"
 #include "PickupNumberUI.h"
 
-
 int APlayer::Heart = 6;
 int APlayer::HeartMax = 8;
-//int APlayer::SoulHeart   = 0;
-//int APlayer::AllHeartMax = 24;
-
-//void APlayer::RunSoundPlay()
-//{
-//	UEngineDebug::OutPutString("SoundPlay");
-//}
 
 APlayer::APlayer()
 {
@@ -47,24 +39,28 @@ void APlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	UISetting();
-
-	// 직접 카메라 피봇을 설정해줘야 한다.
-	//FVector2D Size = UEngineAPICore::GetCore()->GetMainWindow().GetWindowSize();
-	//GetWorld()->SetCameraPivot(Size.Half());
 }
 
 void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	IsCameraMove();
+
+	ARoom* CurRoom = ARoom::GetCurRoom();
+	if (true == CurRoom->IsCameraMove())
+	{
+		return;
+	}
 	// 로직
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
 	UITick(_DeltaTime);
 
-
 	// 충돌체크
 	BodyCollision->SetCollisionEnter(std::bind(&APlayer::CollisionEnter, this, std::placeholders::_1));
+	RestoreInitialRenderState(_DeltaTime);
+
 
 	DeathCheck();
 
@@ -109,11 +105,16 @@ void APlayer::UITick(float _DeltaTime)
 
 void APlayer::CollisionEnter(AActor* _Other)
 {
-	this->Heart -= 0.5;
-	FullRenderer->SetActive(true);
-	FullRenderer->ChangeAnimation("Damaged");
-	BodyRenderer->SetActive(false);
-	HeadRenderer->SetActive(false);
+	if (true == FullRenderer->IsActive())
+	{
+		return;
+	}
+		this->Heart -= 0.5;
+		FullRenderer->SetActive(true);
+		FullRenderer->ChangeAnimation("Damaged");
+		BodyRenderer->SetActive(false);
+		HeadRenderer->SetActive(false);
+
 }
 
 void APlayer::CollisionStay(AActor* _Other)
@@ -122,6 +123,24 @@ void APlayer::CollisionStay(AActor* _Other)
 
 void APlayer::CollisionEnd(AActor* _Other)
 {
+
+}
+
+void APlayer::RestoreInitialRenderState(float _DeltaTime)
+{
+	if (true == FullRenderer->IsActive())
+	{
+		StateElapsed += _DeltaTime;
+		float ActionDuration = 1.0f;
+		if (StateElapsed > ActionDuration)
+		{
+			FullRenderer->SetActive(false);
+			BodyRenderer->SetActive(true);
+			HeadRenderer->SetActive(true);
+			StateElapsed = 0.0f;
+			return;
+		}
+	}
 }
 
 void APlayer::Collision()
@@ -154,14 +173,10 @@ bool APlayer::DeathCheck()
 
 void APlayer::Move(float _DeltaTime)
 {
-	// 방 이동을 중에 캐릭터는 움직일 수 없다.
-	if (true == CameraMove)
+	if (true == CameraMove) // 방 이동을 중에 캐릭터는 움직일 수 없다.
 	{
 		return;
 	}
-
-	// 입력 방법 1 : 단순 키 입력에 로직을 추가하여 처리
-
 	// 자연스럽게 이동하게 보이는 법 : 이동(로직)과 렌더를 분리할 것
 	// 이동
 
@@ -198,12 +213,11 @@ void APlayer::Move(float _DeltaTime)
 		FinalSpeed += Dir * MoveAcc * _DeltaTime; 	// 가속도
 		FinalSpeed = FVector2D::Lerp(FinalSpeed, TargetSpeed, MoveAcc * _DeltaTime);
 		FVector2D Result = FinalSpeed;
-		int a = 0;
 	}
-
+	else
 	{
-		FinalSpeed *= 700.0f * _DeltaTime;
-		int a = 0;
+		//FinalSpeed *= 700.0f * _DeltaTime;
+		FinalSpeed = FVector2D::ZERO;
 	}
 
 	// 최대속도 제한 : 항상 절댓값으로
@@ -211,12 +225,11 @@ void APlayer::Move(float _DeltaTime)
 	{
 		FinalSpeed.Normalize();
 		FinalSpeed *= SpeedMax;
-
 	}
 
 	AddActorLocation(FinalSpeed * _DeltaTime);
-	FVector2D Result = FinalSpeed* _DeltaTime;
-	int a = 0;
+
+
 	// HeadState 설정 : 공격 중인지, 아닌지
 	if (true == IsAttack())
 	{
@@ -296,10 +309,17 @@ void APlayer::CameraPosMove(float _DeltaTime)
 		{
 			CameraMove = false;
 			CameraMoveTime = 0.0f;
-
-			// 플레이어를 어떻게 다음 방의 문 앞에 배치시킬지 생각해보기
-			//SetActorLocation(다음 방 문 앞);
 		}
+	}
+}
+
+void APlayer::IsCameraMove()
+{
+	ARoom* CurRoom = ARoom::GetCurRoom();
+	if (true == CurRoom->IsCameraMove())
+	{
+		BodyRenderer->ChangeAnimation("Body_Idle");
+		HeadRenderer->ChangeAnimation("Head_Down");
 	}
 }
 
@@ -308,19 +328,16 @@ void APlayer::InputAttack(float _DeltaTime)
 	// 공격 입력이 처음 들어왔을 때 동작
 	if (false == TearFire &&
 		(UEngineInput::GetInst().IsDown(VK_LEFT) ||
-			UEngineInput::GetInst().IsDown(VK_RIGHT) ||
-			UEngineInput::GetInst().IsDown(VK_UP) ||
-			UEngineInput::GetInst().IsDown(VK_DOWN)))
+		UEngineInput::GetInst().IsDown(VK_RIGHT) ||
+		UEngineInput::GetInst().IsDown(VK_UP)    ||
+		UEngineInput::GetInst().IsDown(VK_DOWN)))
 	{
 		Attack(_DeltaTime);
 	}
 
 	if (true == TearFire)				// false니까 공격. true로 변환.
 	{
-
 		CoolDownElapsed += _DeltaTime; 	// 공격했으면 쿨타임 계산 시작
-
-
 		if (CoolDownElapsed > Cooldown) //  쿨타임이 경과되면, 
 		{
 			//TearFire를 false로 되돌려 공격 가능 상태로 바꾸고 쿨타임 초기화
@@ -500,13 +517,6 @@ void APlayer::CurStateAnimation(float _DeltaTime)
 
 void APlayer::SpriteSetting()
 {
-	// 1. 헤더에 랜더러를 하나 만든다.
-	// 2. CreateDefualtSubObject 함수를 사용하여 렌더러 컴포넌트를 만든다.
-	// 3. CreateAnimation 함수를 사용하여 ("동작 이름", "이미지.png", 동작순서, 프레임)을 설정한다.
-	// 4. SetComponentScale 함수를 사용하여 렌더러 컴포넌트의 크기를 정의한다.
-	// 5. ChanageAnimation 함수를 사용하여 기본 동작을 정의한다.
-	// 6. SetOrder로 정렬 순서를 정할 수 있다.
-
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Body_Left", "Body.png", 1, 9, 0.05f);
 	BodyRenderer->CreateAnimation("Body_Right", "Body.png", 10, 19, 0.05f);
@@ -548,7 +558,6 @@ void APlayer::SpriteSetting()
 	FullRenderer->SetOrder(ERenderOrder::PLAYER);
 	FullRenderer->SetPivot({ 0, -20 });
 	FullRenderer->SetActive(false);
-
 
 }
 
@@ -605,25 +614,3 @@ void APlayer::UISetting()
 	KeyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
 	KeyPickupNumber->SetActorLocation(BombPickupNumber->GetActorLocation() + Offset);
 }
-
-// 입력 방법 2 : 이벤트 방식으로 처리
-//void APlayer::LeftMove(float _DeltaTime)
-//{
-//	AddActorLocation(FVector2D::LEFT * _DeltaTime * Speed);
-//}
-//
-//void APlayer::RightMove(float _DeltaTime)
-//{
-//	AddActorLocation(FVector2D::RIGHT * _DeltaTime * Speed);
-//}
-//
-//void APlayer::UpMove(float _DeltaTime)
-//{
-//	AddActorLocation(FVector2D::UP * _DeltaTime * Speed);
-//}
-//
-//void APlayer::DownMove(float _DeltaTime)
-//{
-//	AddActorLocation(FVector2D::DOWN * _DeltaTime * Speed);
-//}
-
