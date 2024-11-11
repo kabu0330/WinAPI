@@ -46,6 +46,9 @@
     <ClInclude Include="Monster.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>04_Play</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -92,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>04_Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>04_Play</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

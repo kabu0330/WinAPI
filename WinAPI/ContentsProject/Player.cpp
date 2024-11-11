@@ -109,11 +109,12 @@ void APlayer::CollisionEnter(AActor* _Other)
 	{
 		return;
 	}
-		this->Heart -= 0.5;
-		FullRenderer->SetActive(true);
-		FullRenderer->ChangeAnimation("Damaged");
-		BodyRenderer->SetActive(false);
-		HeadRenderer->SetActive(false);
+
+	this->Heart -= 1;
+	FullRenderer->SetActive(true);
+	FullRenderer->ChangeAnimation("Damaged");
+	BodyRenderer->SetActive(false);
+	HeadRenderer->SetActive(false);
 
 }
 
@@ -123,7 +124,6 @@ void APlayer::CollisionStay(AActor* _Other)
 
 void APlayer::CollisionEnd(AActor* _Other)
 {
-
 }
 
 void APlayer::RestoreInitialRenderState(float _DeltaTime)
@@ -153,12 +153,12 @@ void APlayer::Collision()
 
 	WarpCollision = CreateDefaultSubObject<U2DCollision>();
 	WarpCollision->SetComponentLocation({ 0, 10 });
-	WarpCollision->SetComponentScale({ 50, 20 });
+	WarpCollision->SetComponentScale({ 30, 10 });
 	WarpCollision->SetCollisionGroup(ECollisionGroup::WARP);
 	WarpCollision->SetCollisionType(ECollisionType::Rect);
 
 	// Collision 충돌에서 Actor의 크기가 중요해졌다.
-	//SetActorScale(WarpCollision->GetComponentScale());
+	SetActorScale(WarpCollision->GetComponentScale());
 }
 
 bool APlayer::DeathCheck()

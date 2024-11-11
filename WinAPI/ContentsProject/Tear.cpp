@@ -30,12 +30,6 @@ ATear::ATear()
 	DebugOn();
 }
 
-void ATear::Attack()
-{
-
-	int a = 0;
-}
-
 // 값만 받아서 멤버에 저장한다.
 void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att)
 {
@@ -59,17 +53,12 @@ void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att)
 	if (Speed >= SpeedMax)
 	{
 		Speed = SpeedMax;
-		//Duration = 0.9f;
 		ResistanceActivationTime = 0.2f;
 		Resistance = 0.9f;
 		GravityActivationTime = 0.5f;
 	}
 }
 
-void ATear::Reset()
-{
-	//TearEffectRenderer->SetActive(false);
-}
 
 void ATear::BeginPlay()
 {
@@ -124,7 +113,7 @@ void ATear::Tick(float _DeltaTime)
 	
 	if (nullptr != TearCollision)
 	{
-		if (false == TearCollision->IsDestroy()) // Collision을 먼저 끄면 충돌 조건식에서 터진다.
+		if (false == TearCollision->IsDestroy()) 
 		{
 			CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::MONSTER_BODY);
 		}
@@ -136,11 +125,8 @@ void ATear::Tick(float _DeltaTime)
 
 
 			AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
-			//CollisionMonster->Death(_DeltaTime);
-			// 나중에는 Hp 감소로 만들어야 함.
 			CollisionMonster->ApplyDamaged(ActorAtt);
 			
-
 			UEngineDebug::OutPutString(CollisionMonster->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionMonster->GetMonsterHp()));
 		}
 	}
@@ -150,11 +136,6 @@ void ATear::Tick(float _DeltaTime)
 	if (Duration < TimeElapesd)
 	{
 		TriggerExplosion(_DeltaTime);	
-
-		if (Duration + 0.5f < TimeElapesd)
-		{
-			Destroy();
-		}	
 	}
 
 	// 2. 맵 밖으로 벗어나면 터진다.
@@ -165,15 +146,15 @@ void ATear::TriggerExplosion(float _DeltaTime)
 {
 	if (nullptr != TearCollision)
 	{
-		TearCollision->Destroy(); // Collision을 먼저 끄면 충돌 조건식에서 터진다.
+		TearCollision->Destroy(); 
 		TearCollision = nullptr;
-		Dir = FVector2D::ZERO;        // 그 자리에서 더 이상 이동않고 터뜨린다.
+		Dir = FVector2D::ZERO;  
 		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
 		SetActorLocation(GetActorLocation());
 
 		if (nullptr != TearEffectRenderer)
 		{
-			// Destroy(0.4f); // 렌더에서 터진다.
+			Destroy(0.4f);
 		}
 	}
 }

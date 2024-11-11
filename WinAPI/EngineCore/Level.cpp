@@ -228,6 +228,14 @@ void ULevel::Collision(float _DeltaTime)
 void ULevel::Release(float _DeltaTime)
 {
 	// 릴리즈 순서는 말단부터 돌려야 한다.
+	std::list<AActor*>::iterator StartIter = AllActors.begin();
+	std::list<AActor*>::iterator EndIter = AllActors.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		AActor* CurActor = *StartIter;
+		CurActor->ReleaseTimeCheck(_DeltaTime);
+	}
 
 	// 충돌체 제거
 	{

@@ -99,6 +99,17 @@ public:
 		return dynamic_cast<ConvertType*>(MainPawn);
 	}
 
+	AActor* GetGameMode()
+	{
+		return GameMode;
+	}
+
+	template<typename ConvertType>
+	ConvertType* GetGameMode()
+	{
+		return dynamic_cast<ConvertType*>(GameMode);
+	}
+
 	template<typename LeftEnumType, typename RightEnumType>
 	static void CollisionGroupLink(LeftEnumType _Left, RightEnumType _Right)
 	{

@@ -1,24 +1,27 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
-// 설명 : 눈물공격 
-class ATear : public AActor
+// 설명 :
+class ABullet : public AActor
 {
 public:
 	// constrcuter destructer
-	ATear();
-	~ATear();
+	ABullet();
+	~ABullet();
 
 	// delete Function
-	ATear(const ATear& _Other) = delete;
-	ATear(ATear&& _Other) noexcept = delete;
-	ATear& operator=(const ATear& _Other) = delete;
-	ATear& operator=(ATear&& _Other) noexcept = delete;
+	ABullet(const ABullet& _Other) = delete;
+	ABullet(ABullet&& _Other) noexcept = delete;
+	ABullet& operator=(const ABullet& _Other) = delete;
+	ABullet& operator=(ABullet&& _Other) noexcept = delete;
 
 	void Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att);
+	void TriggerExplosion(float _DeltaTime);
+
+	void PlayerFireLogic(float _DeltaTime);
+
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
-	void TriggerExplosion(float _DeltaTime);
 
 protected:
 
@@ -35,8 +38,6 @@ private:
 	float Resistance = 0.8f;
 
 	float GravityActivationTime = 0.7f;
-	FVector2D Gravity = FVector2D(Resistance * 0.85f, 0.35f);
-	FVector2D GravityDir = FVector2D::ZERO;
 
 	FVector2D Dir = FVector2D::ZERO;
 

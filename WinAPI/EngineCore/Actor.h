@@ -98,6 +98,7 @@ private:
 	static std::list<class UActorComponent*> ComponentList;
 
 	void ReleaseCheck(float _DeltaTime) override;
+	void ReleaseTimeCheck(float _DeltaTime) override;
 
 	class ULevel* World = nullptr;
 
