@@ -279,11 +279,6 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	}
 }
 
-ARoom::~ARoom()
-{
-	// map에서 insert한 자료들을 모두 map에서 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
-}
-
 void ARoom::BeginPlay()
 {
 	Super::BeginPlay();
@@ -304,7 +299,6 @@ void ARoom::BeginPlay()
 	else // 베이스룸을 제외한 맵의 이미지를 바꿀 수 있다.
 	{
 		RoomRenderer->SetSprite("Room_02.png");
-
 	}
 }
 
@@ -314,12 +308,6 @@ void ARoom::SpriteSetting()
 	RoomRenderer->SetSprite("Room_01.png");
 	RoomRenderer->SetComponentScale(RoomScale);
 	RoomRenderer->SetOrder(ERenderOrder::BACKGROUND);
-
-	//BolderLineRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	//BolderLineRenderer->SetSprite("BolderLine.png");
-	//BolderLineRenderer->SetComponentScale(GetActorScale());
-	//BolderLineRenderer->SetComponentLocation({ RoomRenderer->GetComponentLocation().X, RoomRenderer->GetComponentLocation().Y });
-	//BolderLineRenderer->SetOrder(ERenderOrder::BOLDERLINE);
 }
 
 void ARoom::CollisionSetting()
@@ -383,10 +371,10 @@ void ARoom::DoorSpriteSetting()
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_OpenAnim", "OpenDoor", 8, 11, 0.15f, false);
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->SetSpriteDir(RoomDir::DOWN);
 
-	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1 ]->ChangeAnimation("Door_Left_Open");
+	DoorRenderers[static_cast<int>(RoomDir::LEFT)  - 1]->ChangeAnimation("Door_Left_Open");
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->ChangeAnimation("Door_Right_Open");
-	DoorRenderers[static_cast<int>(RoomDir::UP) - 1   ]->ChangeAnimation("Door_Up_Open");
-	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1 ]->ChangeAnimation("Door_Down_Open");
+	DoorRenderers[static_cast<int>(RoomDir::UP)    - 1]->ChangeAnimation("Door_Up_Open");
+	DoorRenderers[static_cast<int>(RoomDir::DOWN)  - 1]->ChangeAnimation("Door_Down_Open");
 
 	// 세팅해두고 일단 렌더를 끈다. AddDoor 함수에서 호출되는 RoomDir 방향의 문만 렌더한다.
 	for (int i = 0; i < DoorRenderers.size(); i++)
@@ -395,6 +383,9 @@ void ARoom::DoorSpriteSetting()
 	}
 }
 
-
+ARoom::~ARoom()
+{
+	// map에서 insert한 자료들을 모두 map에서 delete하기 때문에 따로 소멸자를 호출해줄 필요가 없다.
+}
 
 
