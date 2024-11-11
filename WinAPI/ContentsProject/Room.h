@@ -43,7 +43,8 @@ public:
 	void CollisionSetting();
 
 	void WarpCollisionCheck(float _DeltaTime);
-	void WarpPlayerSetting(ESpriteDir _Dir);
+	void WarpPlayerSetting();
+	void Warp(float _DeltaTime);
 
 	class U2DCollision* GetRoomCollision()
 	{
@@ -105,10 +106,11 @@ private:
 	float CameraMoveTime = 0.0f;
 	float LerpAlpha = 0.0f;
 	bool  CameraMove = false;
-	bool WarpCollision = false;
+	//bool WarpCollision = false;
 	FVector2D TargetPlayerPos = FVector2D::ZERO;
 	FVector2D CameraMoveDir = FVector2D::ZERO;
 	FVector2D StartCameraPos = FVector2D::ZERO;
 	FVector2D EndCameraPos = FVector2D::ZERO;
+	ESpriteDir MoveDir = ESpriteDir::NONE;
 };
 

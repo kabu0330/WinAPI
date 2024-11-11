@@ -32,7 +32,11 @@ void ARoom::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	// Player Warp
 	WarpCollisionCheck(_DeltaTime);
+	Warp(_DeltaTime);
+
+	int a = 0;
 }
 
 void ARoom::WarpCollisionCheck(float _DeltaTime)
@@ -43,61 +47,78 @@ void ARoom::WarpCollisionCheck(float _DeltaTime)
 	for (int i = 0; i < DoorCollisions.size(); i++)
 	{
 		FTransform DoorTrans = DoorCollisions[i]->GetActorTransform();
-		if (true == FTransform::RectToRect(PlayerTrans, DoorTrans) || true == WarpCollision)
+		if (true == FTransform::RectToRect(PlayerTrans, DoorTrans))
 		{
-			WarpCollision = true; // 플레이어 위치를 이동시키고 난 후부터, 카메라 이동이 완료될 때까지 해당 스코프에 진입하도록 하는 변수
-
-			ESpriteDir MoveDir = DoorRenderers[i]->GetSpriteDir();
+			MoveDir = DoorRenderers[i]->GetSpriteDir();
 			CameraMoveDir = Global::SwitchEnumToDir(MoveDir); // FVector2D:: Left, Right, Up, Down
 
-			// 카메라 이동 도착지점을 고정시키기 위해 만든 조건문
-			if (false == CameraMove)
-			{
-				EndCameraPos = GetWorld()->GetCameraPos() + RoomScaleA * CameraMoveDir;
-			}
+			StartCameraPos = GetWorld()->GetCameraPos();
+			EndCameraPos = GetWorld()->GetCameraPos() + RoomScaleA * CameraMoveDir;
 
 			CameraMove = true;
-			if (true == CameraMove)
+			return;
+		}
+	}
+}
+
+void ARoom::Warp(float _DeltaTime)
+{
+	if (true == CameraMove)
+	{
+		// 플레이어 위치 이동
+		WarpPlayerSetting(); 
+
+		float CameraLerpTime = 0.1f;
+		LerpAlpha = FVector2D::Clamp(CameraMoveTime / CameraLerpTime, 0.0f, 1.0f);
+
+		FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
+		GetWorld()->SetCameraPos(CamPos);
+
+
+		CameraMoveTime += _DeltaTime;
+		if (CameraLerpTime < CameraMoveTime)
+		{
+			CameraMoveDir = FVector2D::ZERO;
+
+			// 카메라 이동이 완료되고도, 잠시동안 플레이어의 움직임을 제한
+			float PlayerMovementCooldown = CameraLerpTime + 0.9f;
+			if (PlayerMovementCooldown < CameraMoveTime)
 			{
-				WarpPlayerSetting(MoveDir); // 플레이어 위치 이동
-
-				StartCameraPos = GetWorld()->GetCameraPos();
-				LerpAlpha = FVector2D::Clamp(CameraMoveTime / 1.0f, 0.0f, 1.0f);
-
-				FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
-				GetWorld()->SetCameraPos(CamPos);
-
-				CameraMoveTime += _DeltaTime;
-				float CameraLerpTime = 1.0f;
-				if (CameraLerpTime < CameraMoveTime)
-				{
-					CameraMoveDir = FVector2D::ZERO;
-
-					// 카메라 이동이 완료되고도, 잠시동안 플레이어의 움직임을 제한
-					float PlayerMovementCooldown = 2.0f;
-					if (PlayerMovementCooldown < CameraMoveTime)
-					{
-						WarpCollision = false;
-						CameraMove = false;
-						CameraMoveTime = 0.0f;						
-					}		
-				}
+				CameraMove = false;
+				CameraMoveTime = 0.0f;
 			}
 		}
 	}
 }
 
-void ARoom::WarpPlayerSetting(ESpriteDir _Dir)
+void ARoom::WarpPlayerSetting()
 {
 	// 플레이어는 즉시 다음 맵 문 위치로 이동
-	
-	TargetPlayerPos = { -600, 200 };
+	FVector2D DestDoorPos = DoorRenderers[static_cast<int>(MoveDir)]->GetComponentLocation();
+	FVector2D WorldPosition = FVector2D::ZERO;
+	FVector2D OffsetX = FVector2D(20, 0);
+	FVector2D OffsetY = FVector2D(0, 20);
+
+	if (FVector2D::LEFT == Global::SwitchEnumToDir(MoveDir))
+	{
+		WorldPosition = { DestDoorPos.iX() - Global::WindowHalfScale.iX(), Global::WindowHalfScale.iY() };
+		OffsetX *= -1;
+		OffsetY = FVector2D(0, 0);
+	}
+	if (FVector2D::DOWN == Global::SwitchEnumToDir(MoveDir))
+	{
+		OffsetX = FVector2D(0, 0);
+		OffsetY *= -1;
+	}
+
+	//TargetPlayerPos = WorldPosition + OffsetX + OffsetY;
+	TargetPlayerPos = { -175, 270 };
 	AActor* Player = GetWorld()->GetPawn();
 	Player->SetActorLocation(TargetPlayerPos);
 
 	// 플레이어 렌더러 애니메이션 변경
-	APlayer* CastPlayer = dynamic_cast<APlayer*>(Player);
-	CastPlayer->SetRendererDir(_Dir);
+	//APlayer* CastPlayer = dynamic_cast<APlayer*>(Player);
+	//CastPlayer->SetRendererDir(MoveDir);
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
