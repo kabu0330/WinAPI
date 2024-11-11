@@ -28,6 +28,13 @@ ARoom::ARoom()
 	DebugOn();
 }
 
+void ARoom::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
+
+	WarpCollisionCheck(_DeltaTime);
+}
+
 void ARoom::WarpCollisionCheck(float _DeltaTime)
 {
 	FTransform PlayerTrans = GetWorld()->GetPawn()->GetTransform();
@@ -47,7 +54,6 @@ void ARoom::WarpCollisionCheck(float _DeltaTime)
 			if (false == CameraMove)
 			{
 				EndCameraPos = GetWorld()->GetCameraPos() + RoomScaleA * CameraMoveDir;
-				//TargetPlayerPos = CameraMoveDir * RoomScale + this->GetActorLocation();
 			}
 
 			CameraMove = true;
@@ -300,13 +306,6 @@ void ARoom::BeginPlay()
 		RoomRenderer->SetSprite("Room_02.png");
 
 	}
-}
-
-void ARoom::Tick(float _DeltaTime)
-{
-	Super::Tick(_DeltaTime);
-
-	WarpCollisionCheck(_DeltaTime);
 }
 
 void ARoom::SpriteSetting()

@@ -23,6 +23,11 @@ void U2DCollision::BeginPlay()
 	}
 
 	Level->PushCollision(this);
+
+	if (nullptr != Enter || nullptr != Stay || nullptr != End)
+	{
+		Level->PushCheckCollision(this);
+	}
 }
 
 void U2DCollision::ComponentTick(float _DeltaTime)
@@ -51,11 +56,9 @@ void U2DCollision::ComponentTick(float _DeltaTime)
 	}
 }
 
-
-
-bool U2DCollision::Collision(int _OtherCollisionGroup, std::vector<AActor*>& _Result, unsigned int  _Limite)
+bool U2DCollision::Collision(int _OtherCollisionGroup, std::vector<AActor*>& _Result, FVector2D _NextPos, unsigned int  _Limite)
 {
-	// 내가 xxxx 그룹이랑 충돌하는거죠.
+	// 내가 _OtherCollisionGroup 그룹이랑 충돌
 	// 모든 충돌체를 한곳에 모아놓는게 Level
 
 	std::list<class U2DCollision*>& OtherCollisions = GetActor()->GetWorld()->Collisions[_OtherCollisionGroup];
@@ -67,9 +70,11 @@ bool U2DCollision::Collision(int _OtherCollisionGroup, std::vector<AActor*>& _Re
 	{
 		U2DCollision* ThisCollision = this;
 		U2DCollision* DestCollision = *StartIter;
-		// 
+		
 		FTransform ThisTrans = ThisCollision->GetActorTransform();
 		FTransform DestTrans = DestCollision->GetActorTransform();
+
+		ThisTrans.Location += _NextPos;
 
 		ECollisionType ThisType = ThisCollision->CollisionType;
 		ECollisionType DestType = DestCollision->CollisionType;
@@ -90,4 +95,92 @@ bool U2DCollision::Collision(int _OtherCollisionGroup, std::vector<AActor*>& _Re
 	}
 
 	return 0 != _Result.size();
+}
+
+// 이벤트 방식
+void U2DCollision::SetCollisionEnter(std::function<void(AActor*)> _Function)
+{
+	Enter = _Function;
+
+	ULevel* Level = GetActor()->GetWorld();
+
+	if (nullptr != GetActor()->GetWorld())
+	{
+		Level->PushCheckCollision(this);
+	}
+}
+
+void U2DCollision::SetCollisionStay(std::function<void(AActor*)> _Function)
+{
+	Stay = _Function;
+
+	ULevel* Level = GetActor()->GetWorld();
+
+	if (nullptr != GetActor()->GetWorld())
+	{
+		Level->PushCheckCollision(this);
+	}
+}
+
+void U2DCollision::SetCollisionEnd(std::function<void(AActor*)> _Function)
+{
+	End = _Function;
+
+	ULevel* Level = GetActor()->GetWorld();
+
+	if (nullptr != GetActor()->GetWorld())
+	{
+		Level->PushCheckCollision(this);
+	}
+}
+
+void U2DCollision::CollisionEventCheck(class U2DCollision* _Other)
+{
+	// 최초 충돌
+	// 충돌 중
+	// 충돌 끝
+	U2DCollision* ThisCollision = this;
+	U2DCollision* DestCollision = _Other;
+	// 
+	FTransform ThisTrans = ThisCollision->GetActorTransform();
+	FTransform DestTrans = DestCollision->GetActorTransform();
+
+	ECollisionType ThisType = ThisCollision->GetCollisionType();
+	ECollisionType DestType = DestCollision->GetCollisionType();
+
+	bool Result = FTransform::Collision(ThisType, ThisTrans, DestType, DestTrans);
+
+	// 충돌 true
+	if (true == Result)
+	{
+		if (false == CollisionCheckSet.contains(DestCollision))
+		{
+			if (nullptr != Enter)
+			{
+				Enter(DestCollision->GetActor());
+			}
+
+			CollisionCheckSet.insert(DestCollision);
+		}
+		else
+		{
+			if (nullptr != Stay)
+			{
+				Stay(DestCollision->GetActor());
+			}
+		}
+	}
+	else
+	{
+		// 충돌은 안했는데 예전에 충돌한 기록은 가지고 있어.
+		if (true == CollisionCheckSet.contains(DestCollision))
+		{
+			if (nullptr != End)
+			{
+				End(DestCollision->GetActor());
+			}
+
+			CollisionCheckSet.erase(DestCollision);
+		}
+	}
 }

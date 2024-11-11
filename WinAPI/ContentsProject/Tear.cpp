@@ -122,8 +122,6 @@ void ATear::Tick(float _DeltaTime)
 		}
 	}
 	
-	/////////////////////////////////////////////////////////////////////////////////////////
-	// 코드 분석 요청
 	if (nullptr != TearCollision)
 	{
 		if (false == TearCollision->IsDestroy()) // Collision을 먼저 끄면 충돌 조건식에서 터진다.

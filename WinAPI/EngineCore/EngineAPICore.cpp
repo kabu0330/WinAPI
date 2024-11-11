@@ -115,6 +115,7 @@ void UEngineAPICore::Tick()
 
 	CurLevel->Tick(DeltaTime);
 	CurLevel->Render(DeltaTime);
+	CurLevel->Collision(DeltaTime);
 
 	// 틱돌고 랜더돌고 릴리즈
 	CurLevel->Release(DeltaTime);
