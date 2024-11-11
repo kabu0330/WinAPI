@@ -49,6 +49,8 @@ void ARoom::WarpCollisionCheck(float _DeltaTime)
 		FTransform DoorTrans = DoorCollisions[i]->GetActorTransform();
 		if (true == FTransform::RectToRect(PlayerTrans, DoorTrans))
 		{
+			PlayerPos = Player->GetActorLocation(); // 140, 270
+
 			MoveDir = DoorRenderers[i]->GetSpriteDir();
 			CameraMoveDir = Global::SwitchEnumToDir(MoveDir); // FVector2D:: Left, Right, Up, Down
 
@@ -94,26 +96,31 @@ void ARoom::Warp(float _DeltaTime)
 void ARoom::WarpPlayerSetting()
 {
 	// 플레이어는 즉시 다음 맵 문 위치로 이동
-	FVector2D DestDoorPos = DoorRenderers[static_cast<int>(MoveDir)]->GetComponentLocation();
-	FVector2D WorldPosition = FVector2D::ZERO;
-	FVector2D OffsetX = FVector2D(20, 0);
-	FVector2D OffsetY = FVector2D(0, 20);
+	FVector2D OffsetX = FVector2D(320, 0);
+	FVector2D OffsetY = FVector2D(0, 200);
 
 	if (FVector2D::LEFT == Global::SwitchEnumToDir(MoveDir))
-	{
-		WorldPosition = { DestDoorPos.iX() - Global::WindowHalfScale.iX(), Global::WindowHalfScale.iY() };
+	{	
 		OffsetX *= -1;
-		OffsetY = FVector2D(0, 0);
+		OffsetY = FVector2D(1, 0);
+	}
+	if (FVector2D::RIGHT == Global::SwitchEnumToDir(MoveDir))
+	{
+		OffsetX *= 1;
+		OffsetY = FVector2D(1, 0);
+	}	
+	if (FVector2D::UP == Global::SwitchEnumToDir(MoveDir))
+	{
+		OffsetX = FVector2D(0, 1);
+		OffsetY *= -1;
 	}
 	if (FVector2D::DOWN == Global::SwitchEnumToDir(MoveDir))
 	{
-		OffsetX = FVector2D(0, 0);
-		OffsetY *= -1;
+		OffsetX = FVector2D(0, 1);
+		OffsetY *= 1;
 	}
 
-	//TargetPlayerPos = WorldPosition + OffsetX + OffsetY;
-	TargetPlayerPos = { -175, 270 };
-	AActor* Player = GetWorld()->GetPawn();
+	TargetPlayerPos = PlayerPos + OffsetX + OffsetY;
 	Player->SetActorLocation(TargetPlayerPos);
 
 	// 플레이어 렌더러 애니메이션 변경
@@ -304,6 +311,8 @@ void ARoom::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Player = GetWorld()->GetPawn();
+
 	// 맵 이름에 따라 이미지를 바꾼다.
 	if ("BaseRoom" == GetName())
 	{
@@ -321,6 +330,8 @@ void ARoom::BeginPlay()
 	{
 		RoomRenderer->SetSprite("Room_02.png");
 	}
+
+
 }
 
 void ARoom::SpriteSetting()

@@ -103,10 +103,11 @@ private:
 	
 
 	// 카메라 이동관련 멤버
+	AActor* Player = nullptr;
+	FVector2D PlayerPos = FVector2D::ZERO;
 	float CameraMoveTime = 0.0f;
 	float LerpAlpha = 0.0f;
 	bool  CameraMove = false;
-	//bool WarpCollision = false;
 	FVector2D TargetPlayerPos = FVector2D::ZERO;
 	FVector2D CameraMoveDir = FVector2D::ZERO;
 	FVector2D StartCameraPos = FVector2D::ZERO;
