@@ -86,13 +86,19 @@ public:
 		BodyState = static_cast<LowerState>(Direction);
 	}
 
+	// Ãæµ¹
+	U2DCollision* GetWarpCollision()
+	{
+		return WarpCollision;
+	}
+
+	void CollisionEnter(AActor* _Other);
+	void CollisionStay(AActor* _Other);
+	void CollisionEnd(AActor* _Other);
+
 	// UI
 	void UISetting();
 	void UITick(float _DeltaTime);
-
-	// RoomCollision
-	void ConstrainToRoom();
-
 
 	// Stat
 	static int GetPlayerHptMax() 

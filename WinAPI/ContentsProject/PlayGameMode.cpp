@@ -62,7 +62,14 @@ void APlayGameMode::BeginPlay()
 	AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
 
 
+	CollisionGroupLinkSetting();
 	UISetting();
+}
+
+void APlayGameMode::CollisionGroupLinkSetting()
+{
+	GetWorld()->CollisionGroupLink(ECollisionGroup::WARP, ECollisionGroup::OBJECT_WALL);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::PLAYER_BODY, ECollisionGroup::MONSTER_BODY);
 }
 
 void APlayGameMode::Tick(float _DeltaTime)

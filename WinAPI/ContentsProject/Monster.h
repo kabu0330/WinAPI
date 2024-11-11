@@ -62,7 +62,7 @@ protected:
 
 	float Hp    = 1;
 	int   Att   = 1;
-	float Speed = 0;
+	float Speed = 50;
 	
 private:
 

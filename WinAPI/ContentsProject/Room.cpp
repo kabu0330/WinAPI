@@ -42,6 +42,11 @@ void ARoom::Tick(float _DeltaTime)
 void ARoom::WarpCollisionCheck(float _DeltaTime)
 {
 	FTransform PlayerTrans = GetWorld()->GetPawn()->GetTransform();
+	//APlayer* Player = dynamic_cast<APlayer*>(GetWorld()->GetPawn());
+	//FVector2D PlayerScale = Player->GetWarpCollision()->GetComponentScale();
+	//Player->SetActorScale(PlayerScale);
+	//FTransform PlayerTrans = Player->GetTransform();
+
 	FVector2D RoomScaleA = Global::WindowSize;
 
 	for (int i = 0; i < DoorCollisions.size(); i++)

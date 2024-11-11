@@ -302,24 +302,24 @@ public:
 		return Location - Scale.Half();
 	}
 
-	float CenterLeft() const
-	{
-		return Location.X - Scale.hX();
-	}
-
-	float CenterTop() const
-	{
-		return Location.Y - Scale.hY();
-	}
-
 	FVector2D CenterRightBottom() const
 	{
 		return Location + Scale.Half();
 	}
 
+	float CenterLeft() const
+	{
+		return Location.X - Scale.hX();
+	}
+
 	float CenterRight() const
 	{
 		return Location.X + Scale.hX();
+	}
+
+	float CenterTop() const
+	{
+		return Location.Y - Scale.hY();
 	}
 
 	float CenterBottom() const

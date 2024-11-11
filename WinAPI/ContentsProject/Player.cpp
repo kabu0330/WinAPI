@@ -32,8 +32,8 @@ int APlayer::HeartMax = 8;
 
 APlayer::APlayer()
 {
+	SetName("Isaac");
 	SetActorLocation(Global::WindowSize.Half()); // 1. Actor의 위치는 의미가 있어도 크기는 의미가 없다.
-
 	
 	SpriteSetting(); // 2. 상태에 따른 애니메이션 동작을 정의한다.
 
@@ -63,7 +63,9 @@ void APlayer::Tick(float _DeltaTime)
 	UITick(_DeltaTime);
 
 
-	ConstrainToRoom();
+	// 충돌체크
+	BodyCollision->SetCollisionEnter(std::bind(&APlayer::CollisionEnter, this, std::placeholders::_1));
+
 	DeathCheck();
 
 	// 렌더
@@ -104,7 +106,17 @@ void APlayer::UITick(float _DeltaTime)
 	  KeyPickupNumber->SetValue(KeyCount);
 }
 
-void APlayer::ConstrainToRoom()
+
+void APlayer::CollisionEnter(AActor* _Other)
+{
+	this->Heart -= 0.5;
+}
+
+void APlayer::CollisionStay(AActor* _Other)
+{
+}
+
+void APlayer::CollisionEnd(AActor* _Other)
 {
 }
 
@@ -118,9 +130,12 @@ void APlayer::Collision()
 
 	WarpCollision = CreateDefaultSubObject<U2DCollision>();
 	WarpCollision->SetComponentLocation({ 0, 10 });
-	WarpCollision->SetComponentScale({ 30, 10 });
+	WarpCollision->SetComponentScale({ 50, 20 });
 	WarpCollision->SetCollisionGroup(ECollisionGroup::WARP);
 	WarpCollision->SetCollisionType(ECollisionType::Rect);
+
+	// Collision 충돌에서 Actor의 크기가 중요해졌다.
+	//SetActorScale(WarpCollision->GetComponentScale());
 }
 
 bool APlayer::DeathCheck()

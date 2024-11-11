@@ -139,7 +139,9 @@ void ATear::Tick(float _DeltaTime)
 			//CollisionMonster->Death(_DeltaTime);
 			// 나중에는 Hp 감소로 만들어야 함.
 			CollisionMonster->ApplyDamaged(ActorAtt);
+			
 
+			UEngineDebug::OutPutString(CollisionMonster->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionMonster->GetMonsterHp()));
 		}
 	}
 

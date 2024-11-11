@@ -11,6 +11,7 @@
 
 AMonster::AMonster()
 {
+	SetName("Fly");
 	SetActorLocation({ Global::WindowHalfScale.X + 250, Global::WindowHalfScale.Y });
 
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
@@ -27,7 +28,6 @@ AMonster::AMonster()
 
 	SetMonsterHp(10.0f);
 	float Result = GetMonsterHp();
-
 
 	CreateMonster();
 	DebugOn();
