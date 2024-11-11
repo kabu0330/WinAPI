@@ -59,7 +59,6 @@ void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att)
 	}
 }
 
-
 void ATear::BeginPlay()
 {
 	Super::BeginPlay();

@@ -59,6 +59,7 @@ void APlayer::Tick(float _DeltaTime)
 
 	// 충돌체크
 	BodyCollision->SetCollisionEnter(std::bind(&APlayer::CollisionEnter, this, std::placeholders::_1));
+	//BodyCollision->SetCollisionStay(std::bind(&APlayer::CollisionStay, this, std::placeholders::_1));
 	RestoreInitialRenderState(_DeltaTime);
 
 
@@ -112,10 +113,9 @@ void APlayer::CollisionEnter(AActor* _Other)
 
 	this->Heart -= 1;
 	FullRenderer->SetActive(true);
-	FullRenderer->ChangeAnimation("Damaged");
+	FullRenderer->SetSprite("PlayerDamaged.png");
 	BodyRenderer->SetActive(false);
 	HeadRenderer->SetActive(false);
-
 }
 
 void APlayer::CollisionStay(AActor* _Other)
@@ -157,7 +157,6 @@ void APlayer::Collision()
 	WarpCollision->SetCollisionGroup(ECollisionGroup::WARP);
 	WarpCollision->SetCollisionType(ECollisionType::Rect);
 
-	// Collision 충돌에서 Actor의 크기가 중요해졌다.
 	SetActorScale(WarpCollision->GetComponentScale());
 }
 
@@ -509,8 +508,6 @@ void APlayer::CurStateAnimation(float _DeltaTime)
 		{
 			StateElapesd = 0.0f;
 			HeadState = static_cast<UpperState>(BodyState);
-
-			int a = 0;
 		}
 	}
 }
@@ -552,9 +549,8 @@ void APlayer::SpriteSetting()
 	////////////////////////////////////////////////////////////////////////////////
 	// Event
 	FullRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	FullRenderer->CreateAnimation("Damaged", "PlayerDamaged.png", 0, 0, 0.1f, false);
+	FullRenderer->SetSprite("PlayerDamaged.png");
 	FullRenderer->SetComponentScale({ 128, 128 });
-	FullRenderer->ChangeAnimation("Damaged");
 	FullRenderer->SetOrder(ERenderOrder::PLAYER);
 	FullRenderer->SetPivot({ 0, -20 });
 	FullRenderer->SetActive(false);
