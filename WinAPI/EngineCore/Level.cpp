@@ -114,9 +114,10 @@ void ULevel::Tick(float _DeltaTime)
 			AllActors.push_back(CurActor);
 		}
 
+		// 액터의 BeginPlay를 모두 실행 후 데이터를 삭제하므로 프로그램 실행 최초 1회만 반복한다.
 		BeginPlayList.clear();
 
-		// 생성 시
+		// 컴포넌트의 소유자는 Actor이므로 Actor에서 돌린다.
 		AActor::ComponentBeginPlay();
 	}
 
@@ -137,6 +138,7 @@ void ULevel::Tick(float _DeltaTime)
 			CurActor->Tick(_DeltaTime);
 		}
 	}
+	int a = 0;
 }
 
 // 여기서 모든 Actor들을 렌더한다.

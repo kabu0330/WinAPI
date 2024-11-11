@@ -108,7 +108,7 @@ void AActor::ReleaseCheck(float _DeltaTime)
 			continue;
 		}
 
-		// 액터는 죽을 컴포넌트가 있으면 진짜 죽
+		// 액터는 죽을 컴포넌트가 있으면 진짜 죽인다.
 		delete Component;
 		StartIter = Components.erase(StartIter);
 	}

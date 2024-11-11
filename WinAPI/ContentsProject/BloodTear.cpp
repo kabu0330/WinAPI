@@ -29,7 +29,7 @@ ABloodTear::ABloodTear()
 	DebugOn();
 }
 
-void ABloodTear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att)
+void ABloodTear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att)
 {
 	TearEffectRenderer->SetActive(true);
 	SetActorLocation(_StartPos);
@@ -40,6 +40,9 @@ void ABloodTear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _
 void ABloodTear::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+	FVector2D Result = Dir * Speed;
+	AddActorLocation(Dir * Speed * _DeltaTime );
 
 	TimeElapesd += _DeltaTime;
 	if (Duration < TimeElapesd)

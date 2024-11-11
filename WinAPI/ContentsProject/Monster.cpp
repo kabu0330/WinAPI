@@ -26,16 +26,9 @@ AMonster::AMonster()
 	Renderer->SetComponentScale({256, 256});
 	Renderer->ChangeAnimation("Fly.IDle");
 
-	SetMonsterHp(10.0f);
-	float Result = GetMonsterHp();
+	SetMonsterHp(10);
 
-	CreateMonster();
 	DebugOn();
-}
-
-void AMonster::CreateMonster()
-{
-
 }
 
 void AMonster::BeginPlay()
@@ -46,6 +39,9 @@ void AMonster::BeginPlay()
 void AMonster::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+
+	Attack(_DeltaTime);
 
 	DeathCheck(_DeltaTime);
 }
@@ -73,8 +69,21 @@ void AMonster::Death(float _DeltaTime)
 	this->Destroy(0.4f);
 }
 
-void AMonster::Attack()
+void AMonster::Attack(float _DeltaTime)
 {
+	CoolDownElapsed += _DeltaTime;
+	if (CoolDownElapsed < Cooldown)
+	{
+		return;
+	}
+	
+	TearDir = FVector2D::LEFT;
+	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() };
+
+	Tear = GetWorld()->SpawnActor<ABloodTear>();
+	Tear->Fire(TearPos, TearDir, ProjectileSpeed, Att);
+	CoolDownElapsed = 0.0f;
+
 }
 
 AMonster::~AMonster()

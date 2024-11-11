@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include "BloodTear.h"
 
 // 설명 :
 class AMonster : public AActor
@@ -17,27 +18,26 @@ public:
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
-	void CreateMonster();
 
 	void DeathCheck(float _DeltaTime);
 	void Death(float _DeltaTime);
 
-	void Attack();
+	void Attack(float _DeltaTime);
 
 	bool IsDeath()
 	{
 		return Hp <= 0;
 	}
 
-	float GetMonsterHp() const
+	int GetMonsterHp() const
 	{
 		return Hp;
 	}
-	void SetMonsterHp(float _Hp) // Hp 세팅
+	void SetMonsterHp(int _Hp) // Hp 세팅
 	{
 		Hp = _Hp;
 	}
-	float ApplyDamaged(float _PlayerAtt) // 피격
+	int ApplyDamaged(int _PlayerAtt) // 피격
 	{
 		Hp -= _PlayerAtt;
 		if (Hp < 0)
@@ -58,11 +58,17 @@ protected:
 
 	class USpriteRenderer* Renderer = nullptr;
 
-	class ATear* Tear = nullptr;
-
-	float Hp    = 1;
+	int   Hp    = 1;
 	int   Att   = 1;
 	float Speed = 50;
+
+
+	ABloodTear* Tear = nullptr;
+	float Cooldown = 2.0f;
+	float CoolDownElapsed = 0.0f;
+	float ProjectileSpeed = 300.0f;
+	FVector2D TearDir = FVector2D::ZERO;
+	//bool TearFire = false;
 	
 private:
 

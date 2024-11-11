@@ -106,7 +106,7 @@ public:
 		return HeartMax;
 	}
 
-	static int ApplyPlayerHp(int _Att)
+	static int ApplyPlayerDamaged(int _Att)
 	{
 		Heart -= _Att;
 		if (Heart < 0 )
@@ -116,16 +116,12 @@ public:
 		return Heart;
 	}
 
-	float GetPlayerAtt() const
+	int GetPlayerAtt() const
 	{
 		return Att;
 	}
 
-	float ApplyPlayerAtt(float _Value)
-	{
-		return Att += _Value;
-	}
-	float ApplyPlayerAtt(int _Value)
+	int ApplyPlayerAtt(int _Value)
 	{
 		return Att += _Value;
 	}
@@ -145,7 +141,7 @@ private:
 	float SpeedMax = 400.0f; // Speed
 	bool IsMove = false;
 	float TimeElapsed = 0.0f;
-	float Att = 3.5;
+	int Att = 3;
 
 	// Item
 	int PennyCount = 0;

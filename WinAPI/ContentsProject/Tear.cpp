@@ -31,7 +31,7 @@ ATear::ATear()
 }
 
 // 값만 받아서 멤버에 저장한다.
-void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att)
+void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att)
 {
 	TearEffectRenderer->SetActive(true);
 	SetActorLocation(_StartPos);

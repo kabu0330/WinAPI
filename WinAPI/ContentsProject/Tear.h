@@ -1,7 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 
-// 설명 : 눈물공격 
+// 설명 : 플레이어의 공격 발사체 
 class ATear : public AActor
 {
 public:
@@ -15,7 +15,7 @@ public:
 	ATear& operator=(const ATear& _Other) = delete;
 	ATear& operator=(ATear&& _Other) noexcept = delete;
 
-	void Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, float _Att);
+	void Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att);
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 	void TriggerExplosion(float _DeltaTime);
@@ -23,13 +23,12 @@ public:
 protected:
 
 private:
-	float ActorAtt = 0.0f;
+	int ActorAtt = 0;
 
 	float Speed = 350.0f;
 	float SpeedMax = 500.0f;
 	float TimeElapesd = 0.0f;
 	float Duration = 0.85f;
-	float ExplosionDelay = 1.0f;
 
 	float ResistanceActivationTime = 0.6f;
 	float Resistance = 0.8f;
