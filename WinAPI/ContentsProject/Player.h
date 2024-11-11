@@ -161,6 +161,7 @@ private:
 	// Renderer
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* HeadRenderer = nullptr;
+	class USpriteRenderer* FullRenderer = nullptr;
 
 	//Bullet
 	ATear* Tear = nullptr;

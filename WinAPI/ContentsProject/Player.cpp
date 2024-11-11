@@ -110,6 +110,10 @@ void APlayer::UITick(float _DeltaTime)
 void APlayer::CollisionEnter(AActor* _Other)
 {
 	this->Heart -= 0.5;
+	FullRenderer->SetActive(true);
+	FullRenderer->ChangeAnimation("Damaged");
+	BodyRenderer->SetActive(false);
+	HeadRenderer->SetActive(false);
 }
 
 void APlayer::CollisionStay(AActor* _Other)
@@ -534,6 +538,18 @@ void APlayer::SpriteSetting()
 
 	BodyRenderer->SetOrder(ERenderOrder::PLAYER);
 	HeadRenderer->SetOrder(ERenderOrder::PLAYER);
+
+	////////////////////////////////////////////////////////////////////////////////
+	// Event
+	FullRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	FullRenderer->CreateAnimation("Damaged", "PlayerDamaged.png", 0, 0, 0.1f, false);
+	FullRenderer->SetComponentScale({ 128, 128 });
+	FullRenderer->ChangeAnimation("Damaged");
+	FullRenderer->SetOrder(ERenderOrder::PLAYER);
+	FullRenderer->SetPivot({ 0, -20 });
+	FullRenderer->SetActive(false);
+
+
 }
 
 void APlayer::UISetting()
