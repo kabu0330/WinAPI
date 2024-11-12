@@ -24,16 +24,18 @@ public:
 
 	void Attack(float _DeltaTime);
 
+	FVector2D GetDirectionToPlayer();
+
 	bool IsDeath()
 	{
 		return Hp <= 0;
 	}
 
-	int GetMonsterHp() const
+	int GetHp() const
 	{
 		return Hp;
 	}
-	void SetMonsterHp(int _Hp) // Hp 세팅
+	void SetHp(int _Hp) // Hp 세팅
 	{
 		Hp = _Hp;
 	}
@@ -47,7 +49,7 @@ public:
 		return Hp;
 	}
 
-	int GetMonsterAtt() const
+	int GetAtt() const
 	{
 		return Att;
 	}

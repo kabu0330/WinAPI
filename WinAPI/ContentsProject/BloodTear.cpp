@@ -44,6 +44,26 @@ void ABloodTear::Tick(float _DeltaTime)
 	FVector2D Result = Dir * Speed;
 	AddActorLocation(Dir * Speed * _DeltaTime );
 
+	if (nullptr != TearCollision)
+	{
+		if (false == TearCollision->IsDestroy())
+		{
+			CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::PLAYER_BODY);
+		}
+
+		// 플레이어와 충돌하면 터진다.
+		if (nullptr != CollisionActor)
+		{
+			TriggerExplosion(_DeltaTime);
+
+
+			APlayer* CollisionPlayer = dynamic_cast<APlayer*>(CollisionActor);
+			CollisionPlayer->ApplyDamaged(ActorAtt);
+
+			UEngineDebug::OutPutString(CollisionPlayer->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionPlayer->GetHp()));
+		}
+	}
+
 	TimeElapesd += _DeltaTime;
 	if (Duration < TimeElapesd)
 	{

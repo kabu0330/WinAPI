@@ -106,7 +106,7 @@ public:
 		return HeartMax;
 	}
 
-	static int ApplyPlayerDamaged(int _Att)
+	static int ApplyDamaged(int _Att)
 	{
 		Heart -= _Att;
 		if (Heart < 0 )
@@ -116,14 +116,19 @@ public:
 		return Heart;
 	}
 
-	int GetPlayerAtt() const
+	int GetAtt() const
 	{
 		return Att;
 	}
 
-	int ApplyPlayerAtt(int _Value)
+	int ApplyAtt(int _Value)
 	{
 		return Att += _Value;
+	}
+
+	int GetHp() const
+	{
+		return Heart;
 	}
 
 protected:

@@ -26,7 +26,7 @@ AMonster::AMonster()
 	Renderer->SetComponentScale({256, 256});
 	Renderer->ChangeAnimation("Fly.IDle");
 
-	SetMonsterHp(10);
+	SetHp(10);
 
 	DebugOn();
 }
@@ -40,7 +40,7 @@ void AMonster::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-
+	GetDirectionToPlayer();
 	Attack(_DeltaTime);
 
 	DeathCheck(_DeltaTime);
@@ -77,13 +77,25 @@ void AMonster::Attack(float _DeltaTime)
 		return;
 	}
 	
-	TearDir = FVector2D::LEFT;
+	TearDir = GetDirectionToPlayer();
 	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() };
 
 	Tear = GetWorld()->SpawnActor<ABloodTear>();
 	Tear->Fire(TearPos, TearDir, ProjectileSpeed, Att);
 	CoolDownElapsed = 0.0f;
 
+}
+
+FVector2D AMonster::GetDirectionToPlayer()
+{
+	AActor* Player = GetWorld()->GetPawn();
+	FVector2D PlayerPos = Player->GetActorLocation();
+	FVector2D MonsterPos = this->GetActorLocation();
+	FVector2D Distance = PlayerPos - MonsterPos;
+
+	Distance.Normalize();
+
+	return Distance;
 }
 
 AMonster::~AMonster()

@@ -126,7 +126,7 @@ void ATear::Tick(float _DeltaTime)
 			AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
 			CollisionMonster->ApplyDamaged(ActorAtt);
 			
-			UEngineDebug::OutPutString(CollisionMonster->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionMonster->GetMonsterHp()));
+			UEngineDebug::OutPutString(CollisionMonster->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionMonster->GetHp()));
 		}
 	}
 

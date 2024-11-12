@@ -68,6 +68,7 @@ void ContentsCore::SpriteSetting()
 
 	// Monster
 	UImageManager::GetInst().CuttingSprite("Fly.png", 5, 3);
+	UImageManager::GetInst().CuttingSprite("Fly002.png", 6, 2);
 
 	// Background
 	UImageManager::GetInst().CuttingSprite("NormalRoomDoor.png", 4, 2);
