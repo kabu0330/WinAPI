@@ -78,6 +78,7 @@ public:
 
 
 	bool DeathCheck();
+	void Death(float _DeltaTime);
 
 	// 애니메이션
 	void CurStateAnimation(float _DeltaTime);
@@ -147,8 +148,8 @@ private:
 	// Speed : MoveAcc
 	FVector2D Dir = FVector2D::ZERO;
 	FVector2D FinalSpeed = FVector2D::ZERO;
-	float MoveAcc = 1000.0f;
-	float SpeedMax = 400.0f; // Speed
+	float MoveAcc = 500.0f;
+	float SpeedMax = 350.0f; // Speed
 	bool IsMove = false;
 	float TimeElapsed = 0.0f;
 	int Att = 3;

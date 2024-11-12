@@ -38,6 +38,7 @@ void APlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	UISetting();
+	CollisionCheck();
 }
 
 void APlayer::Tick(float _DeltaTime)
@@ -56,12 +57,10 @@ void APlayer::Tick(float _DeltaTime)
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
 	UITick(_DeltaTime);
-	DeathCheck();
-	CollisionCheck();
+	Death(_DeltaTime);
 
 	// 렌더
 	CurStateAnimation(_DeltaTime);
-	RestoreInitialRenderState(_DeltaTime);
 
 	// 카메라
 	CameraPosMove(_DeltaTime);
@@ -121,7 +120,7 @@ void APlayer::CollisionEnter(AActor* _Other)
 	}
 
 	FullRenderer->SetActive(true);
-	FullRenderer->SetSprite("PlayerDamaged.png");
+	FullRenderer->SetSprite("Isaac.png", 6);
 	BodyRenderer->SetActive(false);
 	HeadRenderer->SetActive(false);
 }
@@ -188,7 +187,7 @@ void APlayer::CollisionSetting()
 	BodyCollision->SetCollisionType(ECollisionType::CirCle);
 
 	WarpCollision = CreateDefaultSubObject<U2DCollision>();
-	WarpCollision->SetComponentLocation({ 0, 10 });
+	WarpCollision->SetComponentLocation({ 0, 5 });
 	WarpCollision->SetComponentScale({ 30, 20 });
 	WarpCollision->SetCollisionGroup(ECollisionGroup::PLAYER_WARP);
 	WarpCollision->SetCollisionType(ECollisionType::Rect);
@@ -201,9 +200,30 @@ bool APlayer::DeathCheck()
 	if (Heart < 0)
 	{
 		Heart = 0;
+		
+	}
+
+	if (0 == Heart)
+	{
 		return true;
 	}
 	return false;
+}
+
+void APlayer::Death(float _DeltaTime)
+{
+	if (false == DeathCheck())
+	{
+		RestoreInitialRenderState(_DeltaTime);
+		return;
+	}
+
+	FullRenderer->SetActive(true);
+	BodyRenderer->SetActive(false);
+	HeadRenderer->SetActive(false);
+	FullRenderer->SetComponentScale({ 120, 120 });
+	FullRenderer->ChangeAnimation("Death");
+
 }
 
 void APlayer::Move(float _DeltaTime)
@@ -243,9 +263,9 @@ void APlayer::Move(float _DeltaTime)
 	if (true == IsMove)
 	{
 		Dir.Normalize();
-		FVector2D TargetSpeed = Dir * SpeedMax * 1.4f;
+		FVector2D TargetSpeed = Dir * SpeedMax * 1.0f;
 
-		FinalSpeed += Dir * MoveAcc * _DeltaTime; 	// 가속도
+		//FinalSpeed += Dir * MoveAcc * _DeltaTime; 	// 가속도
 		FinalSpeed = FVector2D::Lerp(FinalSpeed, TargetSpeed, MoveAcc * _DeltaTime);
 		FVector2D Result = FinalSpeed;
 	}
@@ -585,7 +605,7 @@ void APlayer::SpriteSetting()
 	////////////////////////////////////////////////////////////////////////////////
 	// Event
 	FullRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	FullRenderer->SetSprite("PlayerDamaged.png");
+	FullRenderer->CreateAnimation("Death", "Isaac.png", { 0, 6, 3 }, 0.1f, false);
 	FullRenderer->SetComponentScale({ 128, 128 });
 	FullRenderer->SetOrder(ERenderOrder::PLAYER);
 	FullRenderer->SetPivot({ 0, -20 });

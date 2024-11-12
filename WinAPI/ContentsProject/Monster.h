@@ -25,6 +25,7 @@ public:
 	void ChaseMove(float _DeltaTime);
 	void Move(float _DeltaTime);
 	FVector2D GetRandomDir();
+	void ClampPositionToRoom();
 
 	bool IsPlayerNearby();
 	FVector2D GetDirectionToPlayer();
@@ -77,7 +78,7 @@ protected:
 
 	// 이동 관련 쿨타임
 	float MoveElapsedTime = 0.0f;
-	float MoveCooldown = 5.0f;
+	float MoveCooldown = 0.0f;
 	float MoveTime = 1.0f;
 
 	// Detect And Chase
@@ -95,7 +96,7 @@ protected:
 	float ShootingSpeed = 300.0f;
 	FVector2D TearDir = FVector2D::ZERO;
 
-	ARoom* CurRoom = nullptr;
+	ARoom* ParentRoom = nullptr;
 	
 private:
 

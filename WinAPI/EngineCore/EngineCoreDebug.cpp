@@ -61,6 +61,8 @@ namespace UEngineDebug
 		EDebugPosType Type;
 	};
 
+	HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
+	HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
 
 	std::vector<DebugRenderInfo> DebugPoses;
 
@@ -79,9 +81,6 @@ namespace UEngineDebug
 		// void WinAPIOutPutString(UEngineWinImage * _Image, std::string_view _Text, FVector2D _Pos);
 		UEngineWinImage* BackBuffer = UEngineAPICore::GetCore()->GetMainWindow().GetBackBuffer();
 		HDC BackHDC = BackBuffer->GetDC();
-		HPEN hPen = CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
-		HBRUSH hBrush = (HBRUSH)GetStockObject(NULL_BRUSH);
-		//HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
 
 		for (size_t i = 0; i < DebugTexts.size(); i++)
 		{
@@ -95,10 +94,8 @@ namespace UEngineDebug
 		FTransform Trans;
 		Trans.Scale = FVector2D(6, 6);
 
-
 		for (size_t i = 0; i < DebugPoses.size(); i++)
 		{
-
 			EDebugPosType Type = DebugPoses[i].Type;
 
 			FVector2D LT = DebugPoses[i].Trans.CenterLeftTop();
@@ -108,14 +105,13 @@ namespace UEngineDebug
 			{
 			case UEngineDebug::EDebugPosType::Rect:
 			{
-				//HPEN hOldPen     = (HPEN)SelectObject(BackHDC, hPen);
-				//HBRUSH hOldBrush = (HBRUSH)SelectObject(BackHDC, hBrush);
+				SelectObject(BackHDC, hPen);
+				SelectObject(BackHDC, hBrush);
 
 				Rectangle(BackHDC, LT.iX(), LT.iY(), RB.iX(), RB.iY());
 
-
-				//DeleteObject(hOldBrush);
-				//DeleteObject(hOldPen);
+				DeleteObject(hPen);
+				DeleteObject(hBrush);
 
 				break;
 			}
@@ -126,7 +122,8 @@ namespace UEngineDebug
 
 				Ellipse(BackHDC, LT.iX(), LT.iY(), RB.iX(), RB.iY());
 
-	
+				DeleteObject(hPen);
+				DeleteObject(hBrush);
 				break;
 			}
 			default:
@@ -135,8 +132,6 @@ namespace UEngineDebug
 		}
 
 		DebugPoses.clear();
-		DeleteObject(hPen);
-		DeleteObject(hBrush);
 	}
 
 	void CoreDebugBox(FTransform _Trans)

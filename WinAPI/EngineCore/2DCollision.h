@@ -62,11 +62,11 @@ public:
 	}
 
 	template<typename EnumType>
-	std::vector<AActor*> CollisionAll(EnumType _OtherCollisionGroup)
+	std::vector<AActor*> CollisionAll(EnumType _OtherCollisionGroup, FVector2D _NextDir)
 	{
 		// 최대 42억개와 충돌체크
 		std::vector<AActor*> Result;
-		Collision(static_cast<int>(_OtherCollisionGroup), Result, -1);
+		Collision(static_cast<int>(_OtherCollisionGroup), Result, _NextDir, -1);
 
 		return Result;
 	}

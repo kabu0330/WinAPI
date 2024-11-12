@@ -9,8 +9,6 @@
 #include "Global.h"
 #include "ContentsEnum.h"
 
-
-
 AMonster::AMonster()
 {
 	SetName("Fly");
@@ -43,7 +41,7 @@ AMonster::AMonster()
 void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
-	CurRoom = ARoom::GetCurRoom();
+	ParentRoom = ARoom::GetCurRoom();
 }
 
 void AMonster::Tick(float _DeltaTime)
@@ -51,10 +49,12 @@ void AMonster::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 
+	ClampPositionToRoom();
 	Move(_DeltaTime);
 	ChasePlayer(_DeltaTime);
 
 	BodyCollisionCheck(_DeltaTime);
+
 
 	DeathCheck(_DeltaTime);
 }
@@ -178,6 +178,40 @@ FVector2D AMonster::GetRandomDir()
 	}
 
 	return FVector2D(Dir);
+}
+
+void AMonster::ClampPositionToRoom()
+{
+	FVector2D Pos = GetActorLocation();
+	FVector2D OffsetPos = Pos + BodyCollision->GetComponentLocation();
+
+	ARoom* CurRoom = ParentRoom;
+	FVector2D RoomPos = CurRoom->GetActorLocation();
+	FVector2D RoomScale = CurRoom->GetActorScale().Half();
+	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2;
+	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 2;
+
+	float LeftEdge = RoomPos.X - RoomScale.X - RoomSizeOffsetX;
+	float RightEdge = RoomPos.X + RoomScale.X + RoomSizeOffsetX;
+	float TopEdge = RoomPos.Y - RoomScale.Y - RoomSizeOffsetY;
+	float BotEdge = RoomPos.Y + RoomScale.Y + RoomSizeOffsetY;
+
+	if (LeftEdge > OffsetPos.X)
+	{
+		SetActorLocation(Pos + FVector2D{ 1, 0 });
+	}
+	if (RightEdge < OffsetPos.X)
+	{
+		SetActorLocation(Pos + FVector2D{ -1, 0 });
+	}
+	if (TopEdge > OffsetPos.Y)
+	{
+		SetActorLocation(Pos + FVector2D{ 0, 1 });
+	}
+	if (BotEdge < OffsetPos.Y)
+	{
+		SetActorLocation(Pos + FVector2D{ 0, -1 });
+	}
 }
 
 void AMonster::DeathCheck(float _DeltaTime)
