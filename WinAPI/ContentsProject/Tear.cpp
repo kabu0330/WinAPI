@@ -11,6 +11,7 @@
 
 ATear::ATear()
 {
+	SetName("Player Tear");
 	SetActorLocation(FVector2D::ZERO);
 
 	TearCollision = CreateDefaultSubObject<U2DCollision>();
@@ -62,19 +63,54 @@ void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att)
 void ATear::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CollisionCheck();
 }
 
 void ATear::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	if (nullptr == TearCollision)
+	{
+		return;
+	}
+
 	if (false == TearEffectRenderer->IsActive())
 	{
 		return;
 	}
-	
-	TimeElapesd += _DeltaTime;
 
+	TimeElapesd += _DeltaTime;
+	UpdateTearPosion(_DeltaTime);
+	CheckForExplosion(_DeltaTime);
+	
+}
+
+void ATear::Explosion()
+{
+	if (nullptr != TearCollision)
+	{
+		TearCollision->Destroy(); 
+		TearCollision = nullptr;
+		Dir = FVector2D::ZERO;  
+		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
+		SetActorLocation(GetActorLocation());
+
+		//if (true == TearEffectRenderer->IsCurAnimationEnd())
+		//{
+		//	Destroy(0.4f);
+		//}
+
+		if (nullptr != TearEffectRenderer)
+		{
+			Destroy(0.4f);
+		}
+	}
+}
+
+void ATear::UpdateTearPosion(float _DeltaTime)
+{
 	// 좌우 공격만 중력을 준다.
 	if (Dir == FVector2D::LEFT || Dir == FVector2D::RIGHT)
 	{
@@ -109,58 +145,61 @@ void ATear::Tick(float _DeltaTime)
 			AddActorLocation(Dir * _DeltaTime * Speed);
 		}
 	}
-	
-	if (nullptr != TearCollision)
-	{
-		if (false == TearCollision->IsDestroy()) 
-		{
-			CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::MONSTER_BODY);
-		}
 
-		// 3. 액터와 충돌하면 터진다.
-		if (nullptr != CollisionActor)
-		{
-			TriggerExplosion(_DeltaTime);
+}
 
-
-			AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
-			CollisionMonster->ApplyDamaged(ActorAtt);
-			
-			UEngineDebug::OutPutString(CollisionMonster->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionMonster->GetHp()));
-		}
-	}
-
-
+void ATear::CheckForExplosion(float _DeltaTime)
+{
 	// 1. 일정 시간이 지나면 터진다.
 	if (Duration < TimeElapesd)
 	{
-		TriggerExplosion(_DeltaTime);	
+		Explosion();
+	}
+	// 2. 맵 밖으로 벗어나면 터진다.
+	ARoom* CurRoom = ARoom::GetCurRoom();
+	U2DCollision* CurRoomCollision = CurRoom->GetRoomCollision();
+	
+	//if (true = FTransform::RectToCirCle())
+	//{
+
+	//}
+	
+	// 4. 오브젝트와 충돌하면 터진다.
+
+	if (nullptr == TearCollision)
+	{
+		return;
 	}
 
-	// 2. 맵 밖으로 벗어나면 터진다.
-	// 4. 오브젝트와 충돌하면 터진다.
+	if (false == TearCollision->IsDestroy())
+	{
+		CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::MONSTER_BODY);
+	}
+
+	if (nullptr == CollisionActor)
+	{
+		return;
+	}
+
+	// 3. 액터와 충돌하면 터진다.
+	Explosion();
+
+	AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
+	CollisionMonster->ApplyDamaged(ActorAtt);
+
+	UEngineDebug::OutPutString(CollisionMonster->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionMonster->GetHp()));
+
 }
 
-void ATear::TriggerExplosion(float _DeltaTime)
+void ATear::CollisionCheck()
 {
-	if (nullptr != TearCollision)
-	{
-		TearCollision->Destroy(); 
-		TearCollision = nullptr;
-		Dir = FVector2D::ZERO;  
-		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
-		SetActorLocation(GetActorLocation());
+	// RectToCircle이 없어서 터지는 듯
+	
+	//TearCollision->SetCollisionEnter(std::bind(&ATear::ExplodeOnWallCollision, this, std::placeholders::_1));
+}
 
-		//if (true == TearEffectRenderer->IsCurAnimationEnd())
-		//{
-		//	Destroy(0.4f);
-		//}
-
-		if (nullptr != TearEffectRenderer)
-		{
-			Destroy(0.4f);
-		}
-	}
+void ATear::ExplodeOnWallCollision(AActor* _Other)
+{
 }
 
 ATear::~ATear()

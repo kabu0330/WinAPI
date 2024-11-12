@@ -16,9 +16,9 @@ public:
 	ABloodTear& operator=(ABloodTear&& _Other) noexcept = delete;
 
 	void Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed = 300.0f, int _Att = 1);
-	void TriggerExplosion(float _DeltaTime);
-	void UpdateTearPosion(float _DeltaTime);
 	void Explosion(float _DeltaTime);
+	void UpdateTearPosion(float _DeltaTime);
+	void CheckForExplosion(float _DeltaTime);
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;

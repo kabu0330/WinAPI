@@ -16,9 +16,14 @@ public:
 	ATear& operator=(ATear&& _Other) noexcept = delete;
 
 	void Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att);
+	void Explosion();
+	void UpdateTearPosion(float _DeltaTime);
+	void CheckForExplosion(float _DeltaTime);
+	void CollisionCheck();
+	void ExplodeOnWallCollision(AActor* _Other);
+
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
-	void TriggerExplosion(float _DeltaTime);
 
 protected:
 

@@ -10,6 +10,7 @@
 
 ABloodTear::ABloodTear()
 {
+	SetName("Blood Tear");
 	SetActorLocation(FVector2D::ZERO);
 
 	TearCollision = CreateDefaultSubObject<U2DCollision>();
@@ -42,12 +43,12 @@ void ABloodTear::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	UpdateTearPosion(_DeltaTime);
-	Explosion(_DeltaTime);
+	CheckForExplosion(_DeltaTime);
 
 
 }
 
-void ABloodTear::TriggerExplosion(float _DeltaTime)
+void ABloodTear::Explosion(float _DeltaTime)
 {
 	if (nullptr == TearCollision)
 	{
@@ -66,7 +67,7 @@ void ABloodTear::TriggerExplosion(float _DeltaTime)
 	}
 }
 
-void ABloodTear::Explosion(float _DeltaTime)
+void ABloodTear::CheckForExplosion(float _DeltaTime)
 {
 	if (nullptr == TearCollision)
 	{
@@ -81,11 +82,11 @@ void ABloodTear::Explosion(float _DeltaTime)
 	// 플레이어와 충돌하면 터진다.
 	if (nullptr != CollisionActor)
 	{
-		TriggerExplosion(_DeltaTime);
+		Explosion(_DeltaTime);
 
 		APlayer* CollisionPlayer = dynamic_cast<APlayer*>(CollisionActor);
 		CollisionPlayer->ApplyDamaged(ActorAtt);
-		CollisionPlayer->CollisionEnter(CollisionPlayer);
+		CollisionPlayer->ShowHitAnimation(CollisionPlayer);
 
 		UEngineDebug::OutPutString(CollisionPlayer->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionPlayer->GetHp()));
 	}
@@ -93,7 +94,7 @@ void ABloodTear::Explosion(float _DeltaTime)
 	TimeElapesd += _DeltaTime;
 	if (Duration < TimeElapesd)
 	{
-		TriggerExplosion(_DeltaTime);
+		Explosion(_DeltaTime);
 	}
 }
 

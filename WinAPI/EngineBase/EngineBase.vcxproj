@@ -181,6 +181,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TimeEvent.h" />
     <ClInclude Include="UEngineTimer.h">
       <SubType>
       </SubType>
@@ -221,6 +222,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PreCompile.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="TimeEvent.cpp" />
     <ClCompile Include="UEngineTimer.cpp">
       <SubType>
       </SubType>

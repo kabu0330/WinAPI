@@ -77,7 +77,7 @@ public:
 	void CollisionCheck();
 
 
-	bool DeathCheck();
+	bool IsDeath();
 	void Death(float _DeltaTime);
 
 	// 애니메이션
@@ -98,9 +98,7 @@ public:
 		return WarpCollision;
 	}
 
-	void CollisionEnter(AActor* _Other);
-	void CollisionStay(AActor* _Other);
-	void CollisionEnd(AActor* _Other);
+	void ShowHitAnimation(AActor* _Other);
 
 	// UI
 	void UISetting();

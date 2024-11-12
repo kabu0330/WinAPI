@@ -71,7 +71,7 @@ void APlayer::Tick(float _DeltaTime)
 
 void APlayer::CollisionCheck()
 {
-	BodyCollision->SetCollisionEnter(std::bind(&APlayer::CollisionEnter, this, std::placeholders::_1));
+	BodyCollision->SetCollisionEnter(std::bind(&APlayer::ShowHitAnimation, this, std::placeholders::_1));
 	WarpCollision->SetCollisionStay(std::bind(&APlayer::ClampPositionToRoom, this));
 
 }
@@ -109,10 +109,10 @@ void APlayer::ClampPositionToRoom()
 		SetActorLocation(Pos + FVector2D{ 0, -2 });
 	}
 
-	int a = 0;
+
 }
 
-void APlayer::CollisionEnter(AActor* _Other)
+void APlayer::ShowHitAnimation(AActor* _Other)
 {
 	if (true == FullRenderer->IsActive())
 	{
@@ -123,14 +123,6 @@ void APlayer::CollisionEnter(AActor* _Other)
 	FullRenderer->SetSprite("Isaac.png", 6);
 	BodyRenderer->SetActive(false);
 	HeadRenderer->SetActive(false);
-}
-
-void APlayer::CollisionStay(AActor* _Other)
-{
-}
-
-void APlayer::CollisionEnd(AActor* _Other)
-{
 }
 
 void APlayer::UITick(float _DeltaTime)
@@ -195,12 +187,11 @@ void APlayer::CollisionSetting()
 	SetActorScale(WarpCollision->GetComponentScale());
 }
 
-bool APlayer::DeathCheck()
+bool APlayer::IsDeath()
 {
 	if (Heart < 0)
 	{
-		Heart = 0;
-		
+		Heart = 0;		
 	}
 
 	if (0 == Heart)
@@ -212,7 +203,7 @@ bool APlayer::DeathCheck()
 
 void APlayer::Death(float _DeltaTime)
 {
-	if (false == DeathCheck())
+	if (false == IsDeath())
 	{
 		RestoreInitialRenderState(_DeltaTime);
 		return;

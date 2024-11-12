@@ -97,6 +97,7 @@ protected:
 	FVector2D TearDir = FVector2D::ZERO;
 
 	ARoom* ParentRoom = nullptr;
+	APlayer* Player = nullptr;
 	
 private:
 

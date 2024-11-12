@@ -42,12 +42,19 @@ void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 	ParentRoom = ARoom::GetCurRoom();
+
+	AActor* MainPawn = GetWorld()->GetPawn();
+	Player = dynamic_cast<APlayer*>(MainPawn);
 }
 
 void AMonster::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	if (true == Player->IsDeath())
+	{
+		return;
+	}
 
 	ClampPositionToRoom();
 	Move(_DeltaTime);
@@ -74,6 +81,11 @@ void AMonster::ChasePlayer(float _DeltaTime)
 
 void AMonster::BodyCollisionCheck(float _DeltaTime)
 {
+	if (nullptr == BodyCollision)
+	{
+		return;
+	}
+
 	AActor* CollisionActor = BodyCollision->CollisionOnce(ECollisionGroup::PLAYER_BODY);
 
 	if (nullptr == CollisionActor)
@@ -89,7 +101,7 @@ void AMonster::BodyCollisionCheck(float _DeltaTime)
 
 	APlayer* CollisionPlayer = dynamic_cast<APlayer*>(CollisionActor);
 	CollisionPlayer->ApplyDamaged(1);
-	CollisionPlayer->CollisionEnter(CollisionPlayer);
+	CollisionPlayer->ShowHitAnimation(CollisionPlayer);
 
 	BodyCollisionCooldownElapsed = 0.0f;
 
@@ -182,6 +194,11 @@ FVector2D AMonster::GetRandomDir()
 
 void AMonster::ClampPositionToRoom()
 {
+	if (nullptr == BodyCollision)
+	{
+		return;
+	}
+
 	FVector2D Pos = GetActorLocation();
 	FVector2D OffsetPos = Pos + BodyCollision->GetComponentLocation();
 
