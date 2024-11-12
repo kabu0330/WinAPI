@@ -2,6 +2,7 @@
 #include "Monster.h"
 
 #include <EngineBase/EngineMath.h>
+#include <EngineBase/EngineRandom.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/2DCollision.h>
 
@@ -29,7 +30,7 @@ AMonster::AMonster()
 	SetHp(10);
 
 	DetectCollision = CreateDefaultSubObject<U2DCollision>();
-	DetectCollision->SetComponentScale({ 400, 400 });
+	DetectCollision->SetComponentScale({ 450, 450 });
 	DetectCollision->SetCollisionGroup(ECollisionGroup::MONSETR_DETECTINRANGE);
 	DetectCollision->SetCollisionType(ECollisionType::CirCle);
 	DetectCollision->SetActive(true);
@@ -71,6 +72,20 @@ void AMonster::ChaseMove(float _DeltaTime)
 	Direction = GetDirectionToPlayer();
 	FVector2D MovePos = Direction * Speed * _DeltaTime;
 	AddActorLocation(MovePos);
+}
+
+void AMonster::Move(float _DeltaTime)
+{
+
+}
+
+FVector2D AMonster::GetMoveDir()
+{
+	UEngineRandom Random;
+	Random.SetSeed(time(nullptr));
+	Random.RandomInt(0, 7);
+
+	return FVector2D();
 }
 
 void AMonster::DeathCheck(float _DeltaTime)

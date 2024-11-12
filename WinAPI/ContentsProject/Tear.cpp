@@ -151,6 +151,11 @@ void ATear::TriggerExplosion(float _DeltaTime)
 		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
 		SetActorLocation(GetActorLocation());
 
+		//if (true == TearEffectRenderer->IsCurAnimationEnd())
+		//{
+		//	Destroy(0.4f);
+		//}
+
 		if (nullptr != TearEffectRenderer)
 		{
 			Destroy(0.4f);

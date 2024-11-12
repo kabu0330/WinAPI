@@ -21,6 +21,8 @@ public:
 
 	void Attack(float _DeltaTime);
 	void ChaseMove(float _DeltaTime);
+	void Move(float _DeltaTime);
+	FVector2D GetMoveDir();
 
 	bool IsPlayerNearby();
 	FVector2D GetDirectionToPlayer();

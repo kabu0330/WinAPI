@@ -29,8 +29,7 @@ APlayer::APlayer()
 	
 	SpriteSetting(); // 2. 상태에 따른 애니메이션 동작을 정의한다.
 
-	 // 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다.
-	Collision(); // 4. 캐릭터의 히트박스를 설정할 충돌체를 생성한다.
+	CollisionSetting(); // 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다. 
 
 	DebugOn(); // 디버그 대상에 포함
 }
@@ -52,27 +51,51 @@ void APlayer::Tick(float _DeltaTime)
 	{
 		return;
 	}
+
 	// 로직
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
 	UITick(_DeltaTime);
-
-	// 충돌체크
-	BodyCollision->SetCollisionEnter(std::bind(&APlayer::CollisionEnter, this, std::placeholders::_1));
-	//BodyCollision->SetCollisionStay(std::bind(&APlayer::CollisionStay, this, std::placeholders::_1));
-	RestoreInitialRenderState(_DeltaTime);
-
-
 	DeathCheck();
+	CollisionCheck();
 
 	// 렌더
 	CurStateAnimation(_DeltaTime);
+	RestoreInitialRenderState(_DeltaTime);
 
 	// 카메라
 	CameraPosMove(_DeltaTime);
 
 	// Debug
 	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
+}
+
+void APlayer::CollisionCheck()
+{
+	BodyCollision->SetCollisionEnter(std::bind(&APlayer::CollisionEnter, this, std::placeholders::_1));
+	//BodyCollision->SetCollisionStay(std::bind(&APlayer::CollisionStay, this, std::placeholders::_1));
+
+}
+
+void APlayer::CollisionEnter(AActor* _Other)
+{
+	if (true == FullRenderer->IsActive())
+	{
+		return;
+	}
+
+	FullRenderer->SetActive(true);
+	FullRenderer->SetSprite("PlayerDamaged.png");
+	BodyRenderer->SetActive(false);
+	HeadRenderer->SetActive(false);
+}
+
+void APlayer::CollisionStay(AActor* _Other)
+{
+}
+
+void APlayer::CollisionEnd(AActor* _Other)
+{
 }
 
 void APlayer::UITick(float _DeltaTime)
@@ -103,35 +126,12 @@ void APlayer::UITick(float _DeltaTime)
 	  KeyPickupNumber->SetValue(KeyCount);
 }
 
-
-void APlayer::CollisionEnter(AActor* _Other)
-{
-	if (true == FullRenderer->IsActive())
-	{
-		return;
-	}
-
-	this->Heart -= 1;
-	FullRenderer->SetActive(true);
-	FullRenderer->SetSprite("PlayerDamaged.png");
-	BodyRenderer->SetActive(false);
-	HeadRenderer->SetActive(false);
-}
-
-void APlayer::CollisionStay(AActor* _Other)
-{
-}
-
-void APlayer::CollisionEnd(AActor* _Other)
-{
-}
-
 void APlayer::RestoreInitialRenderState(float _DeltaTime)
 {
 	if (true == FullRenderer->IsActive())
 	{
 		StateElapsed += _DeltaTime;
-		float ActionDuration = 1.0f;
+		float ActionDuration = 0.5f;
 		if (StateElapsed > ActionDuration)
 		{
 			FullRenderer->SetActive(false);
@@ -143,7 +143,7 @@ void APlayer::RestoreInitialRenderState(float _DeltaTime)
 	}
 }
 
-void APlayer::Collision()
+void APlayer::CollisionSetting()
 {
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });

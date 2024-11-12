@@ -7,8 +7,10 @@ void UEngineInput::UEngineKey::KeyCheck(float _DeltaTime)
 	if (0 != GetAsyncKeyState(Key))
 	{
 		// 입력시간 누계
-		PressTime += _DeltaTime;
-
+		if (true == IsPress)
+		{
+			PressTime += _DeltaTime;
+		}
 		// 이전에 눌린 적이 없다면 : Down
 		if (true == IsFree)
 		{
@@ -20,6 +22,7 @@ void UEngineInput::UEngineKey::KeyCheck(float _DeltaTime)
 		// 계속 눌렸다면 : Press
 		else if (true == IsDown) 
 		{
+			FreeTime = 0.0f;
 			IsDown  = false;
 			IsPress = true;
 			IsFree  = false;
@@ -28,8 +31,11 @@ void UEngineInput::UEngineKey::KeyCheck(float _DeltaTime)
 	}
 	else // 키가 눌리지 않았다면
 	{
-		PressTime = 0.0f;
-		
+		if (true == IsFree)
+		{
+			FreeTime += _DeltaTime;
+		}
+
 		// 키를 눌렀다가 뗐다면 : Up
 		if (true == IsPress)
 		{
@@ -41,6 +47,7 @@ void UEngineInput::UEngineKey::KeyCheck(float _DeltaTime)
 		// 눌린 적이 없다면 : Free
 		else if (true == IsUp)
 		{
+			PressTime = 0.0f;
 			IsDown  = false;
 			IsPress = false;
 			IsFree  = true;
