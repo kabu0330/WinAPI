@@ -19,15 +19,15 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
-	void DetectInRange();
+	void Attack(float _DeltaTime);
+	void ChaseMove(float _DeltaTime);
+
+	bool IsPlayerNearby();
+	FVector2D GetDirectionToPlayer();
+	void ChasePlayer(float _DeltaTime);
 
 	void DeathCheck(float _DeltaTime);
 	void Death(float _DeltaTime);
-
-	void Attack(float _DeltaTime);
-
-	FVector2D GetDirectionToPlayer();
-	void ChaseIfPlayerInRange();
 
 	bool IsDeath()
 	{
@@ -66,17 +66,18 @@ protected:
 	// Stat
 	int   Hp    = 1;
 	int   Att   = 1;
-	float Speed = 50;
+	float Speed = 100;
+	FVector2D Direction = FVector2D::ZERO;
 
 	// Detect And Chase
-	bool ChasePlayer = false;
+	bool PlayerDetected = false;
 	class U2DCollision* DetectCollision = nullptr;
 
 	// Attack
 	ABloodTear* Tear = nullptr;
 	float Cooldown = 2.0f;
 	float CoolDownElapsed = 0.0f;
-	float ProjectileSpeed = 300.0f;
+	float ShootingSpeed = 300.0f;
 	FVector2D TearDir = FVector2D::ZERO;
 	//bool TearFire = false;
 	
