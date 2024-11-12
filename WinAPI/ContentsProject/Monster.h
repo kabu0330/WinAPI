@@ -71,6 +71,11 @@ protected:
 	float Speed = 100;
 	FVector2D Direction = FVector2D::ZERO;
 
+	// 이동 관련 쿨타임
+	float MoveElapsedTime = 0.0f;
+	float MoveCooldown = 5.0f;
+	float MoveTime = 1.0f;
+
 	// Detect And Chase
 	bool PlayerDetected = false;
 	class U2DCollision* DetectCollision = nullptr;

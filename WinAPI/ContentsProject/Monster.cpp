@@ -48,7 +48,7 @@ void AMonster::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-
+	Move(_DeltaTime);
 	ChasePlayer(_DeltaTime);
 
 
@@ -76,6 +76,26 @@ void AMonster::ChaseMove(float _DeltaTime)
 
 void AMonster::Move(float _DeltaTime)
 {
+	PlayerDetected = IsPlayerNearby();
+	if (true == PlayerDetected) // 플레이어를 추적하지 않는 중이면
+	{
+		return;
+	}
+
+	MoveElapsedTime += _DeltaTime;
+	if (MoveElapsedTime > MoveTime)
+	{
+		if (MoveElapsedTime > MoveCooldown)
+		{
+			MoveElapsedTime = 0.0f;
+			return;
+		}
+		return;
+	}
+
+	Direction = FVector2D::LEFT;
+	FVector2D MovePos = Direction * Speed * _DeltaTime;
+	AddActorLocation(MovePos);
 
 }
 
