@@ -29,7 +29,7 @@ public:
 	FVector2D GetDirectionToPlayer();
 	void ChasePlayer(float _DeltaTime);
 
-	void BodyCollisionCheck();
+	void BodyCollisionCheck(float _DeltaTime);
 
 	void DeathCheck(float _DeltaTime);
 	void Death(float _DeltaTime);
@@ -82,6 +82,10 @@ protected:
 	// Detect And Chase
 	bool PlayerDetected = false;
 	class U2DCollision* DetectCollision = nullptr;
+
+	// BodyCollision Attack
+	float BodyCollisionCooldownElapsed = 0.0f;
+	float BodyCollisionCooldown = 1.0f;
 
 	// Attack
 	ABloodTear* Tear = nullptr;
