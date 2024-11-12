@@ -19,12 +19,15 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	void DetectInRange();
+
 	void DeathCheck(float _DeltaTime);
 	void Death(float _DeltaTime);
 
 	void Attack(float _DeltaTime);
 
 	FVector2D GetDirectionToPlayer();
+	void ChaseIfPlayerInRange();
 
 	bool IsDeath()
 	{
@@ -60,11 +63,16 @@ protected:
 
 	class USpriteRenderer* Renderer = nullptr;
 
+	// Stat
 	int   Hp    = 1;
 	int   Att   = 1;
 	float Speed = 50;
 
+	// Detect And Chase
+	bool ChasePlayer = false;
+	class U2DCollision* DetectCollision = nullptr;
 
+	// Attack
 	ABloodTear* Tear = nullptr;
 	float Cooldown = 2.0f;
 	float CoolDownElapsed = 0.0f;

@@ -28,6 +28,14 @@ AMonster::AMonster()
 
 	SetHp(10);
 
+	DetectCollision = CreateDefaultSubObject<U2DCollision>();
+	DetectCollision->SetComponentLocation({0,0});
+	DetectCollision->SetComponentScale({ 300, 300 });
+	DetectCollision->SetCollisionGroup(ECollisionGroup::MONSETR_DETECTINRANGE);
+	DetectCollision->SetCollisionType(ECollisionType::CirCle);
+	DetectCollision->SetActive(true);
+
+
 	DebugOn();
 }
 
@@ -41,9 +49,17 @@ void AMonster::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	GetDirectionToPlayer();
+	ChaseIfPlayerInRange();
+
 	Attack(_DeltaTime);
 
 	DeathCheck(_DeltaTime);
+}
+
+void AMonster::DetectInRange()
+{
+
+
 }
 
 void AMonster::DeathCheck(float _DeltaTime)
@@ -83,7 +99,6 @@ void AMonster::Attack(float _DeltaTime)
 	Tear = GetWorld()->SpawnActor<ABloodTear>();
 	Tear->Fire(TearPos, TearDir, ProjectileSpeed, Att);
 	CoolDownElapsed = 0.0f;
-
 }
 
 FVector2D AMonster::GetDirectionToPlayer()
@@ -96,6 +111,15 @@ FVector2D AMonster::GetDirectionToPlayer()
 	Distance.Normalize();
 
 	return Distance;
+}
+
+void AMonster::ChaseIfPlayerInRange()
+{
+	AActor* Player = GetWorld()->GetPawn();
+	FVector2D PlayerPos = Player->GetActorLocation();
+	FVector2D MonsterPos = this->GetActorLocation();
+	FVector2D Distance = PlayerPos - MonsterPos;
+
 }
 
 AMonster::~AMonster()
