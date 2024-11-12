@@ -255,6 +255,7 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	FVector2D DoorOffestY = FVector2D(0, RoomScale.Half().iY());
 	FVector2D OffestX = { 110, 0 };
 	FVector2D OffestY = { 0, 57};
+	FVector2D DoorCollisionScale = FVector2D(60, 70);
 
 	switch (_Dir)
 	{
@@ -266,7 +267,7 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 		DoorRenderers[0]->SetComponentLocation(DoorPos);
 		DoorRenderers[0]->SetActive(true);
 
-		DoorCollisions[0]->SetComponentScale({ 60, 60 });
+		DoorCollisions[0]->SetComponentScale(DoorCollisionScale);
 		DoorCollisions[0]->SetActive(true);
 
 		DoorRendererMap.insert({ _Dir , DoorRenderers[0] });
@@ -280,7 +281,7 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 		DoorRenderers[1]->SetComponentLocation(DoorPos);
 		DoorRenderers[1]->SetActive(true);
 
-		DoorCollisions[1]->SetComponentScale({ 60, 60 });
+		DoorCollisions[1]->SetComponentScale(DoorCollisionScale);
 		DoorCollisions[1]->SetActive(true);
 
 		DoorRendererMap.insert({ _Dir , DoorRenderers[1] });
@@ -294,7 +295,7 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 		DoorRenderers[2]->SetComponentLocation(DoorPos);
 		DoorRenderers[2]->SetActive(true);
 
-		DoorCollisions[2]->SetComponentScale({ 60, 60 });
+		DoorCollisions[2]->SetComponentScale(DoorCollisionScale);
 		DoorCollisions[2]->SetActive(true);
 		DoorRendererMap.insert({ _Dir , DoorRenderers[2] });
 		DoorCollisionMap.insert({ _Dir ,DoorCollisions[2] });
@@ -307,7 +308,7 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 		DoorRenderers[3]->SetComponentLocation(DoorPos);
 		DoorRenderers[3]->SetActive(true);
 
-		DoorCollisions[3]->SetComponentScale({ 60, 60 });
+		DoorCollisions[3]->SetComponentScale(DoorCollisionScale);
 		DoorCollisions[3]->SetActive(true);
 
 		DoorRendererMap.insert({ _Dir , DoorRenderers[3] });
@@ -358,9 +359,12 @@ void ARoom::SpriteSetting()
 
 void ARoom::CollisionSetting()
 {
+	RoomSizeOffsetX = -280.0f;
+	RoomSizeOffsetY = -180.0f;
+
 	RoomCollision = CreateDefaultSubObject<U2DCollision>();
 	RoomCollision->SetComponentLocation({ 0, 0 });
-	RoomCollision->SetComponentScale({ RoomScale.X - 270, RoomScale.Y - 165 });
+	RoomCollision->SetComponentScale({ RoomScale.X + RoomSizeOffsetX, RoomScale.Y + RoomSizeOffsetY });
 	RoomCollision->SetCollisionGroup(ECollisionGroup::OBJECT_WALL);
 	RoomCollision->SetCollisionType(ECollisionType::Rect);
 

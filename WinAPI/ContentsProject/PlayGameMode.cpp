@@ -58,7 +58,9 @@ void APlayGameMode::BeginPlay()
 
 void APlayGameMode::CollisionGroupLinkSetting()
 {
-	GetWorld()->CollisionGroupLink(ECollisionGroup::WARP, ECollisionGroup::OBJECT_WALL);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::PLAYER_WARP, ECollisionGroup::OBJECT_WALL);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::PLAYER_WARP, ECollisionGroup::WARP);
+
 	GetWorld()->CollisionGroupLink(ECollisionGroup::PLAYER_BODY, ECollisionGroup::MONSTER_BODY);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::MONSTER_BODY, ECollisionGroup::OBJECT_WALL);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::PLAYER_ATTACK, ECollisionGroup::OBJECT_WALL);

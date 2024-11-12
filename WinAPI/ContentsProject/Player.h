@@ -49,6 +49,8 @@ public:
 	void CameraPosMove(float _DeltaTime);
 	void IsCameraMove();
 
+	void ClampPositionToRoom();
+
 	void RestoreInitialRenderState(float _DeltaTime);
 
 	// 공격관련

@@ -2,6 +2,7 @@
 #include <EngineCore/Actor.h>
 #include "BloodTear.h"
 #include "Player.h"
+#include "Room.h"
 
 // Ό³Έν :
 class AMonster : public AActor
@@ -93,7 +94,8 @@ protected:
 	float CoolDownElapsed = 0.0f;
 	float ShootingSpeed = 300.0f;
 	FVector2D TearDir = FVector2D::ZERO;
-	//bool TearFire = false;
+
+	ARoom* CurRoom = nullptr;
 	
 private:
 

@@ -36,10 +36,9 @@ public:
 	bool IsLinking(ARoom* _Room);
 	bool InterLinkRoom(ARoom* _Room, RoomDir _Dir);
 	ARoom* LinkRoom(ARoom* _Room, RoomDir _Dir);
-	void DoorSpriteSetting();
-
 	void AddDoor(RoomDir _Dir, ARoom* ConnectedRoom);
 
+	void DoorSpriteSetting();
 	void SpriteSetting();
 	void CollisionSetting();
 
@@ -107,6 +106,16 @@ public:
 		return CameraMove;
 	}
 
+	float GetRoomSizeOffsetX()
+	{
+		return RoomSizeOffsetX;
+	}
+
+	float GetRoomSizeOffsetY()
+	{
+		return RoomSizeOffsetY;
+	}
+
 protected:
 
 private:
@@ -119,12 +128,17 @@ private:
 	RoomDir Directon = RoomDir::NONE;
 	FVector2D RoomScale = FVector2D::ZERO;
 
+	float RoomSizeOffsetX = 0.0f;
+	float RoomSizeOffsetY = 0.0f;
+
 	// Room Collision And Renderer
 	class U2DCollision* RoomCollision = nullptr;
 
 	USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
 	USpriteRenderer* ControlsRenderer   = nullptr; // BaseRoom 컨트롤러 이미지
-	//USpriteRenderer* BolderLineRenderer = nullptr; // 화면 가장자리 검은 배경
+
+	AActor* CollisionActor = nullptr;
+	std::vector<AActor*> CollisionMonsters;
 
 	// Door Collision And Renderer
 	std::vector<class U2DCollision*> DoorCollisions;

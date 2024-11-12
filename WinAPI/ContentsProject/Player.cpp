@@ -73,8 +73,44 @@ void APlayer::Tick(float _DeltaTime)
 void APlayer::CollisionCheck()
 {
 	BodyCollision->SetCollisionEnter(std::bind(&APlayer::CollisionEnter, this, std::placeholders::_1));
-	//BodyCollision->SetCollisionStay(std::bind(&APlayer::CollisionStay, this, std::placeholders::_1));
+	WarpCollision->SetCollisionStay(std::bind(&APlayer::ClampPositionToRoom, this));
 
+}
+
+void APlayer::ClampPositionToRoom()
+{
+	FVector2D Pos = GetActorLocation();
+	FVector2D FootPos = Pos + WarpCollision->GetComponentLocation();
+
+	ARoom* CurRoom = ARoom::GetCurRoom();
+	FVector2D RoomPos = CurRoom->GetActorLocation();
+	FVector2D RoomScale = CurRoom->GetActorScale().Half();
+	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2;
+	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 2;
+
+	float LeftEdge = RoomPos.X - RoomScale.X - RoomSizeOffsetX;
+	float RightEdge = RoomPos.X + RoomScale.X + RoomSizeOffsetX;
+	float TopEdge = RoomPos.Y - RoomScale.Y - RoomSizeOffsetY;
+	float BotEdge = RoomPos.Y + RoomScale.Y + RoomSizeOffsetY;
+
+	if (LeftEdge > FootPos.X)
+	{
+		SetActorLocation(Pos + FVector2D{2, 0});
+	}
+	if (RightEdge < FootPos.X)
+	{
+		SetActorLocation(Pos + FVector2D{ -2, 0 });
+	}
+	if (TopEdge > FootPos.Y)
+	{
+		SetActorLocation(Pos + FVector2D{ 0, 2 });
+	}
+	if (BotEdge < FootPos.Y)
+	{
+		SetActorLocation(Pos + FVector2D{ 0, -2 });
+	}
+
+	int a = 0;
 }
 
 void APlayer::CollisionEnter(AActor* _Other)
@@ -153,8 +189,8 @@ void APlayer::CollisionSetting()
 
 	WarpCollision = CreateDefaultSubObject<U2DCollision>();
 	WarpCollision->SetComponentLocation({ 0, 10 });
-	WarpCollision->SetComponentScale({ 30, 10 });
-	WarpCollision->SetCollisionGroup(ECollisionGroup::WARP);
+	WarpCollision->SetComponentScale({ 30, 20 });
+	WarpCollision->SetCollisionGroup(ECollisionGroup::PLAYER_WARP);
 	WarpCollision->SetCollisionType(ECollisionType::Rect);
 
 	SetActorScale(WarpCollision->GetComponentScale());

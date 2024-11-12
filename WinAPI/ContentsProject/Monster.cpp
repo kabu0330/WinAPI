@@ -10,6 +10,7 @@
 #include "ContentsEnum.h"
 
 
+
 AMonster::AMonster()
 {
 	SetName("Fly");
@@ -42,11 +43,13 @@ AMonster::AMonster()
 void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
+	CurRoom = ARoom::GetCurRoom();
 }
 
 void AMonster::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
 
 	Move(_DeltaTime);
 	ChasePlayer(_DeltaTime);
