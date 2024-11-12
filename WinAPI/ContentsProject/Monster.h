@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include "BloodTear.h"
+#include "Player.h"
 
 // Ό³Έν :
 class AMonster : public AActor
@@ -27,6 +28,8 @@ public:
 	bool IsPlayerNearby();
 	FVector2D GetDirectionToPlayer();
 	void ChasePlayer(float _DeltaTime);
+
+	void BodyCollisionCheck();
 
 	void DeathCheck(float _DeltaTime);
 	void Death(float _DeltaTime);

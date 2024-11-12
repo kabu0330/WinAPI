@@ -51,6 +51,7 @@ void AMonster::Tick(float _DeltaTime)
 	Move(_DeltaTime);
 	ChasePlayer(_DeltaTime);
 
+	BodyCollisionCheck();
 
 	DeathCheck(_DeltaTime);
 }
@@ -65,6 +66,22 @@ void AMonster::ChasePlayer(float _DeltaTime)
 
 	Attack(_DeltaTime);
 	ChaseMove(_DeltaTime);
+}
+
+void AMonster::BodyCollisionCheck()
+{
+	AActor* CollisionActor = BodyCollision->CollisionOnce(ECollisionGroup::PLAYER_BODY);
+
+	if (nullptr == CollisionActor)
+	{
+		return;
+	}
+
+	APlayer* CollisionPlayer = dynamic_cast<APlayer*>(CollisionActor);
+	CollisionPlayer->ApplyDamaged(1);
+	CollisionPlayer->CollisionEnter(CollisionPlayer);
+
+	UEngineDebug::OutPutString(CollisionPlayer->GetName() + "에게 " + std::to_string(1) + " 의 충돌 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionPlayer->GetHp()));
 }
 
 void AMonster::ChaseMove(float _DeltaTime)
@@ -83,9 +100,9 @@ void AMonster::Move(float _DeltaTime)
 	}
 
 	MoveElapsedTime += _DeltaTime;
-	if (MoveElapsedTime > MoveTime)
+	if (MoveElapsedTime > MoveTime) // 일정 시간 이동하면 리턴
 	{
-		if (MoveElapsedTime > MoveCooldown)
+		if (MoveElapsedTime > MoveCooldown) // 멈춘 뒤 일정 시간이 흐르면 다시 이동
 		{
 			MoveElapsedTime = 0.0f;
 			return;
