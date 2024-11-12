@@ -66,6 +66,7 @@ void AMonster::ChasePlayer(float _DeltaTime)
 
 	Attack(_DeltaTime);
 	ChaseMove(_DeltaTime);
+
 }
 
 void AMonster::BodyCollisionCheck(float _DeltaTime)
@@ -119,19 +120,61 @@ void AMonster::Move(float _DeltaTime)
 		return;
 	}
 
-	Direction = FVector2D::LEFT;
+	Direction = GetRandomDir();
 	FVector2D MovePos = Direction * Speed * _DeltaTime;
 	AddActorLocation(MovePos);
-
 }
 
-FVector2D AMonster::GetMoveDir()
+FVector2D AMonster::GetRandomDir()
 {
+	FVector2D LeftTop = FVector2D::LEFT + FVector2D::UP;
+	LeftTop.Normalize();
+
+	FVector2D LeftBot = FVector2D::LEFT + FVector2D::DOWN;
+	LeftBot.Normalize();
+
+	FVector2D RightTop = FVector2D::RIGHT + FVector2D::UP;
+	RightTop.Normalize();
+
+	FVector2D RightBot = FVector2D::RIGHT + FVector2D::DOWN;
+	RightBot.Normalize();
+
 	UEngineRandom Random;
 	Random.SetSeed(time(nullptr));
-	Random.RandomInt(0, 7);
+	int Result = Random.RandomInt(0, 7);
 
-	return FVector2D();
+	FVector2D Dir = FVector2D::ZERO;
+	switch (Result)
+	{
+	case 0:
+		Dir = FVector2D::LEFT;
+		break;
+	case 1:
+		Dir = FVector2D::RIGHT;
+		break;
+	case 2:
+		Dir = FVector2D::UP;
+		break;
+	case 3:
+		Dir = FVector2D::DOWN;
+		break;
+	case 4:
+		Dir = LeftTop;
+		break;
+	case 5:
+		Dir = LeftBot;
+		break;
+	case 6:
+		Dir = RightTop;
+		break;
+	case 7:
+		Dir = RightBot;
+		break;
+	default:
+		break;
+	}
+
+	return FVector2D(Dir);
 }
 
 void AMonster::DeathCheck(float _DeltaTime)
@@ -181,7 +224,7 @@ bool AMonster::IsPlayerNearby()
 	FVector2D Distance = PlayerPos - MonsterPos;
 
 	float Length = Distance.Length();
-	float DetectLength = DetectCollision->GetComponentScale().Half().iX();
+	float DetectLength = DetectCollision->GetComponentScale().Half().X;
 
 	if (DetectLength >= Length)
 	{

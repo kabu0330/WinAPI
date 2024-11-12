@@ -48,14 +48,6 @@ public:
 	// _Value 값이  _Min ~ _Max 사잇값으로만 고정
 	static float Clamp(float _Value, float _Min = 0.0f, float _Max = 1.0f);
 
-	static float Distance(const FVector2D& _Vec0, const FVector2D& _Vec1)
-	{
-		FVector2D Result;
-		Result.X = _Vec0.X - _Vec1.X;
-		Result.Y = _Vec0.Y - _Vec1.Y;
-		return ::sqrt((Result.X * Result.X) + (Result.Y, Result.Y));
-	}
-
 	FVector2D& GetNormal()
 	{
 		this->Normalize();

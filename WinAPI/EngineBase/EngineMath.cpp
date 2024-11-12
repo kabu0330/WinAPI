@@ -7,7 +7,6 @@ const FVector2D FVector2D::RIGHT = {  1,  0 };
 const FVector2D FVector2D::UP    = {  0, -1 };
 const FVector2D FVector2D::DOWN  = {  0,  1 };
 
-
 FVector2D FVector2D::Abs(FVector2D& _Vector)
 {
 	if (0 > _Vector.X)
