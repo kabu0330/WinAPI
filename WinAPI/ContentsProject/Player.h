@@ -13,6 +13,7 @@ class APlayer : public AActor
 		RIGHT,
 		UP,
 		DOWN,
+		DEATH,
 		MAX
 	};
 
@@ -27,6 +28,7 @@ class APlayer : public AActor
 		ATTACK_RIGHT,
 		ATTACK_UP,
 		ATTACK_DOWN,
+		DEATH,
 		MAX
 	};
 
@@ -44,19 +46,34 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	// 주요 설정 함수
+	void CollisionSetting();
+	void CollisionFuctionSetting();
+	void SpriteSetting();
+	void CurStateAnimation(float _DeltaTime);
+	void UISetting();
+	void UITick(float _DeltaTime);
+
+
 	// 이동관련
 	void Move(float _DeltaTime);
-	void CameraPosMove(float _DeltaTime);
-	void IsCameraMove();
+	bool PlayerIsMove()
+	{
+		return IsMove;
+	}
 
 	void ClampPositionToRoom();
+	void IsCameraMove();
+	void CameraPosMove(float _DeltaTime);
+	U2DCollision* GetWarpCollision()
+	{
+		return WarpCollision;
+	}
 
-	void RestoreInitialRenderState(float _DeltaTime);
 
-	// 공격관련
-	void InputAttack(float _DeltaTime);
-
-	void Attack(float _DeltaTime);
+	// 공격 및 피격
+	void InputAttack(float _DeltaTime); // 입력 함수
+	void Attack(float _DeltaTime); // 실제 공격정보를 Tear로 넘기는 함수
 	bool IsAttack() const
 	{
 		return true == TearFire;
@@ -68,24 +85,30 @@ public:
 		return CurAttackHeadDir;
 	}
 
-	bool PlayerIsMove()
-	{
-		return IsMove;
-	}
+	void ShowHitAnimation(AActor* _Other);
+	void RestoreInitialRenderState(float _DeltaTime);
 
-	void CollisionSetting();
-	void CollisionCheck();
-
-
+	// 사망, 일시정지, 재시작 관련
 	bool IsDeath();
 	void Death(float _DeltaTime);
 	void DeathAnimation();
+	void SpiritAnimation();
 	void ShowDeathReport();
 	void Reset();
 
-	// 애니메이션
-	void CurStateAnimation(float _DeltaTime);
-	void SpriteSetting();
+	void SetInvincible(bool _OnOff)
+	{
+		Invincibility = _OnOff;
+	}
+	void SwitchInvincibility()
+	{
+		Invincibility = !Invincibility;
+	}
+	bool IsInvincible()
+	{
+		return Invincibility;
+	}
+
 
 	template<typename EnumType>
 	void SetRendererDir(EnumType _Dir)
@@ -95,17 +118,6 @@ public:
 		BodyState = static_cast<LowerState>(Direction);
 	}
 
-	// 충돌
-	U2DCollision* GetWarpCollision()
-	{
-		return WarpCollision;
-	}
-
-	void ShowHitAnimation(AActor* _Other);
-
-	// UI
-	void UISetting();
-	void UITick(float _DeltaTime);
 
 	// Stat
 	static int GetPlayerHptMax() 
@@ -155,15 +167,30 @@ private:
 	float TimeElapsed = 0.0f;
 	int Att = 3;
 
-	// Death And Restart
+	// Death And GameSetting
 	FVector2D InitPos = FVector2D::ZERO;
 	FVector2D DeathPos = FVector2D::ZERO;
 	bool IsDead = false;
+	bool Invincibility = false;
+	bool IsResetReady = false;
+	float FadeValue = 0.0f;
+	float FadeDir = 1.0f;
+	void FadeChange();
+	void FadeOut();
+	float SpiritMoveElapsed = 0.0f;
 
 	// Item
 	int PennyCount = 0;
-	int BombCount  = 1;
-	int KeyCount   = 1;
+	int BombCount = 1;
+	int KeyCount = 1;
+
+	//Bullet
+	ATear* Tear = nullptr;
+	float Cooldown = 0.5f;
+	float CoolDownElapsed = 0.0f;
+	FVector2D TearDir = FVector2D::ZERO;
+	bool TearFire = false;
+	bool LeftFire = true;
 
 	// Collision
 	U2DCollision* BodyCollision = nullptr;
@@ -174,14 +201,6 @@ private:
 	class USpriteRenderer* HeadRenderer = nullptr;
 	class USpriteRenderer* FullRenderer = nullptr;
 	float StateElapsed = 0.0f;
-
-	//Bullet
-	ATear* Tear = nullptr;
-	float Cooldown = 0.5f;
-	float CoolDownElapsed = 0.0f;
-	FVector2D TearDir = FVector2D::ZERO;
-	bool TearFire = false;
-	bool LeftFire = true;
 
 	// Animation State
 	UpperState HeadState = UpperState::IDLE;

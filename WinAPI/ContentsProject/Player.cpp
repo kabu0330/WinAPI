@@ -26,11 +26,11 @@ int APlayer::HeartMax = 8;
 APlayer::APlayer()
 {
 	SetName("Isaac");
+
 	SetActorLocation(Global::WindowSize.Half()); // 1. Actor의 위치는 의미가 있어도 크기는 의미가 없다.
 	InitPos = GetActorLocation();
 
 	SpriteSetting(); // 2. 상태에 따른 애니메이션 동작을 정의한다.
-
 	CollisionSetting(); // 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다. 
 
 	DebugOn(); // 디버그 대상에 포함
@@ -39,13 +39,22 @@ APlayer::APlayer()
 void APlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
 	UISetting();
-	CollisionCheck();
+	CollisionFuctionSetting();
 }
 
 void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+	// Debug
+	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
+	UEngineDebug::CoreOutPutString("Body : " + BodyRenderer->GetComponentLocation().ToString());
+	UEngineDebug::CoreOutPutString("Head : " + HeadRenderer->GetComponentLocation().ToString());
+
+	// 카메라
+	CameraPosMove(_DeltaTime);
 
 	Death(_DeltaTime);
 	UITick(_DeltaTime);
@@ -59,12 +68,12 @@ void APlayer::Tick(float _DeltaTime)
 		return;
 	}
 
-	IsCameraMove();
-
+	RestoreInitialRenderState(_DeltaTime);
+	IsCameraMove(); // 워프
 	ARoom* CurRoom = ARoom::GetCurRoom();
-	if (true == CurRoom->IsCameraMove())
+	if (true == CurRoom->IsCameraMove()) 
 	{
-		return;
+		return; // 워프 후 몬스터가 스폰되는 연출시간 동안 움직이지 않도록 
 	}
 
 	// 로직
@@ -74,20 +83,15 @@ void APlayer::Tick(float _DeltaTime)
 	// 렌더
 	CurStateAnimation(_DeltaTime);
 
-	// 카메라
-	CameraPosMove(_DeltaTime);
-
-	// Debug
-	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
 }
 
-void APlayer::CollisionCheck()
+void APlayer::CollisionFuctionSetting()
 {
 	BodyCollision->SetCollisionEnter(std::bind(&APlayer::ShowHitAnimation, this, std::placeholders::_1));
 	WarpCollision->SetCollisionStay(std::bind(&APlayer::ClampPositionToRoom, this));
-
 }
 
+// 맵 바깥으로 나가지 못하게 막는 함수
 void APlayer::ClampPositionToRoom()
 {
 	FVector2D Pos = GetActorLocation();
@@ -120,8 +124,6 @@ void APlayer::ClampPositionToRoom()
 	{
 		SetActorLocation(Pos + FVector2D{ 0, -2 });
 	}
-
-
 }
 
 void APlayer::ShowHitAnimation(AActor* _Other)
@@ -135,8 +137,8 @@ void APlayer::ShowHitAnimation(AActor* _Other)
 		return;
 	}
 
-	FullRenderer->SetActive(true);
 	FullRenderer->ChangeAnimation("Damaged");
+	FullRenderer->SetActive(true);
 	BodyRenderer->SetActive(false);
 	HeadRenderer->SetActive(false);
 }
@@ -165,24 +167,27 @@ void APlayer::UITick(float _DeltaTime)
 	}
 	  PlayerHpToHeart->SetPlayerHp(Heart);
 	PennyPickupNumber->SetValue(PennyCount);
-	BombPickupNumber->SetValue(BombCount);
+ 	 BombPickupNumber->SetValue(BombCount);
 	  KeyPickupNumber->SetValue(KeyCount);
 }
 
+// 플레이어가 공격받는 애니메이션이 출력되는 함수
 void APlayer::RestoreInitialRenderState(float _DeltaTime)
-{
-	if (true == FullRenderer->IsActive())
+{	// 피격 중이라면 리턴
+	if (false == FullRenderer->IsActive())
 	{
-		StateElapsed += _DeltaTime;
-		float ActionDuration = 0.5f;
-		if (StateElapsed > ActionDuration)
-		{
-			FullRenderer->SetActive(false);
-			BodyRenderer->SetActive(true);
-			HeadRenderer->SetActive(true);
-			StateElapsed = 0.0f;
-			return;
-		}
+		return;
+	}
+
+	StateElapsed += _DeltaTime;
+	float ActionDuration = 0.5f;
+	if (StateElapsed > ActionDuration)
+	{
+		FullRenderer->SetActive(false);
+		BodyRenderer->SetActive(true);
+		HeadRenderer->SetActive(true);
+		StateElapsed = 0.0f;
+		return;
 	}
 }
 
@@ -205,61 +210,82 @@ void APlayer::CollisionSetting()
 
 bool APlayer::IsDeath()
 {
-	if (Heart < 0)
+	if (Heart <= 0)
 	{
-		Heart = 0;		
-	}
-
-	if (0 == Heart)
-	{
+		Heart = 0;
 		IsDead = true;
 		return true;
 	}
+
 	return false;
 }
 
+// 플레이어가 죽으면 딱 한번 사망 관련 함수를 호출할 함수
 void APlayer::Death(float _DeltaTime)
 {
 	if (false == IsDeath())
 	{
-		RestoreInitialRenderState(_DeltaTime);
 		return;
 	}
 
-	BodyCollision->SetActive(false);
-	WarpCollision->SetActive(false);
-
-
-
-	FullRenderer->SetActive(true);
-	FullRenderer->SetComponentScale({ 120, 120 });
-	FullRenderer->ChangeAnimation("Death");
-
-	DeathPos = Global::WindowHalfScale - GetActorLocation();
-	SetActorLocation(DeathPos);
-
-	APlayGameMode::SetGamePaused(true);
-
-	TimeEventer.PushEvent(1.0f, std::bind(&APlayer::DeathAnimation, this));
-	TimeEventer.PushEvent(5.0f, std::bind(&APlayer::ShowDeathReport, this));
+	APlayGameMode::SetGamePaused(true); // 조작 멈춰, 몬스터들도 멈춰
+	DeathAnimation();
 }
 
 void APlayer::DeathAnimation()
 {
+	if (false == IsResetReady)
+	{
+		FullRenderer->SetComponentScale({ 120, 120 });
+		FullRenderer->ChangeAnimation("Death");
+		
+		FullRenderer->SetActive(true);
+		BodyRenderer->SetActive(false);
+		HeadRenderer->SetActive(false);
+		BodyRenderer->SetComponentLocation({ -5, -BodyRenderer->GetComponentScale().Half().iY() -10});
+		HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() - 40});
+		FadeOut();
+
+		FVector2D Pos = GetActorLocation();
+		DeathPos = GetActorLocation() ;
+
+		SetActorLocation(DeathPos);
+	}
+
+	IsResetReady = true; 
+
+	TimeEventer.PushEvent(1.0f, std::bind(&APlayer::SpiritAnimation, this));
+}
+
+void APlayer::SpiritAnimation()
+{
+	FullRenderer->SetActive(true);
+	BodyRenderer->SetActive(true);
+	HeadRenderer->SetActive(true);
+
 	BodyRenderer->ChangeAnimation("Body_Death");
 	HeadRenderer->ChangeAnimation("Head_Death");
 
-	//BodyRenderer->SetActive(true);
-	//HeadRenderer->SetActive(true);
+	WarpCollision->SetActive(false);
+	//WarpCollision->SetComponentScale({0, 0});
 
-	BodyRenderer->SetComponentLocation({ DeathPos.X, DeathPos.Y - 5});
-	HeadRenderer->SetComponentLocation({ DeathPos.X, DeathPos.Y - 5});
+	// 데스리포트 호출
+	TimeEventer.PushEvent(3.0f, std::bind(&APlayer::ShowDeathReport, this));
 
 	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
+	float SpiritMoveDuration = 3.0f;
+	SpiritMoveElapsed += DeltaTime;
+	if (SpiritMoveDuration < SpiritMoveElapsed)
+	{
+		FullRenderer->SetActive(false); // 이 때 안지우고 Reset함수에서 지우면 빠른 재시작 시 렌더러가 남아있다.
+		return;
+	}
 	float SpiritSpeed = 50.0f;
 	Dir = FVector2D::UP;
-	AddActorLocation(Dir * SpiritSpeed * DeltaTime);
-	
+	BodyRenderer->AddComponentLocation(Dir * SpiritSpeed * DeltaTime);
+	HeadRenderer->AddComponentLocation(Dir * SpiritSpeed * DeltaTime);
+
+
 }
 
 void APlayer::ShowDeathReport()
@@ -284,18 +310,26 @@ void APlayer::ShowDeathReport()
 
 void APlayer::Reset()
 {
-	IsDead = false;
 	Heart = 6;
-	SetActorLocation(InitPos);
+
+
+	APlayGameMode::SetGamePaused(false);
+	IsDead = false;
+	IsResetReady = false;
+	Dir = FVector2D::ZERO;
 
 	BodyCollision->SetActive(true);
 	WarpCollision->SetActive(true);
 
-	BodyRenderer->ChangeAnimation("Body_Idle");
-	HeadRenderer->ChangeAnimation("Head_Idle");
+	BodyRenderer->SetAlphaFloat(1.0f);
+	HeadRenderer->SetAlphaFloat(1.0f);
 
-	FullRenderer->SetActive(false);
+	HeadState = UpperState::IDLE;
+	BodyState = LowerState::IDLE;
 
+	SetActorLocation(InitPos);
+	BodyRenderer->SetComponentLocation(GetActorLocation() - Global::WindowHalfScale);
+	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
 }
 
 void APlayer::Move(float _DeltaTime)
@@ -304,8 +338,6 @@ void APlayer::Move(float _DeltaTime)
 	{
 		return;
 	}
-	// 자연스럽게 이동하게 보이는 법 : 이동(로직)과 렌더를 분리할 것
-	// 이동
 
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
@@ -445,8 +477,8 @@ void APlayer::IsCameraMove()
 	ARoom* CurRoom = ARoom::GetCurRoom();
 	if (true == CurRoom->IsCameraMove())
 	{
-		BodyRenderer->ChangeAnimation("Body_Idle");
-		HeadRenderer->ChangeAnimation("Head_Down");
+		HeadState = UpperState::IDLE;
+		BodyState = LowerState::IDLE;
 	}
 }
 
@@ -570,76 +602,6 @@ void APlayer::SetAttackDir(UpperState _HeadState)
 	CurAttackHeadDir = static_cast<int>(_HeadState);
 }
 
-void APlayer::CurStateAnimation(float _DeltaTime)
-{
-	switch (BodyState)
-	{
-	case APlayer::LowerState::IDLE:
-		BodyRenderer->ChangeAnimation("Body_Idle");
-		break;
-	case APlayer::LowerState::LEFT:
-		BodyRenderer->ChangeAnimation("Body_Left");
-		break;
-	case APlayer::LowerState::RIGHT:
-		BodyRenderer->ChangeAnimation("Body_Right");
-		break;
-	case APlayer::LowerState::UP:
-		BodyRenderer->ChangeAnimation("Body_Up");
-		break;
-	case APlayer::LowerState::DOWN:
-		BodyRenderer->ChangeAnimation("Body_Down");
-		break;
-	default:
-		break;
-	}
-
-	switch (HeadState)
-	{
-	case APlayer::UpperState::IDLE:
-		HeadRenderer->ChangeAnimation("Head_Down");
-		break;
-	case APlayer::UpperState::LEFT:
-		HeadRenderer->ChangeAnimation("Head_Left");
-		break;
-	case APlayer::UpperState::RIGHT:
-		HeadRenderer->ChangeAnimation("Head_RIght");
-		break;
-	case APlayer::UpperState::UP:
-		HeadRenderer->ChangeAnimation("Head_Up");
-		break;
-	case APlayer::UpperState::DOWN:
-		HeadRenderer->ChangeAnimation("Head_Down");
-		break;
-	case APlayer::UpperState::ATTACK_LEFT:
-		HeadRenderer->ChangeAnimation("Head_Attack_Left");
-		break;
-	case APlayer::UpperState::ATTACK_RIGHT:
-		HeadRenderer->ChangeAnimation("Head_Attack_Right");
-		break;
-	case APlayer::UpperState::ATTACK_UP:
-		HeadRenderer->ChangeAnimation("Head_Attack_Up");
-		break;
-	case APlayer::UpperState::ATTACK_DOWN:
-		HeadRenderer->ChangeAnimation("Head_Attack_Down");
-		break;
-	default:
-		break;
-	}
-
-	// HeadState가 공격 중 모션이라면
-	if (static_cast<int>(UpperState::ATTACK_LEFT) <= static_cast<int>(HeadState))
-	{
-		StateElapesd += _DeltaTime;
-
-		// 0.2초 이상이 경과한다면 BodyState 따라가.
-		if (StateElapesd >= StateTime)
-		{
-			StateElapesd = 0.0f;
-			HeadState = static_cast<UpperState>(BodyState);
-		}
-	}
-}
-
 void APlayer::SpriteSetting()
 {
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
@@ -648,7 +610,7 @@ void APlayer::SpriteSetting()
 	BodyRenderer->CreateAnimation("Body_Down", "Body.png", 20, 29, 0.05f);
 	BodyRenderer->CreateAnimation("Body_Up", "Body.png", { 29, 28, 27, 26, 25, 24, 23, 22, 21, 20 }, 0.05f);
 	BodyRenderer->CreateAnimation("Body_Idle", "Body.png", 29, 29, 0.05f);
-	BodyRenderer->CreateAnimation("Body_Death", "Death_Body.png", 0, 4, 0.5f);
+	BodyRenderer->CreateAnimation("Body_Death", "Death_Body.png", 0, 4, 0.2f);
 
 	BodyRenderer->SetComponentScale({ 64, 64 });
 	//BodyRenderer->ChangeAnimation("Body_Idle");
@@ -667,16 +629,15 @@ void APlayer::SpriteSetting()
 	HeadRenderer->CreateAnimation("Head_Attack_Right", "Head.png", { 3, 2, 3 }, 0.12f);
 	HeadRenderer->CreateAnimation("Head_Attack_Down", "Head.png", { 7, 6, 7 }, 0.12f);
 	HeadRenderer->CreateAnimation("Head_Attack_Up", "Head.png", { 5, 4, 5 }, 0.12f);
-	HeadRenderer->CreateAnimation("Head_Death", "Death_Head.png", 0, 1, 0.5f);
+	HeadRenderer->CreateAnimation("Head_Death", "Death_Head.png", 0, 0, 0.5f);
 
 	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
 	HeadRenderer->SetComponentScale({ 64, 64 });
-	//HeadRenderer->ChangeAnimation("Head_Down");
-	HeadRenderer->ChangeAnimation("Head_Death");
+	HeadRenderer->ChangeAnimation("Head_Down");
 
 
 	BodyRenderer->SetOrder(ERenderOrder::Player);
-	HeadRenderer->SetOrder(ERenderOrder::Player);
+	HeadRenderer->SetOrder(ERenderOrder::PlayerHead);
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Event
@@ -742,4 +703,95 @@ void APlayer::UISetting()
 	KeyPickupNumber->SetOrder(ERenderOrder::UI);
 	KeyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
 	KeyPickupNumber->SetActorLocation(BombPickupNumber->GetActorLocation() + Offset);
+}
+
+void APlayer::FadeChange()
+{
+	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
+	FadeValue += DeltaTime * 0.3f * FadeDir;
+	BodyRenderer->SetAlphaFloat(FadeValue);
+	HeadRenderer->SetAlphaFloat(FadeValue);
+}
+
+void APlayer::FadeOut()
+{
+	FadeValue = 1.0f;
+	FadeDir = -1.0f;
+	TimeEventer.PushEvent(3.0f, std::bind_front(&APlayer::FadeChange, this), true, false);
+}
+
+void APlayer::CurStateAnimation(float _DeltaTime)
+{
+	switch (BodyState)
+	{
+	case APlayer::LowerState::IDLE:
+		BodyRenderer->ChangeAnimation("Body_Idle");
+		break;
+	case APlayer::LowerState::LEFT:
+		BodyRenderer->ChangeAnimation("Body_Left");
+		break;
+	case APlayer::LowerState::RIGHT:
+		BodyRenderer->ChangeAnimation("Body_Right");
+		break;
+	case APlayer::LowerState::UP:
+		BodyRenderer->ChangeAnimation("Body_Up");
+		break;
+	case APlayer::LowerState::DOWN:
+		BodyRenderer->ChangeAnimation("Body_Down");
+		break;
+	case APlayer::LowerState::DEATH:
+		BodyRenderer->ChangeAnimation("Body_Death");
+		break;
+	default:
+		break;
+	}
+
+	switch (HeadState)
+	{
+	case APlayer::UpperState::IDLE:
+		HeadRenderer->ChangeAnimation("Head_Down");
+		break;
+	case APlayer::UpperState::LEFT:
+		HeadRenderer->ChangeAnimation("Head_Left");
+		break;
+	case APlayer::UpperState::RIGHT:
+		HeadRenderer->ChangeAnimation("Head_RIght");
+		break;
+	case APlayer::UpperState::UP:
+		HeadRenderer->ChangeAnimation("Head_Up");
+		break;
+	case APlayer::UpperState::DOWN:
+		HeadRenderer->ChangeAnimation("Head_Down");
+		break;
+	case APlayer::UpperState::ATTACK_LEFT:
+		HeadRenderer->ChangeAnimation("Head_Attack_Left");
+		break;
+	case APlayer::UpperState::ATTACK_RIGHT:
+		HeadRenderer->ChangeAnimation("Head_Attack_Right");
+		break;
+	case APlayer::UpperState::ATTACK_UP:
+		HeadRenderer->ChangeAnimation("Head_Attack_Up");
+		break;
+	case APlayer::UpperState::ATTACK_DOWN:
+		HeadRenderer->ChangeAnimation("Head_Attack_Down");
+		break;
+	case APlayer::UpperState::DEATH:
+		HeadRenderer->ChangeAnimation("Head_Death");
+		break;
+	default:
+		break;
+	}
+
+	// HeadState가 공격 중 모션이라면
+	if (static_cast<int>(UpperState::ATTACK_LEFT) <= static_cast<int>(HeadState))
+	{
+		StateElapesd += _DeltaTime;
+
+		// 0.2초 이상이 경과한다면 BodyState 따라가.
+		if (StateElapesd >= StateTime)
+		{
+			StateElapesd = 0.0f;
+			HeadState = static_cast<UpperState>(BodyState);
+		}
+	}
 }

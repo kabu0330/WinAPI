@@ -30,7 +30,7 @@ AMonster::AMonster()
 	SetHp(10);
 
 	DetectCollision = CreateDefaultSubObject<U2DCollision>();
-	DetectCollision->SetComponentScale({ 500, 500 });
+	DetectCollision->SetComponentScale({ 400, 400 });
 	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
 	DetectCollision->SetCollisionType(ECollisionType::CirCle);
 	DetectCollision->SetActive(true);
