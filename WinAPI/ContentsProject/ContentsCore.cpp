@@ -64,6 +64,8 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
 	UImageManager::GetInst().CuttingSprite("Head.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("Isaac.png", 4, 3);
+	UImageManager::GetInst().CuttingSprite("Death_Head.png", 2, 1);
+	UImageManager::GetInst().CuttingSprite("Death_Body.png", 5, 1);
 
 	UImageManager::GetInst().CuttingSprite("effect_tearpoofa.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("effect_bloodtear.png", 4, 4);

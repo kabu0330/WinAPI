@@ -79,7 +79,9 @@ public:
 
 	bool IsDeath();
 	void Death(float _DeltaTime);
+	void DeathAnimation();
 	void ShowDeathReport();
+	void Reset();
 
 	// 애니메이션
 	void CurStateAnimation(float _DeltaTime);
@@ -155,6 +157,7 @@ private:
 
 	// Death And Restart
 	FVector2D InitPos = FVector2D::ZERO;
+	FVector2D DeathPos = FVector2D::ZERO;
 	bool IsDead = false;
 
 	// Item

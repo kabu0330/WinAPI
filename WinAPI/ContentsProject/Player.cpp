@@ -67,8 +67,6 @@ void APlayer::Tick(float _DeltaTime)
 		return;
 	}
 
-
-
 	// 로직
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
@@ -228,14 +226,40 @@ void APlayer::Death(float _DeltaTime)
 		return;
 	}
 
+	BodyCollision->SetActive(false);
+	WarpCollision->SetActive(false);
+
+
+
 	FullRenderer->SetActive(true);
-	BodyRenderer->SetActive(false);
-	HeadRenderer->SetActive(false);
 	FullRenderer->SetComponentScale({ 120, 120 });
 	FullRenderer->ChangeAnimation("Death");
+
+	DeathPos = Global::WindowHalfScale - GetActorLocation();
+	SetActorLocation(DeathPos);
+
 	APlayGameMode::SetGamePaused(true);
 
-	TimeEventer.PushEvent(3.0f, std::bind(&APlayer::ShowDeathReport, this));
+	TimeEventer.PushEvent(1.0f, std::bind(&APlayer::DeathAnimation, this));
+	TimeEventer.PushEvent(5.0f, std::bind(&APlayer::ShowDeathReport, this));
+}
+
+void APlayer::DeathAnimation()
+{
+	BodyRenderer->ChangeAnimation("Body_Death");
+	HeadRenderer->ChangeAnimation("Head_Death");
+
+	//BodyRenderer->SetActive(true);
+	//HeadRenderer->SetActive(true);
+
+	BodyRenderer->SetComponentLocation({ DeathPos.X, DeathPos.Y - 5});
+	HeadRenderer->SetComponentLocation({ DeathPos.X, DeathPos.Y - 5});
+
+	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
+	float SpiritSpeed = 50.0f;
+	Dir = FVector2D::UP;
+	AddActorLocation(Dir * SpiritSpeed * DeltaTime);
+	
 }
 
 void APlayer::ShowDeathReport()
@@ -249,16 +273,28 @@ void APlayer::ShowDeathReport()
 	
 	if (UEngineInput::GetInst().IsDown(VK_SPACE))
 	{
-
-		IsDead = false;
-		Heart = 6;
-		
-
+		Reset();
 		ADeathReportScene::DeathReport->CloseDeathReport();
 
 		// 제일 마지막에
 		UEngineAPICore::GetCore()->OpenLevel("Title");
 	}
+
+}
+
+void APlayer::Reset()
+{
+	IsDead = false;
+	Heart = 6;
+	SetActorLocation(InitPos);
+
+	BodyCollision->SetActive(true);
+	WarpCollision->SetActive(true);
+
+	BodyRenderer->ChangeAnimation("Body_Idle");
+	HeadRenderer->ChangeAnimation("Head_Idle");
+
+	FullRenderer->SetActive(false);
 
 }
 
@@ -612,9 +648,11 @@ void APlayer::SpriteSetting()
 	BodyRenderer->CreateAnimation("Body_Down", "Body.png", 20, 29, 0.05f);
 	BodyRenderer->CreateAnimation("Body_Up", "Body.png", { 29, 28, 27, 26, 25, 24, 23, 22, 21, 20 }, 0.05f);
 	BodyRenderer->CreateAnimation("Body_Idle", "Body.png", 29, 29, 0.05f);
+	BodyRenderer->CreateAnimation("Body_Death", "Death_Body.png", 0, 4, 0.5f);
 
 	BodyRenderer->SetComponentScale({ 64, 64 });
-	BodyRenderer->ChangeAnimation("Body_Idle");
+	//BodyRenderer->ChangeAnimation("Body_Idle");
+	BodyRenderer->ChangeAnimation("Body_Death");
 
 	// Body
 	/////////////////////////////////////////////////////////////////////////////// 
@@ -629,10 +667,12 @@ void APlayer::SpriteSetting()
 	HeadRenderer->CreateAnimation("Head_Attack_Right", "Head.png", { 3, 2, 3 }, 0.12f);
 	HeadRenderer->CreateAnimation("Head_Attack_Down", "Head.png", { 7, 6, 7 }, 0.12f);
 	HeadRenderer->CreateAnimation("Head_Attack_Up", "Head.png", { 5, 4, 5 }, 0.12f);
+	HeadRenderer->CreateAnimation("Head_Death", "Death_Head.png", 0, 1, 0.5f);
 
 	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
 	HeadRenderer->SetComponentScale({ 64, 64 });
-	HeadRenderer->ChangeAnimation("Head_Down");
+	//HeadRenderer->ChangeAnimation("Head_Down");
+	HeadRenderer->ChangeAnimation("Head_Death");
 
 
 	BodyRenderer->SetOrder(ERenderOrder::Player);
