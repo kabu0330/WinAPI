@@ -79,6 +79,7 @@ public:
 
 	bool IsDeath();
 	void Death(float _DeltaTime);
+	void ShowDeathReport();
 
 	// 애니메이션
 	void CurStateAnimation(float _DeltaTime);
@@ -151,6 +152,10 @@ private:
 	bool IsMove = false;
 	float TimeElapsed = 0.0f;
 	int Att = 3;
+
+	// Death And Restart
+	FVector2D InitPos = FVector2D::ZERO;
+	bool IsDead = false;
 
 	// Item
 	int PennyCount = 0;

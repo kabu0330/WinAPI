@@ -11,6 +11,7 @@ enum class ERenderOrder
 	UI = 9999,
 	Fade = 20000,
 	Loading = 30000,
+	Menu = 40000
 };
 
 enum class ECollisionGroup

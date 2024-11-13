@@ -7,6 +7,7 @@
 #include <EngineCore/Actor.h>
 #include "Player.h"
 #include "Monster.h"
+#include "PlayGameMode.h"
 
 ABloodTear::ABloodTear()
 {
@@ -41,6 +42,11 @@ void ABloodTear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _At
 void ABloodTear::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+	if (true == APlayGameMode::IsGamePaused())
+	{
+		return;
+	}
 
 	UpdateTearPosion(_DeltaTime);
 	CheckForExplosion(_DeltaTime);

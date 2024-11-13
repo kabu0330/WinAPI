@@ -20,6 +20,7 @@ public:
 	void FadeOut();
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
+	void SceneDimming(float _Alpha);
 
 	class USpriteRenderer* GetRenderer()
 	{

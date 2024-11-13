@@ -15,6 +15,7 @@
 #include "Room.h"
 #include "Tear.h"
 
+#include "DeathReportScene.h"
 #include "HeartUI.h"
 #include "PickupItemUI.h"
 #include "PickupNumberUI.h"
@@ -26,7 +27,8 @@ APlayer::APlayer()
 {
 	SetName("Isaac");
 	SetActorLocation(Global::WindowSize.Half()); // 1. Actor의 위치는 의미가 있어도 크기는 의미가 없다.
-	
+	InitPos = GetActorLocation();
+
 	SpriteSetting(); // 2. 상태에 따른 애니메이션 동작을 정의한다.
 
 	CollisionSetting(); // 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다. 
@@ -45,6 +47,18 @@ void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	Death(_DeltaTime);
+	UITick(_DeltaTime);
+
+	if (true == APlayGameMode::IsGamePaused()) // 메뉴를 열면 정지
+	{
+		return;
+	}
+	if (true == IsDeath()) // 플레이어가 죽으면 정지
+	{
+		return;
+	}
+
 	IsCameraMove();
 
 	ARoom* CurRoom = ARoom::GetCurRoom();
@@ -53,11 +67,11 @@ void APlayer::Tick(float _DeltaTime)
 		return;
 	}
 
+
+
 	// 로직
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
-	UITick(_DeltaTime);
-	Death(_DeltaTime);
 
 	// 렌더
 	CurStateAnimation(_DeltaTime);
@@ -118,9 +132,13 @@ void APlayer::ShowHitAnimation(AActor* _Other)
 	{
 		return;
 	}
+	if (true == IsDead)
+	{
+		return;
+	}
 
 	FullRenderer->SetActive(true);
-	FullRenderer->SetSprite("Isaac.png", 6);
+	FullRenderer->ChangeAnimation("Damaged");
 	BodyRenderer->SetActive(false);
 	HeadRenderer->SetActive(false);
 }
@@ -129,7 +147,7 @@ void APlayer::UITick(float _DeltaTime)
 {
 	if (UEngineInput::GetInst().IsDown('I'))
 	{
-		Heart -= 1;
+		Heart = 0;
 	}		
 	if (UEngineInput::GetInst().IsDown('M'))
 	{
@@ -196,6 +214,7 @@ bool APlayer::IsDeath()
 
 	if (0 == Heart)
 	{
+		IsDead = true;
 		return true;
 	}
 	return false;
@@ -214,6 +233,32 @@ void APlayer::Death(float _DeltaTime)
 	HeadRenderer->SetActive(false);
 	FullRenderer->SetComponentScale({ 120, 120 });
 	FullRenderer->ChangeAnimation("Death");
+	APlayGameMode::SetGamePaused(true);
+
+	TimeEventer.PushEvent(3.0f, std::bind(&APlayer::ShowDeathReport, this));
+}
+
+void APlayer::ShowDeathReport()
+{
+	if (false == IsDeath())
+	{
+		return;
+	}
+	
+	ADeathReportScene::DeathReport->ShowDeathReport();
+	
+	if (UEngineInput::GetInst().IsDown(VK_SPACE))
+	{
+
+		IsDead = false;
+		Heart = 6;
+		
+
+		ADeathReportScene::DeathReport->CloseDeathReport();
+
+		// 제일 마지막에
+		UEngineAPICore::GetCore()->OpenLevel("Title");
+	}
 
 }
 
@@ -597,6 +642,7 @@ void APlayer::SpriteSetting()
 	// Event
 	FullRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	FullRenderer->CreateAnimation("Death", "Isaac.png", { 0, 6, 3 }, 0.1f, false);
+	FullRenderer->CreateAnimation("Damaged", "Isaac.png", 6, 6, 0.1f);
 	FullRenderer->SetComponentScale({ 128, 128 });
 	FullRenderer->SetOrder(ERenderOrder::Player);
 	FullRenderer->SetPivot({ 0, -20 });

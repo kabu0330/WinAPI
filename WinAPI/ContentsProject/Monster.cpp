@@ -5,6 +5,7 @@
 #include <EngineBase/EngineRandom.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/2DCollision.h>
+#include "PlayGameMode.h"
 
 #include "Global.h"
 #include "ContentsEnum.h"
@@ -51,7 +52,7 @@ void AMonster::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-	if (true == Player->IsDeath())
+	if (true == APlayGameMode::IsGamePaused())
 	{
 		return;
 	}

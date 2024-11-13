@@ -7,6 +7,7 @@
 #include <EngineCore/Actor.h>
 #include "Player.h"
 #include "Monster.h"
+#include "PlayGameMode.h"
 
 
 ATear::ATear()
@@ -70,6 +71,11 @@ void ATear::BeginPlay()
 void ATear::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+	if (true == APlayGameMode::IsGamePaused())
+	{
+		return;
+	}
 
 	if (nullptr == TearCollision)
 	{

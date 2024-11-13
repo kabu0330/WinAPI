@@ -159,6 +159,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="DeathReportScene.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Fade.h" />
     <ClInclude Include="Global.h">
       <SubType>
@@ -177,6 +181,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Monster.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -227,6 +235,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="DeathReportScene.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Global.cpp">
       <SubType>
@@ -245,6 +257,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
       <SubType>
       </SubType>
     </ClCompile>

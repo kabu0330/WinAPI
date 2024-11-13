@@ -30,12 +30,29 @@ public:
 	void LevelChangeStart() override;
 
 	void FadeOut();
+	void FadeActiveFalse();
+	void CheckInput();
+
+	void SwitchIsShowDeathReport()
+	{
+		IsShowMenu = !IsShowMenu;
+	}
+	
+	static bool IsGamePaused()
+	{
+		return true == GamePaused;
+	}
+	static void SetGamePaused(bool _OnOff)
+	{
+		GamePaused = _OnOff;
+	}
 
 protected:
 
 private:
-	class AFade* FadeBackground;
-	class ALoadingScene* LoadingImage;
+	class ALoadingScene* LoadingImage = nullptr;
+	bool IsShowMenu = false;
+	static bool GamePaused; // 게임 일시정지
 };
 
 

@@ -16,6 +16,10 @@
 #include "Monster.h"
 #include "Fade.h"
 #include "LoadingScene.h"
+#include "DeathReportScene.h"
+#include "MenuScene.h"
+
+bool APlayGameMode::GamePaused = false;
 
 void APlayGameMode::BeginPlay()
 {
@@ -74,6 +78,53 @@ void APlayGameMode::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	EngineDebug(_DeltaTime);
+	CheckInput();
+
+}
+
+void APlayGameMode::CheckInput()
+{
+	AActor* Pawn = GetWorld()->GetPawn();
+	APlayer* Player = dynamic_cast<APlayer*>(Pawn);	
+
+	// 플레이어가 죽으면 메뉴 창 열지마.
+	if (true == Player->IsDeath())
+	{
+		return;
+	}
+
+	if (UEngineInput::GetInst().IsDown(VK_ESCAPE))
+	{
+		if (false == IsShowMenu)
+		{
+			AMenuScene::Menu->ShowMenu();
+			SwitchIsShowDeathReport();
+			SetGamePaused(true);
+		}
+		else
+		{
+			AMenuScene::Menu->CloseMenu();
+			SwitchIsShowDeathReport();
+			SetGamePaused(false);
+		}
+	}
+}
+
+void APlayGameMode::UISetting()
+{
+	// Text
+	ABannerTextUI* TextUI = GetWorld()->SpawnActor<ABannerTextUI>();
+	TextUI->SetTextSpriteName("banner.png");
+	TextUI->SetOrder(ERenderOrder::UI);
+	TextUI->SetTextScale({ 16, 10 });
+	TextUI->SetActorLocation({ 400, 100 });
+	//TextUI->SetTextOut("TheBindingOfIsaac"); // 띄어쓰기 문제 해결 어떻게?
+
+	// Death Report
+	ADeathReportScene::DeathReport = GetWorld()->SpawnActor<ADeathReportScene>();
+	AMenuScene::Menu = GetWorld()->SpawnActor<AMenuScene>();
+
+
 }
 
 void APlayGameMode::EngineDebug(float _DeltaTime)
@@ -93,11 +144,13 @@ void APlayGameMode::EngineDebug(float _DeltaTime)
 
 void APlayGameMode::LevelChangeStart()
 {
+	AFade::MainFade = GetWorld()->SpawnActor<AFade>();
+
 #ifdef _DEBUG
 
 #else
-	FadeBackground = GetWorld()->SpawnActor<AFade>();
-	USpriteRenderer* FadeRenderer = FadeBackground->GetRenderer();
+	GamePaused = true;
+	USpriteRenderer* FadeRenderer = AFade::MainFade->GetRenderer();
 
 	LoadingImage = GetWorld()->SpawnActor<ALoadingScene>();
 	USpriteRenderer* LoadingRenderer = LoadingImage->GetRenderer();
@@ -105,28 +158,33 @@ void APlayGameMode::LevelChangeStart()
 	FadeRenderer->SetActive(true);
 	LoadingRenderer->SetActive(true);
 
-	TimeEventer.PushEvent(3.0f, std::bind_front(&APlayGameMode::FadeOut, this));
+	TimeEventer.PushEvent(3.0f, std::bind(&APlayGameMode::FadeOut, this));
 #endif // DEBUG
 }
 
 void APlayGameMode::FadeOut()
 {
-	FadeBackground->FadeOut();
+#ifdef _DEBUG
+
+#else
+	AFade::MainFade->FadeOut();
 	LoadingImage->FadeOut();
 
-	FadeBackground->Destroy(5.0f);
+	TimeEventer.PushEvent(5.0f, std::bind(&APlayGameMode::FadeActiveFalse, this));
 	LoadingImage->Destroy(5.0f);
+	GamePaused = false; // 여기서 플레이어가 이동 가능
+#endif // _DEBUG
+
 }
 
-void APlayGameMode::UISetting()
+void APlayGameMode::FadeActiveFalse()
 {
-	// Text
-	ABannerTextUI* TextUI = GetWorld()->SpawnActor<ABannerTextUI>();
-	TextUI->SetTextSpriteName("banner.png");
-	TextUI->SetOrder(ERenderOrder::UI);
-	TextUI->SetTextScale({ 16, 10 });
-	TextUI->SetActorLocation({ 400, 100 });
-	//TextUI->SetTextOut("TheBindingOfIsaac"); // 띄어쓰기 문제 해결 어떻게?
+	// Fade가 화면에 렌더될 때 굉장히 많은 부하를 일으켜서 사용을 다 하고 나면 반드시 Active를 비활성화 해야한다.
+#ifdef _DEBUG
+
+#else
+	AFade::MainFade->SetActive(false);
+#endif // _DEBUG
 }
 
 APlayGameMode::APlayGameMode()

@@ -98,6 +98,9 @@ protected:
 
 	ARoom* ParentRoom = nullptr;
 	APlayer* Player = nullptr;
+
+
+	
 	
 private:
 

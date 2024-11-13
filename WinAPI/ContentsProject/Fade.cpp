@@ -52,6 +52,11 @@ void AFade::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 }
 
+void AFade::SceneDimming(float _Alpha)
+{
+	Renderer->SetAlphaFloat(_Alpha);
+}
+
 void AFade::LevelChangeStart()
 {
 	MainFade = this;
