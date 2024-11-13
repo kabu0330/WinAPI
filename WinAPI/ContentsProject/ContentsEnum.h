@@ -10,6 +10,7 @@ enum class ERenderOrder
 	PLAYER = 0,
 	TEAR = 1000,
 	UI = 9999,
+	FADE = 20000,
 };
 
 enum class ECollisionGroup

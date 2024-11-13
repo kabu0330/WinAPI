@@ -91,6 +91,8 @@ void ABloodTear::CheckForExplosion(float _DeltaTime)
 		UEngineDebug::OutPutString(CollisionPlayer->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionPlayer->GetHp()));
 	}
 
+	//TimeEventer.PushEvent(Duration, std::bind(&ABloodTear::Explosion, this, std::placeholders::_1));
+
 	TimeElapesd += _DeltaTime;
 	if (Duration < TimeElapesd)
 	{

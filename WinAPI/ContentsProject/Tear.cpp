@@ -193,8 +193,6 @@ void ATear::CheckForExplosion(float _DeltaTime)
 
 void ATear::CollisionCheck()
 {
-	// RectToCircle이 없어서 터지는 듯
-	
 	//TearCollision->SetCollisionEnter(std::bind(&ATear::ExplodeOnWallCollision, this, std::placeholders::_1));
 }
 

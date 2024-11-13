@@ -43,9 +43,33 @@ ULevel::~ULevel()
 	}
 }
 
+void ULevel::BeginPlayCheck()
+{
+	{
+		std::list<AActor*>::iterator StartIter = BeginPlayList.begin();
+		std::list<AActor*>::iterator EndIter = BeginPlayList.end();
+
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			AActor* CurActor = *StartIter;
+			CurActor->BeginPlay();
+			AllActors.push_back(CurActor);
+		}
+
+		BeginPlayList.clear();
+
+		// todtjdtl 
+		AActor::ComponentBeginPlay();
+	}
+
+
+}
+
 // 내가 CurLevel 됐을 때 
 void ULevel::LevelChangeStart()
 {
+	BeginPlayCheck();
+
 	{
 		std::list<AActor*>::iterator StartIter = AllActors.begin();
 		std::list<AActor*>::iterator EndIter = AllActors.end();
@@ -103,23 +127,7 @@ void ULevel::LevelChangeEnd()
 
 void ULevel::Tick(float _DeltaTime)
 {
-	{
-		std::list<AActor*>::iterator StartIter = BeginPlayList.begin();
-		std::list<AActor*>::iterator EndIter = BeginPlayList.end();
-
-		for (; StartIter != EndIter; ++StartIter)
-		{
-			AActor* CurActor = *StartIter;
-			CurActor->BeginPlay();
-			AllActors.push_back(CurActor);
-		}
-
-		// 액터의 BeginPlay를 모두 실행 후 데이터를 삭제하므로 프로그램 실행 최초 1회만 반복한다.
-		BeginPlayList.clear();
-
-		// 컴포넌트의 소유자는 Actor이므로 Actor에서 돌린다.
-		AActor::ComponentBeginPlay();
-	}
+	BeginPlayCheck();
 
 	{
 		std::list<AActor*>::iterator StartIter = AllActors.begin();

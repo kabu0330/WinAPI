@@ -103,6 +103,36 @@ void UEngineWinImage::CopyToTrans(UEngineWinImage* _TargetImage, const FTransfor
 	);
 }
 
+void UEngineWinImage::CopyToAlpha(UEngineWinImage* _TargetImage, const FTransform& _RenderTrans, const FTransform& _LTImageTrans, unsigned char _Alpha)
+{
+	// 알파 블랜드는 알파 채널이라는 것을 이용해서 알파를 적용시킨다.
+	// 이미지는 R G B A 로 이루어져 있다. 컬러 채널이라고 부른다. 여기서 A 채널을 옅게 하냐, 진하게 하냐를 통해 투명도를 결정한다.
+
+	BLENDFUNCTION BLEND;
+	BLEND.BlendOp = AC_SRC_OVER;
+	BLEND.BlendFlags = 0;
+	BLEND.AlphaFormat = AC_SRC_ALPHA;
+	BLEND.SourceConstantAlpha = _Alpha;
+
+	HDC CopyDC = ImageDC;
+	HDC TargetDC = _TargetImage->ImageDC;
+	FVector2D LeftTop = _RenderTrans.CenterLeftTop();
+
+	AlphaBlend(
+		TargetDC,
+		LeftTop.iX(),
+		LeftTop.iY(),
+		_RenderTrans.Scale.iX(),
+		_RenderTrans.Scale.iY(),
+		CopyDC,
+		_LTImageTrans.Location.iX(),
+		_LTImageTrans.Location.iY(),
+		_LTImageTrans.Scale.iX(),
+		_LTImageTrans.Scale.iY(),
+		BLEND
+	);
+}
+
 // bmp로 변환 후 이미지 정보 저장 및 이미지를 로드할 HDC와 HBITMAP 할당 및 저장
 void UEngineWinImage::Load(UEngineWinImage* _TargetImage, std::string_view _Path)
 {						// _TargetImage : 윈도우 메인 HDC	

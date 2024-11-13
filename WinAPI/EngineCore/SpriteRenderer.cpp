@@ -97,7 +97,15 @@ void USpriteRenderer::Render(float _DeltaTime)
 
 	Trans.Location += Pivot;
 
-	CurData.Image->CopyToTrans(BackBufferImage, Trans, CurData.Transform);
+	
+	if (Alpha == 255)
+	{
+		CurData.Image->CopyToTrans(BackBufferImage, Trans, CurData.Transform);
+	}
+	else // 알파값 적용
+	{
+		CurData.Image->CopyToAlpha(BackBufferImage, Trans, CurData.Transform, Alpha);
+	}
 }
 
 void USpriteRenderer::BeginPlay()
