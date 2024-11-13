@@ -17,7 +17,7 @@ AMonster::AMonster()
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ 25, 25 });
-	BodyCollision->SetCollisionGroup(ECollisionGroup::MONSTER_BODY);
+	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_Body);
 	BodyCollision->SetCollisionType(ECollisionType::CirCle);
 
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
@@ -30,7 +30,7 @@ AMonster::AMonster()
 
 	DetectCollision = CreateDefaultSubObject<U2DCollision>();
 	DetectCollision->SetComponentScale({ 500, 500 });
-	DetectCollision->SetCollisionGroup(ECollisionGroup::MONSETR_DETECTINRANGE);
+	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
 	DetectCollision->SetCollisionType(ECollisionType::CirCle);
 	DetectCollision->SetActive(true);
 
@@ -86,7 +86,7 @@ void AMonster::BodyCollisionCheck(float _DeltaTime)
 		return;
 	}
 
-	AActor* CollisionActor = BodyCollision->CollisionOnce(ECollisionGroup::PLAYER_BODY);
+	AActor* CollisionActor = BodyCollision->CollisionOnce(ECollisionGroup::Player_Body);
 
 	if (nullptr == CollisionActor)
 	{

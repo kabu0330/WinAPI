@@ -8,13 +8,13 @@ AFade* AFade::MainFade = nullptr;
 
 AFade::AFade()
 {
-	BackSpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BackSpriteRenderer->SetOrder(ERenderOrder::FADE);
-	BackSpriteRenderer->SetSprite("Fade.bmp");
-	FVector2D MapScale = BackSpriteRenderer->SetSpriteScale(1.0f);
-	BackSpriteRenderer->SetComponentLocation(MapScale.Half());
-	BackSpriteRenderer->SetActive(false);
-	BackSpriteRenderer->SetCameraEffect(false);
+	Renderer = CreateDefaultSubObject<USpriteRenderer>();
+	Renderer->SetOrder(ERenderOrder::Fade);
+	Renderer->SetSprite("Fade.bmp");
+	FVector2D MapScale = Renderer->SetSpriteScale(1.0f);
+	Renderer->SetComponentLocation(MapScale.Half());
+	Renderer->SetActive(false);
+	Renderer->SetCameraEffect(false);
 }
 
 AFade::~AFade()
@@ -25,21 +25,31 @@ void AFade::FadeChange()
 {
 	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
 	FadeValue += DeltaTime * 0.5f * FadeDir;
-	BackSpriteRenderer->SetAlphaFloat(FadeValue);
+	Renderer->SetAlphaFloat(FadeValue);
 }
 
 void AFade::FadeIn()
 {
 	FadeValue = 0.0f;
 	FadeDir = 1.0f;
-	TimeEventer.PushEvent(5.0f, std::bind_front(&AFade::FadeChange, this), true, false);
+	TimeEventer.PushEvent(2.0f, std::bind_front(&AFade::FadeChange, this), true, false);
 }
 
 void AFade::FadeOut()
 {
 	FadeValue = 1.0f;
 	FadeDir = -1.0f;
-	TimeEventer.PushEvent(5.0f, std::bind_front(&AFade::FadeChange, this), true, false);
+	TimeEventer.PushEvent(2.0f, std::bind_front(&AFade::FadeChange, this), true, false);
+}
+
+void AFade::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AFade::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
 }
 
 void AFade::LevelChangeStart()

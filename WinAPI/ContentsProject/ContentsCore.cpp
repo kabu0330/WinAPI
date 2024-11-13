@@ -53,8 +53,8 @@ void ContentsCore::LevelSetting()
 	//UEngineAPICore::GetCore()->CreateLevel("End");
 
 	// 최초 실행될 레벨을 결정한다.
-	UEngineAPICore::GetCore()->OpenLevel("Title");
-	//UEngineAPICore::GetCore()->OpenLevel("Play");
+	//UEngineAPICore::GetCore()->OpenLevel("Title");
+	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
 void ContentsCore::SpriteSetting()
@@ -85,11 +85,20 @@ void ContentsCore::SpriteSetting()
 
 void ContentsCore::FolderSetting()
 {
+	// TitleGameMode
 	UEngineDirectory TitleDir;
 	TitleDir.MoveParentToDirectory("Resources");
 	TitleDir.Append("Title");
 	UImageManager::GetInst().LoadFolder(TitleDir.GetPathToString());
 
+	// PlayGameMode
+	// 1. Loading
+	UEngineDirectory PlayModeLoading;
+	PlayModeLoading.MoveParentToDirectory("Resources//Play");
+	PlayModeLoading.Append("PlayModeLoading");
+	UImageManager::GetInst().LoadFolder(PlayModeLoading.GetPathToString());
+
+	// 2. Playing
 	UEngineDirectory DoorLockSprite;
 	DoorLockSprite.MoveParentToDirectory("Resources//Play");
 	DoorLockSprite.Append("NormalDoor");

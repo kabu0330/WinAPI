@@ -18,6 +18,13 @@ public:
 
 	void FadeIn();
 	void FadeOut();
+	void BeginPlay() override;
+	void Tick(float _DeltaTime) override;
+
+	class USpriteRenderer* GetRenderer()
+	{
+		return Renderer;
+	}
 
 protected:
 
@@ -25,7 +32,7 @@ private:
 	void LevelChangeStart() override;
 	float FadeValue = 0.0f;
 	float FadeDir = 1.0f;
-	class USpriteRenderer* BackSpriteRenderer;
+	class USpriteRenderer* Renderer;
 	void FadeChange();
 };
 

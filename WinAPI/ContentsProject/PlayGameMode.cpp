@@ -14,6 +14,8 @@
 #include "PickupItemUI.h"
 #include "BannerTextUI.h"
 #include "Monster.h"
+#include "Fade.h"
+#include "LoadingScene.h"
 
 void APlayGameMode::BeginPlay()
 {
@@ -58,20 +60,18 @@ void APlayGameMode::BeginPlay()
 
 void APlayGameMode::CollisionGroupLinkSetting()
 {
-	GetWorld()->CollisionGroupLink(ECollisionGroup::PLAYER_WARP, ECollisionGroup::OBJECT_WALL);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::PLAYER_WARP, ECollisionGroup::WARP);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::PLAYER_BODY, ECollisionGroup::MONSTER_BODY);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::PLAYER_ATTACK, ECollisionGroup::OBJECT_WALL);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Warp, ECollisionGroup::Object_Wall);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Warp, ECollisionGroup::Warp);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Body, ECollisionGroup::Monster_Body);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Object_Wall);
 
-	GetWorld()->CollisionGroupLink(ECollisionGroup::MONSTER_BODY, ECollisionGroup::OBJECT_WALL);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::MONSTER_ATTACK, ECollisionGroup::OBJECT_WALL);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Body, ECollisionGroup::Object_Wall);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Object_Wall);
 }
 
 void APlayGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
-
-
 
 	EngineDebug(_DeltaTime);
 }
@@ -89,6 +89,33 @@ void APlayGameMode::EngineDebug(float _DeltaTime)
 	{
 		UEngineDebug::SwitchIsDebug();
 	}
+}
+
+void APlayGameMode::LevelChangeStart()
+{
+#ifdef _DEBUG
+
+#else
+	FadeBackground = GetWorld()->SpawnActor<AFade>();
+	USpriteRenderer* FadeRenderer = FadeBackground->GetRenderer();
+
+	LoadingImage = GetWorld()->SpawnActor<ALoadingScene>();
+	USpriteRenderer* LoadingRenderer = LoadingImage->GetRenderer();
+
+	FadeRenderer->SetActive(true);
+	LoadingRenderer->SetActive(true);
+
+	TimeEventer.PushEvent(3.0f, std::bind_front(&APlayGameMode::FadeOut, this));
+#endif // DEBUG
+}
+
+void APlayGameMode::FadeOut()
+{
+	FadeBackground->FadeOut();
+	LoadingImage->FadeOut();
+
+	FadeBackground->Destroy(5.0f);
+	LoadingImage->Destroy(5.0f);
 }
 
 void APlayGameMode::UISetting()

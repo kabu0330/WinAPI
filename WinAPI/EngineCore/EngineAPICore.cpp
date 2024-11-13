@@ -96,6 +96,24 @@ void UEngineAPICore::EngineTick()
 
 void UEngineAPICore::Tick()
 {
+	if (nullptr != NextLevel)
+	{
+		// 레벨들을 왔다갔다 할 때가 있기 때문에
+		if (nullptr != CurLevel)
+		{
+			CurLevel->LevelChangeEnd();
+		}
+
+		CurLevel = NextLevel;
+
+		NextLevel->LevelChangeStart();
+
+		NextLevel = nullptr;
+
+		// 델타타임이 지연될수 있으므로 델타타임을 초기화시켜주는것이 좋다.
+		DeltaTimer.TimeStart();
+	}
+
 	// Delta Time
 	DeltaTimer.TimeCheck();
 	float DeltaTime = DeltaTimer.GetDeltaTime();
@@ -117,7 +135,7 @@ void UEngineAPICore::Tick()
 	CurLevel->Render(DeltaTime);
 	CurLevel->Collision(DeltaTime);
 
-	// 틱돌고 랜더돌고 릴리즈
+	// 틱돌고 렌더돌고 충돌돌고 릴리즈
 	CurLevel->Release(DeltaTime);
 }
 
@@ -134,7 +152,7 @@ void UEngineAPICore::OpenLevel(std::string_view _LevelName)
 		return;
 	}
 
-	CurLevel = FindIter->second;
+	NextLevel = FindIter->second;
 }
 
 

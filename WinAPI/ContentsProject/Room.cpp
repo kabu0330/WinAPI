@@ -337,7 +337,7 @@ void ARoom::BeginPlay()
 		ControlsRenderer->SetSprite("controls.png");
 		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowHalfScale.iX(), GetActorLocation().iY() - Global::WindowHalfScale.iY() - 20 });
 		ControlsRenderer->SetComponentScale({ 655, 145 }); // 385, 85
-		ControlsRenderer->SetOrder(ERenderOrder::CONTROLS);
+		ControlsRenderer->SetOrder(ERenderOrder::Controls);
 	}
 	else if ("BossRoom" == GetName())
 	{
@@ -354,7 +354,7 @@ void ARoom::SpriteSetting()
 	RoomRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	RoomRenderer->SetSprite("Room_01.png");
 	RoomRenderer->SetComponentScale(RoomScale);
-	RoomRenderer->SetOrder(ERenderOrder::BACKGROUND);
+	RoomRenderer->SetOrder(ERenderOrder::Background);
 }
 
 void ARoom::CollisionSetting()
@@ -365,7 +365,7 @@ void ARoom::CollisionSetting()
 	RoomCollision = CreateDefaultSubObject<U2DCollision>();
 	RoomCollision->SetComponentLocation({ 0, 0 });
 	RoomCollision->SetComponentScale({ RoomScale.X + RoomSizeOffsetX, RoomScale.Y + RoomSizeOffsetY });
-	RoomCollision->SetCollisionGroup(ECollisionGroup::OBJECT_WALL);
+	RoomCollision->SetCollisionGroup(ECollisionGroup::Object_Wall);
 	RoomCollision->SetCollisionType(ECollisionType::Rect);
 
 	DoorCollisions.resize(4);
@@ -373,7 +373,7 @@ void ARoom::CollisionSetting()
 	{
 		DoorCollisions[i] = CreateDefaultSubObject<U2DCollision>();
 		DoorCollisions[i]->SetComponentScale({ 0, 0 }); // SetActive를 false로 설정하여도 Collision이 맵 가운데에 생성되는 문제
-		DoorCollisions[i]->SetCollisionGroup(ECollisionGroup::WARP);
+		DoorCollisions[i]->SetCollisionGroup(ECollisionGroup::Warp);
 		DoorCollisions[i]->SetCollisionType(ECollisionType::Rect);
 		DoorCollisions[i]->SetActive(false);
 	}
@@ -394,7 +394,7 @@ void ARoom::DoorSpriteSetting()
 	for (int i = 0; i < DoorRenderers.size(); i++)
 	{
 		DoorRenderers[i]->SetComponentScale({ 128, 128 });
-		DoorRenderers[i]->SetOrder(ERenderOrder::DOOR);
+		DoorRenderers[i]->SetOrder(ERenderOrder::Door);
 		DoorRenderers[i]->SetActive(false); // 세팅해두고 일단 렌더를 끈다. AddDoor 함수에서 호출되는 RoomDir 방향의 문만 렌더한다.
 	}
 

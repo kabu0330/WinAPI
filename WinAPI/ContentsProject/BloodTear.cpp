@@ -16,14 +16,14 @@ ABloodTear::ABloodTear()
 	TearCollision = CreateDefaultSubObject<U2DCollision>();
 	TearCollision->SetComponentLocation({ 0, 0 });
 	TearCollision->SetComponentScale({ 25, 25 });
-	TearCollision->SetCollisionGroup(ECollisionGroup::MONSTER_ATTACK);
+	TearCollision->SetCollisionGroup(ECollisionGroup::Monster_Attack);
 	TearCollision->SetCollisionType(ECollisionType::CirCle);
 
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	TearEffectRenderer->CreateAnimation("BloodTear_Normal", "effect_bloodtear.png", 0, 0, 0, false);
 	TearEffectRenderer->CreateAnimation("BloodTear_Attack", "effect_bloodtear.png", 1, 15, 0.05f, false);
 	TearEffectRenderer->SetComponentScale({ 96, 96 }); // 64, 64
-	TearEffectRenderer->SetOrder(ERenderOrder::TEAR);
+	TearEffectRenderer->SetOrder(ERenderOrder::Tear);
 	TearEffectRenderer->ChangeAnimation("BloodTear_Normal");
 	TearEffectRenderer->SetActive(true);
 
@@ -76,7 +76,7 @@ void ABloodTear::CheckForExplosion(float _DeltaTime)
 
 	if (false == TearCollision->IsDestroy())
 	{
-		CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::PLAYER_BODY);
+		CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::Player_Body);
 	}
 
 	// 플레이어와 충돌하면 터진다.

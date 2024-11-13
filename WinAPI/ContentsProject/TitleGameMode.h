@@ -18,13 +18,9 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime);
 
-	void EnterPlayGameMode();
-	void FadeOut();
-
 protected:
 
 private:
-	class AFade* FadeBackground;
-	bool IsChangeGameMode = false;
+	
 };
 

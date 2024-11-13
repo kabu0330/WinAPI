@@ -17,14 +17,14 @@ ATear::ATear()
 	TearCollision = CreateDefaultSubObject<U2DCollision>();
 	TearCollision->SetComponentLocation({ 0, 0 });
 	TearCollision->SetComponentScale({ 25, 25 });
-	TearCollision->SetCollisionGroup(ECollisionGroup::PLAYER_ATTACK);
+	TearCollision->SetCollisionGroup(ECollisionGroup::Player_Attack);
 	TearCollision->SetCollisionType(ECollisionType::CirCle);
 	
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
 	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.05f, false);
 	TearEffectRenderer->SetComponentScale({ 96, 96 }); // 64, 64
-	TearEffectRenderer->SetOrder(ERenderOrder::TEAR);
+	TearEffectRenderer->SetOrder(ERenderOrder::Tear);
 	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
 	TearEffectRenderer->SetActive(true);
 
@@ -173,7 +173,7 @@ void ATear::CheckForExplosion(float _DeltaTime)
 
 	if (false == TearCollision->IsDestroy())
 	{
-		CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::MONSTER_BODY);
+		CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::Monster_Body);
 	}
 
 	if (nullptr == CollisionActor)

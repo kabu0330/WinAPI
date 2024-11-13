@@ -2,6 +2,7 @@
 #include "TitleScene.h"
 #include <EngineCore/SpriteRenderer.h>
 #include "Global.h"
+#include "ContentsEnum.h"
 
 ATitleScene::ATitleScene()
 {
@@ -19,6 +20,7 @@ void ATitleScene::BeginPlay()
 	TitleRenderer->CreateAnimation("Background", "Title", 0, 7, 0.2f);
 	TitleRenderer->SetComponentScale(Global::WindowSize);
 	TitleRenderer->ChangeAnimation("Background");
+	TitleRenderer->SetOrder(ERenderOrder::Background);
 
 }
 

@@ -49,8 +49,11 @@
     <ClInclude Include="BloodTear.h">
       <Filter>04_Play</Filter>
     </ClInclude>
+    <ClInclude Include="LoadingScene.h">
+      <Filter>04_Play\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="Fade.h">
-      <Filter>03_Global</Filter>
+      <Filter>04_Play\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -102,8 +105,11 @@
     <ClCompile Include="BloodTear.cpp">
       <Filter>04_Play</Filter>
     </ClCompile>
+    <ClCompile Include="LoadingScene.cpp">
+      <Filter>04_Play\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="Fade.cpp">
-      <Filter>03_Global</Filter>
+      <Filter>04_Play\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +136,9 @@
     </Filter>
     <Filter Include="04_Play\Monster">
       <UniqueIdentifier>{4b30e55e-31b8-48c5-b6e9-0684ca68c45e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Play\Scene">
+      <UniqueIdentifier>{4f7444ed-0369-40dc-8868-00b5695febeb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

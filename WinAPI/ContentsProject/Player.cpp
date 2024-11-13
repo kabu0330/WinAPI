@@ -175,13 +175,13 @@ void APlayer::CollisionSetting()
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, -15 });
 	BodyCollision->SetComponentScale({ 30, 50 });
-	BodyCollision->SetCollisionGroup(ECollisionGroup::PLAYER_BODY);
+	BodyCollision->SetCollisionGroup(ECollisionGroup::Player_Body);
 	BodyCollision->SetCollisionType(ECollisionType::Rect);
 
 	WarpCollision = CreateDefaultSubObject<U2DCollision>();
 	WarpCollision->SetComponentLocation({ 0, 5 });
 	WarpCollision->SetComponentScale({ 30, 20 });
-	WarpCollision->SetCollisionGroup(ECollisionGroup::PLAYER_WARP);
+	WarpCollision->SetCollisionGroup(ECollisionGroup::Player_Warp);
 	WarpCollision->SetCollisionType(ECollisionType::CirCle);
 
 	SetActorScale(WarpCollision->GetComponentScale());
@@ -590,15 +590,15 @@ void APlayer::SpriteSetting()
 	HeadRenderer->ChangeAnimation("Head_Down");
 
 
-	BodyRenderer->SetOrder(ERenderOrder::PLAYER);
-	HeadRenderer->SetOrder(ERenderOrder::PLAYER);
+	BodyRenderer->SetOrder(ERenderOrder::Player);
+	HeadRenderer->SetOrder(ERenderOrder::Player);
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Event
 	FullRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	FullRenderer->CreateAnimation("Death", "Isaac.png", { 0, 6, 3 }, 0.1f, false);
 	FullRenderer->SetComponentScale({ 128, 128 });
-	FullRenderer->SetOrder(ERenderOrder::PLAYER);
+	FullRenderer->SetOrder(ERenderOrder::Player);
 	FullRenderer->SetPivot({ 0, -20 });
 	FullRenderer->SetActive(false);
 

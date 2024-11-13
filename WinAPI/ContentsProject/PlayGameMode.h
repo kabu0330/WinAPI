@@ -27,9 +27,15 @@ public:
 
 	void EngineDebug(float _DeltaTime);
 
+	void LevelChangeStart() override;
+
+	void FadeOut();
+
 protected:
 
 private:
+	class AFade* FadeBackground;
+	class ALoadingScene* LoadingImage;
 };
 
 
