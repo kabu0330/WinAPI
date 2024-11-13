@@ -159,6 +159,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="Global.h">
       <SubType>
       </SubType>
@@ -222,6 +223,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Global.cpp">
       <SubType>
       </SubType>

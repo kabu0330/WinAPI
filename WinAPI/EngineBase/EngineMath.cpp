@@ -73,11 +73,31 @@ public:
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Rect)][static_cast<int>(ECollisionType::Rect)] = FTransform::RectToRect;
 
 		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::CirCle)][static_cast<int>(ECollisionType::CirCle)] = FTransform::CirCleToCirCle;
+
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::Rect)][static_cast<int>(ECollisionType::CirCle)] = FTransform::RectToCirCle;
+
+		FTransform::AllCollisionFunction[static_cast<int>(ECollisionType::CirCle)][static_cast<int>(ECollisionType::Rect)] = FTransform::CirCleToRect;
+
 	}
 };
 
 // 데이터 영역
 CollisionFunctionInit Inst = CollisionFunctionInit();
+
+bool FTransform::PointToCirCle(const FTransform& _Left, const FTransform& _Right)
+{
+	FTransform LeftTrans = _Left;
+	LeftTrans.Scale = FVector2D::ZERO;
+	return CirCleToCirCle(LeftTrans, _Right);
+}
+
+// 점 vs 사각형
+bool FTransform::PointToRect(const FTransform& _Left, const FTransform& _Right)
+{
+	FTransform LeftTrans = _Left;
+	LeftTrans.Scale = FVector2D::ZERO;
+	return RectToRect(LeftTrans, _Right);
+}
 
 bool FTransform::Collision(ECollisionType _LeftType, const FTransform& _Left, ECollisionType _RightType, const FTransform& _Right)
 {
@@ -118,6 +138,48 @@ bool FTransform::CirCleToCirCle(const FTransform& _Left, const FTransform& _Righ
 	if (Len.Length() < _Left.Scale.hX() + _Right.Scale.hX())
 	{
 		return true;
+	}
+
+	return false;
+}
+
+bool FTransform::RectToCirCle(const FTransform& _Left, const FTransform& _Right)
+{
+	return CirCleToRect(_Right, _Left);
+}
+
+
+bool FTransform::CirCleToRect(const FTransform& _Left, const FTransform& _Right)
+{
+	// 좌우로 반지름 확장한 트랜스폼
+	FTransform WTransform = _Right;
+	WTransform.Scale.X += _Left.Scale.X;
+
+	// 위아래로 반지름 만큼 확장한 트랜스폼
+	FTransform HTransform = _Right;
+	HTransform.Scale.Y += _Left.Scale.X;
+
+	if (true == PointToRect(_Left, WTransform) || true == PointToRect(_Left, HTransform))
+	{
+		return true;
+	}
+
+	static FVector2D ArrPoint[4]; // 쓰레드에서는 static으로 하여 비용 절감 못한다.
+
+	ArrPoint[0] = _Right.CenterLeftTop();
+	ArrPoint[1] = _Right.CenterLeftBottom();
+	ArrPoint[2] = _Right.CenterRightTop();
+	ArrPoint[3] = _Right.CenterRightBottom();
+
+	FTransform PointCirCle;
+	PointCirCle.Scale = _Left.Scale;
+	for (size_t i = 0; i < 4; i++)
+	{
+		PointCirCle.Location = ArrPoint[i];
+		if (true == PointToCirCle(_Left, PointCirCle))
+		{
+			return true;
+		}
 	}
 
 	return false;

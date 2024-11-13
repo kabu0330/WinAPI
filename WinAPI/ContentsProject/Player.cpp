@@ -173,16 +173,16 @@ void APlayer::RestoreInitialRenderState(float _DeltaTime)
 void APlayer::CollisionSetting()
 {
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
-	BodyCollision->SetComponentLocation({ 0, 0 });
-	BodyCollision->SetComponentScale({ 50, 50 });
+	BodyCollision->SetComponentLocation({ 0, -15 });
+	BodyCollision->SetComponentScale({ 30, 50 });
 	BodyCollision->SetCollisionGroup(ECollisionGroup::PLAYER_BODY);
-	BodyCollision->SetCollisionType(ECollisionType::CirCle);
+	BodyCollision->SetCollisionType(ECollisionType::Rect);
 
 	WarpCollision = CreateDefaultSubObject<U2DCollision>();
 	WarpCollision->SetComponentLocation({ 0, 5 });
 	WarpCollision->SetComponentScale({ 30, 20 });
 	WarpCollision->SetCollisionGroup(ECollisionGroup::PLAYER_WARP);
-	WarpCollision->SetCollisionType(ECollisionType::Rect);
+	WarpCollision->SetCollisionType(ECollisionType::CirCle);
 
 	SetActorScale(WarpCollision->GetComponentScale());
 }

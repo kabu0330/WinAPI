@@ -117,7 +117,7 @@ public:
 		Alpha = _Value;
 	}
 
-	void SetAlphafloat(float _Value)
+	void SetAlphaFloat(float _Value)
 	{
 		_Value = UEngineMath::Clamp(_Value, 0.0f, 1.0f);
 		// 언제든지 쉽게 다른 차원의 값으로 변경될수 있다.
