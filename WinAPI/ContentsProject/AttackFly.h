@@ -32,6 +32,11 @@ public:
 
 	void Death(float _DeltaTime);
 
+	void SetParentRoom(ARoom* _Parent)
+	{
+		ParentRoom = _Parent;
+	}
+
 protected:
 
 private:

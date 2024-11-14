@@ -2,7 +2,7 @@
 #include <EngineCore/Actor.h>
 #include "BloodTear.h"
 #include "Player.h"
-#include "Room.h"
+#include <EngineCore/SpriteRenderer.h>
 
 // 설명 :
 class AMonster : public AActor
@@ -27,6 +27,11 @@ public:
 	virtual void Death(float _DeltaTime) {}
 	virtual void ClampPositionToRoom() {} // 이동 제한
 
+	virtual void SetParentRoom(class ARoom* _Parent)
+	{
+		ParentRoom = _Parent;
+	}
+
 	void DeathCheck(float _DeltaTime)
 	{
 		if (false == IsDeath())
@@ -47,13 +52,13 @@ public:
 
 	void RendererDestroy()
 	{
-		if (true != Renderer->IsCurAnimationEnd())
+		if (true != BodyRenderer->IsCurAnimationEnd())
 		{
 			return;
 		}
-		Renderer->SetActive(false);
-		Renderer->Destroy();
-		Renderer = nullptr;
+		BodyRenderer->SetActive(false);
+		BodyRenderer->Destroy();
+		BodyRenderer = nullptr;
 	}
 
 	bool IsDeath()
@@ -88,7 +93,7 @@ public:
 protected:
 	class U2DCollision* BodyCollision = nullptr;
 
-	class USpriteRenderer* Renderer = nullptr;
+	class USpriteRenderer* BodyRenderer = nullptr;
 
 	// Stat
 	int   Hp    = 1;
@@ -117,7 +122,7 @@ protected:
 	float ShootingSpeed = 300.0f;
 	FVector2D TearDir = FVector2D::ZERO;
 
-	ARoom* ParentRoom = nullptr;
+	class ARoom* ParentRoom = nullptr;
 	APlayer* Player = nullptr;
 
 private:

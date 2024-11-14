@@ -21,12 +21,12 @@ AAttackFly::AAttackFly()
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_Body);
 	BodyCollision->SetCollisionType(ECollisionType::CirCle);
 
-	Renderer = CreateDefaultSubObject<USpriteRenderer>();
-	Renderer->CreateAnimation("Fly.IDle", "Fly.png", 1, 2, 0.1f);
-	Renderer->CreateAnimation("Fly_Death", "Fly.png", 4, 14, 0.03f, false);
-	Renderer->SetComponentScale({ 256, 256 });
-	Renderer->ChangeAnimation("Fly.IDle");
-	Renderer->SetOrder(ERenderOrder::Monsetr);
+	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BodyRenderer->CreateAnimation("Fly.IDle", "Fly.png", 1, 2, 0.1f);
+	BodyRenderer->CreateAnimation("Fly_Death", "Fly.png", 4, 14, 0.03f, false);
+	BodyRenderer->SetComponentScale({ 256, 256 });
+	BodyRenderer->ChangeAnimation("Fly.IDle");
+	BodyRenderer->SetOrder(ERenderOrder::Monsetr);
 
 	SetHp(10);
 
@@ -42,8 +42,6 @@ void AAttackFly::BeginPlay()
 	Super::BeginPlay();
 	AMonster::BeginPlay();
 
-	ParentRoom = ARoom::GetCurRoom();
-
 	AActor* MainPawn = GetWorld()->GetPawn();
 	Player = dynamic_cast<APlayer*>(MainPawn);
 }
@@ -52,6 +50,11 @@ void AAttackFly::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
+
+	if (ParentRoom != ARoom::GetCurRoom())
+	{
+		return;
+	}
 
 	if (true == APlayGameMode::IsGamePaused())
 	{
@@ -289,9 +292,9 @@ void AAttackFly::Death(float _DeltaTime)
 		RendererDestroy();
 	}
 
-	Renderer->ChangeAnimation("Fly_Death");
+	BodyRenderer->ChangeAnimation("Fly_Death");
 
-	if (false == Renderer->IsCurAnimationEnd())
+	if (false == BodyRenderer->IsCurAnimationEnd())
 	{
 		return;
 	}

@@ -24,6 +24,11 @@ void AMonster::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	if (true == APlayGameMode::IsGamePaused())
+	{
+		return;
+	}
+
 }
 
 AMonster::~AMonster()

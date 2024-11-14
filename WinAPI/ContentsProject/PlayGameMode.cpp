@@ -57,7 +57,8 @@ void APlayGameMode::BeginPlay()
 
 	// Monster
 	//AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
-	AMonster* AttackMonster = GetWorld()->SpawnActor<AAttackFly>();
+	MinionRoom0->CreateMonster<AAttackFly>({ -100, -100 });
+	MinionRoom0->CreateMonster<AAttackFly>({ 100, -100 });
 
 
 	CollisionGroupLinkSetting();

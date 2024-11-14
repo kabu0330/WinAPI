@@ -4,6 +4,7 @@
 #include <vector>
 #include "Global.h"
 #include <EngineCore/SpriteRenderer.h>
+#include "Monster.h"
 
 enum class RoomDir
 {
@@ -116,6 +117,15 @@ public:
 		return RoomSizeOffsetY;
 	}
 
+	template<typename MonsterType>
+	void CreateMonster(FVector2D _Pivot)
+	{
+		AMonster* NewMonster = GetWorld()->SpawnActor<MonsterType>();
+		NewMonster->SetActorLocation(this->GetActorLocation() + _Pivot);
+		NewMonster->SetParentRoom(this);
+		Monsters.push_back(NewMonster);
+	}
+
 protected:
 
 private:
@@ -143,6 +153,9 @@ private:
 	// Door Collision And Renderer
 	std::vector<class U2DCollision*> DoorCollisions;
 	std::vector<USpriteRenderer*> DoorRenderers;
+
+	// MonsterSpawn
+	std::list<AMonster*> Monsters;
 	
 
 	// 카메라 이동관련 멤버
