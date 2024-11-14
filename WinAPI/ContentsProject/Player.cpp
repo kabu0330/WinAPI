@@ -44,17 +44,49 @@ void APlayer::BeginPlay()
 	CollisionFuctionSetting();
 }
 
+void APlayer::PlayerDebugSetting(float _DeltaTime)
+{
+	CameraPosMove(_DeltaTime);
+	UIDebug(_DeltaTime);
+
+	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
+	UEngineDebug::CoreOutPutString("Body : " + BodyRenderer->GetComponentLocation().ToString());
+	UEngineDebug::CoreOutPutString("Head : " + HeadRenderer->GetComponentLocation().ToString());
+}
+
+void APlayer::UIDebug(float _DeltaTime)
+{
+	if (true == IsDeath())
+	{
+		return;
+	}
+	if (UEngineInput::GetInst().IsDown('I'))
+	{
+		Heart = 0;
+	}
+	if (UEngineInput::GetInst().IsDown('M'))
+	{
+		Heart = HeartMax;
+	}
+	if (UEngineInput::GetInst().IsDown('O'))
+	{
+		PennyCount += 1;
+	}
+	if (UEngineInput::GetInst().IsDown('P'))
+	{
+		BombCount += 1;
+	}
+	if (UEngineInput::GetInst().IsDown('L'))
+	{
+		KeyCount += 1;
+	}
+}
+
 void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-	// Debug
-	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
-	UEngineDebug::CoreOutPutString("Body : " + BodyRenderer->GetComponentLocation().ToString());
-	UEngineDebug::CoreOutPutString("Head : " + HeadRenderer->GetComponentLocation().ToString());
-
-	// 카메라
-	CameraPosMove(_DeltaTime);
+	PlayerDebugSetting(_DeltaTime);
 
 	Death(_DeltaTime);
 	UITick(_DeltaTime);
@@ -145,30 +177,6 @@ void APlayer::ShowHitAnimation(AActor* _Other)
 
 void APlayer::UITick(float _DeltaTime)
 {
-	if (true == IsDeath())
-	{
-		return;
-	}
-	if (UEngineInput::GetInst().IsDown('I'))
-	{
-		Heart = 0;
-	}		
-	if (UEngineInput::GetInst().IsDown('M'))
-	{
-		Heart = HeartMax;
-	}
-	if (UEngineInput::GetInst().IsDown('O'))
-	{
-		PennyCount += 1;
-	}
-	if (UEngineInput::GetInst().IsDown('P'))
-	{
-		BombCount += 1;
-	}
-	if (UEngineInput::GetInst().IsDown('L'))
-	{
-		KeyCount += 1;
-	}
 	  PlayerHpToHeart->SetPlayerHp(Heart);
 	PennyPickupNumber->SetValue(PennyCount);
  	 BombPickupNumber->SetValue(BombCount);
@@ -274,21 +282,14 @@ void APlayer::SpiritAnimation()
 	HeadRenderer->ChangeAnimation("Head_Death");
 
 	// 데스리포트 호출
-	TimeEventer.PushEvent(3.5f, std::bind(&APlayer::ShowDeathReport, this));
+	TimeEventer.PushEvent(2.0f, std::bind(&APlayer::ShowDeathReport, this));
 
 	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
-	float SpiritMoveDuration = 3.0f;
-	SpiritMoveElapsed += DeltaTime;
-	if (SpiritMoveDuration < SpiritMoveElapsed)
-	{
-		return;
-	}
+
 	float SpiritSpeed = 50.0f;
 	Dir = FVector2D::UP;
 	BodyRenderer->AddComponentLocation(Dir * SpiritSpeed * DeltaTime);
 	HeadRenderer->AddComponentLocation(Dir * SpiritSpeed * DeltaTime);
-
-
 }
 
 void APlayer::ShowDeathReport()
@@ -299,14 +300,16 @@ void APlayer::ShowDeathReport()
 	}
 	
 	ADeathReportScene::DeathReport->ShowDeathReport();
-	FullRenderer->SetActive(false); // 이 때 안지우고 Reset함수에서 지우면 빠른 재시작 시 렌더러가 남아있다.
 	
 	if (UEngineInput::GetInst().IsDown(VK_SPACE))
 	{
-		Reset();
+
 		ADeathReportScene::DeathReport->CloseDeathReport();
 
-		// 제일 마지막에
+		// Static이면 리셋 설정 해줘야 한다.
+		Reset();
+
+		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
 		UEngineAPICore::GetCore()->OpenLevel("Title");
 	}
 
@@ -315,27 +318,27 @@ void APlayer::ShowDeathReport()
 void APlayer::Reset()
 {
 	Heart = 6;
+	HeartMax = 8;
 
+	BodyCollision->SetActive(true);
+	WarpCollision->SetActive(true);
+
+	HeadState = UpperState::IDLE;
+	BodyState = LowerState::IDLE;
 
 	APlayGameMode::SetGamePaused(false);
 	IsDead = false;
 	IsResetReady = false;
 	Dir = FVector2D::ZERO;
 
-	BodyCollision->SetActive(true);
-	WarpCollision->SetActive(true);
+	//BodyRenderer->SetAlphaFloat(1.0f);
+	//HeadRenderer->SetAlphaFloat(1.0f);
 
-	BodyRenderer->SetAlphaFloat(1.0f);
-	HeadRenderer->SetAlphaFloat(1.0f);
+	//SetActorLocation(InitPos);
+	//BodyRenderer->SetComponentLocation(GetActorLocation() - Global::WindowHalfScale);
+	//HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
 
-	HeadState = UpperState::IDLE;
-	BodyState = LowerState::IDLE;
-
-	SetActorLocation(InitPos);
-	BodyRenderer->SetComponentLocation(GetActorLocation() - Global::WindowHalfScale);
-	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
-
-	SpiritMoveElapsed = 0.0f;
+	//SpiritMoveElapsed = 0.0f;
 }
 
 void APlayer::Move(float _DeltaTime)

@@ -16,24 +16,6 @@ UEngineAPICore::UEngineAPICore()
 
 UEngineAPICore::~UEngineAPICore()
 {
-	// 레벨 체인지
-	if (nullptr != NextLevel)
-	{
-		if (nullptr != CurLevel)
-		{
-			CurLevel->LevelChangeEnd();
-		}
-
-		CurLevel = NextLevel;
-
-		NextLevel->LevelChangeStart();
-
-		NextLevel = nullptr;
-
-		// 델타타임이 지연될수 있으므로 델타타임을 초기화시켜주는것이 좋다.
-		DeltaTimer.TimeStart();
-	}
-
 	std::map<std::string, class ULevel*>::iterator StartIter = Levels.begin();
 	std::map<std::string, class ULevel*>::iterator EndIter = Levels.end();
 
@@ -96,6 +78,15 @@ void UEngineAPICore::EngineTick()
 
 void UEngineAPICore::Tick()
 {
+	// 현재 레벨을 리셋할거야?
+	if (true == IsCurLevelReset)
+	{
+		delete CurLevel; // 그럼 지워
+		CurLevel = nullptr;
+		IsCurLevelReset = false; 
+		// 이제 리셋한 정보를 담은 NextLevel이 아래 과정을 거쳐 CurLevel이 된다.
+	}
+
 	if (nullptr != NextLevel)
 	{
 		// 레벨들을 왔다갔다 할 때가 있기 때문에
@@ -141,14 +132,14 @@ void UEngineAPICore::Tick()
 
 void UEngineAPICore::OpenLevel(std::string_view _LevelName)
 {
-	std::string ChangeName = _LevelName.data();
+	std::string UpperName = UEngineString::ToUpper(_LevelName);
 	
-	std::map<std::string, class ULevel*>::iterator FindIter = Levels.find(ChangeName);
+	std::map<std::string, class ULevel*>::iterator FindIter = Levels.find(UpperName);
 	std::map<std::string, class ULevel*>::iterator EndIter = Levels.end();
 
 	if (EndIter == FindIter)
 	{
-		MSGASSERT(ChangeName + " 라는 이름의 레벨은 존재하지 않습니다.");
+		MSGASSERT(UpperName + " 라는 이름의 레벨은 존재하지 않습니다.");
 		return;
 	}
 

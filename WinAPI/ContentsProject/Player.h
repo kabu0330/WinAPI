@@ -54,6 +54,10 @@ public:
 	void UISetting();
 	void UITick(float _DeltaTime);
 
+	// Debug
+	void PlayerDebugSetting(float _DeltaTime);
+	void UIDebug(float _DeltaTime);
+
 
 	// 이동관련
 	void Move(float _DeltaTime);

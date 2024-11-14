@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <EnginePlatform/EngineWindow.h>
 #include <EngineBase/UEngineTimer.h>
+#include <EngineBase/EngineString.h>
 
 #pragma comment (lib, "EngineBase.lib")
 #pragma comment (lib, "EnginePlatform.lib")
@@ -52,15 +53,67 @@ public:
 	template<typename GameModeType, typename MainPawnType>
 	ULevel* CreateLevel(std::string_view _LevelName)
 	{
+		std::string UpperName = UEngineString::ToUpper(_LevelName);
+
+		if (false != Levels.contains(UpperName))
+		{
+			MSGASSERT("이미 존재하는 이름의 레벨을 다시 생성할 수 없습니다." + UpperName);
+			return nullptr;
+		}
+
 		ULevel* NewLevel = new ULevel();
 
 		// 게임 모드가 레벨의 특성을 설정하는 중요한 객체
 		NewLevel->CreateGameMode<GameModeType, MainPawnType>();
+		NewLevel->SetName(UpperName);
 
 		// 레벨을 string으로 저장하고 string으로 호출한다.
-		Levels.insert({ _LevelName.data(), NewLevel });
+		Levels.insert({ UpperName, NewLevel });
 
 		return NewLevel;
+
+	}
+
+	template<typename GameModeType, typename MainPawnType>
+	void ResetLevel(std::string_view _LevelName)
+	{
+		std::string UpperName = UEngineString::ToUpper(_LevelName);
+
+		// 지금 동작 중인 레벨 지우는거 아니지?
+		if (CurLevel->GetName() != UpperName)
+		{
+			DestroyLevel(_LevelName); // 그럼 지워
+			CreateLevel<GameModeType, MainPawnType>(UpperName);
+			return;
+		}
+		
+		// 현재 동작 중인 레벨을 지워야 한다면,
+		std::map<std::string, class ULevel*>::iterator FindIter = Levels.find(UpperName);
+		Levels.erase(FindIter); // 현재 레벨을 Levels에서 지워
+		NextLevel = CreateLevel<GameModeType, MainPawnType>(UpperName); // 그리고 NextLevel에서 똑같은 이름으로 다시 만들어
+		IsCurLevelReset = true; // 아직 CurLevel은 살아있다. APICore에서 Tick이 한바퀴 돌고 난 뒤 지우기 위해 bool 변수를 만든다.
+	}
+
+
+	void DestroyLevel(std::string_view _LevelName)
+	{
+		std::string UpperName = UEngineString::ToUpper(_LevelName);
+
+		if (false == Levels.contains(UpperName))
+		{
+			// MSGASSERT("존재하지 않는 레벨을 리셋할수 없습니다." + UpperName);
+			return;
+		}
+
+		std::map<std::string, class ULevel*>::iterator FindIter = Levels.find(UpperName);
+
+		if (nullptr != FindIter->second)
+		{
+			delete FindIter->second;
+			FindIter->second = nullptr;
+		}
+
+		Levels.erase(FindIter);
 	}
 
 	void OpenLevel(std::string_view _LevelName);
@@ -83,6 +136,7 @@ private:
 	// 화면 전환시 포인터 체인지 방식으로 레벨 전환
 	class ULevel* CurLevel = nullptr;
 	class ULevel* NextLevel = nullptr;
+	bool IsCurLevelReset = false;
 
 	void Tick();
 };
