@@ -10,7 +10,7 @@
 AFly::AFly()
 {
 	/* 이름     : */ SetName("AttackFly");
-	/* 체력     : */ SetHp(4);
+	/* 체력     : */ SetHp(3);
 	/* 공격력   : */ SetAtt(0);
 	/* 이동속도 : */ SetMoveSpeed(50);
 	/* 이동시간 : */ SetMoveDuration(1.0f);
@@ -21,7 +21,7 @@ AFly::AFly()
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ 25, 25 });
-	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_Body);
+	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_NonCollision);
 	BodyCollision->SetCollisionType(ECollisionType::CirCle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();

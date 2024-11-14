@@ -41,7 +41,7 @@ void AMonster::Tick(float _DeltaTime)
 	Move(_DeltaTime);
 	ChasePlayer(_DeltaTime);
 
-	BodyCollisionCheck(_DeltaTime);
+	HandleCollisionDamage(_DeltaTime);
 
 	DeathCheck(_DeltaTime);
 }
@@ -248,7 +248,7 @@ bool AMonster::IsPlayerNearby()
 	return false;
 }
 
-void AMonster::BodyCollisionCheck(float _DeltaTime)
+void AMonster::HandleCollisionDamage(float _DeltaTime)
 {
 	if (nullptr == BodyCollision)
 	{

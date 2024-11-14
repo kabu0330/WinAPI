@@ -9,7 +9,7 @@
 AHopper::AHopper()
 {
 	/* 이름     : */ SetName("Hopper");
-	/* 체력     : */ SetHp(10);
+	/* 체력     : */ SetHp(9);
 	/* 공격력   : */ SetAtt(1);
 	/* 이동속도 : */ SetMoveSpeed(250);
 	/* 이동시간 : */ SetMoveDuration(0.8f);

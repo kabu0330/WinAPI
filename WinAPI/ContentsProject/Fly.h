@@ -28,6 +28,10 @@ public:
 
 	}
 
+	void HandleCollisionDamage(float _DeltaTime)
+	{
+
+	}
 
 protected:
 

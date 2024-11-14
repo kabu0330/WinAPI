@@ -31,7 +31,7 @@ public:
 	FVector2D GetDirectionToPlayer();
 	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
 	bool IsPlayerNearby();
-	void BodyCollisionCheck(float _DeltaTime);
+	virtual void HandleCollisionDamage(float _DeltaTime);
 
 	virtual void Death(float _DeltaTime);
 

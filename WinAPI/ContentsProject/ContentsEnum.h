@@ -23,6 +23,7 @@ enum class ECollisionGroup
 	Player_Body,
 	Player_Attack,
 	Monster_Body,
+	Monster_NonCollision,
 	Monster_Fly,
 	Monster_Attack,
 	Monster_DetectInRange,

@@ -13,7 +13,7 @@
 AAttackFly::AAttackFly()
 {
 	/* 이름     : */ SetName("AttackFly");
-	/* 체력     : */ SetHp(10);
+	/* 체력     : */ SetHp(5);
 	/* 공격력   : */ SetAtt(1);
 	/* 이동속도 : */ SetMoveSpeed(50);
 	/* 이동시간 : */ SetMoveDuration(1.0f);

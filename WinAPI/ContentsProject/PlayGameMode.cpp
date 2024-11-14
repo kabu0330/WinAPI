@@ -37,27 +37,36 @@ void APlayGameMode::BeginPlay()
 	//GetWorld()->SetCameraPos(GetWorld()->GetPawn()->GetActorLocation());
 	//GetWorld()->SetCameraToMainPawn(true); // 카메라가 플레이어 추적
 
-	ARoom* BaseRoom    = GetWorld()->SpawnActor<ARoom>();
+	Spawn();
+
+	CollisionGroupLinkSetting();
+	UISetting();
+}
+
+void APlayGameMode::Spawn()
+{
+	// Room
+	ARoom* BaseRoom = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* BossRoom    = GetWorld()->SpawnActor<ARoom>();
+	ARoom* BossRoom = GetWorld()->SpawnActor<ARoom>();
 
-	   BaseRoom->InterLinkRoom(MinionRoom0, RoomDir::LEFT );
-	   BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::RIGHT);
-	   BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::UP   );
-	   BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN );
-	MinionRoom3->InterLinkRoom(BossRoom   , RoomDir::DOWN );
+	BaseRoom->InterLinkRoom(MinionRoom0, RoomDir::LEFT);
+	BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::RIGHT);
+	BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::UP);
+	BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN);
+	MinionRoom3->InterLinkRoom(BossRoom, RoomDir::DOWN);
 
-	   BaseRoom->SetName("BaseRoom"   );
+	BaseRoom->SetName("BaseRoom");
 	MinionRoom0->SetName("MinionRoom0");
 	MinionRoom1->SetName("MinionRoom1");
 	MinionRoom2->SetName("MinionRoom2");
 	MinionRoom3->SetName("MinionRoom3");
-	   BossRoom->SetName("BossRoom"   );
-	
-	   ARoom::SetCurRoom(BaseRoom);
+	BossRoom->SetName("BossRoom");
+
+	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
 	//AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
@@ -69,10 +78,6 @@ void APlayGameMode::BeginPlay()
 
 
 	BaseRoom->CreateMonster<AHost>({ 150, 0 });
-
-
-	CollisionGroupLinkSetting();
-	UISetting();
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
@@ -136,8 +141,6 @@ void APlayGameMode::UISetting()
 	// Death Report
 	ADeathReportScene::DeathReport = GetWorld()->SpawnActor<ADeathReportScene>();
 	AMenuScene::Menu = GetWorld()->SpawnActor<AMenuScene>();
-
-
 }
 
 void APlayGameMode::EngineDebug(float _DeltaTime)

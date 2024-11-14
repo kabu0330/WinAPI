@@ -11,7 +11,7 @@
 AHost::AHost()
 {
 	/* 이름     : */ SetName("Host");
-	/* 체력     : */ SetHp(14);
+	/* 체력     : */ SetHp(12);
 	/* 공격력   : */ SetAtt(1);
 	/* 이동속도 : */ SetMoveSpeed(0);
 	/* 이동시간 : */ SetMoveDuration(0.0f);
@@ -27,7 +27,7 @@ AHost::AHost()
 	HeadCollision = CreateDefaultSubObject<U2DCollision>();
 	HeadCollision->SetComponentLocation({ 0, 10});
 	HeadCollision->SetComponentScale(HeadCollisionScale);
-	HeadCollision->SetCollisionGroup(ECollisionGroup::Monster_Body);
+	HeadCollision->SetCollisionGroup(ECollisionGroup::Object_Wall);
 	HeadCollision->SetCollisionType(ECollisionType::Rect);
 
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
@@ -39,6 +39,7 @@ AHost::AHost()
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "Host.png", { 0, 0 }, 0.1f);
+	BodyRenderer->CreateAnimation("Attack", "Host.png", 0, 1, 0.5f, false);
 	BodyRenderer->CreateAnimation("Attack", "Host.png", 0, 1, 0.5f, false);
 	BodyRenderer->CreateAnimation("Death", "effect_bloodpoof.png", 0, 9, 0.1f, false);
 	BodyRenderer->SetComponentLocation({ 0, -33 });
