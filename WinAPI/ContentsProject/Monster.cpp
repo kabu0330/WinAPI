@@ -269,7 +269,7 @@ void AMonster::BodyCollisionCheck(float _DeltaTime)
 	}
 
 	APlayer* CollisionPlayer = dynamic_cast<APlayer*>(CollisionActor);
-	CollisionPlayer->ApplyDamaged(CollisionAtt);
+	CollisionPlayer->ApplyDamaged(CollisionActor, CollisionAtt);
 	CollisionPlayer->ShowHitAnimation(CollisionPlayer);
 
 	BodyCollisionCooldownElapsed = 0.0f;

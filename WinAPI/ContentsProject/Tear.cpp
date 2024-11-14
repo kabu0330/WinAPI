@@ -191,7 +191,7 @@ void ATear::CheckForExplosion(float _DeltaTime)
 	Explosion();
 
 	AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
-	CollisionMonster->ApplyDamaged(ActorAtt);
+	CollisionMonster->ApplyDamaged(CollisionActor, ActorAtt);
 
 	UEngineDebug::OutPutString(CollisionMonster->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionMonster->GetHp()));
 

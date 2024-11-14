@@ -91,7 +91,7 @@ void ABloodTear::CheckForExplosion(float _DeltaTime)
 		Explosion(_DeltaTime);
 
 		APlayer* CollisionPlayer = dynamic_cast<APlayer*>(CollisionActor);
-		CollisionPlayer->ApplyDamaged(ActorAtt);
+		CollisionPlayer->ApplyDamaged(CollisionActor, ActorAtt);
 		CollisionPlayer->ShowHitAnimation(CollisionPlayer);
 
 		UEngineDebug::OutPutString(CollisionPlayer->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionPlayer->GetHp()));

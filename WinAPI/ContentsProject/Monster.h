@@ -52,13 +52,19 @@ public:
 
 	void CollisionDestroy()
 	{
-		BodyCollision->Destroy();
-		BodyCollision->SetActive(false);
-		BodyCollision = nullptr;
+		if (nullptr != BodyCollision)
+		{
+			BodyCollision->Destroy();
+			BodyCollision->SetActive(false);
+			BodyCollision = nullptr;
+		}
 
-		DetectCollision->Destroy();
-		DetectCollision->SetActive(false);
-		DetectCollision = nullptr;
+		if (nullptr != DetectCollision)
+		{
+			DetectCollision->Destroy();
+			DetectCollision->SetActive(false);
+			DetectCollision = nullptr;
+		}
 	}
 
 	void RendererDestroy()
@@ -85,8 +91,18 @@ public:
 	{
 		Hp = _Hp;
 	}
-	int ApplyDamaged(int _PlayerAtt) // 피격
+	int ApplyDamaged(AActor* _Monster, int _PlayerAtt) // 피격
 	{
+		AMonster* Monster = dynamic_cast<AMonster*>(_Monster);
+		if (nullptr == Monster)
+		{
+			return 0;
+		}
+		else if (true == Player->IsInvincible()) // 무적이면 리턴
+		{
+			return 0;
+		}
+
 		Hp -= _PlayerAtt;
 		if (Hp < 0)
 		{
@@ -131,7 +147,7 @@ public:
 		MoveDuration = _MoveDuration;
 	}
 
-	FVector2D GetDetectRange()
+	FVector2D GetDetectRange() const 
 	{
 		return DetectRange;
 	}
@@ -140,11 +156,53 @@ public:
 		DetectRange = _DetectRange;
 	}
 
-	float GetMoveElapsedTime()
+	float GetMoveElapsedTime() const
 	{
 		return MoveElapsedTime;
 	}
+	
+	float GetCooldown() const
+	{
+		return Cooldown;
+	}
+	void SetCooldown(float _Cooldown)
+	{
+		Cooldown = _Cooldown;
+	}
 
+	float GetShootingSpeed() const
+	{
+		return ShootingSpeed;
+	}
+	void SetShootingSpeed(float _ShootingSpeed)
+	{
+		ShootingSpeed = _ShootingSpeed;
+	}
+	FVector2D GetTearDir() const
+	{
+		return TearDir;
+	}
+	void SetTearDir(FVector2D _TearDir)
+	{
+		TearDir = _TearDir;
+	}
+
+	void SetInvincible(bool _OnOff)
+	{
+		Invincibility = _OnOff;
+	}
+	void SwitchInvincibility()
+	{
+		Invincibility = !Invincibility;
+	}
+	bool IsInvincible()
+	{
+		return Invincibility;
+	}
+	void EnterInvincibility()
+	{
+		BodyCollision->SetActive(false);
+	}
 
 protected:
 	class U2DCollision* BodyCollision = nullptr;
@@ -157,6 +215,9 @@ protected:
 	int CollisionAtt = 1;
 	float Speed = 50;
 	FVector2D Direction = FVector2D::ZERO;
+
+	// 무적
+	bool Invincibility = false;
 
 	// 이동 관련 쿨타임
 	float MoveElapsedTime = 0.0f;

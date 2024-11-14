@@ -113,6 +113,10 @@ public:
 	{
 		return Invincibility;
 	}
+	void EnterInvincibility()
+	{
+		BodyCollision->SetActive(false);
+	}
 
 
 	template<typename EnumType>
@@ -130,8 +134,18 @@ public:
 		return HeartMax;
 	}
 
-	static int ApplyDamaged(int _Att)
+	static int ApplyDamaged(AActor* _Player, int _Att)
 	{
+		APlayer* Player = dynamic_cast<APlayer*>(_Player);
+		if (nullptr == Player)
+		{
+			return 0;
+		}
+		else if (true == Player->IsInvincible()) // 무적이면 리턴
+		{
+			return 0 ;
+		}
+
 		Heart -= _Att;
 		if (Heart < 0 )
 		{

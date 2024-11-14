@@ -184,6 +184,14 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Hopper.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Host.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="LoadingScene.h">
       <SubType>
       </SubType>
@@ -265,6 +273,14 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="HeartUI.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Hopper.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Host.cpp">
       <SubType>
       </SubType>
     </ClCompile>

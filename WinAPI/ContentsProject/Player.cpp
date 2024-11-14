@@ -124,11 +124,17 @@ void APlayer::ClampPositionToRoom()
 
 void APlayer::ShowHitAnimation(AActor* _Other)
 {
-	if (true == FullRenderer->IsActive())
+	if (true == Invincibility) // 무적상태면 리턴
 	{
 		return;
 	}
-	if (true == IsDead)
+	if (true == FullRenderer->IsActive()) // 이미 피격 상태면 리턴
+	{
+		Invincibility = true;
+		TimeEventer.PushEvent(1.0f, std::bind(&APlayer::SwitchInvincibility, this));
+		return;
+	}
+	if (true == IsDead) // 죽었으면 리턴
 	{
 		return;
 	}
@@ -782,11 +788,19 @@ void APlayer::PlayerDebugSetting(float _DeltaTime)
 
 void APlayer::ResetDebug()
 {
+	if (UEngineInput::GetInst().IsDown(VK_F1))
+	{
+		BodyCollision->SetActiveSwitch();
+		SwitchInvincibility();
+	}
+
 	if (UEngineInput::GetInst().IsDown(VK_F3))
 	{
 		Reset();
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
 	}
+
+
 }
 
 void APlayer::UIDebug(float _DeltaTime)

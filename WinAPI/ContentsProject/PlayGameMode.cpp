@@ -21,6 +21,8 @@
 
 #include "AttackFly.h"
 #include "Fly.h"
+#include "Hopper.h"
+#include "Host.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -61,9 +63,12 @@ void APlayGameMode::BeginPlay()
 	//AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
 	MinionRoom0->CreateMonster<AAttackFly>({ -100, -100 });
 	MinionRoom0->CreateMonster<AAttackFly>({ 100, -100 });
-	MinionRoom0->CreateMonster<AAttackFly>({ 200, -150 });
-	MinionRoom0->CreateMonster<AAttackFly>({ -100, 200 });
-	MinionRoom1->CreateMonster<AFly>({ 0, 0 });
+	MinionRoom0->CreateMonster<AFly>({ 0, 0 });
+
+	MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
+
+
+	BaseRoom->CreateMonster<AHost>({ 150, 0 });
 
 
 	CollisionGroupLinkSetting();

@@ -67,6 +67,12 @@
     <ClInclude Include="Fly.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="Hopper.h">
+      <Filter>04_Play\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Host.h">
+      <Filter>04_Play\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -133,6 +139,12 @@
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
     <ClCompile Include="Fly.cpp">
+      <Filter>04_Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Hopper.cpp">
+      <Filter>04_Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Host.cpp">
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
   </ItemGroup>

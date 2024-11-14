@@ -2,13 +2,10 @@
 #include "Fly.h"
 
 #include <EngineBase/EngineMath.h>
-#include <EngineBase/EngineRandom.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/2DCollision.h>
-#include "PlayGameMode.h"
-
-#include "Global.h"
 #include "ContentsEnum.h"
+#include "Global.h"
 
 AFly::AFly()
 {
@@ -34,11 +31,11 @@ AFly::AFly()
 	BodyRenderer->ChangeAnimation("Fly.Idle");
 	BodyRenderer->SetOrder(ERenderOrder::Monsetr);
 
-	DetectCollision = CreateDefaultSubObject<U2DCollision>();
-	DetectCollision->SetComponentScale(GetDetectRange());
-	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
-	DetectCollision->SetCollisionType(ECollisionType::CirCle);
-	DetectCollision->SetActive(true);
+	//DetectCollision = CreateDefaultSubObject<U2DCollision>();
+	//DetectCollision->SetComponentScale(GetDetectRange());
+	//DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
+	//DetectCollision->SetCollisionType(ECollisionType::CirCle);
+	//DetectCollision->SetActive(true);
 }
 
 AFly::~AFly()
