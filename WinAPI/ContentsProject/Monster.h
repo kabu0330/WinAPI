@@ -21,20 +21,40 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
-	void Attack(float _DeltaTime);
-	void ChaseMove(float _DeltaTime);
-	void Move(float _DeltaTime);
-	FVector2D GetRandomDir();
-	void ClampPositionToRoom();
+	virtual void Move(float _DeltaTime) {}
+	virtual void ChaseMove(float _DeltaTime) {}
+	virtual void Attack(float _DeltaTime) {}
+	virtual void Death(float _DeltaTime) {}
+	virtual void ClampPositionToRoom() {} // 이동 제한
 
-	bool IsPlayerNearby();
-	FVector2D GetDirectionToPlayer();
-	void ChasePlayer(float _DeltaTime);
+	void DeathCheck(float _DeltaTime)
+	{
+		if (false == IsDeath())
+		{
+			return;
+		}
 
-	void BodyCollisionCheck(float _DeltaTime);
+		Death(_DeltaTime);
+	}
 
-	void DeathCheck(float _DeltaTime);
-	void Death(float _DeltaTime);
+	void CollisionDestroy()
+	{
+		BodyCollision->Destroy();
+		BodyCollision = nullptr;
+		DetectCollision->Destroy();
+		DetectCollision = nullptr;
+	}
+
+	void RendererDestroy()
+	{
+		if (true != Renderer->IsCurAnimationEnd())
+		{
+			return;
+		}
+		Renderer->SetActive(false);
+		Renderer->Destroy();
+		Renderer = nullptr;
+	}
 
 	bool IsDeath()
 	{
@@ -73,6 +93,7 @@ protected:
 	// Stat
 	int   Hp    = 1;
 	int   Att   = 1;
+	int CollisionAtt = 1;
 	float Speed = 100;
 	FVector2D Direction = FVector2D::ZERO;
 
@@ -99,9 +120,6 @@ protected:
 	ARoom* ParentRoom = nullptr;
 	APlayer* Player = nullptr;
 
-
-	
-	
 private:
 
 };

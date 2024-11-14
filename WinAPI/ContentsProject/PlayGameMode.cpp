@@ -18,6 +18,7 @@
 #include "LoadingScene.h"
 #include "DeathReportScene.h"
 #include "MenuScene.h"
+#include "AttackFly.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -55,7 +56,8 @@ void APlayGameMode::BeginPlay()
 	   ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
+	//AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
+	AMonster* AttackMonster = GetWorld()->SpawnActor<AAttackFly>();
 
 
 	CollisionGroupLinkSetting();

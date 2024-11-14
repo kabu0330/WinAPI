@@ -2,18 +2,18 @@
 #include "Monster.h"
 
 // Ό³Έν :
-class AttackFly : public AMonster
+class AAttackFly : public AMonster
 {
 public:
 	// constrcuter destructer
-	AttackFly();
-	~AttackFly();
+	AAttackFly();
+	~AAttackFly();
 
 	// delete Function
-	AttackFly(const AttackFly& _Other) = delete;
-	AttackFly(AttackFly&& _Other) noexcept = delete;
-	AttackFly& operator=(const AttackFly& _Other) = delete;
-	AttackFly& operator=(AttackFly&& _Other) noexcept = delete;
+	AAttackFly(const AAttackFly& _Other) = delete;
+	AAttackFly(AAttackFly&& _Other) noexcept = delete;
+	AAttackFly& operator=(const AAttackFly& _Other) = delete;
+	AAttackFly& operator=(AAttackFly&& _Other) noexcept = delete;
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -30,7 +30,6 @@ public:
 
 	void BodyCollisionCheck(float _DeltaTime);
 
-	void DeathCheck(float _DeltaTime);
 	void Death(float _DeltaTime);
 
 protected:

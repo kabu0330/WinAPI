@@ -53,6 +53,7 @@ public:
 	void CurStateAnimation(float _DeltaTime);
 	void UISetting();
 	void UITick(float _DeltaTime);
+	void ResetDebug();
 
 	// Debug
 	void PlayerDebugSetting(float _DeltaTime);

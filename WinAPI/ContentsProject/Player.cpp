@@ -44,48 +44,11 @@ void APlayer::BeginPlay()
 	CollisionFuctionSetting();
 }
 
-void APlayer::PlayerDebugSetting(float _DeltaTime)
-{
-	CameraPosMove(_DeltaTime);
-	UIDebug(_DeltaTime);
-
-	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
-	UEngineDebug::CoreOutPutString("Body : " + BodyRenderer->GetComponentLocation().ToString());
-	UEngineDebug::CoreOutPutString("Head : " + HeadRenderer->GetComponentLocation().ToString());
-}
-
-void APlayer::UIDebug(float _DeltaTime)
-{
-	if (true == IsDeath())
-	{
-		return;
-	}
-	if (UEngineInput::GetInst().IsDown('I'))
-	{
-		Heart = 0;
-	}
-	if (UEngineInput::GetInst().IsDown('M'))
-	{
-		Heart = HeartMax;
-	}
-	if (UEngineInput::GetInst().IsDown('O'))
-	{
-		PennyCount += 1;
-	}
-	if (UEngineInput::GetInst().IsDown('P'))
-	{
-		BombCount += 1;
-	}
-	if (UEngineInput::GetInst().IsDown('L'))
-	{
-		KeyCount += 1;
-	}
-}
-
 void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
+	// 디버그 기능 집합
 	PlayerDebugSetting(_DeltaTime);
 
 	Death(_DeltaTime);
@@ -802,5 +765,53 @@ void APlayer::CurStateAnimation(float _DeltaTime)
 			StateElapesd = 0.0f;
 			HeadState = static_cast<UpperState>(BodyState);
 		}
+	}
+}
+
+void APlayer::PlayerDebugSetting(float _DeltaTime)
+{
+	CameraPosMove(_DeltaTime);
+	UIDebug(_DeltaTime);
+	ResetDebug();
+
+	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
+	//UEngineDebug::CoreOutPutString("Body : " + BodyRenderer->GetComponentLocation().ToString());
+	//UEngineDebug::CoreOutPutString("Head : " + HeadRenderer->GetComponentLocation().ToString());
+}
+
+void APlayer::ResetDebug()
+{
+	if (UEngineInput::GetInst().IsDown(VK_F3))
+	{
+		Reset();
+		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
+	}
+}
+
+void APlayer::UIDebug(float _DeltaTime)
+{
+	if (true == IsDeath())
+	{
+		return;
+	}
+	if (UEngineInput::GetInst().IsDown('I'))
+	{
+		Heart = 0;
+	}
+	if (UEngineInput::GetInst().IsDown('M'))
+	{
+		Heart = HeartMax;
+	}
+	if (UEngineInput::GetInst().IsDown('O'))
+	{
+		PennyCount += 1;
+	}
+	if (UEngineInput::GetInst().IsDown('P'))
+	{
+		BombCount += 1;
+	}
+	if (UEngineInput::GetInst().IsDown('L'))
+	{
+		KeyCount += 1;
 	}
 }
