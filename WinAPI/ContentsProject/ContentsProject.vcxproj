@@ -151,6 +151,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AttackFly.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="BannerTextUI.h">
       <SubType>
       </SubType>
@@ -227,6 +231,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AttackFly.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="BannerTextUI.cpp">
       <SubType>
       </SubType>

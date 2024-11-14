@@ -24,8 +24,9 @@ AMonster::AMonster()
 	Renderer = CreateDefaultSubObject<USpriteRenderer>();
 	Renderer->CreateAnimation("Fly.IDle", "Fly.png", 1, 2, 0.1f);
 	Renderer->CreateAnimation("Fly_Death", "Fly.png", 4, 14, 0.03f, false);
-	Renderer->SetComponentScale({256, 256});
+	Renderer->SetComponentScale({ 256, 256 });
 	Renderer->ChangeAnimation("Fly.IDle");
+	Renderer->SetOrder(ERenderOrder::Monsetr);
 
 	SetHp(10);
 
@@ -34,7 +35,6 @@ AMonster::AMonster()
 	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
 	DetectCollision->SetCollisionType(ECollisionType::CirCle);
 	DetectCollision->SetActive(true);
-
 
 	DebugOn();
 }

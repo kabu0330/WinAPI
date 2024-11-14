@@ -60,6 +60,12 @@ bool U2DCollision::Collision(int _OtherCollisionGroup, std::vector<AActor*>& _Re
 {
 	// 내가 _OtherCollisionGroup 그룹이랑 충돌
 	// 모든 충돌체를 한곳에 모아놓는게 Level
+	U2DCollision* ThisCollision = this;
+
+	if (false == ThisCollision->IsActive())
+	{
+		return false;
+	}
 
 	std::list<class U2DCollision*>& OtherCollisions = GetActor()->GetWorld()->Collisions[_OtherCollisionGroup];
 
@@ -68,8 +74,12 @@ bool U2DCollision::Collision(int _OtherCollisionGroup, std::vector<AActor*>& _Re
 
 	for (; StartIter != EndIter; ++StartIter)
 	{
-		U2DCollision* ThisCollision = this;
 		U2DCollision* DestCollision = *StartIter;
+
+		if (false == DestCollision->IsActive())
+		{
+			continue;
+		}
 		
 		FTransform ThisTrans = ThisCollision->GetActorTransform();
 		FTransform DestTrans = DestCollision->GetActorTransform();

@@ -145,6 +145,10 @@ void APlayer::ShowHitAnimation(AActor* _Other)
 
 void APlayer::UITick(float _DeltaTime)
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
 	if (UEngineInput::GetInst().IsDown('I'))
 	{
 		Heart = 0;
@@ -220,7 +224,6 @@ bool APlayer::IsDeath()
 	return false;
 }
 
-// 플레이어가 죽으면 딱 한번 사망 관련 함수를 호출할 함수
 void APlayer::Death(float _DeltaTime)
 {
 	if (false == IsDeath())
@@ -229,6 +232,10 @@ void APlayer::Death(float _DeltaTime)
 	}
 
 	APlayGameMode::SetGamePaused(true); // 조작 멈춰, 몬스터들도 멈춰
+
+	WarpCollision->SetActive(false);
+	BodyCollision->SetActive(false);
+
 	DeathAnimation();
 }
 
@@ -266,18 +273,14 @@ void APlayer::SpiritAnimation()
 	BodyRenderer->ChangeAnimation("Body_Death");
 	HeadRenderer->ChangeAnimation("Head_Death");
 
-	WarpCollision->SetActive(false);
-	//WarpCollision->SetComponentScale({0, 0});
-
 	// 데스리포트 호출
-	TimeEventer.PushEvent(3.0f, std::bind(&APlayer::ShowDeathReport, this));
+	TimeEventer.PushEvent(3.5f, std::bind(&APlayer::ShowDeathReport, this));
 
 	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
 	float SpiritMoveDuration = 3.0f;
 	SpiritMoveElapsed += DeltaTime;
 	if (SpiritMoveDuration < SpiritMoveElapsed)
 	{
-		FullRenderer->SetActive(false); // 이 때 안지우고 Reset함수에서 지우면 빠른 재시작 시 렌더러가 남아있다.
 		return;
 	}
 	float SpiritSpeed = 50.0f;
@@ -296,6 +299,7 @@ void APlayer::ShowDeathReport()
 	}
 	
 	ADeathReportScene::DeathReport->ShowDeathReport();
+	FullRenderer->SetActive(false); // 이 때 안지우고 Reset함수에서 지우면 빠른 재시작 시 렌더러가 남아있다.
 	
 	if (UEngineInput::GetInst().IsDown(VK_SPACE))
 	{
@@ -330,6 +334,8 @@ void APlayer::Reset()
 	SetActorLocation(InitPos);
 	BodyRenderer->SetComponentLocation(GetActorLocation() - Global::WindowHalfScale);
 	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
+
+	SpiritMoveElapsed = 0.0f;
 }
 
 void APlayer::Move(float _DeltaTime)

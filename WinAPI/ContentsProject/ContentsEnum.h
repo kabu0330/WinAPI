@@ -8,6 +8,7 @@ enum class ERenderOrder
 	Door = -800,
 	Player = 0,
 	PlayerHead = 1,
+	Monsetr = 100,
 	Tear = 1000,
 	UI = 9999,
 	Fade = 20000,

@@ -78,7 +78,7 @@ protected:
 
 	// 이동 관련 쿨타임
 	float MoveElapsedTime = 0.0f;
-	float MoveCooldown = 0.0f;
+	float MoveCooldown = 5.0f;
 	float MoveTime = 1.0f;
 
 	// Detect And Chase

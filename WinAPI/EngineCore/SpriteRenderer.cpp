@@ -17,6 +17,54 @@ USpriteRenderer::~USpriteRenderer()
 // StaticMeshRenderer : public URenderer
 void USpriteRenderer::Render(float _DeltaTime)
 {
+	if (nullptr == Sprite)
+	{
+		MSGASSERT("스프라이트가 세팅되지 않은 액터를 랜더링을 할수 없습니다.");
+		return;
+	}
+	UEngineWindow& MainWindow = UEngineAPICore::GetCore()->GetMainWindow();
+	UEngineWinImage* BackBufferImage = MainWindow.GetBackBuffer();
+	UEngineSprite::USpriteData CurData = Sprite->GetSpriteData(CurIndex);
+
+	FTransform Trans = GetActorTransform();
+
+	ULevel* Level = GetActor()->GetWorld();
+
+	if (true == IsCameraEffect)
+	{
+		Trans.Location = Trans.Location - (Level->CameraPos * CameraEffectScale);
+	}
+
+	Trans.Location += Pivot;
+
+
+	if (Alpha == 255)
+	{
+		CurData.Image->CopyToTrans(BackBufferImage, Trans, CurData.Transform);
+	}
+	else
+	{
+		CurData.Image->CopyToAlpha(BackBufferImage, Trans, CurData.Transform, Alpha);
+	}
+
+}
+
+void USpriteRenderer::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// 액터가 생성된 레벨의 정보를 받고,
+	AActor* Actor = GetActor();
+	ULevel* Level = Actor->GetWorld();
+
+	// 그 레벨에서 렌더를 돌린다.
+	Level->PushRenderer(this);
+}
+
+void USpriteRenderer::ComponentTick(float _DeltaTime)
+{
+	Super::ComponentTick(_DeltaTime);
+
 	// 일단 여기서 다 짠다.
 	if (nullptr != CurAnimation)
 	{
@@ -38,9 +86,9 @@ void USpriteRenderer::Render(float _DeltaTime)
 			CurAnimation->CurTime -= CurFrameTime;
 			++CurAnimation->CurIndex;
 
-			if (CurAnimation->Events.contains(CurAnimation->CurIndex))
+			if (CurAnimation->Events.contains(CurIndex))
 			{
-				CurAnimation->Events[CurAnimation->CurIndex]();
+				CurAnimation->Events[CurIndex]();
 			}
 
 			// 애니메이션 끝
@@ -55,9 +103,9 @@ void USpriteRenderer::Render(float _DeltaTime)
 				{
 					CurAnimation->CurIndex = 0;
 
-					if (CurAnimation->Events.contains(CurAnimation->CurIndex))
+					if (CurAnimation->Events.contains(CurIndex))
 					{
-						CurAnimation->Events[CurAnimation->CurIndex]();
+						CurAnimation->Events[CurIndex]();
 					}
 				}
 				else
@@ -73,57 +121,6 @@ void USpriteRenderer::Render(float _DeltaTime)
 		CurIndex = Indexs[CurAnimation->CurIndex];
 		// ++CurAnimation->CurIndex;
 	}
-
-	if (nullptr == Sprite)
-	{
-		MSGASSERT("스프라이트가 세팅되지 않은 액터를 랜더링을 할수 없습니다.");
-		return;
-	}
-
-	UEngineWindow& MainWindow = UEngineAPICore::GetCore()->GetMainWindow();
-	UEngineWinImage* BackBufferImage = MainWindow.GetBackBuffer();
-
-	UEngineSprite::USpriteData CurData = Sprite->GetSpriteData(CurIndex);
-
-	FTransform Trans = GetActorTransform();
-
-	ULevel* Level = GetActor()->GetWorld();
-
-
-	if (true == IsCameraEffect)
-	{
-		Trans.Location = Trans.Location - (Level->CameraPos * CameraEffectScale);
-	}
-
-	Trans.Location += Pivot;
-
-	
-	if (Alpha == 255)
-	{
-		CurData.Image->CopyToTrans(BackBufferImage, Trans, CurData.Transform);
-	}
-	else // 알파값 적용
-	{
-		CurData.Image->CopyToAlpha(BackBufferImage, Trans, CurData.Transform, Alpha);
-	}
-}
-
-void USpriteRenderer::BeginPlay()
-{
-	Super::BeginPlay();
-
-	AActor* Actor = GetActor();
-
-	// 액터가 생성된 레벨의 정보를 받고,
-	ULevel* Level = Actor->GetWorld();
-
-	// 그 레벨에서 렌더를 돌린다.
-	Level->PushRenderer(this);
-}
-
-void USpriteRenderer::ComponentTick(float _DeltaTime)
-{
-	Super::ComponentTick(_DeltaTime);
 }
 
 void USpriteRenderer::SetSprite(std::string_view _Name, int _CurIndex /*= 0*/)
@@ -149,6 +146,12 @@ void USpriteRenderer::SetOrder(int _Order)
 	int PrevOrder = Order;
 
 	Order = _Order;
+	
+	// Order가 두 번 들어가는 현상 리턴
+	if (PrevOrder == Order)
+	{
+		return;
+	}
 
 	// 동적으로 해야할때는 레벨이 세팅되어 있을 것이므로
 	// 레벨이 세팅되어 있다면 즉각 바꿔준다.
