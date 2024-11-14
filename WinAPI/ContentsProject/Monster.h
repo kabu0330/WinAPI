@@ -21,11 +21,19 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
-	virtual void Move(float _DeltaTime) {}
-	virtual void ChaseMove(float _DeltaTime) {}
-	virtual void Attack(float _DeltaTime) {}
-	virtual void Death(float _DeltaTime) {}
-	virtual void ClampPositionToRoom() {} // 이동 제한
+	virtual void Move(float _DeltaTime);
+	virtual void ChaseMove(float _DeltaTime);
+	virtual void ChasePlayer(float _DeltaTime);
+	//virtual void Attack(float _DeltaTime) {}
+
+	virtual void Attack(float _DeltaTime);
+	FVector2D GetRandomDir();
+	FVector2D GetDirectionToPlayer();
+	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
+	bool IsPlayerNearby();
+	void BodyCollisionCheck(float _DeltaTime);
+
+	virtual void Death(float _DeltaTime);
 
 	virtual void SetParentRoom(class ARoom* _Parent)
 	{
@@ -45,8 +53,11 @@ public:
 	void CollisionDestroy()
 	{
 		BodyCollision->Destroy();
+		BodyCollision->SetActive(false);
 		BodyCollision = nullptr;
+
 		DetectCollision->Destroy();
+		DetectCollision->SetActive(false);
 		DetectCollision = nullptr;
 	}
 
@@ -88,6 +99,51 @@ public:
 	{
 		return Att;
 	}
+	void SetAtt(int _Att)
+	{
+		Att = _Att;
+	}
+
+	float GetMoveSpeed() const
+	{
+		return Speed;
+	}
+	void SetMoveSpeed(float _Speed)
+	{
+		Speed = _Speed;
+	}
+
+	float GetMoveCooldown() const
+	{
+		return MoveCooldown;
+	}
+	void SetMoveCooldown(float _MoveCooldown)
+	{
+		MoveCooldown = _MoveCooldown;
+	}
+
+	float GetMoveDuration() const
+	{
+		return MoveDuration;
+	}
+	void SetMoveDuration(float _MoveDuration)
+	{
+		MoveDuration = _MoveDuration;
+	}
+
+	FVector2D GetDetectRange()
+	{
+		return DetectRange;
+	}
+	void SetDetectRange(FVector2D _DetectRange)
+	{
+		DetectRange = _DetectRange;
+	}
+
+	float GetMoveElapsedTime()
+	{
+		return MoveElapsedTime;
+	}
 
 
 protected:
@@ -99,15 +155,16 @@ protected:
 	int   Hp    = 1;
 	int   Att   = 1;
 	int CollisionAtt = 1;
-	float Speed = 100;
+	float Speed = 50;
 	FVector2D Direction = FVector2D::ZERO;
 
 	// 이동 관련 쿨타임
 	float MoveElapsedTime = 0.0f;
 	float MoveCooldown = 5.0f;
-	float MoveTime = 1.0f;
+	float MoveDuration = 1.0f;
 
 	// Detect And Chase
+	FVector2D DetectRange = FVector2D(100, 100);
 	bool PlayerDetected = false;
 	class U2DCollision* DetectCollision = nullptr;
 

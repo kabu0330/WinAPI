@@ -18,7 +18,9 @@
 #include "LoadingScene.h"
 #include "DeathReportScene.h"
 #include "MenuScene.h"
+
 #include "AttackFly.h"
+#include "Fly.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -59,6 +61,9 @@ void APlayGameMode::BeginPlay()
 	//AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
 	MinionRoom0->CreateMonster<AAttackFly>({ -100, -100 });
 	MinionRoom0->CreateMonster<AAttackFly>({ 100, -100 });
+	MinionRoom0->CreateMonster<AAttackFly>({ 200, -150 });
+	MinionRoom0->CreateMonster<AAttackFly>({ -100, 200 });
+	MinionRoom1->CreateMonster<AFly>({ 0, 0 });
 
 
 	CollisionGroupLinkSetting();

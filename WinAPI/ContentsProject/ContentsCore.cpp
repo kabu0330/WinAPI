@@ -60,6 +60,11 @@ void ContentsCore::LevelSetting()
 void ContentsCore::SpriteSetting()
 {
 	// 이미지 한 장에서 스프라이트를 몇 개로 만들 것인지 자른다. (가로, 세로)
+	// Monster
+	UImageManager::GetInst().CuttingSprite("Fly.png", 5, 3);
+	UImageManager::GetInst().CuttingSprite("Fly002.png", 6, 2);
+	UImageManager::GetInst().CuttingSprite("Hopper.png", 6, 2);
+
 	// Player
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
 	UImageManager::GetInst().CuttingSprite("Head.png", 5, 2);
@@ -70,9 +75,6 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("effect_tearpoofa.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("effect_bloodtear.png", 4, 4);
 
-	// Monster
-	UImageManager::GetInst().CuttingSprite("Fly.png", 5, 3);
-	UImageManager::GetInst().CuttingSprite("Fly002.png", 6, 2);
 
 	// Background
 	UImageManager::GetInst().CuttingSprite("NormalRoomDoor.png", 4, 2);

@@ -65,6 +65,10 @@ void APlayer::Tick(float _DeltaTime)
 
 	RestoreInitialRenderState(_DeltaTime);
 	IsCameraMove(); // ¿öÇÁ
+
+	// ·»´õ
+	CurStateAnimation(_DeltaTime);
+
 	ARoom* CurRoom = ARoom::GetCurRoom();
 	if (true == CurRoom->IsCameraMove()) 
 	{
@@ -74,9 +78,6 @@ void APlayer::Tick(float _DeltaTime)
 	// ·ÎÁ÷
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
-
-	// ·»´õ
-	CurStateAnimation(_DeltaTime);
 
 }
 
@@ -176,7 +177,7 @@ void APlayer::CollisionSetting()
 
 	WarpCollision = CreateDefaultSubObject<U2DCollision>();
 	WarpCollision->SetComponentLocation({ 0, 5 });
-	WarpCollision->SetComponentScale({ 30, 20 });
+	WarpCollision->SetComponentScale({ 30, 15 });
 	WarpCollision->SetCollisionGroup(ECollisionGroup::Player_Warp);
 	WarpCollision->SetCollisionType(ECollisionType::CirCle);
 
@@ -630,7 +631,7 @@ void APlayer::UISetting()
 	PlayerHpToHeart->SetTextSpriteName("hearts.png");
 	PlayerHpToHeart->SetOrder(ERenderOrder::UI);
 	PlayerHpToHeart->SetTextScale({ 32, 32 });
-	PlayerHpToHeart->SetActorLocation({ 135, 45 });
+	PlayerHpToHeart->SetActorLocation({ 140, 50 });
 
 	// Penny
 	PennyUI = GetWorld()->SpawnActor<APickupItemUI>();

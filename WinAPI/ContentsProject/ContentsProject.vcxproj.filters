@@ -64,6 +64,9 @@
     <ClInclude Include="AttackFly.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="Fly.h">
+      <Filter>04_Play\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -127,6 +130,9 @@
       <Filter>04_Play\Scene</Filter>
     </ClCompile>
     <ClCompile Include="AttackFly.cpp">
+      <Filter>04_Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Fly.cpp">
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
   </ItemGroup>

@@ -18,24 +18,23 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
-	void Attack(float _DeltaTime);
-	void ChaseMove(float _DeltaTime);
-	void Move(float _DeltaTime);
-	FVector2D GetRandomDir();
-	void ClampPositionToRoom();
+	//void Death(float _DeltaTime);
+	//void Attack(float _DeltaTime);
+	//void ChaseMove(float _DeltaTime);
+	//void Move(float _DeltaTime);
+	//void ClampPositionToRoom();
 
-	bool IsPlayerNearby();
-	FVector2D GetDirectionToPlayer();
-	void ChasePlayer(float _DeltaTime);
+	//bool IsPlayerNearby();
+	//FVector2D GetDirectionToPlayer();
+	//void ChasePlayer(float _DeltaTime);
 
-	void BodyCollisionCheck(float _DeltaTime);
+	//void BodyCollisionCheck(float _DeltaTime);
 
-	void Death(float _DeltaTime);
 
-	void SetParentRoom(ARoom* _Parent)
-	{
-		ParentRoom = _Parent;
-	}
+	//void SetParentRoom(ARoom* _Parent)
+	//{
+	//	ParentRoom = _Parent;
+	//}
 
 protected:
 
