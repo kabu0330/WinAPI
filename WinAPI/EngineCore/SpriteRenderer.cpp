@@ -68,15 +68,13 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 	// 일단 여기서 다 짠다.
 	if (nullptr != CurAnimation)
 	{
-		CurAnimation->IsEnd = false;
-
 		std::vector<int>& Indexs = CurAnimation->FrameIndex;
 		std::vector<float>& Times = CurAnimation->FrameTime;
 
 		Sprite = CurAnimation->Sprite;
 
 
-		CurAnimation->CurTime += _DeltaTime;
+		CurAnimation->CurTime += _DeltaTime * CurAnimationSpeed;
 
 		float CurFrameTime = Times[CurAnimation->CurIndex];
 
@@ -95,6 +93,10 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 			if (CurAnimation->CurIndex >= Indexs.size())
 			{
 				CurAnimation->IsEnd = true;
+			}
+			else 
+			{
+				CurAnimation->IsEnd = false;
 			}
 
 			if (CurAnimation->CurIndex >= Indexs.size())

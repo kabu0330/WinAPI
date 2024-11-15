@@ -40,6 +40,10 @@ namespace UEngineDebug
 
 	void CoreOutPutString(std::string_view _Text)
 	{
+		if (false == IsDebug)
+		{
+			return;
+		}
 		// #ifdef _DEBUG
 				// 바로 출력하지 않는다.
 		DebugTexts.push_back({ _Text.data(), EngineTextPos });
@@ -49,6 +53,10 @@ namespace UEngineDebug
 
 	void CoreOutPutString(std::string_view _Text, FVector2D _Pos)
 	{
+		if (false == IsDebug)
+		{
+			return;
+		}
 // #ifdef _DEBUG
 		DebugTexts.push_back({ _Text.data(), _Pos });
 // #endif
@@ -68,6 +76,10 @@ namespace UEngineDebug
 
 	void CoreDebugRender(FTransform _Trans, EDebugPosType _Type)
 	{
+		if (false == IsDebug)
+		{
+			return;
+		}
 		DebugPoses.push_back({ _Trans, _Type });
 	}
 
@@ -105,25 +117,24 @@ namespace UEngineDebug
 			{
 			case UEngineDebug::EDebugPosType::Rect:
 			{
-				SelectObject(BackHDC, hPen);
-				SelectObject(BackHDC, hBrush);
+				HBITMAP OldBitMapPen = static_cast<HBITMAP>(SelectObject(BackHDC, hPen));
+				DeleteObject(OldBitMapPen);
+				HBITMAP OldBitMapBrush = static_cast<HBITMAP>(SelectObject(BackHDC, hBrush));
+				DeleteObject(OldBitMapBrush);
 
 				Rectangle(BackHDC, LT.iX(), LT.iY(), RB.iX(), RB.iY());
-
-				DeleteObject(hPen);
-				DeleteObject(hBrush);
 
 				break;
 			}
 			case UEngineDebug::EDebugPosType::Circle:
 			{
-				SelectObject(BackHDC, hPen);
-				SelectObject(BackHDC, hBrush);
+				HBITMAP OldBitMapPen = static_cast<HBITMAP>(SelectObject(BackHDC, hPen));
+				DeleteObject(OldBitMapPen);
+				HBITMAP OldBitMapBrush = static_cast<HBITMAP>(SelectObject(BackHDC, hBrush));
+				DeleteObject(OldBitMapBrush);
 
 				Ellipse(BackHDC, LT.iX(), LT.iY(), RB.iX(), RB.iY());
 
-				DeleteObject(hPen);
-				DeleteObject(hBrush);
 				break;
 			}
 			default:
@@ -131,6 +142,8 @@ namespace UEngineDebug
 			}
 		}
 
+		DeleteObject(hPen);
+		DeleteObject(hBrush);
 		DebugPoses.clear();
 	}
 

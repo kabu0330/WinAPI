@@ -70,14 +70,14 @@ void APlayGameMode::Spawn()
 
 	// Monster
 	//AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
-	MinionRoom0->CreateMonster<AAttackFly>({ -100, -100 });
-	MinionRoom0->CreateMonster<AAttackFly>({ 100, -100 });
-	MinionRoom0->CreateMonster<AFly>({ 0, 0 });
+	//MinionRoom0->CreateMonster<AAttackFly>({ -100, -100 });
+	//MinionRoom0->CreateMonster<AAttackFly>({ 100, -100 });
+	//MinionRoom0->CreateMonster<AFly>({ 0, 0 });
 
-	MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
+	//MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
 
 
-	BaseRoom->CreateMonster<AHost>({ 150, 0 });
+	//BaseRoom->CreateMonster<AHost>({ 150, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
@@ -132,6 +132,7 @@ void APlayGameMode::UISetting()
 {
 	// Text
 	ABannerTextUI* TextUI = GetWorld()->SpawnActor<ABannerTextUI>();
+	TextUI->SetName("TextUI");
 	TextUI->SetTextSpriteName("banner.png");
 	TextUI->SetOrder(ERenderOrder::UI);
 	TextUI->SetTextScale({ 16, 10 });

@@ -12,7 +12,7 @@
 
 AMonster::AMonster()
 {
-	DebugOn();
+	//DebugOn();
 }
 
 void AMonster::BeginPlay()

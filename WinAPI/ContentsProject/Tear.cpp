@@ -29,7 +29,7 @@ ATear::ATear()
 	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
 	TearEffectRenderer->SetActive(true);
 
-	DebugOn();
+	//DebugOn();
 }
 
 // 값만 받아서 멤버에 저장한다.

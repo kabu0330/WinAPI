@@ -38,9 +38,9 @@ AHost::AHost()
 	BodyCollision->SetActive(false);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BodyRenderer->CreateAnimation("Idle", "Host.png", { 0, 0 }, 0.1f);
-	BodyRenderer->CreateAnimation("Attack", "Host.png", 0, 1, 0.5f, false);
-	BodyRenderer->CreateAnimation("Attack", "Host.png", 0, 1, 0.5f, false);
+	BodyRenderer->CreateAnimation("Idle", "Host.png", { 0, 0 }, 0.1f, false);
+	BodyRenderer->CreateAnimation("Attack", "Host.png", 0, 1, 0.1f, false);
+	BodyRenderer->CreateAnimation("Hold", "Host.png", 2, 2, 0.1f, false);
 	BodyRenderer->CreateAnimation("Death", "effect_bloodpoof.png", 0, 9, 0.1f, false);
 	BodyRenderer->SetComponentLocation({ 0, -33 });
 	BodyRenderer->SetComponentScale({ 64, 128 });

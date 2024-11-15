@@ -28,7 +28,7 @@ ABloodTear::ABloodTear()
 	TearEffectRenderer->ChangeAnimation("BloodTear_Normal");
 	TearEffectRenderer->SetActive(true);
 
-	DebugOn();
+	//DebugOn();
 }
 
 void ABloodTear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att)

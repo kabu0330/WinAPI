@@ -127,6 +127,16 @@ public:
 		Alpha = static_cast<unsigned char>(_Value * 255.0f);
 	}
 
+	void SetAnimationSpeed(float _Speed)
+	{
+		CurAnimationSpeed = _Speed;
+	}
+
+	void ResetAnimationSpeed()
+	{
+		CurAnimationSpeed = 1.0f;
+	}
+
 
 protected:
 
@@ -135,6 +145,7 @@ private:
 	int CurIndex = 0;
 	bool IsCameraEffect = true;
 	float CameraEffectScale = 1.0f;
+	float CurAnimationSpeed = 1.0f;
 	FVector2D Pivot = FVector2D::ZERO;
 
 	class UEngineSprite* Sprite = nullptr;

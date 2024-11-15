@@ -49,7 +49,7 @@ void APlayer::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	// 디버그 기능 집합
-	PlayerDebugSetting(_DeltaTime);
+	//PlayerDebugSetting(_DeltaTime);
 
 	Death(_DeltaTime);
 	UITick(_DeltaTime);
@@ -634,6 +634,7 @@ void APlayer::UISetting()
 {
 	// Heart
 	PlayerHpToHeart = GetWorld()->SpawnActor<AHeartUI>();
+	PlayerHpToHeart->SetName("PlayerHp_UI");
 	PlayerHpToHeart->SetTextSpriteName("hearts.png");
 	PlayerHpToHeart->SetOrder(ERenderOrder::UI);
 	PlayerHpToHeart->SetTextScale({ 32, 32 });
@@ -641,6 +642,7 @@ void APlayer::UISetting()
 
 	// Penny
 	PennyUI = GetWorld()->SpawnActor<APickupItemUI>();
+	PlayerHpToHeart->SetName("Penny_UI");
 	PennyUI->SetTextSpriteName("ui_crafting.png");
 	PennyUI->SetOrder(ERenderOrder::UI);
 	PennyUI->SetTextScale({ 34, 38 });
@@ -648,6 +650,7 @@ void APlayer::UISetting()
 	PennyUI->SetValue(8); // SetSpriteIndex
 
 	PennyPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
+	PennyPickupNumber->SetName("PennyPickupNumber");
 	PennyPickupNumber->SetTextSpriteName("pickup.png");
 	PennyPickupNumber->SetOrder(ERenderOrder::UI);
 	PennyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
@@ -656,6 +659,7 @@ void APlayer::UISetting()
 	// Bomb
 	FVector2D Offset = FVector2D(0, +25);
 	BombUI = GetWorld()->SpawnActor<APickupItemUI>();
+	BombUI->SetName("BombUI");
 	BombUI->SetTextSpriteName("ui_crafting.png");
 	BombUI->SetOrder(ERenderOrder::UI);
 	BombUI->SetTextScale({ 32, 32 });
@@ -663,6 +667,7 @@ void APlayer::UISetting()
 	BombUI->SetValue(15); //SetSpriteIndex
 
 	BombPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
+	BombPickupNumber->SetName("BombPickupNumber");
 	BombPickupNumber->SetTextSpriteName("pickup.png");
 	BombPickupNumber->SetOrder(ERenderOrder::UI);
 	BombPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
@@ -671,6 +676,7 @@ void APlayer::UISetting()
 
 	// Key
 	KeyUI = GetWorld()->SpawnActor<APickupItemUI>();
+	KeyUI->SetName("KeyUI");
 	KeyUI->SetTextSpriteName("ui_crafting.png");
 	KeyUI->SetOrder(ERenderOrder::UI);
 	KeyUI->SetTextScale({ 32, 32 });
@@ -678,6 +684,7 @@ void APlayer::UISetting()
 	KeyUI->SetValue(12); //SetSpriteIndex
 
 	KeyPickupNumber = GetWorld()->SpawnActor<APickupNumberUI>();
+	KeyPickupNumber->SetName("KeyPickupNumber");
 	KeyPickupNumber->SetTextSpriteName("pickup.png");
 	KeyPickupNumber->SetOrder(ERenderOrder::UI);
 	KeyPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
