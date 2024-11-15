@@ -5,6 +5,7 @@
 #include <EngineBase/EngineDelegate.h>
 #include <EngineBase/EngineDebug.h>
 #include <EnginePlatform/EngineInput.h>
+#include <EnginePlatform/EngineSound.h>
 
 UEngineAPICore* UEngineAPICore::MainCore = nullptr;
 UContentsCore* UEngineAPICore::UserCore = nullptr;
@@ -29,6 +30,7 @@ UEngineAPICore::~UEngineAPICore()
 	}
 
 	Levels.clear();
+	UEngineSound::Release();
 }
 
 int UEngineAPICore::EngineStart(HINSTANCE _Inst, UContentsCore* _UserCore)
@@ -109,6 +111,9 @@ void UEngineAPICore::Tick()
 	DeltaTimer.TimeCheck();
 	float DeltaTime = DeltaTimer.GetDeltaTime();
 	//
+
+	// 사운드 
+	UEngineSound::Update();
 
 	// 입력 체크
 	UEngineInput::GetInst().KeyCheck(DeltaTime);

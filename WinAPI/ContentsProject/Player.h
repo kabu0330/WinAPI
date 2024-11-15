@@ -1,6 +1,7 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <EngineCore/2DCollision.h>
+#include <EnginePlatform/EngineSound.h>
 #include "Tear.h"
 
 // 설명 : 아이작
@@ -249,7 +250,8 @@ private:
 	FVector2D StartCameraPos = FVector2D::ZERO;
 	FVector2D EndCameraPos   = FVector2D::ZERO;
 
-
+	//BGM
+	USoundPlayer BGM;
 
 };
 // 입력 방법 2 : 이벤트 방식으로 처리

@@ -43,6 +43,9 @@
     <ClInclude Include="TimeEvent.h">
       <Filter>06_Object</Filter>
     </ClInclude>
+    <ClInclude Include="EngineResources.h">
+      <Filter>06_Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EngineDebug.cpp">
@@ -85,6 +88,9 @@
       <Filter>06_Object</Filter>
     </ClCompile>
     <ClCompile Include="TimeEvent.cpp">
+      <Filter>06_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineResources.cpp">
       <Filter>06_Object</Filter>
     </ClCompile>
   </ItemGroup>

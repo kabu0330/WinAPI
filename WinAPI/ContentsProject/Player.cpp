@@ -42,6 +42,8 @@ void APlayer::BeginPlay()
 
 	UISetting();
 	CollisionFuctionSetting();
+
+	//BGM = UEngineSound::Play("doorOpen.wav");
 }
 
 void APlayer::Tick(float _DeltaTime)

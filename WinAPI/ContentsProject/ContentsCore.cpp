@@ -4,6 +4,7 @@
 #include <EngineBase/EngineDebug.h>
 #include <EngineBase/EngineDirectory.h>
 #include <EngineBase/EngineFile.h>
+#include <EnginePlatform/EngineSound.h>
 #include <EngineCore/EngineAPICore.h>
 #include <EngineCore/ImageManager.h>
 
@@ -96,52 +97,76 @@ void ContentsCore::FolderSetting()
 {
 	// TitleGameMode
 	UEngineDirectory TitleDir;
-	TitleDir.MoveParentToDirectory("Resources");
+	TitleDir.MoveParentToDirectory("Resources//Image");
 	TitleDir.Append("Title");
 	UImageManager::GetInst().LoadFolder(TitleDir.GetPathToString());
 
 	// PlayGameMode
 	// 1. Loading
 	UEngineDirectory PlayModeLoading;
-	PlayModeLoading.MoveParentToDirectory("Resources//Play");
+	PlayModeLoading.MoveParentToDirectory("Resources//Image//Play");
 	PlayModeLoading.Append("PlayModeLoading");
 	UImageManager::GetInst().LoadFolder(PlayModeLoading.GetPathToString());
 
 	// 2. Playing
 	UEngineDirectory DoorLockSprite;
-	DoorLockSprite.MoveParentToDirectory("Resources//Play");
+	DoorLockSprite.MoveParentToDirectory("Resources//Image//Play");
 	DoorLockSprite.Append("NormalDoor");
 	UImageManager::GetInst().LoadFolder(DoorLockSprite.GetPathToString());
 
 	UEngineDirectory DoorOpenSprite;
-	DoorOpenSprite.MoveParentToDirectory("Resources//Play");
+	DoorOpenSprite.MoveParentToDirectory("Resources//Image//Play");
 	DoorOpenSprite.Append("OpenDoor");
 	UImageManager::GetInst().LoadFolder(DoorOpenSprite.GetPathToString());
 }
 
 void ContentsCore::ResourceLoad()
 {
-	// Directory 클래스를 생성자를 통해 현재 실행 파일 경로를 EnginePath의 Path 멤버에 저장한다.
-	UEngineDirectory Dir;
-
-	// 상대경로 : 디버깅을 할 때와 릴리즈하여 배포할 때 내 실행 파일의 경로가 다르다.
-	// 이 때, 언제 어떤 상황에서도 내 리소스 파일을 찾아갈 수 있도록 방법을 만들어야 한다.
-	// 현재 리소스 파일을 보관하고 있는 폴더명을 적는다.
-	if (false == Dir.MoveParentToDirectory("Resources"))
+	// 이미지 리소스
 	{
-		MSGASSERT("리소스 폴더를 찾지 못했습니다.");
-		return;
+		// Directory 클래스를 생성자를 통해 현재 실행 파일 경로를 EnginePath의 Path 멤버에 저장한다.
+		UEngineDirectory Dir;
+
+		// 상대경로 : 디버깅을 할 때와 릴리즈하여 배포할 때 내 실행 파일의 경로가 다르다.
+		// 이 때, 언제 어떤 상황에서도 내 리소스 파일을 찾아갈 수 있도록 방법을 만들어야 한다.
+		// 현재 리소스 파일을 보관하고 있는 폴더명을 적는다.
+		if (false == Dir.MoveParentToDirectory("Resources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+
+		Dir.Append("Image");
+		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(/*true*/);
+		// 디폴트 매개변수는 true이며, 하위 디렉토리의 리소스도 가져온다.
+
+		for (size_t i = 0; i < ImageFiles.size(); i++)
+		{
+			std::string FilePath = ImageFiles[i].GetPathToString();
+
+			// Load 함수 : 이미지의 파일명을 Key / HDC와 위치, 크기를 값으로 저장해주는 함수
+			UImageManager::GetInst().Load(FilePath);
+		}
 	}
 
-	std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(/*true*/);
-	// 디폴트 매개변수는 true이며, 하위 디렉토리의 리소스도 가져온다.
-
-	for (size_t i = 0; i < ImageFiles.size(); i++)
+	// 사운드 리소스
 	{
-		std::string FilePath = ImageFiles[i].GetPathToString();
+		UEngineDirectory Dir;
 
-		// Load 함수 : 이미지의 파일명을 Key / HDC와 위치, 크기를 값으로 저장해주는 함수
-		UImageManager::GetInst().Load(FilePath);
+		if (false == Dir.MoveParentToDirectory("Resources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+
+		Dir.Append("Sounds");
+		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(/*true*/);
+
+		for (size_t i = 0; i < ImageFiles.size(); i++)
+		{
+			std::string FilePath = ImageFiles[i].GetPathToString();
+			UEngineSound::Load(FilePath);
+		}
 	}
 }
 
