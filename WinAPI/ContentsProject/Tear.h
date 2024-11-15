@@ -22,6 +22,10 @@ public:
 	void CollisionSetting();
 	void Explode(AActor* _Other);
 
+	void TimeBasedExplosion();
+	void BoundaryExplosion();
+	void HandleMonsterCollision(AActor* _Other);
+
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
@@ -41,6 +45,7 @@ private:
 	float GravityActivationTime = 0.7f;
 	FVector2D Gravity = FVector2D(Resistance * 0.85f, 0.35f);
 	FVector2D GravityDir = FVector2D::ZERO;
+	FTransform TearTrans;
 
 	FVector2D Dir = FVector2D::ZERO;
 

@@ -180,32 +180,48 @@ FVector2D AMonster::GetRandomDir()
 	Random.SetSeed(time(nullptr));
 	int Result = Random.RandomInt(0, 7);
 
+	if (PrevDir == Result)
+	{
+		UEngineRandom Reroll;
+		Reroll.SetSeed(time(nullptr) + Result);
+		int RerollResult = Reroll.RandomInt(0, 7);
+		Result = RerollResult;
+	}
+
 	FVector2D Dir = FVector2D::ZERO;
 	switch (Result)
 	{
 	case 0:
 		Dir = FVector2D::LEFT;
+		PrevDir = 0;
 		break;
 	case 1:
 		Dir = FVector2D::RIGHT;
+		PrevDir = 1;
 		break;
 	case 2:
 		Dir = FVector2D::UP;
+		PrevDir = 2;
 		break;
 	case 3:
 		Dir = FVector2D::DOWN;
+		PrevDir = 3;
 		break;
 	case 4:
 		Dir = LeftTop;
+		PrevDir = 4;
 		break;
 	case 5:
 		Dir = LeftBot;
+		PrevDir = 5;
 		break;
 	case 6:
 		Dir = RightTop;
+		PrevDir = 6;
 		break;
 	case 7:
 		Dir = RightBot;
+		PrevDir = 7;
 		break;
 	default:
 		break;

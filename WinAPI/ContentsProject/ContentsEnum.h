@@ -19,20 +19,20 @@ enum class ERenderOrder
 
 enum class ECollisionGroup
 {
-	Warp,
-	Player_Warp,
-	Player_Body,
-	Player_Attack,
-	Monster_Body,
-	Monster_BodyNonCollision,
-	Monster_FlyingBody,
-	Monster_FlyingBodyNonCollision,
-	Monster_Attack,
-	Monster_Barrier,
-	Monster_DetectInRange,
-	Object_Wall,
-	Object_Attack, // 오브젝트를 지나갈 수 있지만 닿으면 체력 감소
-	Object_Bomb, // 폭탄
+	Warp = 0,
+	Player_Warp = 99,
+	Player_Body = 100,
+	Player_Attack = 101,
+	Monster_Body = 200,
+	Monster_BodyNonCollision = 201,
+	Monster_FlyingBody = 210,
+	Monster_FlyingBodyNonCollision = 211,
+	Monster_Attack = 250,
+	Monster_Barrier = 260,
+	Monster_DetectInRange = 299,
+	Object_Wall = 300,
+	Object_Attack = 301, // 오브젝트를 지나갈 수 있지만 닿으면 체력 감소
+	Item_Bomb = 400, // 폭탄
 	
 };
 

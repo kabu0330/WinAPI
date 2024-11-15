@@ -231,6 +231,7 @@ protected:
 	int CollisionAtt = 1;
 	float Speed = 50;
 	FVector2D Direction = FVector2D::ZERO;
+	int PrevDir = -1;
 
 	// ¹«Àû
 	bool Invincibility = false;
