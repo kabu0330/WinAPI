@@ -4,7 +4,16 @@
 #include "Player.h"
 #include <EngineCore/SpriteRenderer.h>
 
-// 설명 :
+enum class MonsterState
+{
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN
+};
+
+
+// 설명 : 몬스터의 속성을 정의
 class AMonster : public AActor
 {
 public:

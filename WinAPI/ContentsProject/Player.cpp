@@ -34,6 +34,7 @@ APlayer::APlayer()
 	CollisionSetting(); // 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다. 
 
 	DebugOn(); // 디버그 대상에 포함
+	SwitchInvincibility(); // 디버깅용 무적
 }
 
 void APlayer::BeginPlay()

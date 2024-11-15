@@ -54,17 +54,32 @@ void APooter::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
+
 }
 
 void APooter::Attack(float _DeltaTime)
 {
+	std::string CurAnimationName = BodyRenderer->GetCurAnimationName();
+
+	if ("Attack" == CurAnimationName)
+	{
+		if (true == BodyRenderer->IsCurAnimationEnd())
+		{
+			TimeEventer.PushEvent(0.1f, std::bind(&AMonster::ChangeAnimIdle, this));
+		}
+	}
+
 	CoolDownElapsed += _DeltaTime;
 	if (CoolDownElapsed < Cooldown)
 	{
 		return;
 	}
 
-	BodyRenderer->ChangeAnimation("Attack");
+	if ("Idle" == CurAnimationName)
+	{
+		BodyRenderer->ChangeAnimation("Attack");
+	}
+
 
 	PreparationElapesd += _DeltaTime;
 	if (PreparationElapesd < PreparationDuration)
@@ -78,6 +93,7 @@ void APooter::Attack(float _DeltaTime)
 	Tear = GetWorld()->SpawnActor<ABloodTear>();
 	Tear->Fire(TearPos, TearDir, ShootingSpeed, Att);
 	CoolDownElapsed = 0.0f;
+	PreparationElapesd = 0.0f;
 }
 
 

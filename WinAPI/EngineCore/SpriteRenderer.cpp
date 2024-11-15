@@ -267,6 +267,7 @@ void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::stri
 
 void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _Force /*= false*/)
 {
+	CurAnimationName = _AnimationName;
 	std::string UpperName = UEngineString::ToUpper(_AnimationName);
 
 	if (false == FrameAnimations.contains(UpperName))

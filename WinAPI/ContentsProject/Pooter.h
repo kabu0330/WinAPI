@@ -23,7 +23,8 @@ public:
 protected:
 
 private:
-	float PreparationDuration = 0.5f;
+	float PreparationDuration = 0.4f;
 	float PreparationElapesd = 0.0f;
+	bool IsAttackAnimation = false;
 };
 

@@ -137,6 +137,11 @@ public:
 		CurAnimationSpeed = 1.0f;
 	}
 
+	std::string GetCurAnimationName()
+	{
+		return CurAnimationName;
+	}
+
 protected:
 
 private:
@@ -148,6 +153,7 @@ private:
 	FVector2D Pivot = FVector2D::ZERO;
 
 	class UEngineSprite* Sprite = nullptr;
+	std::string CurAnimationName = "";
 
 	std::map<std::string, FrameAnimation> FrameAnimations;
 	FrameAnimation* CurAnimation = nullptr;
