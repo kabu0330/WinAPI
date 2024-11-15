@@ -23,9 +23,11 @@ enum class ECollisionGroup
 	Player_Body,
 	Player_Attack,
 	Monster_Body,
-	Monster_NonCollision,
-	Monster_Fly,
+	Monster_BodyNonCollision,
+	Monster_FlyingBody,
+	Monster_FlyingBodyNonCollision,
 	Monster_Attack,
+	Monster_Barrier,
 	Monster_DetectInRange,
 	Object_Wall,
 	Object_Attack, // 오브젝트를 지나갈 수 있지만 닿으면 체력 감소

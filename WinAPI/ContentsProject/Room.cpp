@@ -27,7 +27,7 @@ ARoom::ARoom()
 
 	CollisionSetting();
 
-	//DebugOn();
+	DebugOn();
 }
 
 void ARoom::Tick(float _DeltaTime)

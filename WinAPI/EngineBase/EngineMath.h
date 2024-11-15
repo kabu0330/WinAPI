@@ -1,4 +1,6 @@
 #pragma once
+#include <cmath>
+#include <numbers>
 
 class UEngineMath
 {
@@ -29,6 +31,26 @@ public:
 			return maxValue;
 		else
 			return value;
+	}
+
+	template <typename VectorType>
+	static VectorType AngleToRadian(const float& _Angle)
+	{
+		float Radian = _Angle * (std::numbers::pi / 180.0f);
+		float DirVectorX = std::cos(Radian);
+		float DirVectorY = std::sin(Radian);
+
+		return VectorType(DirVectorX, DirVectorY);
+	}
+
+	template <typename VectorType>
+	static VectorType AngleToRadian(const VectorType& _DirUintVector, const float& _Angle)
+	{
+		float Radian = static_cast<float>(_Angle * (std::numbers::pi / 180.0f));
+		float RotatedX = _DirUintVector.X * std::cos(Radian) - _DirUintVector.Y * std::sin(Radian);
+		float RotatedY = _DirUintVector.X * std::sin(Radian) + _DirUintVector.Y * std::cos(Radian);
+
+		return VectorType(RotatedX, RotatedY);
 	}
 };
 

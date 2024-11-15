@@ -29,7 +29,7 @@ ATear::ATear()
 	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
 	TearEffectRenderer->SetActive(true);
 
-	//DebugOn();
+	DebugOn();
 }
 
 // 값만 받아서 멤버에 저장한다.
@@ -65,7 +65,7 @@ void ATear::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CollisionCheck();
+	CollisionSetting();
 }
 
 void ATear::Tick(float _DeltaTime)
@@ -197,14 +197,15 @@ void ATear::CheckForExplosion(float _DeltaTime)
 
 }
 
-void ATear::CollisionCheck()
+void ATear::CollisionSetting()
 {
-	//TearCollision->SetCollisionEnter(std::bind(&ATear::ExplodeOnWallCollision, this, std::placeholders::_1));
+	TearCollision->SetCollisionEnter(std::bind(&ATear::Explode, this, std::placeholders::_1));
 }
 
-void ATear::ExplodeOnWallCollision(AActor* _Other)
+void ATear::Explode(AActor* _Other)
 {
 }
+
 
 ATear::~ATear()
 {

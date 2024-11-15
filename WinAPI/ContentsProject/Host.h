@@ -19,6 +19,7 @@ public:
 	void Tick(float _DeltaTime) override;
 
 	void Attack(float _DeltaTime) override;
+	void FireTripleShotForward();
 	void ChangeIdle();
 
 

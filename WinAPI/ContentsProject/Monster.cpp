@@ -12,14 +12,14 @@
 
 AMonster::AMonster()
 {
-	//DebugOn();
+	DebugOn();
 }
 
 void AMonster::BeginPlay()
 {
 	Super::BeginPlay();
 
-		AActor* MainPawn = GetWorld()->GetPawn();
+	AActor* MainPawn = GetWorld()->GetPawn();
 	Player = dynamic_cast<APlayer*>(MainPawn);
 }
 

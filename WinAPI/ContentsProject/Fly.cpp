@@ -21,7 +21,7 @@ AFly::AFly()
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ 25, 25 });
-	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_NonCollision);
+	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_FlyingBodyNonCollision);
 	BodyCollision->SetCollisionType(ECollisionType::CirCle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();

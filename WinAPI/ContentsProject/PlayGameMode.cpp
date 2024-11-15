@@ -77,18 +77,32 @@ void APlayGameMode::Spawn()
 	//MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
 
 
-	//BaseRoom->CreateMonster<AHost>({ 150, 0 });
+	BaseRoom->CreateMonster<AHost>({ 150, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
 {
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Warp, ECollisionGroup::Object_Wall);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Warp, ECollisionGroup::Warp);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Body, ECollisionGroup::Monster_Body);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Object_Wall);
+	// Player
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Warp, ECollisionGroup::Object_Wall); // 플레이어는 맵 밖을 나갈 수 없다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Warp, ECollisionGroup::Warp); // 플레이어는 문과 충돌하여 다음 맵으로 넘어간다.
 
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Body, ECollisionGroup::Object_Wall);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Object_Wall);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Body, ECollisionGroup::Monster_Body); // 플레이어는 몬스터와 충돌하면 데미지를 입는다.
+
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_Body); // 플레이어는 몬스터를 공격할 수 있다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_BodyNonCollision);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_FlyingBody); // 플레이어는 공중의 몬스터도 데미지를 입힌다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_FlyingBodyNonCollision);
+
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_Barrier); // 플레이어의 공격을 막으며 즉시 터진다.
+
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Object_Wall); // 플레이어의 공격이 벽에 닿으면 즉시 터진다.
+
+	// Monster
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Body, ECollisionGroup::Object_Wall); // 몬스터는 맵 밖을 나갈 수 없다.
+
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Player_Body); 
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Object_Wall); 
+
 }
 
 void APlayGameMode::Tick(float _DeltaTime)

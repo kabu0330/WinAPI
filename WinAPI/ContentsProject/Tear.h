@@ -19,8 +19,8 @@ public:
 	void Explosion();
 	void UpdateTearPosion(float _DeltaTime);
 	void CheckForExplosion(float _DeltaTime);
-	void CollisionCheck();
-	void ExplodeOnWallCollision(AActor* _Other);
+	void CollisionSetting();
+	void Explode(AActor* _Other);
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
