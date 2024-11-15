@@ -51,7 +51,7 @@ void APlayer::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	// 디버그 기능 집합
-	//PlayerDebugSetting(_DeltaTime);
+	PlayerDebugSetting(_DeltaTime);
 
 	Death(_DeltaTime);
 	UITick(_DeltaTime);

@@ -17,7 +17,7 @@ ATear::ATear()
 
 	TearCollision = CreateDefaultSubObject<U2DCollision>();
 	TearCollision->SetComponentLocation({ 0, 0 });
-	TearCollision->SetComponentScale({ 25, 25 });
+	TearCollision->SetComponentScale({ 50, 50 });
 	TearCollision->SetCollisionGroup(ECollisionGroup::Player_Attack);
 	TearCollision->SetCollisionType(ECollisionType::CirCle);
 	
@@ -204,6 +204,8 @@ void ATear::CollisionSetting()
 
 void ATear::Explode(AActor* _Other)
 {
+	int a = 0;
+	//Explosion();
 }
 
 

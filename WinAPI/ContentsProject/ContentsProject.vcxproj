@@ -163,7 +163,15 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="DeathDebris.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="DeathReportScene.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Dip.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -205,6 +213,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="PickupItemUI.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Pooter.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -255,7 +267,15 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="DeathDebris.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="DeathReportScene.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Dip.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -297,6 +317,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="PickupItemUI.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Pooter.cpp">
       <SubType>
       </SubType>
     </ClCompile>

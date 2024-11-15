@@ -20,13 +20,16 @@ public:
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
+	void MonsterInputDebug();
 
 	virtual void Move(float _DeltaTime);
 	virtual void ChaseMove(float _DeltaTime);
 	virtual void ChasePlayer(float _DeltaTime);
-	//virtual void Attack(float _DeltaTime) {}
-
 	virtual void Attack(float _DeltaTime);
+
+	void ChangeAnimIdle();
+
+
 	FVector2D GetRandomDir();
 	FVector2D GetDirectionToPlayer();
 	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
@@ -102,6 +105,8 @@ public:
 		{
 			return 0;
 		}
+
+		Monster->DamagedEffectRenderer->SetActive(true);
 
 		Hp -= _PlayerAtt;
 		if (Hp < 0)
@@ -208,6 +213,8 @@ protected:
 	class U2DCollision* BodyCollision = nullptr;
 
 	class USpriteRenderer* BodyRenderer = nullptr;
+	class USpriteRenderer* DamagedEffectRenderer = nullptr;
+	class USpriteRenderer* SpawnEffectRenderer = nullptr;
 
 	// Stat
 	int   Hp    = 1;

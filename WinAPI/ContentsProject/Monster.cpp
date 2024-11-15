@@ -3,15 +3,34 @@
 
 #include <EngineBase/EngineMath.h>
 #include <EngineBase/EngineRandom.h>
+#include <EnginePlatform/EngineInput.h>
+#include <EngineCore/EngineAPICore.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/2DCollision.h>
 #include "PlayGameMode.h"
 
 #include "Global.h"
 #include "ContentsEnum.h"
+#include "DeathDebris.h"
 
 AMonster::AMonster()
 {
+	DamagedEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	DamagedEffectRenderer->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 10, 0.1f, false);
+	DamagedEffectRenderer->SetComponentScale({ 64, 64 });
+	DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
+	DamagedEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
+	DamagedEffectRenderer->SetActive(false);
+
+	//SpawnEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	////SpawnEffectRenderer->CreateAnimation("Spawn", "Fly.png", 4, 14, 0.05f, false);
+	//SpawnEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, {0.1f, 0.1f, 0.1f, 0.1f,0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 5.0f}, false);
+	//SpawnEffectRenderer->SetComponentLocation({ 0, -40 });
+	//SpawnEffectRenderer->SetComponentScale({ 256, 256 });
+	//SpawnEffectRenderer->ChangeAnimation("DeathEffect");
+	//SpawnEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
+	//SpawnEffectRenderer->SetActive(false);
+
 	DebugOn();
 }
 
@@ -26,6 +45,7 @@ void AMonster::BeginPlay()
 void AMonster::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+	MonsterInputDebug();
 
 	if (ParentRoom != ARoom::GetCurRoom())
 	{
@@ -46,18 +66,36 @@ void AMonster::Tick(float _DeltaTime)
 	DeathCheck(_DeltaTime);
 }
 
+void AMonster::MonsterInputDebug()
+{
+	if (UEngineInput::GetInst().IsDown('F'))
+	{
+		Hp = 0;
+	}
+}
+
+void AMonster::ChangeAnimIdle()
+{
+	if (nullptr == BodyRenderer)
+	{
+		return;
+	}
+	BodyRenderer->ChangeAnimation("Idle");
+}
+
 void AMonster::Death(float _DeltaTime)
 {
 	if (nullptr != BodyCollision)
 	{
+		BodyRenderer->SetActive(false);
 		CollisionDestroy();
 		RendererDestroy();
 	}
 
-	// 모든 몬스터의 사망 애니메이션 이름은 "Death"로 고정한다. 아니면 자식클래스에서 재정의
-	BodyRenderer->ChangeAnimation("Death");
+	// 애니메이션 바꿀거면 함수 재정의
+	DeathDebris* BloodEffect = GetWorld()->SpawnActor<DeathDebris>();
 
-	if (false == BodyRenderer->IsCurAnimationEnd())
+	if (false == BloodEffect->IsCurAnimationEnd())
 	{
 		return;
 	}

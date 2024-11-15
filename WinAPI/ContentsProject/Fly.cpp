@@ -25,11 +25,11 @@ AFly::AFly()
 	BodyCollision->SetCollisionType(ECollisionType::CirCle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BodyRenderer->CreateAnimation("Fly.Idle", "Fly002.png", 0, 1, 0.1f);
+	BodyRenderer->CreateAnimation("Idle", "Fly002.png", 0, 1, 0.1f);
 	BodyRenderer->CreateAnimation("Death", "Fly.png", 4, 14, 0.05f, false);
 	BodyRenderer->SetComponentScale({ 64, 64 });
-	BodyRenderer->ChangeAnimation("Fly.Idle");
-	BodyRenderer->SetOrder(ERenderOrder::Monsetr);
+	BodyRenderer->ChangeAnimation("Idle");
+	BodyRenderer->SetOrder(ERenderOrder::Monster);
 
 	//DetectCollision = CreateDefaultSubObject<U2DCollision>();
 	//DetectCollision->SetComponentScale(GetDetectRange());

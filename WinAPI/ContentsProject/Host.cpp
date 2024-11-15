@@ -18,7 +18,7 @@ AHost::AHost()
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
 	/* 탐색범위 : */ SetDetectRange({ 600 , 600 });
 	/* 발사속도 : */ SetShootingSpeed(400.0f);
-	/* 쿨타임   : */ SetCooldown(5.0f);
+	/* 쿨타임   : */ SetCooldown(3.0f);
 
 	SetInvincible(false);
 
@@ -45,7 +45,7 @@ AHost::AHost()
 	BodyRenderer->SetComponentLocation({ 0, -33 });
 	BodyRenderer->SetComponentScale({ 64, 128 });
 	BodyRenderer->ChangeAnimation("Idle");
-	BodyRenderer->SetOrder(ERenderOrder::Monsetr);
+	BodyRenderer->SetOrder(ERenderOrder::Monster);
 
 	DetectCollision = CreateDefaultSubObject<U2DCollision>();
 	DetectCollision->SetComponentScale(GetDetectRange());

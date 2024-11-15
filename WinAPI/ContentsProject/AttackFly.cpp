@@ -28,11 +28,11 @@ AAttackFly::AAttackFly()
 	BodyCollision->SetCollisionType(ECollisionType::CirCle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BodyRenderer->CreateAnimation("Fly.Idle", "Fly.png", 1, 2, 0.1f);
+	BodyRenderer->CreateAnimation("Idle", "Fly.png", 1, 2, 0.1f);
 	BodyRenderer->CreateAnimation("Death", "Fly.png", 4, 14, 0.05f, false);
 	BodyRenderer->SetComponentScale({ 256, 256 });
-	BodyRenderer->ChangeAnimation("Fly.Idle");
-	BodyRenderer->SetOrder(ERenderOrder::Monsetr);
+	BodyRenderer->ChangeAnimation("Idle");
+	BodyRenderer->SetOrder(ERenderOrder::Monster);
 
 	DetectCollision = CreateDefaultSubObject<U2DCollision>();
 	DetectCollision->SetComponentScale(GetDetectRange());

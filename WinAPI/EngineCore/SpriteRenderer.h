@@ -137,7 +137,6 @@ public:
 		CurAnimationSpeed = 1.0f;
 	}
 
-
 protected:
 
 private:

@@ -64,12 +64,14 @@ void ContentsCore::SpriteSetting()
 	// Monster
 	UImageManager::GetInst().CuttingSprite("Fly.png", 5, 3);
 	UImageManager::GetInst().CuttingSprite("Fly002.png", 6, 2);
-	UImageManager::GetInst().CuttingSprite("Hopper.png", 6, 2);
-	UImageManager::GetInst().CuttingSprite("Hopper2.png", 12, 1);
+	UImageManager::GetInst().CuttingSprite("Hopper.png", 12, 1);
 	UImageManager::GetInst().CuttingSprite("Host.png", 3, 1);
+	UImageManager::GetInst().CuttingSprite("Dip.png", 3, 2);
+	UImageManager::GetInst().CuttingSprite("Pooter.png", 4, 4);
 
 	// MonsterEffect
 	UImageManager::GetInst().CuttingSprite("effect_bloodpoof.png", 4, 4);
+	UImageManager::GetInst().CuttingSprite("LargeBloodExplosion.png", 5, 2);
 
 	// Player
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);

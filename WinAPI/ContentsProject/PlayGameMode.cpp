@@ -23,6 +23,8 @@
 #include "Fly.h"
 #include "Hopper.h"
 #include "Host.h"
+#include "Dip.h"
+#include "Pooter.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -70,14 +72,16 @@ void APlayGameMode::Spawn()
 
 	// Monster
 	//AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
-	//MinionRoom0->CreateMonster<AAttackFly>({ -100, -100 });
+	
 	//MinionRoom0->CreateMonster<AAttackFly>({ 100, -100 });
-	//MinionRoom0->CreateMonster<AFly>({ 0, 0 });
+	//BaseRoom->CreateMonster<AFly>({ 150, 0 });
 
 	//MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
 
 
-	BaseRoom->CreateMonster<AHost>({ 150, 0 });
+	//BaseRoom->CreateMonster<AHost>({ 150, 0 });
+	//BaseRoom->CreateMonster<ADip>({ 150, 0 });
+	BaseRoom->CreateMonster<APooter>({ 150, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
