@@ -29,6 +29,8 @@ public:
 
 	}
 
+	void RandomSpeed();
+
 protected:
 
 private:

@@ -37,6 +37,7 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 	void MonsterInputDebug();
+	void CollisionFuctionSetting();
 
 	virtual void Move(float _DeltaTime);
 	virtual void ChaseMove(float _DeltaTime);
@@ -45,6 +46,11 @@ public:
 	virtual void CurStateAnimation(float _DeltaTime);
 	virtual FVector2D GetRandomDir();
 	virtual void ChangeAnimIdle();
+	virtual void HandleCollisionDamage();
+	virtual void Death(float _DeltaTime);
+
+	int ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir); // 피격
+	void KnockbackTick();
 
 	void SpawnAnimation();
 	void BodyRender();
@@ -52,13 +58,11 @@ public:
 	FVector2D GetDirectionToPlayer();
 	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
 	bool IsPlayerNearby();
-	virtual void HandleCollisionDamage(float _DeltaTime);
 
 	void BeginBlinkEffect();
 	void StayBlinkEffect();
-	virtual void Death(float _DeltaTime);
 
-	virtual void SetParentRoom(class ARoom* _Parent)
+	void SetParentRoom(class ARoom* _Parent)
 	{
 		ParentRoom = _Parent;
 	}
@@ -119,8 +123,6 @@ public:
 	{
 		Hp = _Hp;
 	}
-	int ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir); // 피격
-
 
 	void SwitchDamagedEffectRenderer()
 	{
@@ -229,7 +231,10 @@ public:
 	{
 		IsAttack = !IsAttack;
 	}
-
+	void SwitchIsHit()
+	{
+		IsHit = !IsHit;
+	}
 
 protected:
 	class U2DCollision* BodyCollision = nullptr;
@@ -263,6 +268,10 @@ protected:
 
 
 	bool IsAttack = false;
+	bool IsHit = false;
+	float KnockbackDuration = 0.3f;
+	float LerpAlpha = 0.0f;
+	FVector2D KnockbackDistance = FVector2D::ZERO;
 	// 무적
 	bool Invincibility = false;
 

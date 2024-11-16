@@ -30,7 +30,7 @@ public:
 		return RandomCreate.operator()(MtGen);
 	}
 
-	float Randomfloat(float _Min, float _Max)
+	float RandomFloat(float _Min, float _Max)
 	{
 		// _Min ~ _Max ·£´ý°ª »Ì¾ÆÁà
 		std::uniform_real_distribution<float> RandomCreate(_Min, _Max);

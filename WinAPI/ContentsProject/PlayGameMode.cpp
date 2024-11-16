@@ -75,7 +75,7 @@ void APlayGameMode::Spawn()
 
 	//BaseRoom->CreateMonster<AFly>({ 150, 0 });
 
-	BaseRoom->CreateMonster<AHopper>({ 150, 0 });
+	//BaseRoom->CreateMonster<AHopper>({ 150, 0 });
 
 
 	//BaseRoom->CreateMonster<AHost>({ 150, 0 });

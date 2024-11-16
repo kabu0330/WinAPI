@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <numbers>
+#include <algorithm>
 
 class UEngineMath
 {
@@ -33,6 +34,12 @@ public:
 			return value;
 	}
 
+	template <typename DataType>
+	static DataType Min(DataType _A, DataType _B)
+	{
+		return (_A < _B) ? _A : _B;
+	}
+
 	template <typename VectorType>
 	static VectorType AngleToRadian(const float& _Angle)
 	{
@@ -52,6 +59,7 @@ public:
 
 		return VectorType(RotatedX, RotatedY);
 	}
+
 };
 
 class FVector2D

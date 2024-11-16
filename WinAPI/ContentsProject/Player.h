@@ -63,6 +63,10 @@ public:
 
 	// 이동관련
 	void Move(float _DeltaTime);
+	bool ProcessMovementInput();
+	void UpdateHeadState();
+	bool HasMovementInput();
+
 	bool PlayerIsMove()
 	{
 		return IsMove;
@@ -154,6 +158,13 @@ public:
 		return Heart;
 	}
 
+	void SwitchIsHit()
+	{
+		IsHit = !IsHit;
+	}
+
+	void KnockbackTick(float _DeltaTime);
+
 protected:
 
 private:
@@ -165,11 +176,19 @@ private:
 	// Speed : MoveAcc
 	FVector2D Dir = FVector2D::ZERO;
 	FVector2D FinalSpeed = FVector2D::ZERO;
-	float MoveAcc = 500.0f;
-	float SpeedMax = 350.0f; // Speed
-	bool IsMove = false;
+	FVector2D TargetSpeed = FVector2D::ZERO;
+	float MoveAcc = 5.0f;
+	float Deceleration = 15.0f;
+	float SpeedMax = 370.0f; // Speed
+	bool IsMove = false; // 가속도 노멀라이즈를 제어할 변수
+	bool IsHit = false;
 	float TimeElapsed = 0.0f;
 	int Att = 3;
+
+	FVector2D KnockbackDistance = FVector2D::ZERO;
+	FVector2D KnockbackStartPos = FVector2D::ZERO;
+	float KnockbackDuration = 0.2f; // 넉백으로 인한 이동 불가 시간
+	FVector2D UpPos = FVector2D::ZERO;
 
 	// Death And GameSetting
 	FVector2D InitPos = FVector2D::ZERO;
@@ -187,6 +206,7 @@ private:
 	void FadeIn();
 	void FadeOut();
 	void SpiritFadeOut();
+
 
 	// Item
 	int PennyCount = 0;

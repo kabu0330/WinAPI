@@ -2,7 +2,10 @@
 #include "Player.h"
 #include <string>
 #include <vector>
+#include <cmath>
+#include <algorithm>
 
+#include <EngineBase/EngineDebug.h>
 #include <EngineBase/EngineMath.h>
 #include <EngineCore/EngineAPICore.h>
 #include <EnginePlatform/EngineInput.h>
@@ -78,6 +81,8 @@ void APlayer::Tick(float _DeltaTime)
 	}
 
 	// 로직
+	KnockbackTick(_DeltaTime);
+
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
 
@@ -142,13 +147,20 @@ int APlayer::ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir)
 		{
 			return 0;
 		}
-		ShowHitAnimation(_Player);
-		BeginBlinkEffect();
 
-		FVector2D KnockbackDistance = _Dir * 20;
-		FVector2D CurPos = GetActorLocation();
-		FVector2D Result = GetActorLocation() + KnockbackDistance;
-		SetActorLocation(GetActorLocation() + KnockbackDistance);
+		Player->ShowHitAnimation(_Player);
+		Player->BeginBlinkEffect();
+
+		IsHit = true; // 피격시 잠시 이동 불가
+
+		KnockbackStartPos = GetActorLocation();
+		UpPos = KnockbackStartPos + FVector2D(0.0f, -50.0f);
+		FVector2D Offset = _Dir;
+		Offset.Normalize();
+		KnockbackDistance = Offset * 20.0f; // 넉백거리 Lerp 적용
+
+		// 0.3초 뒤 이동가능
+		TimeEventer.PushEvent(KnockbackDuration, std::bind(&APlayer::SwitchIsHit, this));
 
 		Heart -= _Att;
 		if (Heart < 0)
@@ -157,6 +169,30 @@ int APlayer::ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir)
 		}
 		return Heart;
 	}
+}
+
+void APlayer::KnockbackTick(float _DeltaTime)
+{
+	if (false == IsHit)
+	{
+		return;
+	}
+
+	KnockbackDuration -= _DeltaTime;
+	if (KnockbackDuration <= 0.0f)
+	{
+		KnockbackDuration = 0.0f;
+		return; // 넉백 지속 시간 종료
+	}
+
+
+	float KnockbackLerpAlpha = 1.0f - (KnockbackDuration / 1.0f);
+	FVector2D StartPos = FVector2D::ZERO;
+	FVector2D CurPos = FVector2D::Lerp(KnockbackStartPos, KnockbackStartPos + KnockbackDistance, KnockbackLerpAlpha);
+
+	float UpOffset = -50.0f * std::sin(KnockbackLerpAlpha * static_cast<float>(std::numbers::pi));
+	FVector2D FinalPos = CurPos + FVector2D(0.0f, UpOffset);
+	SetActorLocation(FinalPos);
 }
 
 void APlayer::ShowHitAnimation(AActor* _Other)
@@ -226,7 +262,7 @@ void APlayer::StayBlinkEffect()
 	HeadRenderer->SetAlphaFloat(1.0f);
 
 	++FadeCount;
-	if (7 < FadeCount)
+	if (5 < FadeCount)
 	{
 		FadeCount = 0;
 		return;
@@ -265,6 +301,7 @@ bool APlayer::IsDeath()
 	{
 		Heart = 0;
 		IsDead = true;
+		IsHit = false;
 		return true;
 	}
 
@@ -325,7 +362,7 @@ void APlayer::SpiritAnimation()
 
 	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
 
-	float SpiritSpeed = 50.0f;
+	float SpiritSpeed = 100.0f;
 	Dir = FVector2D::UP;
 	BodyRenderer->AddComponentLocation(Dir * SpiritSpeed * DeltaTime);
 	HeadRenderer->AddComponentLocation(Dir * SpiritSpeed * DeltaTime);
@@ -372,10 +409,131 @@ void APlayer::Reset()
 
 void APlayer::Move(float _DeltaTime)
 {
+	if (true == IsHit)
+	{
+		return;
+	}
 	if (true == CameraMove) // 방 이동을 중에 캐릭터는 움직일 수 없다.
 	{
 		return;
 	}
+
+	// 기존에 프레임에 따라 가속도의 결과값 영향이 너무 커 60프레임 기준으로 계산
+	const float FixedTimeStep = 0.016f;
+	float RemainingTime = _DeltaTime;
+	while (RemainingTime > 0.0f)
+	{
+		float DeltaTime = UEngineMath::Min(RemainingTime, FixedTimeStep); // 현재 틱 계산
+		RemainingTime -= DeltaTime;
+
+		if (true == ProcessMovementInput())
+		{
+			if (FVector2D::ZERO != Dir)
+			{
+				Dir.Normalize();
+			}
+
+			TargetSpeed = Dir * SpeedMax;
+
+			FVector2D CurDir = FinalSpeed.Length() > 0.0f ? FinalSpeed / FinalSpeed.Length() : FVector2D::ZERO;
+
+			if (FinalSpeed.Length() < 30.0f) 
+			{
+				// 기본 출발속도를 주어 최저 속도를 보장
+				FinalSpeed += Dir * (SpeedMax * 0.2f); 
+			}
+
+			if (FinalSpeed.Length() < 50.0f)
+			{
+				// 속도가 낮을 때 새로운 방향으로 이동할 경우 부드럽게 이동
+				FinalSpeed = FVector2D::Lerp(FinalSpeed, TargetSpeed, MoveAcc * DeltaTime);
+			}
+			else if (FVector2D::DotProduct(CurDir, Dir) < 0.0f)
+			{
+				// 반대 방향이라면 기존속도의 영향을 빠르게 줄이고 최저 속도를 보장하여 답답하지 않게 함
+				FinalSpeed = FVector2D::Lerp(FinalSpeed, FVector2D::ZERO, MoveAcc * DeltaTime);
+				FinalSpeed += Dir * (SpeedMax * 0.3f);
+			}
+			else // 같은 방향이라면 그대로
+			{
+
+				FinalSpeed = FinalSpeed + (TargetSpeed - FinalSpeed) * MoveAcc * DeltaTime;
+			}
+		}
+
+		else // 키입력이 없는 경우 감속 처리
+		{
+			TargetSpeed = FVector2D::ZERO;
+
+			static const float GlideSpeed = 120.0f;       // 미끄러질 속도
+			static const float GlideDecayFactor = 0.98f; // 감속 비율
+			static const float GlideDuration = 0.3f;     // 미끄러짐 지속 시간 (초)
+			static float CurrentGlideTime = 0.0f;        // 현재 미끄러짐 시간
+			static bool IsGliding = false;               // 미끄러짐 상태 플래그
+
+			// 미끄러짐 초기화
+			if (!IsGliding)
+			{
+				IsGliding = true;
+				CurrentGlideTime = 0.0f;
+			}
+
+			// 미끄러짐 유지
+			if (CurrentGlideTime < GlideDuration)
+			{
+				CurrentGlideTime += DeltaTime;
+				FinalSpeed = FinalSpeed.GetNormal() * GlideSpeed; // 일정 속도 유지
+			}
+			else // 감속 처리
+			{
+				FinalSpeed *= GlideDecayFactor;
+
+				if (FinalSpeed.Length() < 10.0f)
+				{
+					FinalSpeed = FVector2D::ZERO;
+					IsGliding = false; // 감속 종료
+				}
+			}
+		}
+
+		// 최대속도 제한 : 항상 절댓값으로
+		if (abs(FinalSpeed.X) > SpeedMax || abs(FinalSpeed.Y) > SpeedMax)
+		{
+			FinalSpeed.Normalize();
+			FinalSpeed *= SpeedMax;
+		}
+
+		AddActorLocation(FinalSpeed * DeltaTime); // 실제 이동값
+	}
+
+	UpdateHeadState();
+
+	// 키 입력 상태가 아니면
+	if (true == HasMovementInput())
+	{
+		return;
+	}
+
+	IsMove = false;
+
+	TimeElapsed += _DeltaTime;
+	if (TimeElapsed > StateTime)
+	{
+		BodyState = LowerState::IDLE;
+		TimeElapsed = 0.0f;
+	}
+
+	// 공격 상태가 아니고, 키입력 없으면 IDLE로 전환
+	if (false == IsAttack())
+	{
+		HeadState = UpperState::IDLE;
+	}
+}
+
+bool APlayer::ProcessMovementInput()
+{
+	Dir = FVector2D::ZERO;
+	IsMove = false;
 
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
@@ -402,31 +560,11 @@ void APlayer::Move(float _DeltaTime)
 		IsMove = true;
 	}
 
-	if (true == IsMove)
-	{
-		Dir.Normalize();
-		FVector2D TargetSpeed = Dir * SpeedMax * 1.0f;
+	return IsMove;
+}
 
-		//FinalSpeed += Dir * MoveAcc * _DeltaTime; 	// 가속도
-		FinalSpeed = FVector2D::Lerp(FinalSpeed, TargetSpeed, MoveAcc * _DeltaTime);
-		FVector2D Result = FinalSpeed;
-	}
-	else
-	{
-		//FinalSpeed *= 700.0f * _DeltaTime;
-		FinalSpeed = FVector2D::ZERO;
-	}
-
-	// 최대속도 제한 : 항상 절댓값으로
-	if (abs(FinalSpeed.X) > SpeedMax || abs(FinalSpeed.Y) > SpeedMax)
-	{
-		FinalSpeed.Normalize();
-		FinalSpeed *= SpeedMax;
-	}
-
-	AddActorLocation(FinalSpeed * _DeltaTime);
-
-
+void APlayer::UpdateHeadState()
+{
 	// HeadState 설정 : 공격 중인지, 아닌지
 	if (true == IsAttack())
 	{
@@ -438,28 +576,16 @@ void APlayer::Move(float _DeltaTime)
 		int BodyDir = static_cast<int>(BodyState); // 이동방향 그대로 얼굴이 전환
 		HeadState = static_cast<UpperState>(BodyDir);
 	}
+}
 
-	// 키 입력 상태가 아니면
-	if (false == UEngineInput::GetInst().IsPress('A') &&
-		false == UEngineInput::GetInst().IsPress('D') &&
-		false == UEngineInput::GetInst().IsPress('W') &&
-		false == UEngineInput::GetInst().IsPress('S'))
-	{
-		IsMove = false;
+bool APlayer::HasMovementInput()
+{
 
-		TimeElapsed += _DeltaTime;
-		if (TimeElapsed > StateTime)
-		{
-			BodyState = LowerState::IDLE;
-			TimeElapsed = 0.0f;
-		}
+	return UEngineInput::GetInst().IsPress('A') ||
+		   UEngineInput::GetInst().IsPress('D') ||
+		   UEngineInput::GetInst().IsPress('W') ||
+		   UEngineInput::GetInst().IsPress('S');
 
-		// 공격 상태가 아니고, 키입력 없으면 IDLE로 전환
-		if (false == IsAttack())
-		{
-			HeadState = UpperState::IDLE;
-		}
-	}
 }
 
 void APlayer::CameraPosMove(float _DeltaTime)
@@ -643,11 +769,12 @@ void APlayer::SetAttackDir(UpperState _HeadState)
 void APlayer::SpriteSetting()
 {
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BodyRenderer->CreateAnimation("Body_Left", "Body.png", 1, 9, 0.05f);
-	BodyRenderer->CreateAnimation("Body_Right", "Body.png", 10, 19, 0.05f);
-	BodyRenderer->CreateAnimation("Body_Down", "Body.png", 20, 29, 0.05f);
-	BodyRenderer->CreateAnimation("Body_Up", "Body.png", { 29, 28, 27, 26, 25, 24, 23, 22, 21, 20 }, 0.05f);
-	BodyRenderer->CreateAnimation("Body_Idle", "Body.png", 29, 29, 0.05f);
+	float FrameSpeed = 0.08f;
+	BodyRenderer->CreateAnimation("Body_Left", "Body.png", 1, 9, FrameSpeed);
+	BodyRenderer->CreateAnimation("Body_Right", "Body.png", 10, 19, FrameSpeed);
+	BodyRenderer->CreateAnimation("Body_Down", "Body.png", 20, 29, FrameSpeed);
+	BodyRenderer->CreateAnimation("Body_Up", "Body.png", { 29, 28, 27, 26, 25, 24, 23, 22, 21, 20 }, FrameSpeed);
+	BodyRenderer->CreateAnimation("Body_Idle", "Body.png", 29, 29, FrameSpeed);
 	BodyRenderer->CreateAnimation("Body_Death", "Death_Body.png", 0, 4, 0.2f);
 
 	BodyRenderer->SetComponentScale({ 64, 64 });
@@ -680,7 +807,7 @@ void APlayer::SpriteSetting()
 	////////////////////////////////////////////////////////////////////////////////
 	// Event
 	FullRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	FullRenderer->CreateAnimation("Death", "Isaac.png", { 0, 6, 3 }, 0.1f, false);
+	FullRenderer->CreateAnimation("Death", "Isaac.png", { 0, 6, 3 }, {0.4f, 0.15f, 0.1f}, false);
 	FullRenderer->CreateAnimation("Damaged", "Isaac.png", 6, 6, 0.1f);
 	FullRenderer->SetComponentScale({ 128, 128 });
 	FullRenderer->SetOrder(ERenderOrder::Player);

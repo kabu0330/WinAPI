@@ -2,6 +2,7 @@
 #include "Hopper.h"
 
 #include <EngineBase/EngineMath.h>
+#include <EngineBase/EngineRandom.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/2DCollision.h>
 #include "ContentsEnum.h"
@@ -11,9 +12,9 @@ AHopper::AHopper()
 	/* 이름     : */ SetName("Hopper");
 	/* 체력     : */ SetHp(9);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(0);
+	/* 이동속도 : */ SetMoveSpeed(180);
 	/* 이동시간 : */ SetMoveDuration(0.8f);
-	/* 정지시간 : */ SetMoveCooldown(1.5f);
+	/* 정지시간 : */ SetMoveCooldown(1.2f);
 	/* 탐색범위 : */ SetDetectRange({ 0 , 0 });
 
 	
@@ -64,6 +65,7 @@ void AHopper::Move(float _DeltaTime)
 		}
 		if (MoveElapsedTime > MoveCooldown) // 멈춘 뒤 일정 시간이 흐르면 다시 이동
 		{
+			RandomSpeed();
 			BodyRenderer->ChangeAnimation("Hopper_Move");
 			Direction = GetRandomDir();
 			MoveElapsedTime = 0.0f;
@@ -74,4 +76,12 @@ void AHopper::Move(float _DeltaTime)
 
 	FVector2D MovePos = Direction * Speed * _DeltaTime;
 	AddActorLocation(MovePos);
+}
+
+void AHopper::RandomSpeed()
+{
+	UEngineRandom Random;
+	Random.SetSeed(time(NULL));
+	float RandomSpeed = Random.RandomFloat(150.0f, 210.0f);
+	SetMoveSpeed(RandomSpeed);
 }
