@@ -30,6 +30,5 @@ public:
 		}
 		return FVector2D::ZERO;
 	}
-
 };
 

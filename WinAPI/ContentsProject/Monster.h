@@ -6,10 +6,17 @@
 
 enum class MonsterState
 {
+	NONE, 
 	LEFT,
 	RIGHT,
 	UP,
-	DOWN
+	DOWN,
+	ATTCK_NONE, // +-5 하면 방향이 맞다.
+	ATTCK_LEFT,
+	ATTCK_RIGHT,
+	ATTCK_UP,
+	ATTCK_DOWN,
+	MAX
 };
 
 
@@ -35,11 +42,11 @@ public:
 	virtual void ChaseMove(float _DeltaTime);
 	virtual void ChasePlayer(float _DeltaTime);
 	virtual void Attack(float _DeltaTime);
+	virtual void CurStateAnimation(float _DeltaTime);
+	virtual FVector2D GetRandomDir();
+	virtual void ChangeAnimIdle();
 
-	void ChangeAnimIdle();
 
-
-	FVector2D GetRandomDir();
 	FVector2D GetDirectionToPlayer();
 	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
 	bool IsPlayerNearby();
@@ -218,12 +225,25 @@ public:
 		BodyCollision->SetActive(false);
 	}
 
+	bool IsAttacking()
+	{
+		return IsAttack;
+	}
+
+	void SwitchIsAttacking()
+	{
+		IsAttack = !IsAttack;
+	}
+
+
 protected:
 	class U2DCollision* BodyCollision = nullptr;
 
+	MonsterState State = MonsterState::LEFT;
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* DamagedEffectRenderer = nullptr;
 	class USpriteRenderer* SpawnEffectRenderer = nullptr;
+	FVector2D SpawnEffectScale = FVector2D::ZERO;
 
 	// Stat
 	int   Hp    = 1;
@@ -233,6 +253,8 @@ protected:
 	FVector2D Direction = FVector2D::ZERO;
 	int PrevDir = -1;
 
+
+	bool IsAttack = false;
 	// 무적
 	bool Invincibility = false;
 

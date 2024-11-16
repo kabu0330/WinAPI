@@ -22,14 +22,14 @@ AMonster::AMonster()
 	DamagedEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
 	DamagedEffectRenderer->SetActive(false);
 
-	//SpawnEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	////SpawnEffectRenderer->CreateAnimation("Spawn", "Fly.png", 4, 14, 0.05f, false);
-	//SpawnEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, {0.1f, 0.1f, 0.1f, 0.1f,0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 5.0f}, false);
-	//SpawnEffectRenderer->SetComponentLocation({ 0, -40 });
-	//SpawnEffectRenderer->SetComponentScale({ 256, 256 });
-	//SpawnEffectRenderer->ChangeAnimation("DeathEffect");
-	//SpawnEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
-	//SpawnEffectRenderer->SetActive(false);
+	SpawnEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	SpawnEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, {0.1f, 0.1f, 0.1f, 0.1f,0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 5.0f}, false);
+	SpawnEffectRenderer->SetComponentLocation({ 0, -40 });
+	SpawnEffectScale = { 256, 256 };
+	SpawnEffectRenderer->SetComponentScale(SpawnEffectScale);
+	SpawnEffectRenderer->ChangeAnimation("DeathEffect");
+	SpawnEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
+	SpawnEffectRenderer->SetActive(false);
 
 	DebugOn();
 }
@@ -47,25 +47,29 @@ void AMonster::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 	MonsterInputDebug();
 
-	if (ParentRoom != ARoom::GetCurRoom())
+	if (ParentRoom != ARoom::GetCurRoom()) // 너가 생성된 맵 바깥으로 나갈 수 없어.
 	{
 		return;
 	}
 
-	if (true == APlayGameMode::IsGamePaused())
+	if (true == APlayGameMode::IsGamePaused()) // 게임이 일시정지라면 모두 정지
 	{
 		return;
 	}
 
 	ClampPositionToRoom();
-	Move(_DeltaTime);
-	ChasePlayer(_DeltaTime);
 
+	CurStateAnimation(_DeltaTime);
+
+	Move(_DeltaTime);
+
+	ChasePlayer(_DeltaTime);
 	HandleCollisionDamage(_DeltaTime);
 
 	DeathCheck(_DeltaTime);
 }
 
+// 디버깅용 치트키
 void AMonster::MonsterInputDebug()
 {
 	if (UEngineInput::GetInst().IsDown('F'))
@@ -102,6 +106,7 @@ void AMonster::Death(float _DeltaTime)
 	Destroy();
 }
 
+// 플레이어 쫓아가
 void AMonster::ChaseMove(float _DeltaTime)
 {
 	Direction = GetDirectionToPlayer();
@@ -134,13 +139,12 @@ void AMonster::Move(float _DeltaTime)
 	{
 		if (MoveElapsedTime > MoveCooldown) // 멈춘 뒤 일정 시간이 흐르면 다시 이동
 		{
-			Direction = GetRandomDir();
+			Direction = GetRandomDir(); // 플레이어가 탐색 범위에 없다면 랜덤 이동
 			MoveElapsedTime = 0.0f;
 			return;
 		}
 		return;
 	}
-
 
 	FVector2D MovePos = Direction * Speed * _DeltaTime;
 	AddActorLocation(MovePos);
@@ -154,6 +158,9 @@ void AMonster::Attack(float _DeltaTime)
 		return;
 	}
 
+	IsAttack = true;
+	TimeEventer.PushEvent(0.5f, std::bind(&AMonster::SwitchIsAttacking, this));
+
 	TearDir = GetDirectionToPlayer();
 	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() };
 
@@ -162,6 +169,7 @@ void AMonster::Attack(float _DeltaTime)
 	CoolDownElapsed = 0.0f;
 }
 
+// 몬스터의 이동 방향은 8방향
 FVector2D AMonster::GetRandomDir()
 {
 	FVector2D LeftTop = FVector2D::LEFT + FVector2D::UP;
@@ -180,10 +188,10 @@ FVector2D AMonster::GetRandomDir()
 	Random.SetSeed(time(nullptr));
 	int Result = Random.RandomInt(0, 7);
 
-	if (PrevDir == Result)
+	if (PrevDir == Result) // 이전에 이동한 방향과 같으면 다시 이동할 방향 랜덤 돌려
 	{
 		UEngineRandom Reroll;
-		Reroll.SetSeed(time(nullptr) + Result);
+		Reroll.SetSeed(time(nullptr) + Result + 1); // Result가 0일수도 있으니까 1 더해서 반드시 시드값을 바꾼다.
 		int RerollResult = Reroll.RandomInt(0, 7);
 		Result = RerollResult;
 	}
@@ -193,34 +201,42 @@ FVector2D AMonster::GetRandomDir()
 	{
 	case 0:
 		Dir = FVector2D::LEFT;
+		State = MonsterState::LEFT;
 		PrevDir = 0;
 		break;
 	case 1:
 		Dir = FVector2D::RIGHT;
+		State = MonsterState::RIGHT;
 		PrevDir = 1;
 		break;
 	case 2:
 		Dir = FVector2D::UP;
+		State = MonsterState::UP;
 		PrevDir = 2;
 		break;
 	case 3:
 		Dir = FVector2D::DOWN;
+		State = MonsterState::DOWN;
 		PrevDir = 3;
 		break;
 	case 4:
+		State = MonsterState::LEFT;
 		Dir = LeftTop;
 		PrevDir = 4;
 		break;
 	case 5:
 		Dir = LeftBot;
+		State = MonsterState::LEFT;
 		PrevDir = 5;
 		break;
 	case 6:
 		Dir = RightTop;
+		State = MonsterState::RIGHT;
 		PrevDir = 6;
 		break;
 	case 7:
 		Dir = RightBot;
+		State = MonsterState::RIGHT;
 		PrevDir = 7;
 		break;
 	default:
@@ -230,6 +246,7 @@ FVector2D AMonster::GetRandomDir()
 	return FVector2D(Dir);
 }
 
+// 플레이어를 기준으로 몬스터의 어느 방향에 있느냐를 정규화
 FVector2D AMonster::GetDirectionToPlayer()
 {
 	AActor* Player = GetWorld()->GetPawn();
@@ -239,9 +256,19 @@ FVector2D AMonster::GetDirectionToPlayer()
 
 	Distance.Normalize();
 
+	if (Distance.X <= 0)
+	{
+		State = MonsterState::LEFT;
+	}
+	else if (Distance.X > 0)
+	{
+		State = MonsterState::RIGHT;
+	}
+
 	return Distance;
 }
 
+// 너가 속한 맵 밖으로 나가지마.
 void AMonster::ClampPositionToRoom()
 {
 	if (nullptr == BodyCollision)
@@ -265,22 +292,23 @@ void AMonster::ClampPositionToRoom()
 
 	if (LeftEdge > OffsetPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{ 1, 0 });
+		SetActorLocation(Pos + FVector2D{ 2, 0 });
 	}
 	if (RightEdge < OffsetPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{ -1, 0 });
+		SetActorLocation(Pos + FVector2D{ -2, 0 });
 	}
 	if (TopEdge > OffsetPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, 1 });
+		SetActorLocation(Pos + FVector2D{ 0, 2 });
 	}
 	if (BotEdge < OffsetPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, -1 });
+		SetActorLocation(Pos + FVector2D{ 0, -2 });
 	}
 }
 
+// 플레이어가 탐색 범위 내로 들어왔냐?
 bool AMonster::IsPlayerNearby()
 {
 	if (nullptr == DetectCollision)
@@ -302,6 +330,7 @@ bool AMonster::IsPlayerNearby()
 	return false;
 }
 
+// 플레이어와 충돌 시 플레이어에게 데미지를 주고 피격 애니메이션을 동작시킨다.
 void AMonster::HandleCollisionDamage(float _DeltaTime)
 {
 	if (nullptr == BodyCollision)
@@ -328,8 +357,13 @@ void AMonster::HandleCollisionDamage(float _DeltaTime)
 
 	BodyCollisionCooldownElapsed = 0.0f;
 
+	// Debug 출력 메시지
 	UEngineDebug::OutPutString(CollisionPlayer->GetName() + "에게 " + std::to_string(CollisionAtt) + " 의 충돌 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionPlayer->GetHp()));
+}
 
+// 방향이 있는 몬스터만 재정의해서 사용, Tick을 몬스터에서 돌리기 위해서 일단 만들어둔다.
+void AMonster::CurStateAnimation(float _DeltaTime)
+{
 }
 
 AMonster::~AMonster()

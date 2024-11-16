@@ -76,7 +76,7 @@ void ADip::Move(float _DeltaTime)
 	}
 
 	BodyRenderer->ChangeAnimation("Move");
-	TimeEventer.PushEvent(GetMoveDuration() + 0.1f, std::bind(&AMonster::ChangeAnimIdle, this));
+	TimeEventer.PushEvent(GetMoveDuration() + 0.3f, std::bind(&AMonster::ChangeAnimIdle, this));
 
 	FVector2D MovePos = Direction * Speed * _DeltaTime;
 	AddActorLocation(MovePos);

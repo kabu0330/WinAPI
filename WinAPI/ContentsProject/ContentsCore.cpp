@@ -67,7 +67,8 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("Hopper.png", 12, 1);
 	UImageManager::GetInst().CuttingSprite("Host.png", 3, 1);
 	UImageManager::GetInst().CuttingSprite("Dip.png", 3, 2);
-	UImageManager::GetInst().CuttingSprite("Pooter.png", 4, 4);
+	UImageManager::GetInst().CuttingSprite("Pooter_Left.png", 4, 4);
+	UImageManager::GetInst().CuttingSprite("Pooter_Right.png", 4, 4);
 
 	// MonsterEffect
 	UImageManager::GetInst().CuttingSprite("effect_bloodpoof.png", 4, 4);
@@ -162,7 +163,7 @@ void ContentsCore::ResourceLoad()
 		}
 
 		Dir.Append("Sounds");
-		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(/*true*/);
+		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile();
 
 		for (size_t i = 0; i < ImageFiles.size(); i++)
 		{
@@ -174,7 +175,6 @@ void ContentsCore::ResourceLoad()
 
 void ContentsCore::Tick()
 {
-	// 현재 사용 용도가 없음
 }
 
 ContentsCore::ContentsCore()
