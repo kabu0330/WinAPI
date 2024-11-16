@@ -73,6 +73,7 @@ void ContentsCore::SpriteSetting()
 	// MonsterEffect
 	UImageManager::GetInst().CuttingSprite("effect_bloodpoof.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("LargeBloodExplosion.png", 5, 2);
+	UImageManager::GetInst().CuttingSprite("SpawnEffect_Large.png", 5, 3);
 
 	// Player
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);

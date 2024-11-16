@@ -29,7 +29,7 @@ AAttackFly::AAttackFly()
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "Fly.png", 1, 2, 0.1f);
-	BodyRenderer->CreateAnimation("Death", "Fly.png", 4, 14, 0.05f, false);
+	BodyRenderer->CreateAnimation("Death", "Fly.png", 4, 14, 0.08f, false);
 	BodyRenderer->SetComponentScale({ 256, 256 });
 	BodyRenderer->ChangeAnimation("Idle");
 	BodyRenderer->SetOrder(ERenderOrder::Monster);
@@ -51,6 +51,28 @@ void AAttackFly::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
+}
+
+void AAttackFly::Death(float _DeltaTime)
+{
+	// 1. Ãæµ¹Ã¼(¹Ùµð + Å½»ö) ²ô°í
+	if (nullptr != BodyCollision)
+	{
+		CollisionDestroy();
+	}
+
+	// 3. ¾×ÅÍ Áö¿ì°í
+	if (nullptr == BodyRenderer)
+	{
+		Destroy();
+		return;
+	}
+
+	BodyRenderer->ChangeAnimation("Death");
+	BodyRenderer->SetComponentScale({ 256, 256 });
+
+	// 2. ·»´õ ²ô°í
+	RendererDestroy();
 }
 
 AAttackFly::~AAttackFly()

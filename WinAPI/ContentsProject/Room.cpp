@@ -10,6 +10,7 @@
 #include "ContentsEnum.h"
 #include "PlayGameMode.h"
 #include "Player.h"
+#include "DeathDebris.h"
 
 ARoom* ARoom::CurRoom = nullptr;
 
@@ -38,6 +39,7 @@ void ARoom::Tick(float _DeltaTime)
 	WarpCollisionCheck(_DeltaTime);
 	Warp(_DeltaTime);
 
+	MonsterDeathCheck();
 }
 
 void ARoom::WarpCollisionCheck(float _DeltaTime)
@@ -93,17 +95,34 @@ void ARoom::Warp(float _DeltaTime)
 	if (CameraLerpTime < CameraMoveTime)
 	{
 		CameraMoveDir = FVector2D::ZERO;
+		CurRoom = Rooms[MoveDir];
 
 		// 카메라 이동이 완료되고도, 잠시동안 플레이어의 움직임을 제한
-		float PlayerMovementCooldown = CameraLerpTime + 0.9f;
+		float PlayerMovementCooldown = CameraLerpTime + 0.1f;
 		if (PlayerMovementCooldown < CameraMoveTime)
 		{
 			CameraMove = false;
 			CameraMoveTime = 0.0f;
-			CurRoom = Rooms[MoveDir];
 		}
 	}
 	
+}
+
+void ARoom::MonsterDeathCheck()
+{
+	std::list<AMonster*>::iterator StartIter = Monsters.begin();
+	std::list<AMonster*>::iterator EndIter = Monsters.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		AMonster* Monster = *StartIter;
+		
+		if (true == Monster->IsDeath())
+		{
+			DeathDebris* BloodEffect = GetWorld()->SpawnActor<DeathDebris>();
+			//StartIter = Monsters.erase(StartIter);
+		}	
+	}
 }
 
 void ARoom::WarpPlayerSetting()

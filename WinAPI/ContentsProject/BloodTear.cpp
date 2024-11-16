@@ -28,14 +28,16 @@ ABloodTear::ABloodTear()
 	TearEffectRenderer->ChangeAnimation("BloodTear_Normal");
 	TearEffectRenderer->SetActive(true);
 
+
 	DebugOn();
 }
 
-void ABloodTear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att)
+void ABloodTear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed,  int _Att)
 {
 	TearEffectRenderer->SetActive(true);
 	SetActorLocation(_StartPos);
-	Dir = _Dir;
+	Dir = _Dir; // Dir는 터질 때 영벡터로 만들어야 하므로
+	KnockbackDir = _Dir; // 날아오는 방향을 계속 저장할 벡터가 필요하다.
 	ActorAtt = _Att;
 }
 
@@ -48,13 +50,22 @@ void ABloodTear::Tick(float _DeltaTime)
 		return;
 	}
 
-	UpdateTearPosion(_DeltaTime);
-	CheckForExplosion(_DeltaTime);
+	if (nullptr == TearCollision)
+	{
+		return;
+	}
 
+	if (false == TearEffectRenderer->IsActive())
+	{
+		return;
+	}
+
+	TimeElapesd += _DeltaTime;
+	UpdateTearPosion(_DeltaTime);
 
 }
 
-void ABloodTear::Explosion(float _DeltaTime)
+void ABloodTear::Explosion()
 {
 	if (nullptr == TearCollision)
 	{
@@ -75,35 +86,107 @@ void ABloodTear::Explosion(float _DeltaTime)
 
 void ABloodTear::CheckForExplosion(float _DeltaTime)
 {
+
+}
+
+void ABloodTear::CollisionSetting()
+{
+	TearCollision->SetCollisionStay(std::bind(&ABloodTear::Explode, this, std::placeholders::_1));
+}
+
+void ABloodTear::Explode(AActor* _Other)
+{
+	// 1. 일정 시간이 지나면 터진다.
+	TimeBasedExplosion();
+
+	// 2. 맵 밖으로 벗어나면 터진다.
+	BoundaryExplosion();
+
+	// 3. 오브젝트와 충돌하면 터진다.
+
+
+	// 4. 액터와 충돌하면 터진다.
+	HandleMonsterCollision(_Other);
+}
+
+void ABloodTear::TimeBasedExplosion()
+{
 	if (nullptr == TearCollision)
 	{
 		return;
 	}
 
-	if (false == TearCollision->IsDestroy())
-	{
-		CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::Player_Body);
-	}
-
-	// 플레이어와 충돌하면 터진다.
-	if (nullptr != CollisionActor)
-	{
-		Explosion(_DeltaTime);
-
-		APlayer* CollisionPlayer = dynamic_cast<APlayer*>(CollisionActor);
-		CollisionPlayer->ApplyDamaged(CollisionActor, ActorAtt);
-		CollisionPlayer->ShowHitAnimation(CollisionPlayer);
-
-		UEngineDebug::OutPutString(CollisionPlayer->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionPlayer->GetHp()));
-	}
-
-	//TimeEventer.PushEvent(Duration, std::bind(&ABloodTear::Explosion, this, std::placeholders::_1));
-
-	TimeElapesd += _DeltaTime;
 	if (Duration < TimeElapesd)
 	{
-		Explosion(_DeltaTime);
+		Explosion();
 	}
+}
+
+void ABloodTear::BoundaryExplosion()
+{
+	if (nullptr == TearCollision)
+	{
+		return;
+	}
+
+	ARoom* CurRoom = ARoom::GetCurRoom();
+	FVector2D RoomPos = CurRoom->GetActorLocation();
+	FVector2D RoomScale = CurRoom->GetActorScale().Half();
+	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2;
+	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 2;
+
+	float LeftEdge = RoomPos.X - RoomScale.X - RoomSizeOffsetX;
+	float RightEdge = RoomPos.X + RoomScale.X + RoomSizeOffsetX;
+	float TopEdge = RoomPos.Y - RoomScale.Y - RoomSizeOffsetY;
+	float BotEdge = RoomPos.Y + RoomScale.Y + RoomSizeOffsetY;
+
+	FVector2D Pos = this->GetActorLocation();
+	FVector2D TearPos = this->GetActorLocation() + TearCollision->GetComponentLocation();
+	if (LeftEdge > TearPos.X)
+	{
+		Explosion();
+	}
+	if (RightEdge < TearPos.X)
+	{
+		Explosion();
+	}
+	if (TopEdge > TearPos.Y)
+	{
+		Explosion();
+	}
+	if (BotEdge < TearPos.Y)
+	{
+		Explosion();
+	}
+}
+
+void ABloodTear::HandleMonsterCollision(AActor* _Other)
+{
+	if (nullptr == TearCollision)
+	{
+		return;
+	}
+
+	if (true == TearCollision->IsDestroy())
+	{
+		return;
+	}
+
+	CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::Player_Body);
+	if (nullptr == CollisionActor)
+	{
+		return;
+	}
+
+	Explosion();
+
+	APlayer* CollisionPlayer = dynamic_cast<APlayer*>(CollisionActor);
+	CollisionPlayer->ApplyDamaged(CollisionActor, ActorAtt, KnockbackDir);
+	//CollisionPlayer->ShowHitAnimation(CollisionPlayer);
+
+	UEngineDebug::OutPutString(CollisionPlayer->GetName() + "에게 " + std::to_string(ActorAtt) + " 의데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionPlayer->GetHp()));
+
+
 }
 
 void ABloodTear::UpdateTearPosion(float _DeltaTime)
@@ -115,6 +198,8 @@ void ABloodTear::UpdateTearPosion(float _DeltaTime)
 void ABloodTear::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CollisionSetting();
 }
 
 ABloodTear::~ABloodTear()

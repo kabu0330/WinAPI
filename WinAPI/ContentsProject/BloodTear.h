@@ -16,9 +16,18 @@ public:
 	ABloodTear& operator=(ABloodTear&& _Other) noexcept = delete;
 
 	void Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed = 300.0f, int _Att = 1);
-	void Explosion(float _DeltaTime);
+	void Explosion();
+
 	void UpdateTearPosion(float _DeltaTime);
+
 	void CheckForExplosion(float _DeltaTime);
+
+	void CollisionSetting();
+	void Explode(AActor* _Other);
+
+	void TimeBasedExplosion();
+	void BoundaryExplosion();
+	void HandleMonsterCollision(AActor* _Other);
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -29,11 +38,13 @@ private:
 	int ActorAtt = 0;
 
 	float Speed = 300.0f;
-	float TimeElapesd = 0.0f;
 	float Duration = 0.85f;
+
+	float TimeElapesd = 0.0f;
 	float ExplosionDelay = 1.0f;
 
 	FVector2D Dir = FVector2D::ZERO;
+	FVector2D KnockbackDir = FVector2D::ZERO;
 
 	class USpriteRenderer* TearEffectRenderer = nullptr;
 	class U2DCollision* TearCollision = nullptr;

@@ -32,8 +32,6 @@ void APlayGameMode::BeginPlay()
 {
 	// 레벨이 만들어지면 최초 1회 세팅은 여기서 한다.
 	
-	// Player의 BeginPlay 함수에서도 만들어도 동일한 효과를 볼 수 있지만
-	// Player로서의 순수한 독립성을 지켜주기 위해서 Player의 기능이 아니면 모두 여기서 만든다.
 	GetWorld()->SetCameraPos({0, 0});
 	GetWorld()->SetCameraToMainPawn(false);
 	//GetWorld()->SetCameraPos(GetWorld()->GetPawn()->GetActorLocation());
@@ -73,7 +71,8 @@ void APlayGameMode::Spawn()
 	// Monster
 	//AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
 	
-	//MinionRoom0->CreateMonster<AAttackFly>({ 100, -100 });
+	BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
+
 	//BaseRoom->CreateMonster<AFly>({ 150, 0 });
 
 	//MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
@@ -81,7 +80,7 @@ void APlayGameMode::Spawn()
 
 	//BaseRoom->CreateMonster<AHost>({ 150, 0 });
 	//BaseRoom->CreateMonster<ADip>({ 150, 0 });
-	BaseRoom->CreateMonster<APooter>({ 150, 0 });
+	//BaseRoom->CreateMonster<APooter>({ 150, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
@@ -91,6 +90,7 @@ void APlayGameMode::CollisionGroupLinkSetting()
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Warp, ECollisionGroup::Warp); // 플레이어는 문과 충돌하여 다음 맵으로 넘어간다.
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Body, ECollisionGroup::Monster_Body); // 플레이어는 몬스터와 충돌하면 데미지를 입는다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Body, ECollisionGroup::Monster_FlyingBody); 
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_Body); // 플레이어는 몬스터를 공격할 수 있다.
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_BodyNonCollision);

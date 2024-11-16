@@ -126,6 +126,8 @@ public:
 		Monsters.push_back(NewMonster);
 	}
 
+	void MonsterDeathCheck();
+
 protected:
 
 private:

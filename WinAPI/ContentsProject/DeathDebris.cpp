@@ -10,9 +10,9 @@ DeathDebris::DeathDebris()
 
 	BloodEffect->SetComponentLocation(BloodEffectLocation);
 	BloodEffect->SetComponentScale(BloodEffectScale);
-	BloodEffect->SetOrder(ERenderOrder::MonsterEffect);
+	BloodEffect->SetOrder(ERenderOrder::MonsterDeathDebris);
 	BloodEffect->ChangeAnimation("DeathEffect");
-
+	BloodEffect->SetActive(true);
 }
 
 DeathDebris::~DeathDebris()

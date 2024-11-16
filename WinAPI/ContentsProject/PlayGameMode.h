@@ -53,6 +53,8 @@ private:
 	class ALoadingScene* LoadingImage = nullptr;
 	bool IsShowMenu = false;
 	static bool GamePaused; // 게임 일시정지
+
+	std::list<AMonster*> Monsters;
 };
 
 

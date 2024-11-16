@@ -34,7 +34,7 @@ APlayer::APlayer()
 	CollisionSetting(); // 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다. 
 
 	DebugOn(); // 디버그 대상에 포함
-	SwitchInvincibility(); // 디버깅용 무적
+	//SwitchInvincibility(); // 디버깅용 무적
 }
 
 void APlayer::BeginPlay()
@@ -66,7 +66,6 @@ void APlayer::Tick(float _DeltaTime)
 		return;
 	}
 
-	RestoreInitialRenderState(_DeltaTime);
 	IsCameraMove(); // 워프
 
 	// 렌더
@@ -125,6 +124,41 @@ void APlayer::ClampPositionToRoom()
 	}
 }
 
+// 데미지 처리, 무적 및 애니메이션 출력 함수
+int APlayer::ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir)
+{
+	{
+		APlayer* Player = dynamic_cast<APlayer*>(_Player);
+		if (nullptr == Player)
+		{
+			return 0;
+		}
+		else if (true == Player->IsInvincible()) // 무적이면 리턴
+		{
+			return 0;
+		}
+
+		if (true == Player->IsDeath())
+		{
+			return 0;
+		}
+		ShowHitAnimation(_Player);
+		BeginBlinkEffect();
+
+		FVector2D KnockbackDistance = _Dir * 20;
+		FVector2D CurPos = GetActorLocation();
+		FVector2D Result = GetActorLocation() + KnockbackDistance;
+		SetActorLocation(GetActorLocation() + KnockbackDistance);
+
+		Heart -= _Att;
+		if (Heart < 0)
+		{
+			Heart = 0;
+		}
+		return Heart;
+	}
+}
+
 void APlayer::ShowHitAnimation(AActor* _Other)
 {
 	if (true == Invincibility) // 무적상태면 리턴
@@ -133,8 +167,6 @@ void APlayer::ShowHitAnimation(AActor* _Other)
 	}
 	if (true == FullRenderer->IsActive()) // 이미 피격 상태면 리턴
 	{
-		Invincibility = true;
-		TimeEventer.PushEvent(1.0f, std::bind(&APlayer::SwitchInvincibility, this));
 		return;
 	}
 	if (true == IsDead) // 죽었으면 리턴
@@ -146,6 +178,60 @@ void APlayer::ShowHitAnimation(AActor* _Other)
 	FullRenderer->SetActive(true);
 	BodyRenderer->SetActive(false);
 	HeadRenderer->SetActive(false);
+
+	Invincibility = true; // 무적
+
+	// 원래 애니메이션으로 복귀
+	TimeEventer.PushEvent(0.3f, std::bind(&APlayer::RestoreDefaultMotion, this));
+}
+
+void APlayer::RestoreDefaultMotion()
+{
+	if (true == IsDead) // 죽었으면 리턴
+	{
+		return;
+	}
+
+	SwitchInvincibility();
+	FullRenderer->SetActive(false);
+	BodyRenderer->SetActive(true);
+	HeadRenderer->SetActive(true);
+}
+
+void APlayer::BeginBlinkEffect()
+{
+	if (true == IsDead) // 죽었으면 리턴
+	{
+		return;
+	}
+
+	FullRenderer->SetAlphaFloat(0.0f);
+	BodyRenderer->SetAlphaFloat(0.0f);
+	HeadRenderer->SetAlphaFloat(0.0f);
+	TimeEventer.PushEvent(0.1f, std::bind(&APlayer::StayBlinkEffect, this));
+}
+
+void APlayer::StayBlinkEffect()
+{
+	if (true == IsDead) // 죽었으면 리턴
+	{
+		FullRenderer->SetAlphaFloat(1.0f);
+		BodyRenderer->SetAlphaFloat(0.0f);
+		HeadRenderer->SetAlphaFloat(0.0f);
+		return;
+	}
+
+	FullRenderer->SetAlphaFloat(1.0f);
+	BodyRenderer->SetAlphaFloat(1.0f);
+	HeadRenderer->SetAlphaFloat(1.0f);
+
+	++FadeCount;
+	if (7 < FadeCount)
+	{
+		FadeCount = 0;
+		return;
+	}
+	TimeEventer.PushEvent(0.1f, std::bind(&APlayer::BeginBlinkEffect, this));
 }
 
 void APlayer::UITick(float _DeltaTime)
@@ -154,26 +240,6 @@ void APlayer::UITick(float _DeltaTime)
 	PennyPickupNumber->SetValue(PennyCount);
  	 BombPickupNumber->SetValue(BombCount);
 	  KeyPickupNumber->SetValue(KeyCount);
-}
-
-// 플레이어가 공격받는 애니메이션이 출력되는 함수
-void APlayer::RestoreInitialRenderState(float _DeltaTime)
-{	// 피격 중이라면 리턴
-	if (false == FullRenderer->IsActive())
-	{
-		return;
-	}
-
-	StateElapsed += _DeltaTime;
-	float ActionDuration = 0.5f;
-	if (StateElapsed > ActionDuration)
-	{
-		FullRenderer->SetActive(false);
-		BodyRenderer->SetActive(true);
-		HeadRenderer->SetActive(true);
-		StateElapsed = 0.0f;
-		return;
-	}
 }
 
 void APlayer::CollisionSetting()
@@ -217,6 +283,7 @@ void APlayer::Death(float _DeltaTime)
 	WarpCollision->SetActive(false);
 	BodyCollision->SetActive(false);
 
+
 	DeathAnimation();
 }
 
@@ -226,13 +293,12 @@ void APlayer::DeathAnimation()
 	{
 		FullRenderer->SetComponentScale({ 120, 120 });
 		FullRenderer->ChangeAnimation("Death");
-		
-		FullRenderer->SetActive(true);
 		BodyRenderer->SetActive(false);
 		HeadRenderer->SetActive(false);
+		FullRenderer->SetActive(true);
 		BodyRenderer->SetComponentLocation({ -5, -BodyRenderer->GetComponentScale().Half().iY() -10});
 		HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() - 40});
-		FadeOut();
+		SpiritFadeOut();
 
 		FVector2D Pos = GetActorLocation();
 		DeathPos = GetActorLocation() ;
@@ -285,7 +351,6 @@ void APlayer::ShowDeathReport()
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
 		UEngineAPICore::GetCore()->OpenLevel("Title");
 	}
-
 }
 
 void APlayer::Reset()
@@ -303,15 +368,6 @@ void APlayer::Reset()
 	IsDead = false;
 	IsResetReady = false;
 	Dir = FVector2D::ZERO;
-
-	//BodyRenderer->SetAlphaFloat(1.0f);
-	//HeadRenderer->SetAlphaFloat(1.0f);
-
-	//SetActorLocation(InitPos);
-	//BodyRenderer->SetComponentLocation(GetActorLocation() - Global::WindowHalfScale);
-	//HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
-
-	//SpiritMoveElapsed = 0.0f;
 }
 
 void APlayer::Move(float _DeltaTime)
@@ -697,20 +753,42 @@ void APlayer::UISetting()
 void APlayer::FadeChange()
 {
 	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
-	FadeValue += DeltaTime * 0.3f * FadeDir;
+	FadeValue += DeltaTime * FadeWeight * FadeDir;
 	BodyRenderer->SetAlphaFloat(FadeValue);
 	HeadRenderer->SetAlphaFloat(FadeValue);
+}
+
+void APlayer::FadeIn()
+{
+	FadeValue = 0.0f;
+	FadeDir = 1.0f;
+	FadeWeight = 0.5f;
+	TimeEventer.PushEvent(0.5f, std::bind_front(&APlayer::FadeChange, this), true, false);
 }
 
 void APlayer::FadeOut()
 {
 	FadeValue = 1.0f;
 	FadeDir = -1.0f;
+	FadeWeight = 0.5f;
+	TimeEventer.PushEvent(0.5f, std::bind_front(&APlayer::FadeChange, this), true, false);
+}
+
+void APlayer::SpiritFadeOut()
+{
+	FadeValue = 1.0f;
+	FadeDir = -1.0f;
+	FadeWeight = 0.4f;
 	TimeEventer.PushEvent(3.0f, std::bind_front(&APlayer::FadeChange, this), true, false);
 }
 
 void APlayer::CurStateAnimation(float _DeltaTime)
 {
+	if (true == IsDead) // 죽었으면 리턴
+	{
+		return;
+	}
+
 	switch (BodyState)
 	{
 	case APlayer::LowerState::IDLE:

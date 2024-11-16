@@ -46,6 +46,8 @@ public:
 	virtual FVector2D GetRandomDir();
 	virtual void ChangeAnimIdle();
 
+	void SpawnAnimation();
+	void BodyRender();
 
 	FVector2D GetDirectionToPlayer();
 	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
@@ -97,6 +99,11 @@ public:
 		BodyRenderer = nullptr;
 	}
 
+	class U2DCollision* GetBodyCollision()
+	{
+		return BodyCollision;
+	}
+
 	bool IsDeath()
 	{
 		return Hp <= 0;
@@ -110,26 +117,12 @@ public:
 	{
 		Hp = _Hp;
 	}
-	int ApplyDamaged(AActor* _Monster, int _PlayerAtt) // 피격
+	int ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir); // 피격
+
+
+	void SwitchDamagedEffectRenderer()
 	{
-		AMonster* Monster = dynamic_cast<AMonster*>(_Monster);
-		if (nullptr == Monster)
-		{
-			return 0;
-		}
-		else if (true == Player->IsInvincible()) // 무적이면 리턴
-		{
-			return 0;
-		}
-
-		Monster->DamagedEffectRenderer->SetActive(true);
-
-		Hp -= _PlayerAtt;
-		if (Hp < 0)
-		{
-			Hp = 0;
-		}
-		return Hp;
+		DamagedEffectRenderer->SetActive(false);
 	}
 
 	int GetAtt() const
@@ -244,6 +237,7 @@ protected:
 	class USpriteRenderer* DamagedEffectRenderer = nullptr;
 	class USpriteRenderer* SpawnEffectRenderer = nullptr;
 	FVector2D SpawnEffectScale = FVector2D::ZERO;
+	bool SpawEvent = false;
 
 	// Stat
 	int   Hp    = 1;

@@ -17,8 +17,9 @@ public:
 
 	void Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att);
 	void Explosion();
+
 	void UpdateTearPosion(float _DeltaTime);
-	void CheckForExplosion(float _DeltaTime);
+
 	void CollisionSetting();
 	void Explode(AActor* _Other);
 
@@ -48,6 +49,7 @@ private:
 	FTransform TearTrans;
 
 	FVector2D Dir = FVector2D::ZERO;
+	FVector2D KnockbackDir = FVector2D::ZERO;
 
 	class USpriteRenderer* TearEffectRenderer = nullptr;
 	class U2DCollision* TearCollision = nullptr;

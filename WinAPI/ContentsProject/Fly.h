@@ -18,6 +18,8 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	void Death(float _DeltaTime) override;
+
 	void Attack(float _DeltaTime) override
 	{
 

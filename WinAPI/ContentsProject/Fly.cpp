@@ -12,9 +12,9 @@ AFly::AFly()
 	/* 이름     : */ SetName("AttackFly");
 	/* 체력     : */ SetHp(3);
 	/* 공격력   : */ SetAtt(0);
-	/* 이동속도 : */ SetMoveSpeed(50);
+	/* 이동속도 : */ SetMoveSpeed(0);
 	/* 이동시간 : */ SetMoveDuration(1.0f);
-	/* 정지시간 : */ SetMoveCooldown(0.0f);
+	/* 정지시간 : */ SetMoveCooldown(2.0f);
 	/* 탐색범위 : */ SetDetectRange({ 0 , 0});
 
 
@@ -26,16 +26,10 @@ AFly::AFly()
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "Fly002.png", 0, 1, 0.1f);
-	BodyRenderer->CreateAnimation("Death", "Fly.png", 4, 14, 0.05f, false);
+	BodyRenderer->CreateAnimation("Death", "Fly.png", 4, 14, 0.08f, false);
 	BodyRenderer->SetComponentScale({ 64, 64 });
 	BodyRenderer->ChangeAnimation("Idle");
 	BodyRenderer->SetOrder(ERenderOrder::Monster);
-
-	//DetectCollision = CreateDefaultSubObject<U2DCollision>();
-	//DetectCollision->SetComponentScale(GetDetectRange());
-	//DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
-	//DetectCollision->SetCollisionType(ECollisionType::CirCle);
-	//DetectCollision->SetActive(true);
 }
 
 AFly::~AFly()
@@ -52,6 +46,28 @@ void AFly::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
+}
+
+void AFly::Death(float _DeltaTime)
+{
+	// 1. 충돌체(바디 + 탐색) 끄고
+	if (nullptr != BodyCollision)
+	{
+		CollisionDestroy();
+	}
+
+	// 3. 액터 지우고
+	if (nullptr == BodyRenderer)
+	{
+		Destroy();
+		return;
+	}
+	
+	BodyRenderer->ChangeAnimation("Death");
+	BodyRenderer->SetComponentScale({ 256, 256 });
+
+	// 2. 렌더 끄고
+	RendererDestroy();
 }
 
 

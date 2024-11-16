@@ -16,20 +16,20 @@
 AMonster::AMonster()
 {
 	DamagedEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DamagedEffectRenderer->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 10, 0.1f, false);
-	DamagedEffectRenderer->SetComponentScale({ 64, 64 });
+	DamagedEffectRenderer->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 10);
+	DamagedEffectRenderer->SetComponentScale({ 0, 0 });
 	DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
 	DamagedEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
 	DamagedEffectRenderer->SetActive(false);
 
 	SpawnEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	SpawnEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, {0.1f, 0.1f, 0.1f, 0.1f,0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 5.0f}, false);
+	SpawnEffectRenderer->CreateAnimation("SpawnEffect", "SpawnEffect_Large.png",0, 14, 0.1f , false);
 	SpawnEffectRenderer->SetComponentLocation({ 0, -40 });
-	SpawnEffectScale = { 256, 256 };
+	SpawnEffectScale = { 128, 128 };
 	SpawnEffectRenderer->SetComponentScale(SpawnEffectScale);
-	SpawnEffectRenderer->ChangeAnimation("DeathEffect");
+	SpawnEffectRenderer->ChangeAnimation("SpawnEffect");
 	SpawnEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
-	SpawnEffectRenderer->SetActive(false);
+
 
 	DebugOn();
 }
@@ -40,6 +40,16 @@ void AMonster::BeginPlay()
 
 	AActor* MainPawn = GetWorld()->GetPawn();
 	Player = dynamic_cast<APlayer*>(MainPawn);
+
+	SpawnEffectRenderer->SetActive(false);
+	BodyRenderer->SetActive(false);
+	BodyCollision->SetActive(false);
+
+	if (nullptr == DetectCollision)
+	{
+		return;
+	}
+	DetectCollision->SetActive(false);
 }
 
 void AMonster::Tick(float _DeltaTime)
@@ -47,24 +57,25 @@ void AMonster::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 	MonsterInputDebug();
 
-	if (ParentRoom != ARoom::GetCurRoom()) // 너가 생성된 맵 바깥으로 나갈 수 없어.
-	{
-		return;
-	}
-
 	if (true == APlayGameMode::IsGamePaused()) // 게임이 일시정지라면 모두 정지
 	{
 		return;
 	}
 
-	ClampPositionToRoom();
+	SpawnAnimation(); // 최초 1회만 재생
 
-	CurStateAnimation(_DeltaTime);
+	if (ParentRoom != ARoom::GetCurRoom()) // 너가 생성된 맵 바깥으로 나갈 수 없어.
+	{
+		return;
+	}
+	ClampPositionToRoom();
+	
 
 	Move(_DeltaTime);
-
 	ChasePlayer(_DeltaTime);
 	HandleCollisionDamage(_DeltaTime);
+
+	CurStateAnimation(_DeltaTime);
 
 	DeathCheck(_DeltaTime);
 }
@@ -87,23 +98,104 @@ void AMonster::ChangeAnimIdle()
 	BodyRenderer->ChangeAnimation("Idle");
 }
 
-void AMonster::Death(float _DeltaTime)
+void AMonster::SpawnAnimation()
 {
-	if (nullptr != BodyCollision)
-	{
-		BodyRenderer->SetActive(false);
-		CollisionDestroy();
-		RendererDestroy();
-	}
-
-	// 애니메이션 바꿀거면 함수 재정의
-	DeathDebris* BloodEffect = GetWorld()->SpawnActor<DeathDebris>();
-
-	if (false == BloodEffect->IsCurAnimationEnd())
+	if (ParentRoom != ARoom::GetCurRoom()) 
 	{
 		return;
 	}
-	Destroy();
+
+	// 플레이어와 같은 방에 있으면
+	if (nullptr != SpawnEffectRenderer)
+	{
+		SpawnEffectRenderer->SetActive(true);
+		TimeEventer.PushEvent(0.5f, std::bind(&AMonster::BodyRender, this));
+	}
+}
+
+void AMonster::BodyRender()
+{
+	if (nullptr != BodyRenderer)
+	{
+		BodyRenderer->SetActive(true);
+	}
+
+	if (nullptr != BodyCollision)
+	{
+		BodyCollision->SetActive(true);
+	}
+
+	if (nullptr != DetectCollision)
+	{
+		DetectCollision->SetActive(true);
+	}
+
+	if (nullptr == SpawnEffectRenderer)
+	{
+		return;
+	}
+	if (false == SpawnEffectRenderer->IsCurAnimationEnd())
+	{
+		return;
+	}
+	SpawnEffectRenderer->Destroy();
+	SpawnEffectRenderer = nullptr;
+}
+
+void AMonster::Death(float _DeltaTime)
+{
+	// 1. 충돌체(바디 + 탐색) 끄고
+	if (nullptr != BodyCollision)
+	{
+		CollisionDestroy();
+	}
+
+	// 3. 액터 지우고
+	if (nullptr == BodyRenderer)
+	{
+		Destroy();
+		return;
+	}
+
+	// Death 애니메이션이 따로 있으면 재정의
+	// BodyRenderer->ChangeAnimation("Death")
+
+	// 2. 렌더 끄고
+	RendererDestroy();
+}
+
+int AMonster::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)
+{
+	{
+		AMonster* Monster = dynamic_cast<AMonster*>(_Monster);
+		if (nullptr == Monster)
+		{
+			return 0;
+		}
+		else if (true == Monster->IsInvincible()) // 무적이면 리턴
+		{
+			return Hp;
+		}
+
+		if (false == Monster->DamagedEffectRenderer->IsActive())
+		{
+			Monster->DamagedEffectRenderer->SetActive(true);
+			DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
+
+		}
+		TimeEventer.PushEvent(1.0f, std::bind(&AMonster::SwitchDamagedEffectRenderer, this));
+		FVector2D KnockbackDistance = _Dir * 5;
+		FVector2D CurPos = GetActorLocation();
+		FVector2D Result = GetActorLocation() + KnockbackDistance;
+		SetActorLocation(GetActorLocation() + KnockbackDistance);
+
+		Hp -= _PlayerAtt;
+		if (Hp < 0)
+		{
+			Hp = 0;
+		}
+		return Hp;
+	}
 }
 
 // 플레이어 쫓아가
@@ -352,7 +444,7 @@ void AMonster::HandleCollisionDamage(float _DeltaTime)
 	}
 
 	APlayer* CollisionPlayer = dynamic_cast<APlayer*>(CollisionActor);
-	CollisionPlayer->ApplyDamaged(CollisionActor, CollisionAtt);
+	CollisionPlayer->ApplyDamaged(CollisionActor, CollisionAtt, TearDir);
 	CollisionPlayer->ShowHitAnimation(CollisionPlayer);
 
 	BodyCollisionCooldownElapsed = 0.0f;

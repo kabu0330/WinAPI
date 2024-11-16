@@ -80,27 +80,22 @@ public:
 	// 공격 및 피격
 	void InputAttack(float _DeltaTime); // 입력 함수
 	void Attack(float _DeltaTime); // 실제 공격정보를 Tear로 넘기는 함수
+
 	bool IsAttack() const
 	{
 		return true == TearFire;
 	}
-
-	void SetAttackDir(UpperState _HeadState);
 	int  GetAttackDir() const
 	{
 		return CurAttackHeadDir;
 	}
+	void SetAttackDir(UpperState _HeadState);
 
+	int ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir);
 	void ShowHitAnimation(AActor* _Other);
-	void RestoreInitialRenderState(float _DeltaTime);
-
-	// 사망, 일시정지, 재시작 관련
-	bool IsDeath();
-	void Death(float _DeltaTime);
-	void DeathAnimation();
-	void SpiritAnimation();
-	void ShowDeathReport();
-	void Reset();
+	void RestoreDefaultMotion();
+	void BeginBlinkEffect();
+	void StayBlinkEffect();
 
 	void SetInvincible(bool _OnOff)
 	{
@@ -110,6 +105,7 @@ public:
 	{
 		Invincibility = !Invincibility;
 	}
+
 	bool IsInvincible()
 	{
 		return Invincibility;
@@ -118,7 +114,6 @@ public:
 	{
 		BodyCollision->SetActive(false);
 	}
-
 
 	template<typename EnumType>
 	void SetRendererDir(EnumType _Dir)
@@ -129,30 +124,19 @@ public:
 	}
 
 
+	// 사망, 일시정지, 재시작 관련
+	bool IsDeath();
+	void Death(float _DeltaTime);
+	void DeathAnimation();
+	void SpiritAnimation();
+	void ShowDeathReport();
+	void Reset();
+
+
 	// Stat
 	static int GetPlayerHptMax() 
 	{
 		return HeartMax;
-	}
-
-	static int ApplyDamaged(AActor* _Player, int _Att)
-	{
-		APlayer* Player = dynamic_cast<APlayer*>(_Player);
-		if (nullptr == Player)
-		{
-			return 0;
-		}
-		else if (true == Player->IsInvincible()) // 무적이면 리턴
-		{
-			return 0 ;
-		}
-
-		Heart -= _Att;
-		if (Heart < 0 )
-		{
-			Heart = 0;
-		}
-		return Heart;
 	}
 
 	int GetAtt() const
@@ -194,10 +178,15 @@ private:
 	bool Invincibility = false;
 	bool IsResetReady = false;
 	float FadeValue = 0.0f;
+	float FadeWeight = 0.5f;
 	float FadeDir = 1.0f;
-	void FadeChange();
-	void FadeOut();
 	float SpiritMoveElapsed = 0.0f;
+	int FadeCount = 0;
+
+	void FadeChange();
+	void FadeIn();
+	void FadeOut();
+	void SpiritFadeOut();
 
 	// Item
 	int PennyCount = 0;

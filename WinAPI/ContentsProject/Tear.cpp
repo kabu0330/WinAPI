@@ -40,6 +40,7 @@ void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att)
 	TearEffectRenderer->SetActive(true);
 	SetActorLocation(_StartPos);
 	Dir = _Dir;
+	KnockbackDir = _Dir;
 	ActorAtt = _Att;
 
 	APlayer* Player = dynamic_cast<APlayer*>(GetWorld()->GetPawn());
@@ -91,8 +92,6 @@ void ATear::Tick(float _DeltaTime)
 
 	TimeElapesd += _DeltaTime;
 	UpdateTearPosion(_DeltaTime);
-	CheckForExplosion(_DeltaTime);
-	
 }
 
 void ATear::Explosion()
@@ -104,11 +103,6 @@ void ATear::Explosion()
 		Dir = FVector2D::ZERO;  
 		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
 		SetActorLocation(GetActorLocation());
-
-		//if (true == TearEffectRenderer->IsCurAnimationEnd())
-		//{
-		//	Destroy(0.4f);
-		//}
 
 		if (nullptr != TearEffectRenderer)
 		{
@@ -156,49 +150,6 @@ void ATear::UpdateTearPosion(float _DeltaTime)
 
 }
 
-void ATear::CheckForExplosion(float _DeltaTime)
-{
-	//// 1. 일정 시간이 지나면 터진다.
-	//if (Duration < TimeElapesd)
-	//{
-	//	Explosion();
-	//}
-	//// 2. 맵 밖으로 벗어나면 터진다.
-	//ARoom* CurRoom = ARoom::GetCurRoom();
-	//U2DCollision* CurRoomCollision = CurRoom->GetRoomCollision();
-	//
-	////if (true = FTransform::RectToCirCle())
-	////{
-
-	////}
-	//
-	//// 4. 오브젝트와 충돌하면 터진다.
-
-	//if (nullptr == TearCollision)
-	//{
-	//	return;
-	//}
-
-	//if (false == TearCollision->IsDestroy())
-	//{
-	//	CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::Monster_Body);
-	//}
-
-	//if (nullptr == CollisionActor)
-	//{
-	//	return;
-	//}
-
-	//// 3. 액터와 충돌하면 터진다.
-	//Explosion();
-
-	//AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
-	//CollisionMonster->ApplyDamaged(CollisionActor, ActorAtt);
-
-	//UEngineDebug::OutPutString(CollisionMonster->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionMonster->GetHp()));
-
-}
-
 void ATear::CollisionSetting()
 {
 	TearCollision->SetCollisionStay(std::bind(&ATear::Explode, this, std::placeholders::_1));
@@ -212,15 +163,14 @@ void ATear::Explode(AActor* _Other)
 	// 2. 맵 밖으로 벗어나면 터진다.
 	BoundaryExplosion();
 
-	/*CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::Object_Wall);
+	// 3. 오브젝트와 충돌하면 터진다.
+		/*CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::Object_Wall);
 	FTransform CurRoomCollisionTrans = CollisionActor->GetTransform();
 	bool Result = FTransform::RectToCirCle(CurRoomCollisionTrans, TearTrans);
 	if (true == FTransform::RectToCirCle(CurRoomCollisionTrans, TearTrans))
 	{
 		Explosion();
 	}*/
-
-	// 3. 오브젝트와 충돌하면 터진다.
 
 	// 4. 액터와 충돌하면 터진다.
 	HandleMonsterCollision(_Other);
@@ -292,20 +242,14 @@ void ATear::HandleMonsterCollision(AActor* _Other) // 이 액터는 대부분의 경우 Ro
 		return;
 	}
 
-	U2DCollision* Collision = dynamic_cast<U2DCollision*>(_Other);
-	if (nullptr == Collision)
-	{
-		int a = 0;
-		return;
-	}
-	ECollisionGroup CollisionType = static_cast<ECollisionGroup>(Collision->GetGroup());
-
-	// 오브젝트 충돌이면 여기서 하지 않는다.
-	if (ECollisionGroup::Object_Wall == CollisionType)
+	AMonster* CollisionMonster = dynamic_cast<AMonster*>(_Other);
+	if (nullptr == CollisionMonster)
 	{
 		return;
 	}
-
+	ECollisionGroup CollisionType = static_cast<ECollisionGroup>(CollisionMonster->GetBodyCollision()->GetGroup());
+	
+	// 충돌체의 정보는 모두 Actor로 넘겨줘야 한다.
 	CollisionActor = TearCollision->CollisionOnce(CollisionType);
 	if (nullptr == CollisionActor)
 	{
@@ -315,8 +259,8 @@ void ATear::HandleMonsterCollision(AActor* _Other) // 이 액터는 대부분의 경우 Ro
 	Explosion();
 
 	// 피해 로직 처리
-	AMonster* CollisionMonster = dynamic_cast<AMonster*>(CollisionActor);
-	CollisionMonster->ApplyDamaged(CollisionActor, ActorAtt); // 이 함수로 체력도 깎고 피격 애니메이션도 출력한다.
+	// 충돌체의 정보는 모두 Actor로 넘겨줘야 한다.
+	CollisionMonster->ApplyDamaged(CollisionActor, ActorAtt, KnockbackDir); // 이 함수로 체력도 깎고 피격 애니메이션도 출력한다.
 
 	UEngineDebug::OutPutString(CollisionMonster->GetName() + "에게 " + std::to_string(ActorAtt) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionMonster->GetHp()));
 }
