@@ -41,7 +41,6 @@ AHost::AHost()
 	BodyRenderer->CreateAnimation("Idle", "Host.png", { 0, 0 }, 0.1f, false);
 	BodyRenderer->CreateAnimation("Attack", "Host.png", 0, 1, 0.1f, false);
 	BodyRenderer->CreateAnimation("Hold", "Host.png", 2, 2, 0.1f, false);
-	BodyRenderer->CreateAnimation("Death", "effect_bloodpoof.png", 0, 9, 0.1f, false);
 	BodyRenderer->SetComponentLocation({ 0, -33 });
 	BodyRenderer->SetComponentScale({ 64, 128 });
 	BodyRenderer->ChangeAnimation("Idle");
@@ -72,8 +71,12 @@ void AHost::Tick(float _DeltaTime)
 
 void AHost::Attack(float _DeltaTime)
 {
-	CoolDownElapsed += _DeltaTime;
+	if (nullptr == BodyRenderer)
+	{
+		return;
+	}
 
+	CoolDownElapsed += _DeltaTime;
 	if (CoolDownElapsed < Cooldown)
 	{
 		return;

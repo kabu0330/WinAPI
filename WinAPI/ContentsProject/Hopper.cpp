@@ -11,7 +11,7 @@ AHopper::AHopper()
 	/* 이름     : */ SetName("Hopper");
 	/* 체력     : */ SetHp(9);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(250);
+	/* 이동속도 : */ SetMoveSpeed(0);
 	/* 이동시간 : */ SetMoveDuration(0.8f);
 	/* 정지시간 : */ SetMoveCooldown(1.5f);
 	/* 탐색범위 : */ SetDetectRange({ 0 , 0 });
@@ -26,7 +26,6 @@ AHopper::AHopper()
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Hopper_Idle", "Hopper.png", { 0, 0 }, 0.1f);
 	BodyRenderer->CreateAnimation("Hopper_Move", "Hopper.png", { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 0}, 0.15f, false);
-	BodyRenderer->CreateAnimation("Death", "effect_bloodpoof.png", 0, 9, 0.1f, false);
 	BodyRenderer->SetComponentLocation({ -7, -15 });
 	BodyRenderer->SetComponentScale({ 64, 64 });
 	BodyRenderer->ChangeAnimation("Hopper_Idle");
@@ -51,6 +50,11 @@ void AHopper::Tick(float _DeltaTime)
 
 void AHopper::Move(float _DeltaTime)
 {
+	if (nullptr == BodyRenderer)
+	{
+		return;
+	}
+
 	MoveElapsedTime += _DeltaTime;
 	if (MoveElapsedTime > MoveDuration) // 일정 시간 이동하면 리턴
 	{

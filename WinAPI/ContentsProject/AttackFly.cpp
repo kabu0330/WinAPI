@@ -15,10 +15,10 @@ AAttackFly::AAttackFly()
 	/* 이름     : */ SetName("AttackFly");
 	/* 체력     : */ SetHp(5);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(50);
-	/* 이동시간 : */ SetMoveDuration(1.0f);
-	/* 정지시간 : */ SetMoveCooldown(0.0f);
-	/* 탐색범위 : */ SetDetectRange({ 450 ,450 });
+	/* 이동속도 : */ SetMoveSpeed(40);
+	/* 이동시간 : */ SetMoveDuration(1.5f);
+	/* 정지시간 : */ SetMoveCooldown(2.0f);
+	/* 탐색범위 : */ SetDetectRange({ 400 ,400 });
 
 
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();

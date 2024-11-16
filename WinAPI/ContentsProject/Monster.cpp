@@ -17,18 +17,27 @@ AMonster::AMonster()
 {
 	DamagedEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DamagedEffectRenderer->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 10);
-	DamagedEffectRenderer->SetComponentScale({ 0, 0 });
+	DamagedEffectRenderer->SetComponentScale({ 64, 64 });
 	DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
 	DamagedEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
 	DamagedEffectRenderer->SetActive(false);
 
 	SpawnEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	SpawnEffectRenderer->CreateAnimation("SpawnEffect", "SpawnEffect_Large.png",0, 14, 0.1f , false);
+	SpawnEffectRenderer->CreateAnimation("SpawnEffect", "SpawnEffect_Large.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}, { 0.1f, 0.1f, 0.1f, 0.1, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.05f, 0.05f, 0.05f, 0.05f, 0.05f }, false);
 	SpawnEffectRenderer->SetComponentLocation({ 0, -40 });
 	SpawnEffectScale = { 128, 128 };
 	SpawnEffectRenderer->SetComponentScale(SpawnEffectScale);
 	SpawnEffectRenderer->ChangeAnimation("SpawnEffect");
 	SpawnEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
+
+	BloodEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BloodEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 30.0f }, false);
+
+	BloodEffectRenderer->SetComponentLocation(BloodEffectLocation);
+	BloodEffectRenderer->SetComponentScale(BloodEffectScale);
+	BloodEffectRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);
+	BloodEffectRenderer->ChangeAnimation("DeathEffect");
+	BloodEffectRenderer->SetActive(false);
 
 
 	DebugOn();
@@ -109,7 +118,7 @@ void AMonster::SpawnAnimation()
 	if (nullptr != SpawnEffectRenderer)
 	{
 		SpawnEffectRenderer->SetActive(true);
-		TimeEventer.PushEvent(0.5f, std::bind(&AMonster::BodyRender, this));
+		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
 	}
 }
 
@@ -158,10 +167,25 @@ void AMonster::Death(float _DeltaTime)
 	}
 
 	// Death 애니메이션이 따로 있으면 재정의
+	// 2. Death 애니메이션 재생하고
 	// BodyRenderer->ChangeAnimation("Death")
+	// 
+	// 3. Body렌더 끄고
+	// RendererDestroy();
 
-	// 2. 렌더 끄고
-	RendererDestroy();
+	BloodEffectRenderer->SetActive(true);
+	BloodEffectRenderer->ChangeAnimation("DeathEffect");
+
+	if (true == BloodEffectRenderer->IsCurAnimationEnd())
+	{
+		BodyRenderer->Destroy();
+		BodyRenderer = nullptr;
+
+		return;
+	}
+
+	BodyRenderer->SetActive(false);
+	FadeOut();
 }
 
 int AMonster::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)
@@ -177,14 +201,17 @@ int AMonster::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)
 			return Hp;
 		}
 
-		if (false == Monster->DamagedEffectRenderer->IsActive())
+		if (true == Monster->IsDeath())
 		{
-			Monster->DamagedEffectRenderer->SetActive(true);
-			DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
-
+			return 0;
 		}
+
+		Monster->DamagedEffectRenderer->SetActive(true);
+		Monster->DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
 		TimeEventer.PushEvent(1.0f, std::bind(&AMonster::SwitchDamagedEffectRenderer, this));
-		FVector2D KnockbackDistance = _Dir * 5;
+		BeginBlinkEffect();
+
+		FVector2D KnockbackDistance = _Dir * 7;
 		FVector2D CurPos = GetActorLocation();
 		FVector2D Result = GetActorLocation() + KnockbackDistance;
 		SetActorLocation(GetActorLocation() + KnockbackDistance);
@@ -196,6 +223,58 @@ int AMonster::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)
 		}
 		return Hp;
 	}
+}
+
+void AMonster::BeginBlinkEffect()
+{
+	if (true == IsDeath()) // 죽었으면 리턴
+	{
+		return;
+	}
+
+	BodyRenderer->SetAlphaFloat(0.0f);
+	DamagedEffectRenderer->SetAlphaFloat(1.0f);
+	TimeEventer.PushEvent(0.1f, std::bind(&AMonster::StayBlinkEffect, this));
+}
+
+void AMonster::StayBlinkEffect()
+{
+	if (true == IsDeath()) // 죽었으면 리턴
+	{
+		BodyRenderer->SetAlphaFloat(0.0f);
+		return;
+	}
+
+	BodyRenderer->SetAlphaFloat(1.0f);
+
+	++FadeCount;
+	if (3 < FadeCount)
+	{
+		FadeCount = 0;
+		return;
+	}
+	TimeEventer.PushEvent(0.1f, std::bind(&AMonster::BeginBlinkEffect, this));
+}
+
+void AMonster::FadeChange()
+{
+	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
+	FadeValue += DeltaTime * 0.03f * FadeDir;
+	BloodEffectRenderer->SetAlphaFloat(FadeValue);
+}
+
+void AMonster::FadeIn()
+{
+	FadeValue = 0.0f;
+	FadeDir = 1.0f;
+	TimeEventer.PushEvent(0.5f, std::bind(&AMonster::FadeChange, this), true, false);
+}
+
+void AMonster::FadeOut()
+{
+	FadeValue = 1.0f;
+	FadeDir = -1.0f;
+	TimeEventer.PushEvent(20.0f, std::bind(&AMonster::FadeChange, this), true, false);
 }
 
 // 플레이어 쫓아가
@@ -220,6 +299,11 @@ void AMonster::ChasePlayer(float _DeltaTime)
 
 void AMonster::Move(float _DeltaTime)
 {
+	if (nullptr == BodyRenderer)
+	{
+		return;
+	}
+
 	PlayerDetected = IsPlayerNearby();
 	if (true == PlayerDetected) // 플레이어를 추적하지 않는 중이면
 	{
@@ -244,6 +328,11 @@ void AMonster::Move(float _DeltaTime)
 
 void AMonster::Attack(float _DeltaTime)
 {
+	if (nullptr == BodyRenderer)
+	{
+		return;
+	}
+
 	CoolDownElapsed += _DeltaTime;
 	if (CoolDownElapsed < Cooldown)
 	{

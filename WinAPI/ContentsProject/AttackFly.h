@@ -20,6 +20,11 @@ public:
 
 	void Death(float _DeltaTime) override;
 
+	void Attack(float _DeltaTime) override
+	{
+
+	}
+
 
 protected:
 

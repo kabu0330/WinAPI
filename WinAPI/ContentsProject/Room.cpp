@@ -110,19 +110,24 @@ void ARoom::Warp(float _DeltaTime)
 
 void ARoom::MonsterDeathCheck()
 {
-	std::list<AMonster*>::iterator StartIter = Monsters.begin();
-	std::list<AMonster*>::iterator EndIter = Monsters.end();
+	//std::list<AMonster*>::iterator StartIter = Monsters.begin();
+	//std::list<AMonster*>::iterator EndIter = Monsters.end();
 
-	for (; StartIter != EndIter; ++StartIter)
-	{
-		AMonster* Monster = *StartIter;
-		
-		if (true == Monster->IsDeath())
-		{
-			DeathDebris* BloodEffect = GetWorld()->SpawnActor<DeathDebris>();
-			//StartIter = Monsters.erase(StartIter);
-		}	
-	}
+	//for (; StartIter != EndIter; ++StartIter )
+	//{
+	//	AMonster* Monster = *StartIter;
+	//	
+	//	if (true == Monster->IsDeath())
+	//	{
+	//		DeathDebris* BloodEffect = GetWorld()->SpawnActor<DeathDebris>();
+	//		if (StartIter == EndIter)
+	//		{
+	//			return;
+	//		}
+	//		StartIter = Monsters.erase(StartIter);
+
+	//	}	
+	//}
 }
 
 void ARoom::WarpPlayerSetting()

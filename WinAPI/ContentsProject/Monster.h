@@ -54,6 +54,8 @@ public:
 	bool IsPlayerNearby();
 	virtual void HandleCollisionDamage(float _DeltaTime);
 
+	void BeginBlinkEffect();
+	void StayBlinkEffect();
 	virtual void Death(float _DeltaTime);
 
 	virtual void SetParentRoom(class ARoom* _Parent)
@@ -236,8 +238,20 @@ protected:
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* DamagedEffectRenderer = nullptr;
 	class USpriteRenderer* SpawnEffectRenderer = nullptr;
+	class USpriteRenderer* BloodEffectRenderer = nullptr;
+
 	FVector2D SpawnEffectScale = FVector2D::ZERO;
 	bool SpawEvent = false;
+
+	FVector2D BloodEffectLocation = FVector2D(0, -30);
+	FVector2D BloodEffectScale = { 256, 256 };
+
+	void FadeChange();
+	void FadeIn();
+	void FadeOut();
+	float FadeValue = 0.0f;
+	float FadeDir = 1.0f;
+	int FadeCount = 0;
 
 	// Stat
 	int   Hp    = 1;

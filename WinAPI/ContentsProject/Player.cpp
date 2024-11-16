@@ -763,7 +763,7 @@ void APlayer::FadeIn()
 	FadeValue = 0.0f;
 	FadeDir = 1.0f;
 	FadeWeight = 0.5f;
-	TimeEventer.PushEvent(0.5f, std::bind_front(&APlayer::FadeChange, this), true, false);
+	TimeEventer.PushEvent(0.5f, std::bind(&APlayer::FadeChange, this), true, false);
 }
 
 void APlayer::FadeOut()
@@ -771,7 +771,7 @@ void APlayer::FadeOut()
 	FadeValue = 1.0f;
 	FadeDir = -1.0f;
 	FadeWeight = 0.5f;
-	TimeEventer.PushEvent(0.5f, std::bind_front(&APlayer::FadeChange, this), true, false);
+	TimeEventer.PushEvent(0.5f, std::bind(&APlayer::FadeChange, this), true, false);
 }
 
 void APlayer::SpiritFadeOut()
@@ -779,7 +779,7 @@ void APlayer::SpiritFadeOut()
 	FadeValue = 1.0f;
 	FadeDir = -1.0f;
 	FadeWeight = 0.4f;
-	TimeEventer.PushEvent(3.0f, std::bind_front(&APlayer::FadeChange, this), true, false);
+	TimeEventer.PushEvent(3.0f, std::bind(&APlayer::FadeChange, this), true, false);
 }
 
 void APlayer::CurStateAnimation(float _DeltaTime)
