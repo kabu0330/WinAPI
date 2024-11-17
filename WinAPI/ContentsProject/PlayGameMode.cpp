@@ -71,7 +71,7 @@ void APlayGameMode::Spawn()
 	// Monster
 	//AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
 	
-	//BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
+	BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
 
 	//BaseRoom->CreateMonster<AFly>({ 150, 0 });
 

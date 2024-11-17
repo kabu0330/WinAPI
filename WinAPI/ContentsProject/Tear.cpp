@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "Tear.h"
+#include <cmath>
 
 #include <EngineCore/2DCollision.h>
 #include <EngineCore/SpriteRenderer.h>
@@ -204,26 +205,33 @@ void ATear::BoundaryExplosion()
 	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2;
 	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 2;
 
-	float LeftEdge = RoomPos.X - RoomScale.X - RoomSizeOffsetX;
-	float RightEdge = RoomPos.X + RoomScale.X + RoomSizeOffsetX;
-	float TopEdge = RoomPos.Y - RoomScale.Y - RoomSizeOffsetY;
-	float BotEdge = RoomPos.Y + RoomScale.Y + RoomSizeOffsetY;
+	float Offset = 37.0f; // 맵 경계면보다 더 멀리 나가서 터지도록 설정하고 싶다.
+	int LeftEdge  = static_cast<int>(std::round(RoomPos.X - RoomScale.X - RoomSizeOffsetX - Offset));
+	int RightEdge = static_cast<int>(std::round(RoomPos.X + RoomScale.X + RoomSizeOffsetX + Offset));
+	int TopEdge   = static_cast<int>(std::round(RoomPos.Y - RoomScale.Y - RoomSizeOffsetY - Offset));
+	int BotEdge   = static_cast<int>(std::round(RoomPos.Y + RoomScale.Y + RoomSizeOffsetY + Offset));
 
-	FVector2D Pos = this->GetActorLocation();
-	FVector2D TearPos = this->GetActorLocation() + TearCollision->GetComponentLocation();
-	if (LeftEdge > TearPos.X)
+	FVector2D TearCenter = this->GetActorLocation();
+	FVector2D TearSize = TearCollision->GetComponentScale().Half();
+
+	int TearLeft   = static_cast<int>(std::round(TearCenter.X - TearSize.X));
+	int TearRight  = static_cast<int>(std::round(TearCenter.X + TearSize.X));
+	int TearTop    = static_cast<int>(std::round(TearCenter.Y - TearSize.Y));
+	int TearBottom = static_cast<int>(std::round(TearCenter.Y + TearSize.Y));
+
+	if (LeftEdge >= TearLeft)
 	{
 		Explosion();
 	}
-	if (RightEdge < TearPos.X)
+	if (RightEdge <= TearRight)
 	{
 		Explosion();
 	}
-	if (TopEdge > TearPos.Y)
+	if (TopEdge >= TearTop)
 	{
 		Explosion();
 	}
-	if (BotEdge < TearPos.Y)
+	if (BotEdge <= TearBottom)
 	{
 		Explosion();
 	}

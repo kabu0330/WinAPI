@@ -383,8 +383,8 @@ void ARoom::SpriteSetting()
 
 void ARoom::CollisionSetting()
 {
-	RoomSizeOffsetX = -280.0f;
-	RoomSizeOffsetY = -180.0f;
+	RoomSizeOffsetX = -300.0f;
+	RoomSizeOffsetY = -190.0f;
 
 	RoomCollision = CreateDefaultSubObject<U2DCollision>();
 	RoomCollision->SetComponentLocation({ 0, 0 });
