@@ -255,8 +255,18 @@ void ATear::HandleMonsterCollision(AActor* _Other) // 이 액터는 대부분의 경우 Ro
 	{
 		return;
 	}
+	if (nullptr == CollisionMonster->GetBodyCollision())
+	{
+		return;
+	}
 	ECollisionGroup CollisionType = static_cast<ECollisionGroup>(CollisionMonster->GetBodyCollision()->GetGroup());
 	
+	if (ECollisionGroup::Monster_Barrier == CollisionType)
+	{
+		Explosion();
+		return;
+	}
+
 	// 충돌체의 정보는 모두 Actor로 넘겨줘야 한다.
 	CollisionActor = TearCollision->CollisionOnce(CollisionType);
 	if (nullptr == CollisionActor)

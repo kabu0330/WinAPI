@@ -68,6 +68,10 @@ void AHost::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
 	
+	if (false == IsAttacking()) // 공격 중이 아니면 바디는 숨겨줘
+	{
+		BodyCollision->SetActive(false);
+	}
 	if (true == IsDeath())
 	{
 		return;
@@ -87,6 +91,7 @@ void AHost::Attack(float _DeltaTime)
 	{
 		return;
 	}
+	IsAttack = true;
 	BodyRenderer->ChangeAnimation("Attack");
 	BodyCollision->SetActive(true);
 
@@ -132,7 +137,7 @@ void AHost::ChangeIdle()
 	{
 		return;
 	}
-
+	IsAttack = false;
 	BodyRenderer->ChangeAnimation("Idle");
 	BodyCollision->SetActive(false);
 	HeadCollision->SetComponentLocation({ 0, 10 });

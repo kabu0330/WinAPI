@@ -256,7 +256,7 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	FVector2D DoorOffestY = FVector2D(0, RoomScale.Half().iY());
 	FVector2D OffestX = { 110, 0 };
 	FVector2D OffestY = { 0, 57};
-	FVector2D DoorCollisionScale = FVector2D(60, 70);
+	FVector2D DoorCollisionScale = FVector2D(70, 75);
 
 	switch (_Dir)
 	{
@@ -373,7 +373,7 @@ void ARoom::CollisionSetting()
 	for (int i = 0; i < DoorCollisions.size(); i++)
 	{
 		DoorCollisions[i] = CreateDefaultSubObject<U2DCollision>();
-		DoorCollisions[i]->SetComponentScale({ 0, 0 }); // SetActive를 false로 설정하여도 Collision이 맵 가운데에 생성되는 문제
+		DoorCollisions[i]->SetComponentScale({ 0, 0 }); // 여기서 크기를 결정하지 않는다.
 		DoorCollisions[i]->SetCollisionGroup(ECollisionGroup::Warp);
 		DoorCollisions[i]->SetCollisionType(ECollisionType::Rect);
 		DoorCollisions[i]->SetActive(false);

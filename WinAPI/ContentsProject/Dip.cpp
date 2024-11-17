@@ -13,7 +13,7 @@ ADip::ADip()
 	/* 이름     : */ SetName("Dip");
 	/* 체력     : */ SetHp(4);
 	/* 공격력   : */ SetAtt(0);
-	/* 이동속도 : */ SetMoveSpeed(0);
+	/* 이동속도 : */ SetMoveSpeed(100);
 	/* 이동시간 : */ SetMoveDuration(0.5f);
 	/* 정지시간 : */ SetMoveCooldown(1.5f);
 	/* 탐색범위 : */ SetDetectRange({ 0 , 0 });

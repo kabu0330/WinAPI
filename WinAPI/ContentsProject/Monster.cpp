@@ -2,7 +2,6 @@
 #include "Monster.h"
 
 #include <EngineBase/EngineMath.h>
-#include <EngineBase/EngineRandom.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/EngineAPICore.h>
 #include <EngineCore/SpriteRenderer.h>
@@ -38,6 +37,11 @@ AMonster::AMonster()
 	BloodEffectRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);
 	BloodEffectRenderer->ChangeAnimation("DeathEffect");
 	BloodEffectRenderer->SetActive(false);
+
+
+	RandomSeed = static_cast<__int64>(time(nullptr)) ^ reinterpret_cast<__int64>(this);
+	(MonsterRandomDir);
+	MonsterRandomDir.SetSeed(RandomSeed);
 
 	DebugOn();
 }
@@ -201,16 +205,19 @@ FVector2D AMonster::GetRandomDir()
 	FVector2D RightBot = FVector2D::RIGHT + FVector2D::DOWN;
 	RightBot.Normalize();
 
-	static UEngineRandom MonsterRandomDir;
-	MonsterRandomDir.SetSeed(time(nullptr));
+	//static UEngineRandom MonsterRandomDir;
+	//MonsterRandomDir.SetSeed(time(nullptr));
 	int Result = MonsterRandomDir.RandomInt(0, 7);
 
-	if (PrevDir == Result) // 이전에 이동한 방향과 같으면 다시 이동할 방향 랜덤 돌려
+	if (-1 != PrevDir)
 	{
-		UEngineRandom Reroll;
-		Reroll.SetSeed(time(nullptr) + Result + 1); // Result가 0일수도 있으니까 1 더해서 반드시 시드값을 바꾼다.
-		int RerollResult = Reroll.RandomInt(0, 7);
-		Result = RerollResult;
+		if (PrevDir == Result) // 이전에 이동한 방향과 같으면 다시 이동할 방향 랜덤 돌려
+		{
+			static UEngineRandom Reroll;
+			Reroll.SetSeed(time(nullptr) + Result + 1); // Result가 0일수도 있으니까 1 더해서 반드시 시드값을 바꾼다.
+			int RerollResult = Reroll.RandomInt(0, 7);
+			Result = RerollResult;
+		}
 	}
 
 	FVector2D Dir = FVector2D::ZERO;
@@ -446,7 +453,7 @@ void AMonster::Death(float _DeltaTime)
 	// 
 	// 3. Body렌더 끄고
 	// RendererDestroy();
-
+	SetMoveSpeed(0);
 	BloodEffectRenderer->SetActive(true);
 	BloodEffectRenderer->ChangeAnimation("DeathEffect");
 

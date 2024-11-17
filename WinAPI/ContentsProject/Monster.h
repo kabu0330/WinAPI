@@ -3,6 +3,7 @@
 #include "BloodTear.h"
 #include "Player.h"
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineBase/EngineRandom.h>
 #include <numbers>
 
 enum class MonsterState
@@ -270,7 +271,7 @@ protected:
 	bool IsDeathAnimationPlay = false;
 
 	bool IsAttack = false;
-	bool IsHit = false;
+	bool IsHit = false; // ¸Â¾Ò³Ä
 	float KnockbackPower = 0.0f;
 	float KnockbackDuration = 0.3f;
 	float LerpAlpha = 0.0f;
@@ -302,6 +303,9 @@ protected:
 	class ARoom* ParentRoom = nullptr;
 	APlayer* Player = nullptr;
 
+	// Random
+	int RandomSeed = 0;
+	UEngineRandom MonsterRandomDir;
 private:
 
 };

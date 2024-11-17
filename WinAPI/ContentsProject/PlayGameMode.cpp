@@ -70,13 +70,21 @@ void APlayGameMode::Spawn()
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	//BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
-	//BaseRoom->CreateMonster<AFly>({ 150, 0 });
-	//BaseRoom->CreateMonster<AHopper>({ 150, 0 });
-	//BaseRoom->CreateMonster<AHost>({ 150, 0 });
-	//BaseRoom->CreateMonster<ADip>({ 150, 0 });
-	//BaseRoom->CreateMonster<APooter>({ 150, 0 });
-	BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
+	MinionRoom0->CreateMonster<AAttackFly>({ 150, 0 });
+	MinionRoom0->CreateMonster<AAttackFly>({ 150, 100 });
+	MinionRoom0->CreateMonster<AAttackFly>({ 50, 50 });
+	MinionRoom0->CreateMonster<AFly>({ 100, 30 });
+	MinionRoom0->CreateMonster<AFly>({ 100, -50 });
+	MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
+	MinionRoom1->CreateMonster<AHopper>({ 100, 100 });
+	MinionRoom2->CreateMonster<AHost>({ 150, 0 });
+	MinionRoom2->CreateMonster<AHost>({ 150, -50 });
+	MinionRoom3->CreateMonster<ADip>({ 150, 50 });
+	MinionRoom3->CreateMonster<ADip>({ 150, 0 });
+	MinionRoom3->CreateMonster<APooter>({ 100, 100 });
+	MinionRoom3->CreateMonster<APooter>({ 250, 50 });
+	BossRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
+	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 
 
 }
