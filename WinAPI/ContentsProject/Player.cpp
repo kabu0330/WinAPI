@@ -435,15 +435,26 @@ void APlayer::Move(float _DeltaTime)
 
 			TargetSpeed = Dir * SpeedMax;
 
-			FVector2D CurDir = FinalSpeed.Length() > 0.0f ? FinalSpeed / FinalSpeed.Length() : FVector2D::ZERO;
-
-			if (FinalSpeed.Length() < 30.0f) 
+			const float FinalSpeedLength = FinalSpeed.Length(); 
+			FVector2D CurDir = FVector2D::ZERO;
+			if (0.0f < FinalSpeedLength)
 			{
-				// 기본 출발속도를 주어 최저 속도를 보장
+				CurDir = FinalSpeed / FinalSpeedLength;
+			}
+			else
+			{
+				CurDir = FVector2D::ZERO;
+			}
+			//FVector2D CurDir = FinalSpeedLength > 0.0f ? FVector2D(FinalSpeed / FinalSpeedLength) : FVector2D::ZERO;
+
+			// 기본 출발속도를 주어 최저 속도를 보장
+			if (30.0f > FinalSpeed.Length())
+			{
 				FinalSpeed += Dir * (SpeedMax * 0.2f); 
 			}
 
-			if (FinalSpeed.Length() < 50.0f)
+			// 방향전환
+			if (50.0f > FinalSpeed.Length())
 			{
 				// 속도가 낮을 때 새로운 방향으로 이동할 경우 부드럽게 이동
 				FinalSpeed = FVector2D::Lerp(FinalSpeed, TargetSpeed, MoveAcc * DeltaTime);
@@ -456,7 +467,6 @@ void APlayer::Move(float _DeltaTime)
 			}
 			else // 같은 방향이라면 그대로
 			{
-
 				FinalSpeed = FinalSpeed + (TargetSpeed - FinalSpeed) * MoveAcc * DeltaTime;
 			}
 		}
@@ -467,7 +477,7 @@ void APlayer::Move(float _DeltaTime)
 
 			static const float GlideSpeed = 120.0f;       // 미끄러질 속도
 			static const float GlideDecayFactor = 0.98f; // 감속 비율
-			static const float GlideDuration = 0.3f;     // 미끄러짐 지속 시간 (초)
+			static const float GlideDuration = 0.2f;     // 미끄러짐 지속 시간 (초)
 			static float CurrentGlideTime = 0.0f;        // 현재 미끄러짐 시간
 			static bool IsGliding = false;               // 미끄러짐 상태 플래그
 

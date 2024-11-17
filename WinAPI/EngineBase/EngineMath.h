@@ -232,6 +232,14 @@ public:
 		return Result;
 	}
 
+	FVector2D operator/(const float& _Value) const
+	{
+		FVector2D Result;
+		Result.X = X / _Value;
+		Result.Y = Y / _Value;
+		return Result;
+	}
+
 	FVector2D operator/(const FVector2D& _Other) const
 	{
 		FVector2D Result;
