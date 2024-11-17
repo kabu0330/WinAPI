@@ -254,6 +254,9 @@ protected:
 	void FadeChange();
 	void FadeIn();
 	void FadeOut();
+	void SpawnFadeChange();
+	void SpawnFadeOut();
+
 	float FadeValue = 0.0f;
 	float FadeDir = 1.0f;
 	int FadeCount = 0;

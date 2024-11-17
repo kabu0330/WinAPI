@@ -373,6 +373,7 @@ void AMonster::SpawnAnimation()
 	if (nullptr != SpawnEffectRenderer)
 	{
 		SpawnEffectRenderer->SetActive(true);
+		SpawnFadeOut();
 		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
 	}
 }
@@ -546,6 +547,20 @@ void AMonster::FadeOut()
 	TimeEventer.PushEvent(5.0f, std::bind(&AMonster::FadeChange, this), true, false);
 }
 
+void AMonster::SpawnFadeChange()
+{
+	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
+	FadeValue += DeltaTime * 0.4f * FadeDir;
+	SpawnEffectRenderer->SetAlphaFloat(FadeValue);
+}
+
+void AMonster::SpawnFadeOut()
+{
+	FadeValue = 1.0f;
+	FadeDir = -1.0f;
+	TimeEventer.PushEvent(0.1f, std::bind(&AMonster::FadeChange, this), true, false);
+}
+
 // 디버깅용 치트키
 void AMonster::MonsterInputDebug()
 {
@@ -557,6 +572,7 @@ void AMonster::MonsterInputDebug()
 
 void AMonster::CollisionFuctionSetting()
 {
+	BodyCollision->SetCollisionEnter(std::bind(&AMonster::HandleCollisionDamage, this));
 }
 
 void AMonster::ChangeAnimIdle()
@@ -571,7 +587,6 @@ void AMonster::ChangeAnimIdle()
 // 방향이 있는 몬스터만 재정의해서 사용, Tick을 몬스터에서 돌리기 위해서 일단 만들어둔다.
 void AMonster::CurStateAnimation(float _DeltaTime)
 {
-	BodyCollision->SetCollisionEnter(std::bind(&AMonster::HandleCollisionDamage, this));
 }
 
 AMonster::~AMonster()
