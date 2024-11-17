@@ -69,6 +69,7 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("Dip.png", 3, 2);
 	UImageManager::GetInst().CuttingSprite("Pooter_Left.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("Pooter_Right.png", 4, 4);
+	UImageManager::GetInst().CuttingSprite("boss_007_dukeofflies.png", 4, 3);
 
 	// MonsterEffect
 	UImageManager::GetInst().CuttingSprite("effect_bloodpoof.png", 4, 4);

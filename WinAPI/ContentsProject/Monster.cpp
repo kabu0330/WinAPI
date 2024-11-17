@@ -11,7 +11,6 @@
 
 #include "Global.h"
 #include "ContentsEnum.h"
-#include "DeathDebris.h"
 
 AMonster::AMonster()
 {

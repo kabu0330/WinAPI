@@ -817,7 +817,7 @@ void APlayer::SpriteSetting()
 	////////////////////////////////////////////////////////////////////////////////
 	// Event
 	FullRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	FullRenderer->CreateAnimation("Death", "Isaac.png", { 0, 6, 3 }, {0.4f, 0.15f, 0.1f}, false);
+	FullRenderer->CreateAnimation("Death", "Isaac.png", { 0, 6, 3 }, {0.2f, 0.12f, 0.1f}, false);
 	FullRenderer->CreateAnimation("Damaged", "Isaac.png", 6, 6, 0.1f);
 	FullRenderer->SetComponentScale({ 128, 128 });
 	FullRenderer->SetOrder(ERenderOrder::Player);

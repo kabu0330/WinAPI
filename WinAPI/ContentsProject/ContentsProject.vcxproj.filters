@@ -76,10 +76,10 @@
     <ClInclude Include="Dip.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="DeathDebris.h">
+    <ClInclude Include="Pooter.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
-    <ClInclude Include="Pooter.h">
+    <ClInclude Include="TheDukeOfFlies.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
   </ItemGroup>
@@ -159,10 +159,10 @@
     <ClCompile Include="Dip.cpp">
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="DeathDebris.cpp">
+    <ClCompile Include="Pooter.cpp">
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
-    <ClCompile Include="Pooter.cpp">
+    <ClCompile Include="TheDukeOfFlies.cpp">
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
   </ItemGroup>
