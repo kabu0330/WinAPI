@@ -153,11 +153,11 @@ bool FTransform::CirCleToRect(const FTransform& _Left, const FTransform& _Right)
 {
 	// 좌우로 반지름 확장한 트랜스폼
 	FTransform WTransform = _Right;
-	WTransform.Scale.X += _Left.Scale.X;
+	WTransform.Scale.X += _Left.Scale.hX();
 
 	// 위아래로 반지름 만큼 확장한 트랜스폼
 	FTransform HTransform = _Right;
-	HTransform.Scale.Y += _Left.Scale.X;
+	HTransform.Scale.Y += _Left.Scale.hX();
 
 	if (true == PointToRect(_Left, WTransform) || true == PointToRect(_Left, HTransform))
 	{

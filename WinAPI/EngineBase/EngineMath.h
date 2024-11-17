@@ -344,19 +344,13 @@ public:
 	}
 
 	FVector2D CenterLeftBottom() const
-	{
-		FVector2D Location;
-		Location.X = Location.X - Scale.hX();
-		Location.Y = Location.Y + Scale.hY();
-		return Location;
+	{	
+		return FVector2D(Location.X - Scale.hX(), Location.Y + Scale.hY());
 	}
 
 	FVector2D CenterRightTop() const
 	{
-		FVector2D Location;
-		Location.X = Location.X + Scale.hX();
-		Location.Y = Location.Y - Scale.hY();
-		return Location;
+		return	FVector2D(Location.X + Scale.hX(), Location.Y - Scale.hY());
 	}
 
 	FVector2D CenterRightBottom() const

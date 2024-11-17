@@ -295,19 +295,19 @@ void AMonster::ClampPositionToRoom()
 
 	if (LeftEdge > OffsetPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{ 2, 0 });
+		SetActorLocation(Pos + FVector2D{ 1, 0 });
 	}
 	if (RightEdge < OffsetPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{ -2, 0 });
+		SetActorLocation(Pos + FVector2D{ -1, 0 });
 	}
 	if (TopEdge > OffsetPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, 2 });
+		SetActorLocation(Pos + FVector2D{ 0, 1 });
 	}
 	if (BotEdge < OffsetPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, -2 });
+		SetActorLocation(Pos + FVector2D{ 0, -1 });
 	}
 }
 

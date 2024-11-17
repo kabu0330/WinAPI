@@ -113,19 +113,19 @@ void APlayer::ClampPositionToRoom()
 
 	if (LeftEdge > FootPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{2, 0});
+		SetActorLocation(Pos + FVector2D{1, 0});
 	}
 	if (RightEdge < FootPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{ -2, 0 });
+		SetActorLocation(Pos + FVector2D{ -1, 0 });
 	}
 	if (TopEdge > FootPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, 2 });
+		SetActorLocation(Pos + FVector2D{ 0, 1 });
 	}
 	if (BotEdge < FootPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, -2 });
+		SetActorLocation(Pos + FVector2D{ 0, -1 });
 	}
 }
 
