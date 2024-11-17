@@ -67,6 +67,12 @@ void AHost::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
+	
+	if (true == IsDeath())
+	{
+		return;
+	}
+	// 공격패턴
 }
 
 void AHost::Attack(float _DeltaTime)
@@ -76,8 +82,8 @@ void AHost::Attack(float _DeltaTime)
 		return;
 	}
 
-	CoolDownElapsed += _DeltaTime;
-	if (CoolDownElapsed < Cooldown)
+	CooldownElapsed += _DeltaTime;
+	if (CooldownElapsed < Cooldown)
 	{
 		return;
 	}
@@ -89,14 +95,14 @@ void AHost::Attack(float _DeltaTime)
 	HeadCollision->SetComponentScale(HeadCollisionScale);
 
 	float PreAttackDelay = Cooldown + 0.5f;
-	if (PreAttackDelay > CoolDownElapsed)
+	if (PreAttackDelay > CooldownElapsed)
 	{
 		return;
 	}
 
 	FireTripleShotForward();
 
-	CoolDownElapsed = 0.0f;
+	CooldownElapsed = 0.0f;
 	TimeEventer.PushEvent(2.5f, std::bind(&AHost::ChangeIdle, this));
 }
 

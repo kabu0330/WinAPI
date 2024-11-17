@@ -25,6 +25,7 @@
 #include "Host.h"
 #include "Dip.h"
 #include "Pooter.h"
+#include "TheDukeOfFlies.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -69,18 +70,15 @@ void APlayGameMode::Spawn()
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	//AMonster* TestMonster = GetWorld()->SpawnActor<AMonster>();
-	
-	BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
-
+	//BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
 	//BaseRoom->CreateMonster<AFly>({ 150, 0 });
-
 	//BaseRoom->CreateMonster<AHopper>({ 150, 0 });
-
-
 	//BaseRoom->CreateMonster<AHost>({ 150, 0 });
 	//BaseRoom->CreateMonster<ADip>({ 150, 0 });
 	//BaseRoom->CreateMonster<APooter>({ 150, 0 });
+	BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
+
+
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()

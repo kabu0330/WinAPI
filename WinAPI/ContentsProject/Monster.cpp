@@ -15,24 +15,26 @@
 AMonster::AMonster()
 {
 	DamagedEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DamagedEffectRenderer->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 10);
+	DamagedEffectRenderer->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 11, 0.1f, false);
 	DamagedEffectRenderer->SetComponentScale({ 64, 64 });
 	DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
 	DamagedEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
 	DamagedEffectRenderer->SetActive(false);
 
 	SpawnEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	SpawnEffectRenderer->CreateAnimation("SpawnEffect", "SpawnEffect_Large.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.05f, 0.05f, 0.05f, 0.05f, 0.05f }, false);
+	SpawnEffectRenderer->CreateAnimation("SpawnEffect", "SpawnEffect_Large.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}, { 0.2f, 0.1f, 0.15f, 0.13f, 0.12f, 0.12f, 0.08f, 0.07f, 0.07f, 0.06f, 0.06f, 0.05f, 0.05f, 0.05f, 0.05f }, false);
+	//SpawnEffectRenderer->CreateAnimation("SpawnEffect", "SpawnEffect_Large.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 }, 0.1f, false);
+
 	SpawnEffectRenderer->SetComponentLocation({ 0, -40 });
 	SpawnEffectScale = { 128, 128 };
-	SpawnEffectRenderer->SetComponentScale(SpawnEffectScale);
+	SpawnEffectRenderer->SetComponentScale({ 128, 128 });
 	SpawnEffectRenderer->ChangeAnimation("SpawnEffect");
 	SpawnEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
 
 	BloodEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BloodEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 30.0f }, false);
-	BloodEffectRenderer->SetComponentLocation(BloodEffectLocation);
-	BloodEffectRenderer->SetComponentScale(BloodEffectScale);
+	BloodEffectRenderer->SetComponentLocation({0, -30});
+	BloodEffectRenderer->SetComponentScale({256, 256});
 	BloodEffectRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);
 	BloodEffectRenderer->ChangeAnimation("DeathEffect");
 	BloodEffectRenderer->SetActive(false);
@@ -72,6 +74,7 @@ void AMonster::Tick(float _DeltaTime)
 	}
 
 	SpawnAnimation(); // 최초 1회만 재생
+	SpawnFadeOut();
 
 	if (ParentRoom != ARoom::GetCurRoom()) // 너가 생성된 맵 바깥으로 나갈 수 없어.
 	{
@@ -79,6 +82,8 @@ void AMonster::Tick(float _DeltaTime)
 	}
 	ClampPositionToRoom();
 	
+	DeathCheck(_DeltaTime);
+
 	KnockbackTick();
 	Move(_DeltaTime);
 	ChasePlayer(_DeltaTime);
@@ -86,7 +91,6 @@ void AMonster::Tick(float _DeltaTime)
 
 	CurStateAnimation(_DeltaTime);
 
-	DeathCheck(_DeltaTime);
 }
 
 // 플레이어 쫓아가
@@ -149,13 +153,18 @@ void AMonster::Move(float _DeltaTime)
 
 void AMonster::Attack(float _DeltaTime)
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
+
 	if (nullptr == BodyRenderer)
 	{
 		return;
 	}
 
-	CoolDownElapsed += _DeltaTime;
-	if (CoolDownElapsed < Cooldown)
+	CooldownElapsed += _DeltaTime;
+	if (CooldownElapsed < Cooldown)
 	{
 		return;
 	}
@@ -168,7 +177,7 @@ void AMonster::Attack(float _DeltaTime)
 
 	Tear = GetWorld()->SpawnActor<ABloodTear>();
 	Tear->Fire(TearPos, TearDir, ShootingSpeed, Att);
-	CoolDownElapsed = 0.0f;
+	CooldownElapsed = 0.0f;
 }
 
 // 몬스터의 이동 방향은 8방향
@@ -371,8 +380,9 @@ void AMonster::SpawnAnimation()
 	// 플레이어와 같은 방에 있으면
 	if (nullptr != SpawnEffectRenderer)
 	{
+		SpawEvent = true; // FadeOut Trigger
 		SpawnEffectRenderer->SetActive(true);
-		SpawnFadeOut();
+
 		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
 	}
 }
@@ -402,6 +412,7 @@ void AMonster::BodyRender()
 	{
 		return;
 	}
+	SpawEvent = false;
 	SpawnEffectRenderer->Destroy();
 	SpawnEffectRenderer = nullptr;
 }
@@ -432,8 +443,6 @@ void AMonster::Death(float _DeltaTime)
 	BloodEffectRenderer->SetActive(true);
 	BloodEffectRenderer->ChangeAnimation("DeathEffect");
 
-	//FadeOut();
-
 	if (true == BloodEffectRenderer->IsCurAnimationEnd())
 	{
 		BodyRenderer->Destroy();
@@ -463,13 +472,15 @@ int AMonster::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)
 			return 0;
 		}
 
-		Monster->DamagedEffectRenderer->SetActive(true);
-		Monster->DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
-		TimeEventer.PushEvent(1.0f, std::bind(&AMonster::SwitchDamagedEffectRenderer, this));
+		DamagedEffectRenderer->SetActive(true);
+		DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
+		//TimeEventer.PushEvent(0.8f, std::bind(&AMonster::SwitchDamagedEffectRenderer, this));
 		BeginBlinkEffect();
 
 		IsHit = true;
-		KnockbackDistance = _Dir * 0.5;
+
+		KnockbackPower = 0.5f;
+		KnockbackDistance = _Dir * KnockbackPower;
 		
 		TimeEventer.PushEvent(KnockbackDuration, std::bind(&AMonster::SwitchIsHit, this));
 		
@@ -517,7 +528,7 @@ void AMonster::StayBlinkEffect()
 	BodyRenderer->SetAlphaFloat(1.0f);
 
 	++FadeCount;
-	if (3 < FadeCount)
+	if (1 < FadeCount)
 	{
 		FadeCount = 0;
 		return;
@@ -548,16 +559,24 @@ void AMonster::FadeOut()
 
 void AMonster::SpawnFadeChange()
 {
+	if (false == SpawEvent)
+	{
+		return;
+	}
 	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
-	FadeValue += DeltaTime * 0.4f * FadeDir;
+	FadeValue += DeltaTime * 0.2f * FadeDir;
 	SpawnEffectRenderer->SetAlphaFloat(FadeValue);
 }
 
 void AMonster::SpawnFadeOut()
 {
+	if (false == SpawEvent)
+	{
+		return;
+	}
 	FadeValue = 1.0f;
 	FadeDir = -1.0f;
-	TimeEventer.PushEvent(0.1f, std::bind(&AMonster::FadeChange, this), true, false);
+	TimeEventer.PushEvent(2.0f, std::bind(&AMonster::SpawnFadeChange, this), true, false);
 }
 
 // 디버깅용 치트키

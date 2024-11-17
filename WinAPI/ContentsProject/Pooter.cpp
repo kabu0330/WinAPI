@@ -79,6 +79,12 @@ void APooter::ChangeAnimIdle()
 
 void APooter::Attack(float _DeltaTime)
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
+	// 공격패턴
+
 	std::string CurAnimationName = BodyRenderer->GetCurAnimationName();
 
 	if (false == IsAttacking())
@@ -89,8 +95,8 @@ void APooter::Attack(float _DeltaTime)
 		}
 	}
 
-	CoolDownElapsed += _DeltaTime;
-	if (CoolDownElapsed < Cooldown)
+	CooldownElapsed += _DeltaTime;
+	if (CooldownElapsed < Cooldown)
 	{
 		return;
 	}
@@ -118,7 +124,7 @@ void APooter::Attack(float _DeltaTime)
 
 	Tear = GetWorld()->SpawnActor<ABloodTear>();
 	Tear->Fire(TearPos, TearDir, ShootingSpeed, Att);
-	CoolDownElapsed = 0.0f;
+	CooldownElapsed = 0.0f;
 	PreparationElapesd = 0.0f;
 }
 

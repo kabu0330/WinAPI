@@ -69,12 +69,13 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("Dip.png", 3, 2);
 	UImageManager::GetInst().CuttingSprite("Pooter_Left.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("Pooter_Right.png", 4, 4);
-	UImageManager::GetInst().CuttingSprite("boss_007_dukeofflies.png", 4, 3);
+	UImageManager::GetInst().CuttingSprite("duke.png", 2, 2);
 
 	// MonsterEffect
 	UImageManager::GetInst().CuttingSprite("effect_bloodpoof.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("LargeBloodExplosion.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("SpawnEffect_Large.png", 5, 3);
+	UImageManager::GetInst().CuttingSprite("effect_black_dust.png", 3, 4);
 
 	// Player
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);

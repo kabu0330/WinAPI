@@ -118,12 +118,14 @@ public:
 	}
 
 	template<typename MonsterType>
-	void CreateMonster(FVector2D _Pivot)
+	AMonster* CreateMonster(FVector2D _Pivot)
 	{
 		AMonster* NewMonster = GetWorld()->SpawnActor<MonsterType>();
 		NewMonster->SetActorLocation(this->GetActorLocation() + _Pivot);
 		NewMonster->SetParentRoom(this);
 		Monsters.push_back(NewMonster);
+
+		return NewMonster;
 	}
 
 	void MonsterDeathCheck();

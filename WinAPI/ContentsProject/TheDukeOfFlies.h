@@ -18,9 +18,20 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	void Attack(float _DeltaTime) override
+	{
+
+	}
+
+	void SummonFlies();
+	void BeginSummonFliesLogic();
+	void BeginSummonFliesAnimaition();
+	void EndSummonFliesAnimaition();
+
 protected:
 
 private:
-
+	USpriteRenderer* DustEffectRenderer = nullptr;
+	USpriteRenderer* DustCloudEffectRenderer = nullptr;
 };
 

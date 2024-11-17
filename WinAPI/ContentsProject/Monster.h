@@ -3,6 +3,7 @@
 #include "BloodTear.h"
 #include "Player.h"
 #include <EngineCore/SpriteRenderer.h>
+#include <numbers>
 
 enum class MonsterState
 {
@@ -248,9 +249,6 @@ protected:
 	FVector2D SpawnEffectScale = FVector2D::ZERO;
 	bool SpawEvent = false;
 
-	FVector2D BloodEffectLocation = FVector2D(0, -30);
-	FVector2D BloodEffectScale = { 256, 256 };
-
 	void FadeChange();
 	void FadeIn();
 	void FadeOut();
@@ -272,6 +270,7 @@ protected:
 
 	bool IsAttack = false;
 	bool IsHit = false;
+	float KnockbackPower = 0.0f;
 	float KnockbackDuration = 0.3f;
 	float LerpAlpha = 0.0f;
 	FVector2D KnockbackDistance = FVector2D::ZERO;
@@ -295,7 +294,7 @@ protected:
 	// Attack
 	ABloodTear* Tear = nullptr;
 	float Cooldown = 2.0f;
-	float CoolDownElapsed = 0.0f;
+	float CooldownElapsed = 0.0f;
 	float ShootingSpeed = 300.0f;
 	FVector2D TearDir = FVector2D::ZERO;
 

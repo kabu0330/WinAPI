@@ -47,6 +47,12 @@ void AHopper::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
+
+	if (true == IsDeath())
+	{
+		return;
+	}
+	// 공격패턴
 }
 
 void AHopper::Move(float _DeltaTime)
