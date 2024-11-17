@@ -23,15 +23,18 @@ public:
 
 	}
 
+	// ∆–≈œ 1
 	void SummonFlies();
 	void BeginSummonFliesLogic();
 	void BeginSummonFliesAnimaition();
 	void EndSummonFliesAnimaition();
+	bool HasMaxFlies();
 
 protected:
 
 private:
 	USpriteRenderer* DustEffectRenderer = nullptr;
 	USpriteRenderer* DustCloudEffectRenderer = nullptr;
+	int MaxFlyCount = 0;
 };
 

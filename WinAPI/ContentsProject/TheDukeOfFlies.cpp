@@ -61,6 +61,9 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
 	DetectCollision->SetCollisionType(ECollisionType::CirCle);
 	DetectCollision->SetActive(true);
+
+
+	MaxFlyCount = 5;
 }
 
 ATheDukeOfFlies::~ATheDukeOfFlies()
@@ -113,6 +116,10 @@ void ATheDukeOfFlies::SummonFlies()
 
 	CooldownElapsed += DeltaTime;
 	if (CooldownElapsed < Cooldown)
+	{
+		return;
+	}
+	if (true == HasMaxFlies()) // 최대 소환 마릿수 넘어갔으면 리턴
 	{
 		return;
 	}
@@ -180,5 +187,18 @@ void ATheDukeOfFlies::EndSummonFliesAnimaition()
 	DustEffectRenderer->ChangeAnimation("Dust_End");
 	DustEffectRenderer->SetActive(false);
 }
+
+bool ATheDukeOfFlies::HasMaxFlies()
+{
+	int CurFlies = ParentRoom->CountFly();
+	if (MaxFlyCount <= CurFlies)
+	{
+		return true; // 스폰 금지
+	}
+
+	return false;
+}
+
+
 
 

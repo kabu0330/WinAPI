@@ -10,6 +10,7 @@
 #include "ContentsEnum.h"
 #include "PlayGameMode.h"
 #include "Player.h"
+#include "AttackFly.h"
 
 ARoom* ARoom::CurRoom = nullptr;
 
@@ -38,7 +39,6 @@ void ARoom::Tick(float _DeltaTime)
 	WarpCollisionCheck(_DeltaTime);
 	Warp(_DeltaTime);
 
-	MonsterDeathCheck();
 }
 
 void ARoom::WarpCollisionCheck(float _DeltaTime)
@@ -105,28 +105,6 @@ void ARoom::Warp(float _DeltaTime)
 		}
 	}
 	
-}
-
-void ARoom::MonsterDeathCheck()
-{
-	//std::list<AMonster*>::iterator StartIter = Monsters.begin();
-	//std::list<AMonster*>::iterator EndIter = Monsters.end();
-
-	//for (; StartIter != EndIter; ++StartIter )
-	//{
-	//	AMonster* Monster = *StartIter;
-	//	
-	//	if (true == Monster->IsDeath())
-	//	{
-	//		DeathDebris* BloodEffect = GetWorld()->SpawnActor<DeathDebris>();
-	//		if (StartIter == EndIter)
-	//		{
-	//			return;
-	//		}
-	//		StartIter = Monsters.erase(StartIter);
-
-	//	}	
-	//}
 }
 
 void ARoom::WarpPlayerSetting()
@@ -446,6 +424,23 @@ void ARoom::DoorSpriteSetting()
 	DoorRenderers[static_cast<int>(RoomDir::UP)    - 1]->ChangeAnimation("Door_Up_Open");
 	DoorRenderers[static_cast<int>(RoomDir::DOWN)  - 1]->ChangeAnimation("Door_Down_Open");
 
+}
+
+int ARoom::CountFly()
+{	
+	int FlyCount = 0;
+
+	std::list<AMonster*>::iterator StartIter = Monsters.begin();
+	std::list<AMonster*>::iterator EndIter = Monsters.end();
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		AAttackFly* Monster = dynamic_cast<AAttackFly*>(*StartIter);
+		if (nullptr != Monster)
+		{
+			++FlyCount;
+		}
+	}
+	return FlyCount;
 }
 
 ARoom::~ARoom()

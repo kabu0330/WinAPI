@@ -127,8 +127,12 @@ public:
 
 		return NewMonster;
 	}
+	void RemoveMonster(AMonster* _Monster)
+	{
+		Monsters.remove(_Monster);
+	}
 
-	void MonsterDeathCheck();
+	int CountFly();
 
 protected:
 
@@ -151,16 +155,12 @@ private:
 	USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
 	USpriteRenderer* ControlsRenderer   = nullptr; // BaseRoom 컨트롤러 이미지
 
-	AActor* CollisionActor = nullptr;
-	std::vector<AActor*> CollisionMonsters;
-
 	// Door Collision And Renderer
 	std::vector<class U2DCollision*> DoorCollisions;
 	std::vector<USpriteRenderer*> DoorRenderers;
 
 	// MonsterSpawn
 	std::list<AMonster*> Monsters;
-	
 
 	// 카메라 이동관련 멤버
 	AActor* Player = nullptr;
