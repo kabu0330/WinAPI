@@ -77,7 +77,7 @@ protected:
 private:
 	static std::map<std::string, UEngineSound*> Sounds;
 
-	FMOD::Sound* SoundHandle;
+	FMOD::Sound* SoundHandle = nullptr;
 
 	bool ResLoad(std::string_view _Path);
 };

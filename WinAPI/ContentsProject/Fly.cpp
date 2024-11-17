@@ -26,10 +26,17 @@ AFly::AFly()
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "Fly002.png", { 0, 1, 0, 1, 0, 9 }, 0.15f);
-	BodyRenderer->CreateAnimation("Death", "Fly.png", 4, 14, 0.08f, false);
 	BodyRenderer->SetComponentScale({ 64, 64 });
 	BodyRenderer->ChangeAnimation("Idle");
 	BodyRenderer->SetOrder(ERenderOrder::Monster);
+
+	BloodEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BloodEffectRenderer->CreateAnimation("DeathEffect", "Fly.png", 4, 14, 0.08f, false);
+	BloodEffectRenderer->SetComponentLocation({ 0, 0 });
+	BloodEffectRenderer->SetComponentScale({ 256, 256 });
+	BloodEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
+	BloodEffectRenderer->ChangeAnimation("DeathEffect");
+	BloodEffectRenderer->SetActive(false);
 }
 
 AFly::~AFly()
@@ -48,26 +55,5 @@ void AFly::Tick(float _DeltaTime)
 	AMonster::Tick(_DeltaTime);
 }
 
-void AFly::Death(float _DeltaTime)
-{
-	// 1. Ãæµ¹Ã¼(¹Ùµð + Å½»ö) ²ô°í
-	if (nullptr != BodyCollision)
-	{
-		CollisionDestroy();
-	}
-
-	// 3. ¾×ÅÍ Áö¿ì°í
-	if (nullptr == BodyRenderer)
-	{
-		Destroy();
-		return;
-	}
-	
-	BodyRenderer->ChangeAnimation("Death");
-	BodyRenderer->SetComponentScale({ 256, 256 });
-
-	// 2. ·»´õ ²ô°í
-	RendererDestroy();
-}
 
 

@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "TheDukeOfFlies.h"
+#include <cmath>
 
 #include <EngineBase/EngineMath.h>
 #include <EngineBase/EngineRandom.h>
@@ -10,13 +11,14 @@
 
 #include "Room.h"
 #include "AttackFly.h"
+#include "PlayGameMode.h"
 
 ATheDukeOfFlies::ATheDukeOfFlies()
 {
 	/* 이름     : */ SetName("TheDukeOfFlies");
 	/* 체력     : */ SetHp(110);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(0);
+	/* 이동속도 : */ SetMoveSpeed(50);
 	/* 이동시간 : */ SetMoveDuration(1.0f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
 	/* 탐색범위 : */ SetDetectRange({ 100 , 100 });
@@ -87,6 +89,17 @@ void ATheDukeOfFlies::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
 
+	ARoom* PlayerCurRoom = ARoom::GetCurRoom();
+	if (PlayerCurRoom != ParentRoom)
+	{
+		return;
+	}
+
+	if (true == APlayGameMode::IsGamePaused()) // 게임이 일시정지라면 모두 정지
+	{
+		return;
+	}
+
 	if (true == IsDeath())
 	{
 		return;
@@ -104,36 +117,52 @@ void ATheDukeOfFlies::SummonFlies()
 		return;
 	}
 	BodyRenderer->ChangeAnimation("Attack");
-	TimeEventer.PushEvent(2.5f, std::bind(&ATheDukeOfFlies::BeginSummonFliesAnimaition, this));
-	TimeEventer.PushEvent(2.5f, std::bind(&ATheDukeOfFlies::BeginSummonFliesLogic, this));
-
 	CooldownElapsed = 0.0f;
+
+	TimeEventer.PushEvent(2.5f, std::bind(&ATheDukeOfFlies::BeginSummonFliesLogic, this));
+	TimeEventer.PushEvent(2.5f, std::bind(&ATheDukeOfFlies::BeginSummonFliesAnimaition, this));
+
 }
 
 void ATheDukeOfFlies::BeginSummonFliesLogic()
 {
 	ARoom* ParentRoom = ARoom::GetCurRoom();
-	FVector2D SetFliesPos = this->GetActorLocation() - ParentRoom->GetActorLocation() + FVector2D(0, 100);
-	FVector2D OffsetX = FVector2D(30, 0);
-	FVector2D OffsetY = FVector2D(0, -20);
-
-	AAttackFly* ChildFly[3] = { 0, };
-	ChildFly[0] = dynamic_cast<AAttackFly*>(ParentRoom->CreateMonster<AAttackFly>(SetFliesPos));
-	ChildFly[1] = dynamic_cast<AAttackFly*>(ParentRoom->CreateMonster<AAttackFly>(SetFliesPos + OffsetX + OffsetY));
-	ChildFly[2] = dynamic_cast<AAttackFly*>(ParentRoom->CreateMonster<AAttackFly>(SetFliesPos - OffsetX + OffsetY));
-
-	for (int i = 0; i < 3; i++)
+	if (nullptr == ParentRoom)
 	{
-		if (nullptr == ChildFly[i])
-		{
-			MSGASSERT("보스가 AttackFly 포인터를 받는데 실패했습니다.");
-			return;
-		}
+		return;
 	}
 
+	FVector2D SetFliesPos = this->GetActorLocation() - ParentRoom->GetActorLocation() + FVector2D(0, 100);
+
+	float OrbitRadius = 150.0f;
+	float Angles[3] = {
+	static_cast<float>(60.0f * std::numbers::pi / 180.0f), 
+	static_cast<float>(90.0f * std::numbers::pi / 180.0f), 
+	static_cast<float>(120.0f * std::numbers::pi / 180.0f) 
+	};
+
+	AAttackFly* ChildFly[3] = { nullptr, };
 	for (int i = 0; i < 3; i++)
 	{
-		ChildFly[i]->SetIsFollowBoss(this); // 보스 포인터 전달
+		// 부하의 상대 위치 계산
+		FVector2D Offset;
+		Offset.X = OrbitRadius * cos(Angles[i]);
+		Offset.Y = OrbitRadius * sin(Angles[i]);
+
+		// 부하의 최종 위치: SetFliesPos를 기준으로 Offset 추가
+		FVector2D SpawnPosition = SetFliesPos + Offset;
+
+		// 부하 생성
+		ChildFly[i] = dynamic_cast<AAttackFly*>(ParentRoom->CreateMonster<AAttackFly>(SpawnPosition));
+		if (ChildFly[i] == nullptr)
+		{
+			MSGASSERT("AttackFly 생성 실패");
+			return;
+		}
+
+		// 부하가 보스를 따라다니도록 설정
+		ChildFly[i]->SetIsFollowBoss(this);
+		ChildFly[i]->SetInitialAngle(Angles[i]);
 	}
 
 }

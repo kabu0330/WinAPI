@@ -18,18 +18,19 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
-	void Death(float _DeltaTime) override;
-
 	void Attack(float _DeltaTime) override
 	{
 
 	}
+
+	void Move(float _DeltaTime) override;
 
 	void SetIsFollowBoss(AMonster* _Boss)
 	{
 		ParentBoss = _Boss;
 		IsFollowBoss = true;
 	}
+	void SetInitialAngle(float _Angle);
 
 	void ChasePlayer(float _DeltaTime) override;
 	void ChaseMove(float _DeltaTime) override;
@@ -40,7 +41,7 @@ private:
 	void FollowBoss(float _DeltaTime);
 	AMonster* ParentBoss = nullptr;
 	bool IsFollowBoss = false;
-	float OrbitRadius = 150.0f;
+	float OrbitRadius = 100.0f;
 	float OrbitSpeed = 2.0f;
 	float Angle = 0.0f;
 

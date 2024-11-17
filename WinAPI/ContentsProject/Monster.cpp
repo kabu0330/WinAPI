@@ -68,6 +68,12 @@ void AMonster::Tick(float _DeltaTime)
 	MonsterInputDebug();
 	BodyCollisionCooldownElapsed += _DeltaTime;
 
+	ARoom* PlayerCurRoom = ARoom::GetCurRoom();
+	if (PlayerCurRoom != ParentRoom)
+	{
+		return;
+	}
+
 	if (true == APlayGameMode::IsGamePaused()) // 게임이 일시정지라면 모두 정지
 	{
 		return;

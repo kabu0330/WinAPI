@@ -53,7 +53,7 @@ public:
 	int ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir); // ÇÇ°Ý
 	void KnockbackTick();
 
-	void SpawnAnimation();
+	virtual void SpawnAnimation();
 	void BodyRender();
 
 	FVector2D GetDirectionToPlayer();
@@ -267,6 +267,7 @@ protected:
 	FVector2D Direction = FVector2D::ZERO;
 	int PrevDir = -1;
 
+	bool IsDeathAnimationPlay = false;
 
 	bool IsAttack = false;
 	bool IsHit = false;
