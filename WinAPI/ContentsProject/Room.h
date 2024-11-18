@@ -134,6 +134,33 @@ public:
 
 	int CountFly();
 
+	//template<typename MonsterType>
+	//std::list<AMonster*> CurRoomFindMonsters(MonsterType _MonsterType)
+	//{
+	//	std::list<AMonster*>::iterator StartIter = Monsters.begin();
+	//	std::list<AMonster*>::iterator EndIter = Monsters.end();
+	//	std::list<AMonster*> ReturnMonsters;
+
+	//	for (; StartIter != EndIter; ++StartIter)
+	//	{
+	//		AMonster* Monster = *StartIter;
+	//		ARoom ParentRoom = Monster->ParentRoom;
+
+	//		if (ParentRoom != GetCurRoom())
+	//		{
+	//			continue;
+	//		}
+
+	//		AMonster* FindMonster = dynamic_cast<_MonsterType>(Monster);
+	//		if (nullptr == FindMonster)
+	//		{
+	//			ReturnMonsters.push_back(FindMonster);
+	//		}
+	//	}
+
+	//	return ReturnMonsters;
+	//}
+
 protected:
 
 private:

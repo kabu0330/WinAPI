@@ -10,13 +10,14 @@
 
 #include "Global.h"
 #include "ContentsEnum.h"
+#include "TheDukeOfFlies.h"
 
 AAttackFly::AAttackFly()
 {
 	/* 이름     : */ SetName("AttackFly");
 	/* 체력     : */ SetHp(5);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(50);
+	/* 이동속도 : */ SetMoveSpeed(100);
 	/* 이동시간 : */ SetMoveDuration(1.5f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
 	/* 탐색범위 : */ SetDetectRange({ 300 , 300 });
@@ -66,6 +67,8 @@ void AAttackFly::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
 
+
+	RemoveFly();
 }
 
 void AAttackFly::Move(float _DeltaTime)
@@ -132,6 +135,24 @@ void AAttackFly::ChaseMove(float _DeltaTime)
 	Direction = GetDirectionToPlayer();
 	FVector2D MovePos = Direction * Speed * _DeltaTime;
 	AddActorLocation(MovePos);
+}
+
+void AAttackFly::RemoveFly()
+{
+	if (true == IsDeath())
+	{
+		ATheDukeOfFlies* Duke = dynamic_cast<ATheDukeOfFlies*>(ParentBoss);
+		if (nullptr == Duke)
+		{
+			return;
+		}
+		//std::list<AMonster*> Monsters = Duke->GetFliesList();
+
+		Duke->GetFliesList().remove(this);
+
+		int Result = Duke->GetFliesList().size();
+		int a = 0;
+	}
 }
 
 void AAttackFly::FollowBoss(float _DeltaTime)
@@ -202,3 +223,4 @@ void AAttackFly::SetInitialAngle(float _Angle)
 AAttackFly::~AAttackFly()
 {
 }
+

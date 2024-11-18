@@ -445,7 +445,6 @@ void APlayer::Move(float _DeltaTime)
 			{
 				CurDir = FVector2D::ZERO;
 			}
-			//FVector2D CurDir = FinalSpeedLength > 0.0f ? FVector2D(FinalSpeed / FinalSpeedLength) : FVector2D::ZERO;
 
 			// 기본 출발속도를 주어 최저 속도를 보장
 			if (30.0f > FinalSpeed.Length())

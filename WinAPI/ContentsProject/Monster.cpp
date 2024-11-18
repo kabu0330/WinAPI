@@ -40,8 +40,8 @@ AMonster::AMonster()
 
 
 	RandomSeed = static_cast<__int64>(time(nullptr)) ^ reinterpret_cast<__int64>(this);
-	(MonsterRandomDir);
-	MonsterRandomDir.SetSeed(RandomSeed);
+	(MonsterRandom);
+	MonsterRandom.SetSeed(RandomSeed);
 
 	DebugOn();
 }
@@ -207,7 +207,7 @@ FVector2D AMonster::GetRandomDir()
 
 	//static UEngineRandom MonsterRandomDir;
 	//MonsterRandomDir.SetSeed(time(nullptr));
-	int Result = MonsterRandomDir.RandomInt(0, 7);
+	int Result = MonsterRandom.RandomInt(0, 7);
 
 	if (-1 != PrevDir)
 	{

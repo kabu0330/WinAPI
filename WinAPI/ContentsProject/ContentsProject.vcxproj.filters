@@ -82,6 +82,9 @@
     <ClInclude Include="TheDukeOfFlies.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="MapObject.h">
+      <Filter>04_Play\MapObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -165,6 +168,9 @@
     <ClCompile Include="TheDukeOfFlies.cpp">
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
+    <ClCompile Include="MapObject.cpp">
+      <Filter>04_Play\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -193,6 +199,9 @@
     </Filter>
     <Filter Include="04_Play\Scene">
       <UniqueIdentifier>{4f7444ed-0369-40dc-8868-00b5695febeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Play\MapObject">
+      <UniqueIdentifier>{2b4acc0d-735a-4473-bbd3-e0080690c4ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

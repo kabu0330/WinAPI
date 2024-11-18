@@ -305,7 +305,7 @@ protected:
 
 	// Random
 	int RandomSeed = 0;
-	UEngineRandom MonsterRandomDir;
+	UEngineRandom MonsterRandom;
 private:
 
 };

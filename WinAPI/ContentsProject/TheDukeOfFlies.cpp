@@ -18,10 +18,10 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	/* 이름     : */ SetName("TheDukeOfFlies");
 	/* 체력     : */ SetHp(110);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(50);
+	/* 이동속도 : */ SetMoveSpeed(0);
 	/* 이동시간 : */ SetMoveDuration(1.0f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
-	/* 탐색범위 : */ SetDetectRange({ 100 , 100 });
+	/* 탐색범위 : */ SetDetectRange({ 300 , 300 });
 	/* 발사속도 : */ SetShootingSpeed(300.0f);
 	/* 쿨타임   : */ SetCooldown(5.0f);
 
@@ -40,21 +40,25 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	BodyRenderer->ChangeAnimation("Idle");
 	BodyRenderer->SetOrder(ERenderOrder::Monster);
 
+	BlackDustEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BlackDustEffectRenderer->CreateAnimation("Black_Dust", "effect_black_dust.png", 0, 10, 0.1f, false);
+	BlackDustEffectRenderer->CreateAnimation("Black_Dust_End", "effect_black_dust.png", 10, 10, 0.1f, false);
+	BlackDustEffectRenderer->SetComponentLocation({ 0,20 });
+	BlackDustEffectRenderer->SetComponentScale({ 290, 160 }); // 145, 80
+	BlackDustEffectRenderer->ChangeAnimation("Black_Dust");
+	BlackDustEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
+	BlackDustEffectRenderer->SetAlphaFloat(0.7f);
+	BlackDustEffectRenderer->SetActive(false);
+
 	DustEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DustEffectRenderer->CreateAnimation("Dust", "effect_black_dust.png", 0, 10, 0.15f, false);
-	DustEffectRenderer->CreateAnimation("Dust_End", "effect_black_dust.png", 10, 10, 0.1f, false);
-	DustEffectRenderer->SetComponentLocation({ 0,20 });
-	DustEffectRenderer->SetComponentScale({ 290, 160 }); // 145, 80
+	DustEffectRenderer->CreateAnimation("Dust", "effect_dust.png", 0, 10, 0.1f, false);
+	DustEffectRenderer->CreateAnimation("Dust_End", "effect_dust.png", 10, 10, 0.1f, false);
+	DustEffectRenderer->SetComponentLocation({ 0, 20 });
+	DustEffectRenderer->SetComponentScale({ 319, 176 });
 	DustEffectRenderer->ChangeAnimation("Dust");
 	DustEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
-	DustEffectRenderer->SetAlphaFloat(0.9f);
-
-	//DustCloudEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	//DustCloudEffectRenderer->CreateAnimation("Dust_Cloud", "effect_black_dust_cloud.bmp", 0, 7, 0.5f, false);
-	//DustCloudEffectRenderer->SetComponentLocation({ 0, 0 });
-	//DustCloudEffectRenderer->SetComponentScale({ 52, 52 });
-	//DustCloudEffectRenderer->ChangeAnimation("Dust_Cloud");
-	//DustCloudEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
+	DustEffectRenderer->SetAlphaFloat(0.7f);
+	DustEffectRenderer->SetActive(false);
 
 	DetectCollision = CreateDefaultSubObject<U2DCollision>();
 	DetectCollision->SetComponentScale(GetDetectRange());
@@ -62,12 +66,8 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	DetectCollision->SetCollisionType(ECollisionType::CirCle);
 	DetectCollision->SetActive(true);
 
-
-	MaxFlyCount = 5;
-}
-
-ATheDukeOfFlies::~ATheDukeOfFlies()
-{
+	// 맵에 존재할 수 있는 파리 숫자는 최대 12마리임, 11마리까지는 파리 소환 패턴을 쓸 수 있음
+	MaxFlyCount = 3; // 원작은 12마리
 }
 
 void ATheDukeOfFlies::BeginPlay()
@@ -84,7 +84,7 @@ void ATheDukeOfFlies::BeginPlay()
 	BloodEffectRenderer->SetComponentLocation({ 0, -60 });
 	BloodEffectRenderer->SetComponentScale({ 512, 512 });
 
-	DustEffectRenderer->SetActive(false);
+	BlowAwayCooldownElapesd = 1.0f; // 스킬을 쓰지 않아도 쿨타임을 먼저 적용시켜버림
 }
 
 void ATheDukeOfFlies::Tick(float _DeltaTime)
@@ -107,7 +107,9 @@ void ATheDukeOfFlies::Tick(float _DeltaTime)
 	{
 		return;
 	}
+	
 	SummonFlies();
+	//BlowAway();
 }
 
 void ATheDukeOfFlies::SummonFlies()
@@ -139,13 +141,14 @@ void ATheDukeOfFlies::BeginSummonFliesLogic()
 		return;
 	}
 
+	// 스폰 위치
 	FVector2D SetFliesPos = this->GetActorLocation() - ParentRoom->GetActorLocation() + FVector2D(0, 100);
 
 	float OrbitRadius = 150.0f;
-	float Angles[3] = {
-	static_cast<float>(60.0f * std::numbers::pi / 180.0f), 
+	float Angles[3] = { // 스폰 위치를 각도로 지정
+	static_cast<float>(50.0f * std::numbers::pi / 180.0f), 
 	static_cast<float>(90.0f * std::numbers::pi / 180.0f), 
-	static_cast<float>(120.0f * std::numbers::pi / 180.0f) 
+	static_cast<float>(130.0f * std::numbers::pi / 180.0f) 
 	};
 
 	AAttackFly* ChildFly[3] = { nullptr, };
@@ -170,22 +173,24 @@ void ATheDukeOfFlies::BeginSummonFliesLogic()
 		// 부하가 보스를 따라다니도록 설정
 		ChildFly[i]->SetIsFollowBoss(this);
 		ChildFly[i]->SetInitialAngle(Angles[i]);
+
+		Flies.push_back(ChildFly[i]);
 	}
 
 }
 
 void ATheDukeOfFlies::BeginSummonFliesAnimaition()
 {
-	DustEffectRenderer->SetActive(true);	
-	DustEffectRenderer->ChangeAnimation("Dust");
+	BlackDustEffectRenderer->SetActive(true);	
+	BlackDustEffectRenderer->ChangeAnimation("Black_Dust");
 	TimeEventer.PushEvent(2.5f, std::bind(&ATheDukeOfFlies::EndSummonFliesAnimaition, this));
 }
 
 void ATheDukeOfFlies::EndSummonFliesAnimaition()
 {
 	BodyRenderer->ChangeAnimation("Idle");
-	DustEffectRenderer->ChangeAnimation("Dust_End");
-	DustEffectRenderer->SetActive(false);
+	BlackDustEffectRenderer->ChangeAnimation("Black_Dust_End");
+	BlackDustEffectRenderer->SetActive(false);
 }
 
 bool ATheDukeOfFlies::HasMaxFlies()
@@ -199,6 +204,135 @@ bool ATheDukeOfFlies::HasMaxFlies()
 	return false;
 }
 
+bool ATheDukeOfFlies::CanBlowAway()
+{
+	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
 
+	BlowAwayCooldownElapesd += DeltaTime;
+	if (BlowAwayCooldownElapesd < BlowAwayCooldownDuration)
+	{
+		return false;
+	}
+
+	return true;
+
+	std::list<AMonster*>::iterator StartIter = Flies.begin();
+	std::list<AMonster*>::iterator EndIter = Flies.end();
+	int Followers = 0;
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		AMonster* Monster = *StartIter;
+		AAttackFly* Fly = dynamic_cast<AAttackFly*>(Monster);
+		if (nullptr == Fly)
+		{
+			continue;
+		}
+		++Followers;
+		int a = 0;
+	}
+	BlowAwayTriggerValue = 1;
+	if (BlowAwayTriggerValue < Followers)
+	{
+		int a = 0;
+		// 나를 따라 주변을 멤도는 파리가 4마리 이상이라면 BlowAway 스킬을 써!!!
+		return true; 
+	}
+	return false;
+}
+
+void ATheDukeOfFlies::BlowAway()
+{
+	// 나를 따르는 파리가 4마리 미만이면 스킬 쓰지마.
+	if (false == CanBlowAway())
+	{
+		return;
+	}
+	
+	BodyRenderer->ChangeAnimation("Attack");
+	BlowAwayCooldownElapesd = 0.0f;
+
+	TimeEventer.PushEvent(2.5f, std::bind(&ATheDukeOfFlies::BeginBlowAwayLogic, this));
+	TimeEventer.PushEvent(2.5f, std::bind(&ATheDukeOfFlies::BeginBlowAwayAnimaition, this));
+
+}
+
+// 미완
+void ATheDukeOfFlies::BeginBlowAwayLogic()
+{
+	FVector2D CenterPos = this->GetActorLocation() - ParentRoom->GetActorLocation();
+	float InitialSpeed = 500.0f;
+	float Duration = 0.3f;
+	float DecelerationFactor = 0.95f;  // 감속 계수
+
+
+	std::list<AMonster*>::iterator StartIter = Flies.begin();
+	std::list<AMonster*>::iterator EndIter = Flies.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		AMonster* Monster = *StartIter;
+		AAttackFly* Fly = dynamic_cast<AAttackFly*>(Monster);
+		if (nullptr == Fly)
+		{
+			continue;
+		}
+
+		// 중심에서의 초기 방향 계산
+		FVector2D Direction = Fly->GetActorLocation() - CenterPos;
+		if (Direction.Length() < 1.0f)
+		{
+			// 너무 가까운 경우 랜덤 방향 설정
+			float RandomAngle = MonsterRandom.RandomFloat(0.0f, 2.0f * std::numbers::pi);
+			Direction = FVector2D(std::cos(RandomAngle), std::sin(RandomAngle));
+		}
+		Direction.Normalize();
+
+		// 초기 이동 속도 설정
+		float CurrentSpeed = InitialSpeed;
+
+		// 이동 및 감속 로직 등록
+		TimeEventer.PushEvent(Duration, [Fly, Direction, &CurrentSpeed, DecelerationFactor]()
+			{
+				float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
+	
+				// 이동 거리 계산
+				float MoveDistance = CurrentSpeed * DeltaTime;
+
+				// 위치 업데이트
+				FVector2D NewPosition = Fly->GetActorLocation() + (Direction * MoveDistance);
+				Fly->SetActorLocation(NewPosition);
+
+				// 속도 감속
+				CurrentSpeed *= DecelerationFactor;
+				if (CurrentSpeed < 10.0f) // 너무 느려지면 멈춤
+				{
+					CurrentSpeed = 0.0f;
+				}
+	
+			}, true, false);
+		
+	}
+}
+
+void ATheDukeOfFlies::BeginBlowAwayAnimaition()
+{
+	DustEffectRenderer->SetActive(true);
+	DustEffectRenderer->ChangeAnimation("Dust");
+
+	TimeEventer.PushEvent(2.5f, std::bind(&ATheDukeOfFlies::EndBlowAwayAnimaition, this));
+}
+
+void ATheDukeOfFlies::EndBlowAwayAnimaition()
+{
+	BodyRenderer->ChangeAnimation("Idle");
+
+	DustEffectRenderer->SetActive(false);
+	DustEffectRenderer->ChangeAnimation("Dust_End");
+}
+
+ATheDukeOfFlies::~ATheDukeOfFlies()
+{
+}
 
 

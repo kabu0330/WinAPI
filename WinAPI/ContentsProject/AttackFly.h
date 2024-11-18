@@ -34,6 +34,9 @@ public:
 
 	void ChasePlayer(float _DeltaTime) override;
 	void ChaseMove(float _DeltaTime) override;
+
+	void RemoveFly();
+	
 protected:
 
 private:
