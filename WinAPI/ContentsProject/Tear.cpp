@@ -248,8 +248,11 @@ void ATear::MapObjectCollision(AActor* _Other)
 	}
 	// 특수 충돌그룹 로직 설정
 
+	CollisionOther->ApplyDamaged(CollisionActor);
 
 	Explosion();
+
+	UEngineDebug::OutPutString(CollisionOther->GetName() + "에게 " + std::to_string(1) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionOther->GetHp()));
 }
 
 // 몬스터랑 충돌하면 폭발
@@ -276,17 +279,20 @@ void ATear::HandleMonsterCollision(AActor* _Other) // 이 액터는 대부분의 경우 Ro
 	}
 
 	// Host 전용 로직
-	if (true == CollisionMonster->GetHeadCollision()->IsActive())
+	if (nullptr != CollisionMonster->GetHeadCollision())
 	{
-		ECollisionGroup CollisionHeadType = static_cast<ECollisionGroup>(CollisionMonster->GetHeadCollision()->GetGroup());
-
-		if (ECollisionGroup::Monster_Barrier == CollisionHeadType)
+		if (true == CollisionMonster->GetHeadCollision()->IsActive())
 		{
-			Explosion(); 
-			return;
+			ECollisionGroup CollisionHeadType = static_cast<ECollisionGroup>(CollisionMonster->GetHeadCollision()->GetGroup());
+
+			if (ECollisionGroup::Monster_Barrier == CollisionHeadType)
+			{
+				Explosion();
+				return;
+			}
 		}
 	}
-
+	
 	// 충돌체의 정보는 모두 Actor로 넘겨줘야 한다.
 	ECollisionGroup CollisionType = static_cast<ECollisionGroup>(CollisionMonster->GetBodyCollision()->GetGroup());
 	CollisionActor = TearCollision->CollisionOnce(CollisionType);

@@ -42,12 +42,20 @@ public:
 	void Blocker(AActor* _Actor);
 	void PlayerCollision(class APlayer* _Player, FVector2D _Pos);
 	void MonsterCollision(class AMonster* _Monster, FVector2D _Pos);
+
+	int ApplyDamaged(AActor* _Actor);
+	void SwitchAnimation();
 	void DestroyCollision();
-	bool CheckHp();
+	bool IsDeath();
 	
 	void SetParentRoom(class ARoom* _ParentRoom)
 	{
 		ParentRoom = _ParentRoom;
+	}
+	
+	int GetHp()
+	{
+		return Hp;
 	}
 
 protected:

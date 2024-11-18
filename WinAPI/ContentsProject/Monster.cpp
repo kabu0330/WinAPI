@@ -487,41 +487,40 @@ void AMonster::Death(float _DeltaTime)
 
 int AMonster::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)
 {
+	AMonster* Monster = dynamic_cast<AMonster*>(_Monster);
+	if (nullptr == Monster)
 	{
-		AMonster* Monster = dynamic_cast<AMonster*>(_Monster);
-		if (nullptr == Monster)
-		{
-			return 0;
-		}
-		else if (true == Monster->IsInvincible()) // 公利捞搁 府畔
-		{
-			return Hp;
-		}
-
-		if (true == Monster->IsDeath())
-		{
-			return 0;
-		}
-
-		DamagedEffectRenderer->SetActive(true);
-		DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
-		//TimeEventer.PushEvent(0.8f, std::bind(&AMonster::SwitchDamagedEffectRenderer, this));
-		BeginBlinkEffect();
-
-		IsHit = true;
-
-		KnockbackPower = 0.5f;
-		KnockbackDistance = _Dir * KnockbackPower;
-		
-		TimeEventer.PushEvent(KnockbackDuration, std::bind(&AMonster::SwitchIsHit, this));
-		
-		Hp -= _PlayerAtt;
-		if (Hp < 0)
-		{
-			Hp = 0;
-		}
+		return 0;
+	}
+	else if (true == Monster->IsInvincible()) // 公利捞搁 府畔
+	{
 		return Hp;
 	}
+
+	if (true == Monster->IsDeath())
+	{
+		return 0;
+	}
+
+	DamagedEffectRenderer->SetActive(true);
+	DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
+	//TimeEventer.PushEvent(0.8f, std::bind(&AMonster::SwitchDamagedEffectRenderer, this));
+	BeginBlinkEffect();
+
+	IsHit = true;
+
+	KnockbackPower = 0.5f;
+	KnockbackDistance = _Dir * KnockbackPower;
+	
+	TimeEventer.PushEvent(KnockbackDuration, std::bind(&AMonster::SwitchIsHit, this));
+	
+	Hp -= _PlayerAtt;
+	if (Hp < 0)
+	{
+		Hp = 0;
+	}
+	return Hp;
+	
 }
 
 void AMonster::KnockbackTick()

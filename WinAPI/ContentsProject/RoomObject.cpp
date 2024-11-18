@@ -27,9 +27,10 @@ ARoomObject::ARoomObject()
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ Scale.iX() - 15, Scale.iY() - 15 });
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Object);
-	BodyCollision->SetCollisionType(ECollisionType::Rect);
+	BodyCollision->SetCollisionType(ECollisionType::Circle);
 
-
+	Hp = 4;
+	IsTearDamageable = true;
 	DebugOn();
 }
 
@@ -42,6 +43,9 @@ void ARoomObject::BeginPlay()
 void ARoomObject::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+	DestroyCollision();
+	SwitchAnimation();
 }
 
 void ARoomObject::CollisionSetting()
@@ -74,14 +78,73 @@ void ARoomObject::Blocker(AActor* _Actor)
 	}
 }
 
-void ARoomObject::DestroyCollision()
+int ARoomObject::ApplyDamaged(AActor* _Actor)
 {
-	
+	if (true == IsDeath())
+	{
+		return Hp;
+	}
+	if (false == IsTearDamageable)
+	{
+		return Hp;
+	}
+
+	Hp -= 1;
+
+	if (Hp <= 0)
+	{
+		Hp = 0;
+	}
+	return Hp;
 }
 
-bool ARoomObject::CheckHp()
+void ARoomObject::SwitchAnimation()
 {
-	if (0 <= Hp)
+	if (100 < Hp)
+	{
+		return;
+	}
+
+	switch (Hp)
+	{
+	case 4:
+		BodyRenderer->ChangeAnimation("CORNY_POOP0");
+		break;
+	case 3:
+		BodyRenderer->ChangeAnimation("CORNY_POOP1");
+		break;
+	case 2:
+		BodyRenderer->ChangeAnimation("CORNY_POOP2");
+		break;
+	case 1:
+		BodyRenderer->ChangeAnimation("CORNY_POOP3");
+		break;
+	case 0: // 충돌체가 파괴되고 남은 잔해물
+		BodyRenderer->ChangeAnimation("CORNY_POOP4");
+		break;
+	default:
+		break;
+	}
+}
+
+void ARoomObject::DestroyCollision()
+{
+	if (false == IsDeath())
+	{
+		return;
+	}
+	if (nullptr == BodyCollision)
+	{
+		return;
+	}
+
+	BodyCollision->Destroy();
+	BodyCollision = nullptr;
+}
+
+bool ARoomObject::IsDeath()
+{
+	if (0 >= Hp)
 	{
 		IsDead = true;
 		return true;
