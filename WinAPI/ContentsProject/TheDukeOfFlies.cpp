@@ -24,12 +24,12 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	/* 탐색범위 : */ SetDetectRange({ 300 , 300 });
 	/* 발사속도 : */ SetShootingSpeed(300.0f);
 	/* 쿨타임   : */ SetCooldown(5.0f);
-
+	CanKnockback = false;
 
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ 110, 110 });
-	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_Body);
+	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_FlyingBody);
 	BodyCollision->SetCollisionType(ECollisionType::Circle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
@@ -67,7 +67,7 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	DetectCollision->SetActive(true);
 
 	// 맵에 존재할 수 있는 파리 숫자는 최대 12마리임, 11마리까지는 파리 소환 패턴을 쓸 수 있음
-	MaxFlyCount = 3; // 원작은 12마리
+	MaxFlyCount = 12; // 원작은 12마리
 }
 
 void ATheDukeOfFlies::BeginPlay()
@@ -109,7 +109,7 @@ void ATheDukeOfFlies::Tick(float _DeltaTime)
 	}
 	
 	SummonFlies();
-	//BlowAway();
+	BlowAway();
 }
 
 void ATheDukeOfFlies::SummonFlies()
@@ -278,39 +278,10 @@ void ATheDukeOfFlies::BeginBlowAwayLogic()
 			continue;
 		}
 
-		// 중심에서의 초기 방향 계산
-		FVector2D Direction = Fly->GetActorLocation() - CenterPos;
-		if (Direction.Length() < 1.0f)
-		{
-			// 너무 가까운 경우 랜덤 방향 설정
-			float RandomAngle = MonsterRandom.RandomFloat(0.0f, static_cast<float>(2.0f * std::numbers::pi));
-			Direction = FVector2D(std::cos(RandomAngle), std::sin(RandomAngle));
-		}
-		Direction.Normalize();
+		FVector2D Dir = Fly->GetActorLocation() - GetActorLocation();
+		Dir.Normalize();
 
-		// 초기 이동 속도 설정
-		float CurrentSpeed = InitialSpeed;
-
-		// 이동 및 감속 로직 등록
-		TimeEventer.PushEvent(Duration, [Fly, Direction, &CurrentSpeed, DecelerationFactor]()
-			{
-				float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
-	
-				// 이동 거리 계산
-				float MoveDistance = CurrentSpeed * DeltaTime;
-
-				// 위치 업데이트
-				FVector2D NewPosition = Fly->GetActorLocation() + (Direction * MoveDistance);
-				Fly->SetActorLocation(NewPosition);
-
-				// 속도 감속
-				CurrentSpeed *= DecelerationFactor;
-				if (CurrentSpeed < 10.0f) // 너무 느려지면 멈춤
-				{
-					CurrentSpeed = 0.0f;
-				}
-	
-			}, true, false);
+		Fly->GetForce() = Dir * 250.0f;
 		
 	}
 }

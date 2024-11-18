@@ -94,6 +94,7 @@ void AHost::Attack(float _DeltaTime)
 	IsAttack = true;
 	BodyRenderer->ChangeAnimation("Attack");
 	BodyCollision->SetActive(true);
+	HeadCollision->SetActive(false);
 
 	FVector2D DefenseCollisionOffsetPos = FVector2D(0, -30);
 	HeadCollision->SetComponentLocation(DefenseCollisionOffsetPos);
@@ -140,6 +141,7 @@ void AHost::ChangeIdle()
 	IsAttack = false;
 	BodyRenderer->ChangeAnimation("Idle");
 	BodyCollision->SetActive(false);
+	HeadCollision->SetActive(true);
 	HeadCollision->SetComponentLocation({ 0, 10 });
 	HeadCollision->SetComponentScale(HeadCollisionScale);
 	

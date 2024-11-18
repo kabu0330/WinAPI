@@ -366,7 +366,7 @@ void ARoom::CollisionSetting()
 	RoomCollision = CreateDefaultSubObject<U2DCollision>();
 	RoomCollision->SetComponentLocation({ 0, 0 });
 	RoomCollision->SetComponentScale({ RoomScale.X + RoomSizeOffsetX, RoomScale.Y + RoomSizeOffsetY });
-	RoomCollision->SetCollisionGroup(ECollisionGroup::Object_Wall);
+	RoomCollision->SetCollisionGroup(ECollisionGroup::Room_Wall);
 	RoomCollision->SetCollisionType(ECollisionType::Rect);
 
 	float OffsetX = -200.0f;
@@ -375,7 +375,7 @@ void ARoom::CollisionSetting()
 	ClampTearCollision = CreateDefaultSubObject<U2DCollision>();
 	ClampTearCollision->SetComponentLocation({ 0, 0 });
 	ClampTearCollision->SetComponentScale({ RoomScale.X + OffsetX, RoomScale.Y + OffsetY });
-	ClampTearCollision->SetCollisionGroup(ECollisionGroup::Object_Wall);
+	ClampTearCollision->SetCollisionGroup(ECollisionGroup::Room_Wall);
 	ClampTearCollision->SetCollisionType(ECollisionType::Rect);
 
 

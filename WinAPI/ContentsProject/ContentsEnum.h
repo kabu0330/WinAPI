@@ -34,10 +34,12 @@ enum class ECollisionGroup
 	Monster_Attack = 2400,
 	Monster_Barrier = 2550,
 	Monster_DetectInRange = 2999,
-	Object_Wall = 3000,
-	Object = 3500,
-	Object_Attack = 3900, // 오브젝트를 지나갈 수 있지만 닿으면 체력 감소
-	Item_Bomb = 4000, // 폭탄
+	Room_Wall = 3000,
+	Object = 4000, // 길막 오브젝트
+	Object_TearDestroyable = 4100,
+	Object_BombDestroyable = 4200,
+	Object_Combatant = 4900, // 부술수도 있지만 공격도 하는
+	Item_Bomb = 5500, // 폭탄
 	
 };
 

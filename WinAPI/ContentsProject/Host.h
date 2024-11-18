@@ -36,7 +36,6 @@ public:
 protected:
 
 private:
-	class U2DCollision* HeadCollision = nullptr;
-	FVector2D HeadCollisionScale = FVector2D::ZERO;
+
 };
 

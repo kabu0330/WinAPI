@@ -22,7 +22,7 @@ enum class MonsterState
 };
 
 
-// 설명 : 몬스터의 속성을 정의
+// 설명 : 몬스터의 속성을 정의한 부모 클래스
 class AMonster : public AActor
 {
 public:
@@ -40,6 +40,7 @@ public:
 	void Tick(float _DeltaTime) override;
 	void MonsterInputDebug();
 	void CollisionFuctionSetting();
+	void BlowAway(float _DeltaTime);
 
 	virtual void Move(float _DeltaTime);
 	virtual void ChaseMove(float _DeltaTime);
@@ -237,15 +238,31 @@ public:
 	{
 		IsHit = !IsHit;
 	}
+	
+	U2DCollision* GetHeadCollision()
+	{
+		return HeadCollision;
+	}
+
+	FVector2D& GetForce()
+	{
+		return Force;
+	}
 
 protected:
 	class U2DCollision* BodyCollision = nullptr;
+	class USpriteRenderer* BodyRenderer = nullptr;
+
+	class U2DCollision* HeadCollision = nullptr;
+	FVector2D HeadCollisionScale = FVector2D::ZERO;
 
 	MonsterState State = MonsterState::LEFT;
-	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* DamagedEffectRenderer = nullptr;
 	class USpriteRenderer* SpawnEffectRenderer = nullptr;
 	class USpriteRenderer* BloodEffectRenderer = nullptr;
+
+	// Boss 패턴 
+	FVector2D Force = FVector2D::ZERO;
 
 	FVector2D SpawnEffectScale = FVector2D::ZERO;
 	bool SpawEvent = false;
@@ -272,6 +289,7 @@ protected:
 
 	bool IsAttack = false;
 	bool IsHit = false; // 맞았냐
+	bool CanKnockback = true; // 넉백 대상이냐
 	float KnockbackPower = 0.0f;
 	float KnockbackDuration = 0.3f;
 	float LerpAlpha = 0.0f;
@@ -302,6 +320,7 @@ protected:
 
 	class ARoom* ParentRoom = nullptr;
 	APlayer* Player = nullptr;
+
 
 	// Random
 	__int64 RandomSeed = 0;

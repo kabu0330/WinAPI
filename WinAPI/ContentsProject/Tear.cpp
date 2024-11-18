@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Monster.h"
 #include "PlayGameMode.h"
+#include "RoomObject.h"
 
 
 ATear::ATear()
@@ -165,13 +166,7 @@ void ATear::Explode(AActor* _Other)
 	BoundaryExplosion();
 
 	// 3. 오브젝트와 충돌하면 터진다.
-		/*CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::Object_Wall);
-	FTransform CurRoomCollisionTrans = CollisionActor->GetTransform();
-	bool Result = FTransform::RectToCirCle(CurRoomCollisionTrans, TearTrans);
-	if (true == FTransform::RectToCirCle(CurRoomCollisionTrans, TearTrans))
-	{
-		Explosion();
-	}*/
+	MapObjectCollision(_Other);
 
 	// 4. 액터와 충돌하면 터진다.
 	HandleMonsterCollision(_Other);
@@ -237,6 +232,26 @@ void ATear::BoundaryExplosion()
 	}
 }
 
+void ATear::MapObjectCollision(AActor* _Other)
+{
+	ARoomObject* CollisionOther = dynamic_cast<ARoomObject*>(_Other);
+	if (nullptr == CollisionOther)
+	{
+		return;
+	}
+	ECollisionGroup CollisionType = static_cast<ECollisionGroup>(CollisionOther->GetBodyCollision()->GetGroup());
+
+	CollisionActor = TearCollision->CollisionOnce(CollisionType);
+	if (nullptr == CollisionActor)
+	{
+		return;
+	}
+	// 특수 충돌그룹 로직 설정
+
+
+	Explosion();
+}
+
 // 몬스터랑 충돌하면 폭발
 void ATear::HandleMonsterCollision(AActor* _Other) // 이 액터는 대부분의 경우 Room으로 들어온다.
 {
@@ -259,15 +274,21 @@ void ATear::HandleMonsterCollision(AActor* _Other) // 이 액터는 대부분의 경우 Ro
 	{
 		return;
 	}
-	ECollisionGroup CollisionType = static_cast<ECollisionGroup>(CollisionMonster->GetBodyCollision()->GetGroup());
-	
-	if (ECollisionGroup::Monster_Barrier == CollisionType)
+
+	// Host 전용 로직
+	if (true == CollisionMonster->GetHeadCollision()->IsActive())
 	{
-		Explosion();
-		return;
+		ECollisionGroup CollisionHeadType = static_cast<ECollisionGroup>(CollisionMonster->GetHeadCollision()->GetGroup());
+
+		if (ECollisionGroup::Monster_Barrier == CollisionHeadType)
+		{
+			Explosion(); 
+			return;
+		}
 	}
 
 	// 충돌체의 정보는 모두 Actor로 넘겨줘야 한다.
+	ECollisionGroup CollisionType = static_cast<ECollisionGroup>(CollisionMonster->GetBodyCollision()->GetGroup());
 	CollisionActor = TearCollision->CollisionOnce(CollisionType);
 	if (nullptr == CollisionActor)
 	{

@@ -8,10 +8,10 @@ public:
 	{
 		struct
 		{
-			int Left;
+			int Left; 
 			int Right;
 		};
-		__int64 Key;
+		__int64 Key; // 4바이트 Left + 4바이트 Right = Key는 절대로 겹칠 수 없다.
 	};
 };
 
@@ -124,7 +124,7 @@ public:
 
 		for (size_t i = 0; i < CollisionLink.size(); i++)
 		{
-			if (CollisionLink[i].Key == _Right)
+			if (CollisionLink[i].Key == LinkData.Key)
 			{
 				return;
 			}

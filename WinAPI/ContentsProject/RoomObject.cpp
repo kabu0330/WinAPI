@@ -1,27 +1,34 @@
 #include "PreCompile.h"
 #include "RoomObject.h"
 
-#include <EngineBase/EngineMath.h>
-#include "ContentsEnum.h"
-#include "Player.h"
-#include "Monster.h"
-
 ARoomObject::ARoomObject()
 {
 	Scale = { 64, 64 };
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BodyRenderer->CreateAnimation("Rock", "rocks.png", 0, 0);
-	BodyRenderer->ChangeAnimation("Rock");
+	BodyRenderer->CreateAnimation("CORNY_POOP0", "poops.png", 10, 10);
+	BodyRenderer->CreateAnimation("CORNY_POOP1", "poops.png", 11, 11);
+	BodyRenderer->CreateAnimation("CORNY_POOP2", "poops.png", 12, 12);
+	BodyRenderer->CreateAnimation("CORNY_POOP3", "poops.png", 13, 13);
+	BodyRenderer->CreateAnimation("CORNY_POOP4", "poops.png", 14, 14);
+
+	BodyRenderer->CreateAnimation("GOLDEN_POOP0", "poops.png", 15, 15);
+	BodyRenderer->CreateAnimation("GOLDEN_POOP1", "poops.png", 16, 16);
+	BodyRenderer->CreateAnimation("GOLDEN_POOP2", "poops.png", 17, 17);
+	BodyRenderer->CreateAnimation("GOLDEN_POOP3", "poops.png", 18, 18);
+	BodyRenderer->CreateAnimation("GOLDEN_POOP4", "poops.png", 19, 19);
+
 	BodyRenderer->SetComponentLocation({ 0, 0 });
 	BodyRenderer->SetComponentScale(Scale);
 	BodyRenderer->SetOrder(ERenderOrder::Object_Back);
+	BodyRenderer->ChangeAnimation("CORNY_POOP0");
 	BodyRenderer->SetActive(true);
 
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
-	BodyCollision->SetComponentScale({ Scale.iX() - 15, Scale.iY() - 15});
+	BodyCollision->SetComponentScale({ Scale.iX() - 15, Scale.iY() - 15 });
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Object);
 	BodyCollision->SetCollisionType(ECollisionType::Rect);
+
 
 	DebugOn();
 }
@@ -65,6 +72,21 @@ void ARoomObject::Blocker(AActor* _Actor)
 		MonsterCollision(Monster, ActorPos);
 		return;
 	}
+}
+
+void ARoomObject::DestroyCollision()
+{
+	
+}
+
+bool ARoomObject::CheckHp()
+{
+	if (0 <= Hp)
+	{
+		IsDead = true;
+		return true;
+	}
+	return false;
 }
 
 void ARoomObject::PlayerCollision(APlayer* _Player, FVector2D _Pos)

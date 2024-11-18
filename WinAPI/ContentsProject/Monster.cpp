@@ -72,8 +72,12 @@ void AMonster::Tick(float _DeltaTime)
 	MonsterInputDebug();
 	BodyCollisionCooldownElapsed += _DeltaTime;
 
+	BlowAway(_DeltaTime);
+
+	AddActorLocation(Force * _DeltaTime);
+
 	ARoom* PlayerCurRoom = ARoom::GetCurRoom();
-	if (PlayerCurRoom != ParentRoom)
+	if (PlayerCurRoom != ParentRoom) // 플레이어와 같은 공간에 없다면 정지
 	{
 		return;
 	}
@@ -101,6 +105,19 @@ void AMonster::Tick(float _DeltaTime)
 
 	CurStateAnimation(_DeltaTime);
 
+}
+
+void AMonster::BlowAway(float _DeltaTime)
+{
+	FVector2D Revers = -Force;
+	Revers.Normalize();
+
+	Force += Revers * _DeltaTime * 200.0f;
+
+	if (50.0f >= Force.Length())
+	{
+		Force = FVector2D::ZERO;
+	}
 }
 
 // 플레이어 쫓아가
@@ -509,6 +526,10 @@ int AMonster::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)
 
 void AMonster::KnockbackTick()
 {
+	if (false == CanKnockback)
+	{
+		return;
+	}
 	if (false == IsHit)
 	{
 		return;

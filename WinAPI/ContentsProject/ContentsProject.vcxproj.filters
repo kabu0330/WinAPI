@@ -85,6 +85,9 @@
     <ClInclude Include="RoomObject.h">
       <Filter>04_Play\MapObject</Filter>
     </ClInclude>
+    <ClInclude Include="Rock.h">
+      <Filter>04_Play\MapObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -169,6 +172,9 @@
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
     <ClCompile Include="RoomObject.cpp">
+      <Filter>04_Play\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock.cpp">
       <Filter>04_Play\MapObject</Filter>
     </ClCompile>
   </ItemGroup>

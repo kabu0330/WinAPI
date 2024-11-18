@@ -26,7 +26,9 @@
 #include "Dip.h"
 #include "Pooter.h"
 #include "TheDukeOfFlies.h"
+
 #include "RoomObject.h"
+#include "Rock.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -89,13 +91,16 @@ void APlayGameMode::Spawn()
 	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 
 	// Object
-	BaseRoom->CreateObject<ARoomObject>({100, 0});
+	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});
+	//MetalBlock->SetSprite("METALBLOCKS");
+
+	ARoomObject* Poop = BaseRoom->CreateObject<ARoomObject>({ 100, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
 {
 	// Player
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Warp, ECollisionGroup::Object_Wall); // 플레이어는 맵 밖을 나갈 수 없다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Warp, ECollisionGroup::Room_Wall); // 플레이어는 맵 밖을 나갈 수 없다.
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Warp, ECollisionGroup::Warp); // 플레이어는 문과 충돌하여 다음 맵으로 넘어간다.
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Body, ECollisionGroup::Monster_Body); // 플레이어는 몬스터와 충돌하면 데미지를 입는다.
@@ -107,19 +112,20 @@ void APlayGameMode::CollisionGroupLinkSetting()
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_FlyingBodyNonCollision);
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_Barrier); // 플레이어의 공격을 막으며 즉시 터진다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Object);
 
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Object_Wall); // 플레이어의 공격이 벽에 닿으면 즉시 터진다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Room_Wall); // 플레이어의 공격이 벽에 닿으면 즉시 터진다.
 
 	// Monster
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Body, ECollisionGroup::Object_Wall); // 몬스터는 맵 밖을 나갈 수 없다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Body, ECollisionGroup::Room_Wall); // 몬스터는 맵 밖을 나갈 수 없다.
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Player_Body); 
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Object_Wall); 
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Room_Wall); 
 
 	// Object
-	//GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Player_Warp);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Player_Body);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Player_Warp);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_Body);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_BodyNonCollision);
 
 
 }
