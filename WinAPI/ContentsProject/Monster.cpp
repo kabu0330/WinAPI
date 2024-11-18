@@ -14,7 +14,8 @@
 AMonster::AMonster()
 {
 	DamagedEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DamagedEffectRenderer->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 11, 0.1f, false);
+	DamagedEffectRenderer->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 11, 0.05f, false);
+	DamagedEffectRenderer->CreateAnimation("DamagedEffect_End", "effect_bloodpoof.png", 11, 11, 0.1f, false);
 	DamagedEffectRenderer->SetComponentScale({ 64, 64 });
 	DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
 	DamagedEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
@@ -549,6 +550,7 @@ void AMonster::BeginBlinkEffect()
 	BodyRenderer->SetAlphaFloat(0.0f);
 	DamagedEffectRenderer->SetAlphaFloat(1.0f);
 	TimeEventer.PushEvent(0.1f, std::bind(&AMonster::StayBlinkEffect, this));
+	TimeEventer.PushEvent(0.5f,std::bind_front(&AMonster::OffDamagedEffect, this));
 }
 
 void AMonster::StayBlinkEffect()

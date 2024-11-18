@@ -248,6 +248,10 @@ public:
 	{
 		return Force;
 	}
+	void OffDamagedEffect()
+	{
+		DamagedEffectRenderer->ChangeAnimation("DamagedEffect_End");
+	}
 
 protected:
 	class U2DCollision* BodyCollision = nullptr;

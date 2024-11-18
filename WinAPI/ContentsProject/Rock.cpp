@@ -3,6 +3,7 @@
 
 ARock::ARock()
 {
+	SetName("Rock");
 	Scale = { 64, 64 };
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("TINTEDROCKS0", "rocks.png", 0, 0);

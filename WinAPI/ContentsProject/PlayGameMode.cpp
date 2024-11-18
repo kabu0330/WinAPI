@@ -29,6 +29,7 @@
 
 #include "RoomObject.h"
 #include "Rock.h"
+#include "Poop.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -94,7 +95,9 @@ void APlayGameMode::Spawn()
 	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});
 	//MetalBlock->SetSprite("METALBLOCKS");
 
-	ARoomObject* Poop = BaseRoom->CreateObject<ARoomObject>({ 100, 0 });
+	ARoomObject* Poop = BaseRoom->CreateObject<APoop>({ 100, 0 });
+	//Poop->SetSprite("CORNY_POOP");
+	Poop->SetSprite("GOLDEN_POOP");
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()

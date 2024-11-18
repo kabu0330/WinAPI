@@ -26,12 +26,10 @@ public:
 
 	void SetSprite(std::string_view _Name)
 	{
-		if (nullptr == BodyRenderer)
-		{
-			return;
-		}
-		BodyRenderer->ChangeAnimation(_Name);
+		ObjectName = _Name;
 	}
+
+
 
 	U2DCollision* GetBodyCollision()
 	{
@@ -43,8 +41,9 @@ public:
 	void PlayerCollision(class APlayer* _Player, FVector2D _Pos);
 	void MonsterCollision(class AMonster* _Monster, FVector2D _Pos);
 
+	// 파괴형 오브젝트
+	virtual void SwitchAnimation();
 	int ApplyDamaged(AActor* _Actor);
-	void SwitchAnimation();
 	void DestroyCollision();
 	bool IsDeath();
 	
@@ -63,6 +62,7 @@ protected:
 	USpriteRenderer* BodyRenderer = nullptr;
 	U2DCollision* BodyCollision = nullptr;
 	FVector2D Scale = FVector2D::ZERO;
+	std::string ObjectName = "";
 
 	// 상호작용이 가능한 오브젝트
 	USpriteRenderer* ExplodingRenderer = nullptr;

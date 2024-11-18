@@ -3,34 +3,8 @@
 
 ARoomObject::ARoomObject()
 {
-	Scale = { 64, 64 };
-	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BodyRenderer->CreateAnimation("CORNY_POOP0", "poops.png", 10, 10);
-	BodyRenderer->CreateAnimation("CORNY_POOP1", "poops.png", 11, 11);
-	BodyRenderer->CreateAnimation("CORNY_POOP2", "poops.png", 12, 12);
-	BodyRenderer->CreateAnimation("CORNY_POOP3", "poops.png", 13, 13);
-	BodyRenderer->CreateAnimation("CORNY_POOP4", "poops.png", 14, 14);
 
-	BodyRenderer->CreateAnimation("GOLDEN_POOP0", "poops.png", 15, 15);
-	BodyRenderer->CreateAnimation("GOLDEN_POOP1", "poops.png", 16, 16);
-	BodyRenderer->CreateAnimation("GOLDEN_POOP2", "poops.png", 17, 17);
-	BodyRenderer->CreateAnimation("GOLDEN_POOP3", "poops.png", 18, 18);
-	BodyRenderer->CreateAnimation("GOLDEN_POOP4", "poops.png", 19, 19);
 
-	BodyRenderer->SetComponentLocation({ 0, 0 });
-	BodyRenderer->SetComponentScale(Scale);
-	BodyRenderer->SetOrder(ERenderOrder::Object_Back);
-	BodyRenderer->ChangeAnimation("CORNY_POOP0");
-	BodyRenderer->SetActive(true);
-
-	BodyCollision = CreateDefaultSubObject<U2DCollision>();
-	BodyCollision->SetComponentLocation({ 0, 0 });
-	BodyCollision->SetComponentScale({ Scale.iX() - 15, Scale.iY() - 15 });
-	BodyCollision->SetCollisionGroup(ECollisionGroup::Object);
-	BodyCollision->SetCollisionType(ECollisionType::Circle);
-
-	Hp = 4;
-	IsTearDamageable = true;
 	DebugOn();
 }
 
@@ -50,6 +24,10 @@ void ARoomObject::Tick(float _DeltaTime)
 
 void ARoomObject::CollisionSetting()
 {
+	if (nullptr == BodyCollision)
+	{
+		return;
+	}
 	BodyCollision->SetCollisionStay(std::bind(&ARoomObject::Blocker, this, std::placeholders::_1));
 }
 
@@ -104,23 +82,28 @@ void ARoomObject::SwitchAnimation()
 	{
 		return;
 	}
+	if ("" == ObjectName)
+	{
+		MSGASSERT("RoomObject 중 SetSprite 함수로 설정해야만 하는 오브젝트를 생성했습니다.");
+		return;
+	}
 
 	switch (Hp)
 	{
 	case 4:
-		BodyRenderer->ChangeAnimation("CORNY_POOP0");
+		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(0));
 		break;
 	case 3:
-		BodyRenderer->ChangeAnimation("CORNY_POOP1");
+		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(1));
 		break;
 	case 2:
-		BodyRenderer->ChangeAnimation("CORNY_POOP2");
+		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(2));
 		break;
 	case 1:
-		BodyRenderer->ChangeAnimation("CORNY_POOP3");
+		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(3));
 		break;
 	case 0: // 충돌체가 파괴되고 남은 잔해물
-		BodyRenderer->ChangeAnimation("CORNY_POOP4");
+		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(4));
 		break;
 	default:
 		break;
