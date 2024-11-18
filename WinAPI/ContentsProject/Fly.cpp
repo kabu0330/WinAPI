@@ -22,7 +22,7 @@ AFly::AFly()
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ 25, 25 });
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_FlyingBodyNonCollision);
-	BodyCollision->SetCollisionType(ECollisionType::CirCle);
+	BodyCollision->SetCollisionType(ECollisionType::Circle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "Fly002.png", { 0, 1, 0, 1, 0, 9 }, 0.15f);

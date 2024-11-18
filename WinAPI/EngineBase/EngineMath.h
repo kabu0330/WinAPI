@@ -310,7 +310,7 @@ enum class ECollisionType
 {
 	Point,
 	Rect,
-	CirCle,
+	Circle,
 	Max
 };
 

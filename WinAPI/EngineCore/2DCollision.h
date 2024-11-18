@@ -96,7 +96,7 @@ private:
 	// -1 충돌 그룹을 지정해주지 않았다
 	// -1 은 사용하면 안된다.
 	// 양수만 된다.
-	ECollisionType CollisionType = ECollisionType::CirCle;
+	ECollisionType CollisionType = ECollisionType::Circle;
 	int CollisionGroup = -1;
 
 

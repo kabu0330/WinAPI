@@ -20,7 +20,7 @@ ATear::ATear()
 	TearCollision->SetComponentLocation({ 0, 0 });
 	TearCollision->SetComponentScale({ 50, 50 });
 	TearCollision->SetCollisionGroup(ECollisionGroup::Player_Attack);
-	TearCollision->SetCollisionType(ECollisionType::CirCle);
+	TearCollision->SetCollisionType(ECollisionType::Circle);
 	
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);

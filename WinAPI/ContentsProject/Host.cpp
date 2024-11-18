@@ -49,7 +49,7 @@ AHost::AHost()
 	DetectCollision = CreateDefaultSubObject<U2DCollision>();
 	DetectCollision->SetComponentScale(GetDetectRange());
 	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
-	DetectCollision->SetCollisionType(ECollisionType::CirCle);
+	DetectCollision->SetCollisionType(ECollisionType::Circle);
 	DetectCollision->SetActive(true);
 }
 

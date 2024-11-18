@@ -23,7 +23,7 @@ APooter::APooter()
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ 30, 30 });
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_FlyingBody);
-	BodyCollision->SetCollisionType(ECollisionType::CirCle);
+	BodyCollision->SetCollisionType(ECollisionType::Circle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "Pooter_Left.png", { 0, 1, 14, 15 }, 0.15f);
@@ -38,7 +38,7 @@ APooter::APooter()
 	DetectCollision = CreateDefaultSubObject<U2DCollision>();
 	DetectCollision->SetComponentScale(GetDetectRange());
 	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
-	DetectCollision->SetCollisionType(ECollisionType::CirCle);
+	DetectCollision->SetCollisionType(ECollisionType::Circle);
 	DetectCollision->SetActive(true);
 }
 

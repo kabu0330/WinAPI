@@ -26,6 +26,7 @@
 #include "Dip.h"
 #include "Pooter.h"
 #include "TheDukeOfFlies.h"
+#include "RoomObject.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -70,8 +71,8 @@ void APlayGameMode::Spawn()
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	MinionRoom0->CreateMonster<AAttackFly>({ 150, 0 });
-	MinionRoom0->CreateMonster<AAttackFly>({ 150, 100 });
+	//MinionRoom0->CreateMonster<AAttackFly>({ 150, 0 });
+	//MinionRoom0->CreateMonster<AAttackFly>({ 150, 100 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ 50, 50 });
 	//MinionRoom0->CreateMonster<AFly>({ 100, 30 });
 	//MinionRoom0->CreateMonster<AFly>({ 100, -50 });
@@ -84,9 +85,11 @@ void APlayGameMode::Spawn()
 	//MinionRoom3->CreateMonster<APooter>({ 100, 100 });
 	//MinionRoom3->CreateMonster<APooter>({ 250, 50 });
 	//BossRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
-	BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
+	
+	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 
-
+	// Object
+	BaseRoom->CreateObject<ARoomObject>({100, 0});
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
@@ -112,6 +115,12 @@ void APlayGameMode::CollisionGroupLinkSetting()
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Player_Body); 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Object_Wall); 
+
+	// Object
+	//GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Player_Warp);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Player_Body);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_Body);
+
 
 }
 

@@ -27,7 +27,7 @@ AAttackFly::AAttackFly()
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ 25, 25 });
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_FlyingBody);
-	BodyCollision->SetCollisionType(ECollisionType::CirCle);
+	BodyCollision->SetCollisionType(ECollisionType::Circle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "Fly.png", {1, 2, 1, 2, 1, 2, 3, 2, 1, 2, 1, 2, 1, 0} , 0.15f);
@@ -46,7 +46,7 @@ AAttackFly::AAttackFly()
 	DetectCollision = CreateDefaultSubObject<U2DCollision>();
 	DetectCollision->SetComponentScale(GetDetectRange());
 	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
-	DetectCollision->SetCollisionType(ECollisionType::CirCle);
+	DetectCollision->SetCollisionType(ECollisionType::Circle);
 	DetectCollision->SetActive(true);
 }
 
@@ -146,12 +146,8 @@ void AAttackFly::RemoveFly()
 		{
 			return;
 		}
-		//std::list<AMonster*> Monsters = Duke->GetFliesList();
 
 		Duke->GetFliesList().remove(this);
-
-		int Result = Duke->GetFliesList().size();
-		int a = 0;
 	}
 }
 

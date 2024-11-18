@@ -18,7 +18,7 @@ ABloodTear::ABloodTear()
 	TearCollision->SetComponentLocation({ 0, 0 });
 	TearCollision->SetComponentScale({ 25, 25 });
 	TearCollision->SetCollisionGroup(ECollisionGroup::Monster_Attack);
-	TearCollision->SetCollisionType(ECollisionType::CirCle);
+	TearCollision->SetCollisionType(ECollisionType::Circle);
 
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	TearEffectRenderer->CreateAnimation("BloodTear_Normal", "effect_bloodtear.png", 0, 0, 0, false);

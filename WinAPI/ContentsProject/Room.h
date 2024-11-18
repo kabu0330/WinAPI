@@ -5,6 +5,7 @@
 #include "Global.h"
 #include <EngineCore/SpriteRenderer.h>
 #include "Monster.h"
+#include "RoomObject.h"
 
 enum class RoomDir
 {
@@ -134,32 +135,20 @@ public:
 
 	int CountFly();
 
-	//template<typename MonsterType>
-	//std::list<AMonster*> CurRoomFindMonsters(MonsterType _MonsterType)
-	//{
-	//	std::list<AMonster*>::iterator StartIter = Monsters.begin();
-	//	std::list<AMonster*>::iterator EndIter = Monsters.end();
-	//	std::list<AMonster*> ReturnMonsters;
+	template<typename ObjectType>
+	ARoomObject* CreateObject(FVector2D _Pivot)
+	{
+		ARoomObject* NewObject = GetWorld()->SpawnActor<ObjectType>();
+		NewObject->SetActorLocation(this->GetActorLocation() + _Pivot);
+		NewObject->SetParentRoom(this);
+		Objects.push_back(NewObject);
 
-	//	for (; StartIter != EndIter; ++StartIter)
-	//	{
-	//		AMonster* Monster = *StartIter;
-	//		ARoom ParentRoom = Monster->ParentRoom;
-
-	//		if (ParentRoom != GetCurRoom())
-	//		{
-	//			continue;
-	//		}
-
-	//		AMonster* FindMonster = dynamic_cast<_MonsterType>(Monster);
-	//		if (nullptr == FindMonster)
-	//		{
-	//			ReturnMonsters.push_back(FindMonster);
-	//		}
-	//	}
-
-	//	return ReturnMonsters;
-	//}
+		return NewObject;
+	}
+	void RemoveObject(ARoomObject* _Object)
+	{
+		Objects.remove(_Object);
+	}
 
 protected:
 
@@ -178,6 +167,7 @@ private:
 
 	// Room Collision And Renderer
 	class U2DCollision* RoomCollision = nullptr;
+	class U2DCollision* ClampTearCollision = nullptr;
 
 	USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
 	USpriteRenderer* ControlsRenderer   = nullptr; // BaseRoom 컨트롤러 이미지
@@ -186,8 +176,9 @@ private:
 	std::vector<class U2DCollision*> DoorCollisions;
 	std::vector<USpriteRenderer*> DoorRenderers;
 
-	// MonsterSpawn
+	// Spawn
 	std::list<AMonster*> Monsters;
+	std::list<ARoomObject*> Objects;
 
 	// 카메라 이동관련 멤버
 	AActor* Player = nullptr;

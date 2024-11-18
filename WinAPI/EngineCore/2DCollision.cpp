@@ -47,7 +47,7 @@ void U2DCollision::ComponentTick(float _DeltaTime)
 		case ECollisionType::Rect:
 			UEngineDebug::CoreDebugRender(ActorTransform, UEngineDebug::EDebugPosType::Rect);
 			break;
-		case ECollisionType::CirCle:
+		case ECollisionType::Circle:
 			UEngineDebug::CoreDebugRender(ActorTransform, UEngineDebug::EDebugPosType::Circle);
 			break;
 		default:

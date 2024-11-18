@@ -369,6 +369,16 @@ void ARoom::CollisionSetting()
 	RoomCollision->SetCollisionGroup(ECollisionGroup::Object_Wall);
 	RoomCollision->SetCollisionType(ECollisionType::Rect);
 
+	float OffsetX = -200.0f;
+	float OffsetY = -100.0f;
+
+	ClampTearCollision = CreateDefaultSubObject<U2DCollision>();
+	ClampTearCollision->SetComponentLocation({ 0, 0 });
+	ClampTearCollision->SetComponentScale({ RoomScale.X + OffsetX, RoomScale.Y + OffsetY });
+	ClampTearCollision->SetCollisionGroup(ECollisionGroup::Object_Wall);
+	ClampTearCollision->SetCollisionType(ECollisionType::Rect);
+
+
 	DoorCollisions.resize(4);
 	for (int i = 0; i < DoorCollisions.size(); i++)
 	{

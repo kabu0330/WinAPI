@@ -30,7 +30,7 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ 110, 110 });
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_Body);
-	BodyCollision->SetCollisionType(ECollisionType::CirCle);
+	BodyCollision->SetCollisionType(ECollisionType::Circle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "duke.png", 2, 2, 0.1f, false);
@@ -63,7 +63,7 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	DetectCollision = CreateDefaultSubObject<U2DCollision>();
 	DetectCollision->SetComponentScale(GetDetectRange());
 	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
-	DetectCollision->SetCollisionType(ECollisionType::CirCle);
+	DetectCollision->SetCollisionType(ECollisionType::Circle);
 	DetectCollision->SetActive(true);
 
 	// 맵에 존재할 수 있는 파리 숫자는 최대 12마리임, 11마리까지는 파리 소환 패턴을 쓸 수 있음
@@ -283,7 +283,7 @@ void ATheDukeOfFlies::BeginBlowAwayLogic()
 		if (Direction.Length() < 1.0f)
 		{
 			// 너무 가까운 경우 랜덤 방향 설정
-			float RandomAngle = MonsterRandom.RandomFloat(0.0f, 2.0f * std::numbers::pi);
+			float RandomAngle = MonsterRandom.RandomFloat(0.0f, static_cast<float>(2.0f * std::numbers::pi));
 			Direction = FVector2D(std::cos(RandomAngle), std::sin(RandomAngle));
 		}
 		Direction.Normalize();

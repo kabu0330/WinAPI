@@ -304,7 +304,7 @@ protected:
 	APlayer* Player = nullptr;
 
 	// Random
-	int RandomSeed = 0;
+	__int64 RandomSeed = 0;
 	UEngineRandom MonsterRandom;
 private:
 

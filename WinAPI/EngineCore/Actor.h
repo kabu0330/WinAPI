@@ -39,11 +39,13 @@ public:
 
 	void SetActorLocation(FVector2D _Location)
 	{
+		PrevLocation = GetActorLocation();
 		Transform.Location = _Location;
 	}
 
 	void AddActorLocation(FVector2D _Direction)
 	{
+		PrevLocation = GetActorLocation();
 		Transform.Location += _Direction;
 	}
 
@@ -60,6 +62,10 @@ public:
 	FVector2D GetActorLocation()
 	{
 		return Transform.Location;
+	}
+	FVector2D GetPrevActorLocation()
+	{
+		return PrevLocation;
 	}
 
 	// Ãß°¡
@@ -105,6 +111,7 @@ private:
 	class ULevel* World = nullptr;
 
 	FTransform Transform;
+	FVector2D PrevLocation = FVector2D::ZERO;
 
 	std::list<class UActorComponent*> Components;
 
