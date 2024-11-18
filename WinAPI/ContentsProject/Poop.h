@@ -17,7 +17,6 @@ public:
 
 	void BeginPlay();
 	void Tick(float _DeltaTime);
-	//void SwitchAnimation() override;
 
 protected:
 

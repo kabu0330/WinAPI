@@ -4,7 +4,16 @@
 ARock::ARock()
 {
 	SetName("Rock");
-	Scale = { 64, 64 };
+	BodyRendererScale = { 64, 64 };
+	FVector2D BodyCollisionScale = { 40, 40 };
+	FVector2D BlockingPathCollisionScale = { 30 , 30 };
+	FVector2D BlockingPathCollisionPivot = { 0, 5 };
+
+	CanExplode = true;
+	IsTearDamageable = false;
+	IsBlockingPath = true;
+	IsAttackable = false;
+
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("TINTEDROCKS0", "rocks.png", 0, 0);
 	BodyRenderer->CreateAnimation("TINTEDROCKS1", "rocks.png", 1, 1);
@@ -14,16 +23,23 @@ ARock::ARock()
 	BodyRenderer->CreateAnimation("TINTEDROCKS5", "rocks.png", 11, 11);
 	BodyRenderer->CreateAnimation("METALBLOCKS", "rocks.png", 4, 4);
 	BodyRenderer->SetComponentLocation({ 0, 0 });
-	BodyRenderer->SetComponentScale(Scale);
+	BodyRenderer->SetComponentScale(BodyRendererScale);
 	BodyRenderer->SetOrder(ERenderOrder::Object_Back);
 	BodyRenderer->ChangeAnimation("TintedRocks0");
 	BodyRenderer->SetActive(true);
 
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
-	BodyCollision->SetComponentScale({ Scale.iX() - 15, Scale.iY() - 15 });
+	BodyCollision->SetComponentScale(BodyCollisionScale);
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Object);
 	BodyCollision->SetCollisionType(ECollisionType::Rect);
+
+	BlockingPathCollision = CreateDefaultSubObject<U2DCollision>();
+	BlockingPathCollision->SetComponentLocation(BlockingPathCollisionPivot);
+	BlockingPathCollision->SetComponentScale(BlockingPathCollisionScale);
+	BlockingPathCollision->SetCollisionGroup(ECollisionGroup::Object);
+	BlockingPathCollision->SetCollisionType(ECollisionType::Rect);
+
 }
 
 void ARock::BeginPlay()

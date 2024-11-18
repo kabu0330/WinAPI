@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "RoomObject.h"
+#include <EngineCore/EngineAPICore.h>
 
 ARoomObject::ARoomObject()
 {
@@ -18,8 +19,45 @@ void ARoomObject::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-	DestroyCollision();
-	SwitchAnimation();
+	DestroyCollision(); // 충돌체를 파괴해야하는 경우
+	SwitchAnimation(); // 눈물, 폭탄 등과 상호작용해서 이미지가 바뀌어야 하는 경우
+	ChangeRenderOrder(); // 렌더 이미지 크기와 충돌 범위가 차이가 날 경우, 차이나는 상단의 렌더 순서를 변경하여 플레이가 뒤에 그려지도록 변경
+}
+
+void ARoomObject::ChangeRenderOrder()
+{
+	if (nullptr == BodyRenderer)
+	{
+		return;
+	}
+	if (nullptr == BlockingPathCollision)
+	{
+		return;
+	}
+
+	APlayer* Player = dynamic_cast<APlayer*>(GetWorld()->GetPawn());
+	if (nullptr == Player)
+	{
+		return;
+	}
+	FVector2D PlayerPos = Player->GetActorLocation();
+
+	FVector2D ObjectPos = GetActorLocation();
+	FVector2D RenderPivot = BodyRenderer->GetComponentScale().Half();
+	FVector2D CollisionPivot = BlockingPathCollision->GetComponentScale().Half() - BlockingPathCollision->GetComponentLocation().Half();
+	FVector2D Pivot = RenderPivot - CollisionPivot;
+	FVector2D ObjectPivotPos = ObjectPos - Pivot;
+	
+	if (PlayerPos.Y < ObjectPivotPos.Y)
+	{
+		BodyRenderer->SetOrder(ERenderOrder::Object_Front);
+		return;
+	}
+	else
+	{
+		BodyRenderer->SetOrder(ERenderOrder::Object_Back);
+		return;
+	}
 }
 
 void ARoomObject::CollisionSetting()
@@ -28,13 +66,23 @@ void ARoomObject::CollisionSetting()
 	{
 		return;
 	}
-	BodyCollision->SetCollisionStay(std::bind(&ARoomObject::Blocker, this, std::placeholders::_1));
+	BodyCollision->SetCollisionStay(std::bind(&ARoomObject::DealDamageToPlayer, this, std::placeholders::_1));
+
+	if (nullptr == BlockingPathCollision)
+	{
+		return;
+	}
+	BlockingPathCollision->SetCollisionStay(std::bind(&ARoomObject::Blocker, this, std::placeholders::_1));
 }
 
 void ARoomObject::Blocker(AActor* _Actor)
 {
 	// 플레이어나 몬스터가 지나갈 수 없도록하는 로직
 	if (_Actor == nullptr)
+	{
+		return;
+	}
+	if (false == IsBlockingPath) // 길막 오브젝트는 모두 true해야함
 	{
 		return;
 	}
@@ -78,13 +126,13 @@ int ARoomObject::ApplyDamaged(AActor* _Actor)
 
 void ARoomObject::SwitchAnimation()
 {
-	if (100 < Hp)
+	if (false == IsTearDamageable)
 	{
 		return;
 	}
 	if ("" == ObjectName)
 	{
-		MSGASSERT("RoomObject 중 SetSprite 함수로 설정해야만 하는 오브젝트를 생성했습니다.");
+		//MSGASSERT("RoomObject 중 SetSprite 함수로 설정해야만 하는 오브젝트를 생성했습니다.");
 		return;
 	}
 
@@ -121,8 +169,16 @@ void ARoomObject::DestroyCollision()
 		return;
 	}
 
+	IsBlockingPath = false;
+
 	BodyCollision->Destroy();
 	BodyCollision = nullptr;
+
+	if (nullptr != BlockingPathCollision)
+	{
+		BlockingPathCollision->Destroy();
+		BlockingPathCollision = nullptr;
+	}
 }
 
 bool ARoomObject::IsDeath()
@@ -130,13 +186,39 @@ bool ARoomObject::IsDeath()
 	if (0 >= Hp)
 	{
 		IsDead = true;
+
+		CanExplode = false;
+		IsTearDamageable = false; 
+		IsBlockingPath = false;
+		IsAttackable = false;
 		return true;
 	}
 	return false;
 }
 
+void ARoomObject::DealDamageToPlayer(AActor* _Actor)
+{
+	if (false == IsAttackable)
+	{
+		return;
+	}
+
+	APlayer* Player = dynamic_cast<APlayer*>(_Actor);
+	if (nullptr == Player)
+	{
+		return;
+	}
+
+	Player->ApplyDamaged(Player, 1, FVector2D::ZERO);
+}
+
 void ARoomObject::PlayerCollision(APlayer* _Player, FVector2D _Pos)
 {
+	if (false == IsBlockingPath)
+	{
+		return;
+	}
+
 	FVector2D ActorPos = _Pos;
 	float ActorLeftPos = _Pos.X - _Player->GetWarpCollision()->GetComponentScale().Half().X;
 	float ActorRightPos = _Pos.X + _Player->GetWarpCollision()->GetComponentScale().Half().X;

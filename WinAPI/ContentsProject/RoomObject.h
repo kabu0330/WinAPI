@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineBase/EngineMath.h>
+#include <EngineBase/EngineString.h>
 #include <EngineCore/Actor.h>
 #include <EngineCore/2DCollision.h>
 #include <EngineCore/SpriteRenderer.h>
@@ -23,13 +24,13 @@ public:
 
 	void BeginPlay();
 	void Tick(float _DeltaTime);
+	void ChangeRenderOrder();
 
 	void SetSprite(std::string_view _Name)
 	{
-		ObjectName = _Name;
+		std::string UpperName = UEngineString::ToUpper(_Name);
+		ObjectName = UpperName;
 	}
-
-
 
 	U2DCollision* GetBodyCollision()
 	{
@@ -46,6 +47,9 @@ public:
 	int ApplyDamaged(AActor* _Actor);
 	void DestroyCollision();
 	bool IsDeath();
+
+	// Fire
+	void DealDamageToPlayer(AActor* _Actor);
 	
 	void SetParentRoom(class ARoom* _ParentRoom)
 	{
@@ -61,14 +65,14 @@ protected:
 	// 장애물로 기능할 오브젝트
 	USpriteRenderer* BodyRenderer = nullptr;
 	U2DCollision* BodyCollision = nullptr;
-	FVector2D Scale = FVector2D::ZERO;
+	U2DCollision* BlockingPathCollision = nullptr;
+	FVector2D BodyRendererScale = FVector2D::ZERO;
 	std::string ObjectName = "";
 
-	// 상호작용이 가능한 오브젝트
-	USpriteRenderer* ExplodingRenderer = nullptr;
-	U2DCollision* ExplodingCollision = nullptr;
-	bool CanExplode = false; // 파괴될 수 있는 오브젝트인지
+	bool CanExplode       = false; // 파괴될 수 있는 오브젝트인지
 	bool IsTearDamageable = false; // 플레이어 눈물 공격으로 파괴될 수 있는 오브젝트인지
+	bool IsBlockingPath   = false;
+	bool IsAttackable     = false;
 	bool IsDead = false;
 	int Hp = 9999; // 플레이어 눈물 공격으로 파괴될 수 있다면 Hp를 가져야 한다.
 

@@ -10,8 +10,8 @@ enum class ERenderOrder
 	Object_Back = -500,
 	Player = 0,
 	PlayerHead = 1,
+	Object_Front = 99,
 	Monster = 100,
-	Object_Front = 200,
 	MonsterEffect = 500,
 	Tear = 1000,
 	UI = 9999,
@@ -35,10 +35,7 @@ enum class ECollisionGroup
 	Monster_Barrier = 2550,
 	Monster_DetectInRange = 2999,
 	Room_Wall = 3000,
-	Object = 4000, // 길막 오브젝트
-	Object_TearDestroyable = 4100,
-	Object_BombDestroyable = 4200,
-	Object_Combatant = 4900, // 부술수도 있지만 공격도 하는
+	Object = 4000, 
 	Item_Bomb = 5500, // 폭탄
 	
 };

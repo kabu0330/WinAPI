@@ -30,6 +30,7 @@
 #include "RoomObject.h"
 #include "Rock.h"
 #include "Poop.h"
+#include "Fire.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -95,9 +96,11 @@ void APlayGameMode::Spawn()
 	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});
 	//MetalBlock->SetSprite("METALBLOCKS");
 
-	ARoomObject* Poop = BaseRoom->CreateObject<APoop>({ 100, 0 });
-	//Poop->SetSprite("CORNY_POOP");
-	Poop->SetSprite("GOLDEN_POOP");
+	//ARoomObject* Poop = BaseRoom->CreateObject <APoop>({ 100, 0 });
+	////Poop->SetSprite("CORNY_POOP");
+	//Poop->SetSprite("GOLDEN_POOP");
+
+	ARoomObject* Poop = BaseRoom->CreateObject <AFire>({ 100, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()

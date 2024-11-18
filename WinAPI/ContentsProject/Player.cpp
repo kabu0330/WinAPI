@@ -290,7 +290,7 @@ void APlayer::CollisionSetting()
 	WarpCollision->SetComponentLocation({ 0, 5 });
 	WarpCollision->SetComponentScale({ 30, 15 });
 	WarpCollision->SetCollisionGroup(ECollisionGroup::Player_Warp);
-	WarpCollision->SetCollisionType(ECollisionType::Circle);
+	WarpCollision->SetCollisionType(ECollisionType::Rect);
 
 	SetActorScale(WarpCollision->GetComponentScale());
 }

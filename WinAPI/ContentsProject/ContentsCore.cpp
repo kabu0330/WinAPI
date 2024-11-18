@@ -79,10 +79,10 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("effect_dust.png", 3, 4);
 
 	// MapObject
-	UImageManager::GetInst().CuttingSprite("fire_bottom.png", 4, 4);
-	UImageManager::GetInst().CuttingSprite("fire_top_scale.png", 7, 2);
-	UImageManager::GetInst().CuttingSprite("poops.png", 5, 5);
 	UImageManager::GetInst().CuttingSprite("rocks.png", 4, 8);
+	UImageManager::GetInst().CuttingSprite("poops.png", 5, 5);
+	UImageManager::GetInst().CuttingSprite("fire_top.png", 7, 2);
+	UImageManager::GetInst().CuttingSprite("fire_bottom.png", 4, 4);
 
 	// Player
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
