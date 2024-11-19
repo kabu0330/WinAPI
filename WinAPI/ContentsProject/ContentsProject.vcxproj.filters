@@ -94,6 +94,12 @@
     <ClInclude Include="Fire.h">
       <Filter>04_Play\MapObject</Filter>
     </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>04_Play\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="BloodPool.h">
+      <Filter>04_Play\MapObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -189,6 +195,12 @@
     <ClCompile Include="Fire.cpp">
       <Filter>04_Play\MapObject</Filter>
     </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>04_Play\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="BloodPool.cpp">
+      <Filter>04_Play\MapObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -220,6 +232,12 @@
     </Filter>
     <Filter Include="04_Play\MapObject">
       <UniqueIdentifier>{2b4acc0d-735a-4473-bbd3-e0080690c4ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Play\Item">
+      <UniqueIdentifier>{e19eb775-bf14-495f-bba7-dd37a1d94fca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Play\Item\Pickup">
+      <UniqueIdentifier>{079671b1-8a15-491e-904a-a758f86c03c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -69,14 +69,6 @@ void AMonster::BeginPlay()
 
 void AMonster::Tick(float _DeltaTime)
 {
-	Super::Tick(_DeltaTime);
-	MonsterInputDebug();
-	BodyCollisionCooldownElapsed += _DeltaTime;
-
-	BlowAway(_DeltaTime);
-
-	AddActorLocation(Force * _DeltaTime);
-
 	ARoom* PlayerCurRoom = ARoom::GetCurRoom();
 	if (PlayerCurRoom != ParentRoom) // 플레이어와 같은 공간에 없다면 정지
 	{
@@ -87,6 +79,15 @@ void AMonster::Tick(float _DeltaTime)
 	{
 		return;
 	}
+
+	Super::Tick(_DeltaTime);
+	MonsterInputDebug();
+
+	BodyCollisionCooldownElapsed += _DeltaTime;
+
+	BlowAway(_DeltaTime);
+
+	AddActorLocation(Force * _DeltaTime);
 
 	SpawnAnimation(); // 최초 1회만 재생
 	SpawnFadeOut();

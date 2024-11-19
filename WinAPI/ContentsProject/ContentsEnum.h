@@ -4,6 +4,7 @@
 enum class ERenderOrder
 {
 	Background = -1000,
+	Decal = -999,
 	Controls = -990,
 	MonsterDeathDebris = -900,
 	Door = -800,
@@ -36,6 +37,7 @@ enum class ECollisionGroup
 	Monster_DetectInRange = 2999,
 	Room_Wall = 3000,
 	Object = 4000, 
+	Item = 5000,
 	Item_Bomb = 5500, // ÆøÅº
 	
 };

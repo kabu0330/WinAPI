@@ -587,12 +587,10 @@ void APlayer::UpdateHeadState()
 
 bool APlayer::HasMovementInput()
 {
-
 	return UEngineInput::GetInst().IsPress('A') ||
 		   UEngineInput::GetInst().IsPress('D') ||
 		   UEngineInput::GetInst().IsPress('W') ||
 		   UEngineInput::GetInst().IsPress('S');
-
 }
 
 void APlayer::CameraPosMove(float _DeltaTime)

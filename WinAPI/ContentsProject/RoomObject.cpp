@@ -7,7 +7,6 @@
 ARoomObject::ARoomObject()
 {
 
-
 	DebugOn();
 }
 
@@ -20,8 +19,6 @@ void ARoomObject::BeginPlay()
 
 void ARoomObject::Tick(float _DeltaTime)
 {
-	Super::Tick(_DeltaTime);
-
 	// 플레이어와 다른 맵이면 리턴
 	ARoom* PlayerCurRoom = ARoom::GetCurRoom();
 	if (PlayerCurRoom != ParentRoom) 
@@ -34,6 +31,7 @@ void ARoomObject::Tick(float _DeltaTime)
 		return;
 	}
 
+	Super::Tick(_DeltaTime);
 
 	DestroyCollision(); // 충돌체를 파괴해야하는 경우
 	SwitchAnimation(); // 눈물, 폭탄 등과 상호작용해서 이미지가 바뀌어야 하는 경우

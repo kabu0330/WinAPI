@@ -133,7 +133,12 @@ void APlayGameMode::CollisionGroupLinkSetting()
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_Body);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_BodyNonCollision);
 
+	// Item
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Item     , ECollisionGroup::Player_Body);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Item     , ECollisionGroup::Room_Wall);
 
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_Bomb, ECollisionGroup::Player_Body);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_Bomb, ECollisionGroup::Monster_Body);
 }
 
 void APlayGameMode::Tick(float _DeltaTime)

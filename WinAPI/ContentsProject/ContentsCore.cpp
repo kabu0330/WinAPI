@@ -83,6 +83,7 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("poops.png", 5, 5);
 	UImageManager::GetInst().CuttingSprite("fire_top.png", 3, 2);
 	UImageManager::GetInst().CuttingSprite("fire_bottom.png", 4, 4);
+	UImageManager::GetInst().CuttingSprite("effect_bloodpool.png", 5, 5);
 
 
 	// Player
