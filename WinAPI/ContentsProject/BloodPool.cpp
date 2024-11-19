@@ -39,23 +39,23 @@ ABloodPool::ABloodPool()
 	BodyRenderer->CreateAnimation("bloodpool24", "effect_bloodpool.png", 24, 24, 0.1f, false);
 	BodyRenderer->SetComponentLocation({ 0, 0 });
 	BodyRenderer->SetComponentScale(BodyRendererScale);
-	BodyRenderer->SetOrder(ERenderOrder::Object_Back);
+	BodyRenderer->SetOrder(ERenderOrder::Decal);
 	BodyRenderer->ChangeAnimation("bloodpool00");
 	BodyRenderer->SetActive(true);
-	BodyRenderer->SetAlphaFloat(1.0f);
+	BodyRenderer->SetAlphaFloat(0.9f);
 
-
-	DebugOn();
 }
 
 void ABloodPool::BeginPlay()
 {
 	Super::BeginPlay();
+	ARoomObject::BeginPlay();
 }
 
 void ABloodPool::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+	ARoomObject::Tick(_DeltaTime);
 
 }
 

@@ -32,6 +32,8 @@
 #include "Poop.h"
 #include "Fire.h"
 
+#include "Item.h"
+
 bool APlayGameMode::GamePaused = false;
 
 void APlayGameMode::BeginPlay()
@@ -100,7 +102,8 @@ void APlayGameMode::Spawn()
 	////Poop->SetSprite("CORNY_POOP");
 	//Poop->SetSprite("GOLDEN_POOP");
 
-	ARoomObject* Poop = BaseRoom->CreateObject <AFire>({ 100, 0 });
+	//ARoomObject* Poop = BaseRoom->CreateObject<AFire>({ 100, 0 });
+	AItem* Heart = BaseRoom->CreateItem<AItem>(nullptr, { 100, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()

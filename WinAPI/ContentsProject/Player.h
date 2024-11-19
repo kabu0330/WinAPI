@@ -136,6 +136,8 @@ public:
 	void ShowDeathReport();
 	void Reset();
 
+	// æ∆¿Ã≈€
+	bool Drop(class AItem* _Item, int _Count);
 
 	// Stat
 	static int GetPlayerHptMax() 
@@ -165,9 +167,22 @@ public:
 
 	void KnockbackTick(float _DeltaTime);
 
+	FVector2D& GetForce()
+	{
+		return Force;
+	}
+
+	void SetForce(FVector2D _Force)
+	{
+		Force = _Force;
+	}
+
+	void ReverseForce(float _DeltaTime);
 protected:
 
 private:
+	FVector2D Force = FVector2D::ZERO;
+
 	// Heart
 	static int Heart;
 	static int HeartMax;

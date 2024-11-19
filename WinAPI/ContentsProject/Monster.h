@@ -40,7 +40,7 @@ public:
 	void Tick(float _DeltaTime) override;
 	void MonsterInputDebug();
 	void CollisionFuctionSetting();
-	void BlowAway(float _DeltaTime);
+	void ReverseForce(float _DeltaTime);
 
 	virtual void Move(float _DeltaTime);
 	virtual void ChaseMove(float _DeltaTime);
@@ -248,6 +248,12 @@ public:
 	{
 		return Force;
 	}
+
+	void SetForce(FVector2D _Force)
+	{
+		Force = _Force;
+	}
+
 	void OffDamagedEffect()
 	{
 		DamagedEffectRenderer->ChangeAnimation("DamagedEffect_End");

@@ -9,6 +9,7 @@ enum class ERenderOrder
 	MonsterDeathDebris = -900,
 	Door = -800,
 	Object_Back = -500,
+	Item = -100,
 	Player = 0,
 	PlayerHead = 1,
 	Object_Front = 99,

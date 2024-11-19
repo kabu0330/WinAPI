@@ -6,6 +6,7 @@
 #include <EngineCore/SpriteRenderer.h>
 #include "Monster.h"
 #include "RoomObject.h"
+#include "Item.h"
 
 enum class RoomDir
 {
@@ -150,6 +151,29 @@ public:
 		Objects.remove(_Object);
 	}
 
+	template<typename ItemType>
+	AItem* CreateItem(AItem* _Item = nullptr, FVector2D _Pivot = {0, 0})
+	{
+		AItem* NewItem = GetWorld()->SpawnActor<ItemType>();
+		if (nullptr == _Item)
+		{
+			NewItem->SetActorLocation(this->GetActorLocation() + _Pivot);
+		}
+		else
+		{
+			NewItem->SetActorLocation(_Item->GetActorLocation() + _Pivot);
+		}
+		
+		NewItem->SetParentRoom(this);
+		Items.push_back(NewItem);
+
+		return NewItem;
+	}
+	void RemoveItem(AItem* _Item)
+	{
+		Items.remove(_Item);
+	}
+
 protected:
 
 private:
@@ -179,6 +203,7 @@ private:
 	// Spawn
 	std::list<AMonster*> Monsters;
 	std::list<ARoomObject*> Objects;
+	std::list<AItem*> Items;
 
 	// 카메라 이동관련 멤버
 	AActor* Player = nullptr;

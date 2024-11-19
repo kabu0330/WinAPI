@@ -31,6 +31,7 @@ public:
 		std::string UpperName = UEngineString::ToUpper(_Name);
 		ObjectName = UpperName;
 	}
+	virtual void SetSprite(std::string_view _StrNum, FVector2D _Scale) {};
 
 	U2DCollision* GetBodyCollision()
 	{
@@ -51,17 +52,31 @@ public:
 	// Fire
 	void DealDamageToPlayer(AActor* _Actor);
 	
-	void SetParentRoom(class ARoom* _ParentRoom)
-	{
-		ParentRoom = _ParentRoom;
-	}
+
 	
 	int GetHp()
 	{
 		return Hp;
 	}
 
+	void SetParentRoom(class ARoom* _ParentRoom)
+	{
+		ParentRoom = _ParentRoom;
+	}
+
+	FVector2D& GetForce()
+	{
+		return Force;
+	}
+
+	void SetForce(FVector2D _Force)
+	{
+		Force = _Force;
+	}
+
 protected:
+	FVector2D Force = FVector2D::ZERO;
+
 	// 장애물로 기능할 오브젝트
 	USpriteRenderer* BodyRenderer = nullptr;
 	U2DCollision* BodyCollision = nullptr;

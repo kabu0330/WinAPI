@@ -23,6 +23,8 @@
 #include "PickupItemUI.h"
 #include "PickupNumberUI.h"
 
+#include "Item.h"
+
 int APlayer::Heart = 6;
 int APlayer::HeartMax = 8;
 
@@ -68,6 +70,8 @@ void APlayer::Tick(float _DeltaTime)
 	{
 		return;
 	}
+
+	ReverseForce(_DeltaTime);
 
 	IsCameraMove(); // ฟ๖วม
 
@@ -195,6 +199,21 @@ void APlayer::KnockbackTick(float _DeltaTime)
 	float UpOffset = -50.0f * std::sin(KnockbackLerpAlpha * static_cast<float>(std::numbers::pi));
 	FVector2D FinalPos = CurPos + FVector2D(0.0f, UpOffset);
 	SetActorLocation(FinalPos);
+}
+
+void APlayer::ReverseForce(float _DeltaTime)
+{
+	FVector2D Reverse = -Force;
+	Reverse.Normalize();
+
+	Force += Reverse * _DeltaTime * 100.0f;
+
+	if (10.0f > Force.Length())
+	{
+		Force = FVector2D::ZERO;
+	}
+
+	AddActorLocation(Force * _DeltaTime);
 }
 
 void APlayer::ShowHitAnimation(AActor* _Other)
@@ -407,6 +426,11 @@ void APlayer::Reset()
 	IsDead = false;
 	IsResetReady = false;
 	Dir = FVector2D::ZERO;
+}
+
+bool APlayer::Drop(AItem* _Item, int _Count)
+{
+	return false;
 }
 
 void APlayer::Move(float _DeltaTime)

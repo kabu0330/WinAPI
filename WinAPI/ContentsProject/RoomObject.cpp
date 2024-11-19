@@ -14,7 +14,6 @@ void ARoomObject::BeginPlay()
 {
 	Super::BeginPlay();
 	CollisionSetting();
-
 }
 
 void ARoomObject::Tick(float _DeltaTime)

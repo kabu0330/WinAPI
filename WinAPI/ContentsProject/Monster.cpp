@@ -85,7 +85,7 @@ void AMonster::Tick(float _DeltaTime)
 
 	BodyCollisionCooldownElapsed += _DeltaTime;
 
-	BlowAway(_DeltaTime);
+	ReverseForce(_DeltaTime);
 
 	AddActorLocation(Force * _DeltaTime);
 
@@ -109,12 +109,12 @@ void AMonster::Tick(float _DeltaTime)
 
 }
 
-void AMonster::BlowAway(float _DeltaTime)
+void AMonster::ReverseForce(float _DeltaTime)
 {
-	FVector2D Revers = -Force;
-	Revers.Normalize();
+	FVector2D Reverse = -Force;
+	Reverse.Normalize();
 
-	Force += Revers * _DeltaTime * 200.0f;
+	Force += Reverse * _DeltaTime * 100.0f;
 
 	if (50.0f >= Force.Length())
 	{

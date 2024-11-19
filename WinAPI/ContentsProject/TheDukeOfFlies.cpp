@@ -281,7 +281,7 @@ void ATheDukeOfFlies::BeginBlowAwayLogic()
 		FVector2D Dir = Fly->GetActorLocation() - GetActorLocation();
 		Dir.Normalize();
 
-		Fly->GetForce() = Dir * 250.0f;
+		Fly->GetForce() = Dir * 150.0f;
 		
 	}
 }
