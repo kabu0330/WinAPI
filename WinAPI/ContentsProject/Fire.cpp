@@ -16,10 +16,10 @@ AFire::AFire()
 	IsBlockingPath = false;
 	IsAttackable = true;
 
-	float BurningFrame = 0.3f;
+	float BurningFrame = 0.2f;
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("FireBottom_Flame", "fire_bottom.png", 1, 1, BurningFrame);
-	BodyRenderer->CreateAnimation("FireBottom_Burned", "fire_bottom.png", {0, 4, 5}, 1.0f);
+	BodyRenderer->CreateAnimation("FireBottom_Burned", "fire_bottom.png", 1, 1, 0.1f, false);
 	BodyRenderer->SetComponentLocation({ 0, 0 });
 	BodyRenderer->SetComponentScale(BodyRendererScale);
 	BodyRenderer->SetOrder(ERenderOrder::Object_Back);

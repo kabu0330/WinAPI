@@ -30,6 +30,7 @@ AMonster::AMonster()
 	SpawnEffectRenderer->SetComponentScale({ 128, 128 });
 	SpawnEffectRenderer->ChangeAnimation("SpawnEffect");
 	SpawnEffectRenderer->SetOrder(ERenderOrder::MonsterEffect);
+	SpawnEffectRenderer->SetActive(false);
 
 	BloodEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BloodEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 30.0f }, false);
@@ -56,7 +57,7 @@ void AMonster::BeginPlay()
 	AActor* MainPawn = GetWorld()->GetPawn();
 	Player = dynamic_cast<APlayer*>(MainPawn);
 
-	SpawnEffectRenderer->SetActive(false);
+
 	BodyRenderer->SetActive(false);
 	BodyCollision->SetActive(false);
 
@@ -414,9 +415,14 @@ void AMonster::SpawnAnimation()
 	{
 		SpawEvent = true; // FadeOut Trigger
 		SpawnEffectRenderer->SetActive(true);
-
+		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
+		
+	}
+	else
+	{
 		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
 	}
+
 }
 
 void AMonster::BodyRender()

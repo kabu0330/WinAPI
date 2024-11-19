@@ -94,7 +94,7 @@ void APlayGameMode::Spawn()
 	//MinionRoom3->CreateMonster<APooter>({ 250, 50 });
 	//BossRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 	
-	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
+	BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 
 	// Object
 	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});
@@ -105,11 +105,13 @@ void APlayGameMode::Spawn()
 	//Poop->SetSprite("GOLDEN_POOP");
 
 	//ARoomObject* Poop = BaseRoom->CreateObject<AFire>({ 100, 0 });
+	
+	// Item
 	//AItem* Heart = BaseRoom->CreateItem<AHeart>(nullptr, { 100, 0 });
 	//AItem* HalfHeart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
 	//HalfHeart->ChangeAnimation("HalfHeart");
 
-	AItem* Heart = BaseRoom->CreateItem<ABomb>(nullptr, { 100, 0 });
+	AItem* Bomb = BaseRoom->CreateItem<ABomb>(nullptr, { 100, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
@@ -140,8 +142,8 @@ void APlayGameMode::CollisionGroupLinkSetting()
 
 	// Object
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Player_Warp);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_Body);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_BodyNonCollision);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_Body); // 몬스터는 오브젝트를 통과할 수 없다. 
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_BodyNonCollision); // 그러나 Fly타입 몬스터는 통과한다.
 
 	// Item
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item     , ECollisionGroup::Player_Body);

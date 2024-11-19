@@ -29,6 +29,8 @@ public:
 	{
 		ParentBoss = _Boss;
 		IsFollowBoss = true;
+		SpawnEffectRenderer->Destroy();
+		SpawnEffectRenderer = nullptr;
 	}
 	void SetInitialAngle(float _Angle);
 
