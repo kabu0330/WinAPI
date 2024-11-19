@@ -8,24 +8,6 @@
 
 AItem::AItem()
 {
-	SetName("Item");
-	BodyRendererScale = { 64, 64 };
-	BodyCollisionScale = { 32, 32 };
-	ItemCount = 1;
-
-	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BodyRenderer->CreateAnimation("Heart", "Heart", 0, 3, 0.2f);
-	BodyRenderer->SetComponentLocation({ 0, 0 });
-	BodyRenderer->SetComponentScale(BodyRendererScale);
-	BodyRenderer->SetOrder(ERenderOrder::Item);
-	BodyRenderer->ChangeAnimation("Heart");
-	BodyRenderer->SetActive(true);
-
-	PlayerCollision = CreateDefaultSubObject<U2DCollision>();
-	PlayerCollision->SetComponentLocation({ 0, 0 });
-	PlayerCollision->SetComponentScale(BodyCollisionScale);
-	PlayerCollision->SetCollisionGroup(ECollisionGroup::Item);
-	PlayerCollision->SetCollisionType(ECollisionType::Rect);
 
 	DebugOn();
 }
@@ -61,6 +43,10 @@ void AItem::CollisionSetting()
 	if (nullptr != PlayerCollision)
 	{
 		PlayerCollision->SetCollisionEnter(std::bind(&AItem::Drop, this, std::placeholders::_1));
+	}
+	if (nullptr != UniversalCollision)
+	{
+		UniversalCollision->SetCollisionEnter(std::bind(&AItem::AreaWideAttack, this, std::placeholders::_1));
 	}
 
 }
@@ -130,6 +116,26 @@ void AItem::ReverseForce(float _DeltaTime)
 	}
 
 	AddActorLocation(Force * _DeltaTime);
+}
+
+void AItem::AreaWideAttack(AActor* _Actor)
+{
+	ARoom* Room = CastActorToType<ARoom>(_Actor);
+	if (nullptr != Room)
+	{
+		return;
+	}
+
+	FVector2D Dir = _Actor->GetActorLocation() - GetActorLocation();
+	Dir.Normalize(); // πÊ«‚∫§≈Õ
+	
+	
+
+	APlayer* Player = CastActorToType<APlayer>(_Actor);
+	if (nullptr == Player)
+	{	
+		Player->ApplyDamaged(Player, 1, Dir);
+	}
 }
 
 void AItem::ClampPositionToRoom()

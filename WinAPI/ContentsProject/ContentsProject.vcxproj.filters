@@ -100,6 +100,12 @@
     <ClInclude Include="BloodPool.h">
       <Filter>04_Play\MapObject</Filter>
     </ClInclude>
+    <ClInclude Include="Heart.h">
+      <Filter>04_Play\Item\Pickup</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>04_Play\Item\Pickup</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -200,6 +206,12 @@
     </ClCompile>
     <ClCompile Include="BloodPool.cpp">
       <Filter>04_Play\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Heart.cpp">
+      <Filter>04_Play\Item\Pickup</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>04_Play\Item\Pickup</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -138,9 +138,14 @@ void ContentsCore::FolderSetting()
 	UImageManager::GetInst().LoadFolder(DoorOpenSprite.GetPathToString());
 
 	UEngineDirectory ItemHeart;
-	DoorOpenSprite.MoveParentToDirectory("Resources//Image//Play//Item//Pickup");
-	DoorOpenSprite.Append("Heart");
-	UImageManager::GetInst().LoadFolder(DoorOpenSprite.GetPathToString());
+	ItemHeart.MoveParentToDirectory("Resources//Image//Play//Item");
+	ItemHeart.Append("Heart");
+	UImageManager::GetInst().LoadFolder(ItemHeart.GetPathToString());
+
+	UEngineDirectory ItemHalfHeart;
+	ItemHalfHeart.MoveParentToDirectory("Resources//Image//Play//Item");
+	ItemHalfHeart.Append("HalfHeart");
+	UImageManager::GetInst().LoadFolder(ItemHalfHeart.GetPathToString());
 }
 
 void ContentsCore::ResourceLoad()

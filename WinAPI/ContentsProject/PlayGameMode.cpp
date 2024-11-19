@@ -33,6 +33,8 @@
 #include "Fire.h"
 
 #include "Item.h"
+#include "Heart.h"
+#include "Bomb.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -103,7 +105,11 @@ void APlayGameMode::Spawn()
 	//Poop->SetSprite("GOLDEN_POOP");
 
 	//ARoomObject* Poop = BaseRoom->CreateObject<AFire>({ 100, 0 });
-	AItem* Heart = BaseRoom->CreateItem<AItem>(nullptr, { 100, 0 });
+	//AItem* Heart = BaseRoom->CreateItem<AHeart>(nullptr, { 100, 0 });
+	//AItem* HalfHeart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
+	//HalfHeart->ChangeAnimation("HalfHeart");
+
+	AItem* Heart = BaseRoom->CreateItem<ABomb>(nullptr, { 100, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
