@@ -86,7 +86,9 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("effect_bloodpool.png", 4, 6);
 
 	// Item
-	UImageManager::GetInst().CuttingSprite("pickup_001_heart.png", 5, 3);
+	UImageManager::GetInst().CuttingSprite("bomb.png", 5, 6);
+	UImageManager::GetInst().CuttingSprite("bomb_spark.png", 4, 2);
+	UImageManager::GetInst().CuttingSprite("hot_flames.png", 4, 2);
 
 
 	// Player

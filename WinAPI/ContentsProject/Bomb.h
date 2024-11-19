@@ -18,9 +18,15 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	void BombCollisionSetting();
+	void Explosion();
+
 protected:
 
 private:
+	USpriteRenderer* BobmSparkEffectRenderer = nullptr;
+	USpriteRenderer* FlamesEffectRenderer = nullptr;
+	USpriteRenderer* ExplosionEffectRenderer = nullptr;
 
 };
 

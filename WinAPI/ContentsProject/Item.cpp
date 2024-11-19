@@ -5,6 +5,7 @@
 #include "Room.h"
 #include "PlayGameMode.h"
 #include "Player.h"
+#include "Tear.h"
 
 AItem::AItem()
 {
@@ -71,8 +72,7 @@ void AItem::FailToPickup(APlayer* _Player)
  	FVector2D Dir = GetActorLocation() - _Player->GetActorLocation();
 	Dir.Normalize(); // 방향벡터
 
-	Force = Dir * 180.0f;
-
+	Force = Dir * 200.0f;
 }
 
 void AItem::ReverseForce(float _DeltaTime)
@@ -87,7 +87,7 @@ void AItem::ReverseForce(float _DeltaTime)
 		Force = FVector2D::ZERO;	
 	}
 
-	if (true == IsAtBoundary)
+	if (true == IsAtBoundary) // 반사
 	{
 		FVector2D BoundaryNormal = FVector2D::ZERO;
 
@@ -129,13 +129,41 @@ void AItem::AreaWideAttack(AActor* _Actor)
 	FVector2D Dir = _Actor->GetActorLocation() - GetActorLocation();
 	Dir.Normalize(); // 방향벡터
 	
-	
-
 	APlayer* Player = CastActorToType<APlayer>(_Actor);
-	if (nullptr == Player)
+	if (nullptr != Player)
 	{	
-		Player->ApplyDamaged(Player, 1, Dir);
+		Player->ApplyDamaged(Player, 2, Dir); // 폭탄은 플레이어에게 하트 한칸의 피해를 준다.
 	}
+
+	AMonster* Monster = CastActorToType<AMonster>(_Actor);
+	if (nullptr != Monster)
+	{
+		Monster->ApplyDamaged(Monster, Att, Dir); // 폭탄은 몬스터에게 60의 피해를 입힌다.
+	}
+
+	ARoomObject* Object = CastActorToType<ARoomObject>(_Actor);
+	if (nullptr != Object)
+	{
+		Object->ApplyDamaged(Object);
+	}
+}
+
+void AItem::Knockback(AActor* _Actor)
+{
+	if (nullptr == ImpactCollision)
+	{
+		return;
+	}
+
+	ATear* Tear = dynamic_cast<ATear*>(_Actor);
+	if (nullptr == Tear)
+	{
+		return;
+	}
+
+	FVector2D Dir = GetActorLocation() - Tear->GetActorLocation();
+	Dir.Normalize(); // 방향벡터
+	Force = Dir * 100.0f;
 }
 
 void AItem::ClampPositionToRoom()
@@ -187,13 +215,13 @@ FVector2D AItem::Reflect(FVector2D _Dir)
 	return ReflectedForce;
 }
 
-
 void AItem::IdleAnimation()
 {
 	
+}
 
-
-
+void AItem::SpawnAnimation()
+{
 }
 
 void AItem::HoverAnimation()

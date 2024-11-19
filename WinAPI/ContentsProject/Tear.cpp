@@ -10,7 +10,7 @@
 #include "Monster.h"
 #include "PlayGameMode.h"
 #include "RoomObject.h"
-
+#include "Item.h"
 
 ATear::ATear()
 {
@@ -170,6 +170,9 @@ void ATear::Explode(AActor* _Other)
 
 	// 4. 액터와 충돌하면 터진다.
 	HandleMonsterCollision(_Other);
+
+	// 5. 특정 아이템과 충돌하면 터진다.
+	ItemImpackCollision(_Other);
 }
 
 // 시간 초과 폭발
@@ -246,13 +249,35 @@ void ATear::MapObjectCollision(AActor* _Other)
 	{
 		return;
 	}
-	// 특수 충돌그룹 로직 설정
 
 	CollisionOther->ApplyDamaged(CollisionActor);
 
 	Explosion();
 
 	UEngineDebug::OutPutString(CollisionOther->GetName() + "에게 " + std::to_string(1) + " 의 데미지를 주었습니다. // 현재 체력 : " + std::to_string(CollisionOther->GetHp()));
+}
+
+// 특정 아이템과 충돌하면 밀어내기
+void ATear::ItemImpackCollision(AActor* _Other)
+{
+	AItem* CollisionOther = dynamic_cast<AItem*>(_Other);
+	if (nullptr == CollisionOther)
+	{
+		return;
+	}
+
+	CollisionActor = TearCollision->CollisionOnce(ECollisionGroup::Item_Impact);
+	if (nullptr == CollisionActor)
+	{
+		return;
+	}
+	// 특수 충돌그룹 로직 설정
+
+	CollisionOther->Knockback(this);
+
+	Explosion();
+
+	UEngineDebug::OutPutString(CollisionOther->GetName() + "에게 넉백 공격을 가했습니다.");
 }
 
 // 몬스터랑 충돌하면 폭발

@@ -105,14 +105,14 @@ void ARoomObject::Blocker(AActor* _Actor)
 	APlayer * Player = dynamic_cast<APlayer*>(_Actor);
 	if (nullptr != Player)
 	{
-		PlayerCollision(Player, ActorPos);
+		BlockPlayerCollision(Player, ActorPos);
 		return;
 	}
 
 	AMonster* Monster = dynamic_cast<AMonster*>(_Actor); // 몬스터라면
 	if (true)
 	{
-		MonsterCollision(Monster, ActorPos);
+		BlockMonsterCollision(Monster, ActorPos);
 		return;
 	}
 }
@@ -125,6 +125,13 @@ int ARoomObject::ApplyDamaged(AActor* _Actor)
 	}
 	if (false == IsTearDamageable)
 	{
+		return Hp;
+	}
+
+	if (true == CanExplode) // 파괴가 가능한 오브젝트라면
+	{
+		DestroyCollision();
+		Hp = 0;
 		return Hp;
 	}
 
@@ -226,7 +233,7 @@ void ARoomObject::DealDamageToPlayer(AActor* _Actor)
 
 }
 
-void ARoomObject::PlayerCollision(APlayer* _Player, FVector2D _Pos)
+void ARoomObject::BlockPlayerCollision(APlayer* _Player, FVector2D _Pos)
 {
 	if (false == IsBlockingPath)
 	{
@@ -265,7 +272,7 @@ void ARoomObject::PlayerCollision(APlayer* _Player, FVector2D _Pos)
 	}
 }
 
-void ARoomObject::MonsterCollision(AMonster* _Monster, FVector2D _Pos)
+void ARoomObject::BlockMonsterCollision(AMonster* _Monster, FVector2D _Pos)
 {
 	FVector2D ActorPos = _Pos;
 	float ActorLeftPos = _Pos.X - _Monster->GetBodyCollision()->GetComponentScale().Half().X;

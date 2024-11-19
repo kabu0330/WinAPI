@@ -33,6 +33,7 @@ public:
 
 	// 폭탄
 	void AreaWideAttack(AActor* _Actor);
+	void Knockback(AActor* _Actor);
 
 	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
 	FVector2D Reflect(FVector2D _Dir);
@@ -43,6 +44,7 @@ public:
 	}
 
 	virtual void IdleAnimation(); // 기본 애니메이션
+	void SpawnAnimation(); 
 	void HoverAnimation(); // 플레이어가 아이템을 습득하고 공중에 들고 있는 경우
 	void GlowAnimation(); // 플레이어가 아이템을 습득하고 공중에 들고 있을 때 출력할 이펙트 효과
 
@@ -51,7 +53,7 @@ public:
 		ParentRoom = _Parent;
 	}
 
-	FVector2D& GetForce()
+	FVector2D GetForce() const
 	{
 		return Force;
 	}
@@ -75,15 +77,18 @@ public:
 
 protected:
 	int ItemCount = 0;
+	int Att = 0;
+
 	float TimeElapsed = 0.0f;
 	class ARoom* ParentRoom = nullptr;
 
 	USpriteRenderer* BodyRenderer = nullptr;
-	USpriteRenderer* EffectRenderer = nullptr;
 
 	U2DCollision* PlayerCollision = nullptr;
 	U2DCollision* MonsterCollision = nullptr;
 	U2DCollision* UniversalCollision = nullptr;
+
+	U2DCollision* ImpactCollision = nullptr; // 플레이어 공격에 밀려날 수 있는 충돌체
 
 	FVector2D BodyRendererScale = FVector2D::ZERO;
 	FVector2D BodyRendererLocation = FVector2D::ZERO;
@@ -92,7 +97,8 @@ protected:
 
 	FVector2D Force = FVector2D::ZERO;
 
-	bool IsAtBoundary = false;
+	bool IsAtBoundary = false; 
+
 private:
 
 };

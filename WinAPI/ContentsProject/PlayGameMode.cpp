@@ -128,6 +128,7 @@ void APlayGameMode::CollisionGroupLinkSetting()
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_Barrier); // 플레이어의 공격을 막으며 즉시 터진다.
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Object);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Item_Impact);
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Room_Wall); // 플레이어의 공격이 벽에 닿으면 즉시 터진다.
 
@@ -146,8 +147,8 @@ void APlayGameMode::CollisionGroupLinkSetting()
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item     , ECollisionGroup::Player_Body);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item     , ECollisionGroup::Room_Wall);
 
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_Bomb, ECollisionGroup::Player_Body);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_Bomb, ECollisionGroup::Monster_Body);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Player_Body);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Monster_Body);
 }
 
 void APlayGameMode::Tick(float _DeltaTime)

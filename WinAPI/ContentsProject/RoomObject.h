@@ -40,8 +40,8 @@ public:
 
 	void CollisionSetting();
 	void Blocker(AActor* _Actor);
-	void PlayerCollision(class APlayer* _Player, FVector2D _Pos);
-	void MonsterCollision(class AMonster* _Monster, FVector2D _Pos);
+	void BlockPlayerCollision(class APlayer* _Player, FVector2D _Pos);
+	void BlockMonsterCollision(class AMonster* _Monster, FVector2D _Pos);
 
 	// 파괴형 오브젝트
 	virtual void SwitchAnimation();

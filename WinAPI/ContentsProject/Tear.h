@@ -26,6 +26,7 @@ public:
 	void TimeBasedExplosion();
 	void BoundaryExplosion();
 	void MapObjectCollision(AActor* _Other);
+	void ItemImpackCollision(AActor* _Other);
 	void HandleMonsterCollision(AActor* _Other);
 
 	void BeginPlay() override;
