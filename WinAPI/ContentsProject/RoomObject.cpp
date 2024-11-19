@@ -1,6 +1,8 @@
 #include "PreCompile.h"
 #include "RoomObject.h"
 #include <EngineCore/EngineAPICore.h>
+#include "Room.h"
+#include "PlayGameMode.h"
 
 ARoomObject::ARoomObject()
 {
@@ -13,11 +15,25 @@ void ARoomObject::BeginPlay()
 {
 	Super::BeginPlay();
 	CollisionSetting();
+
 }
 
 void ARoomObject::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+	// 플레이어와 다른 맵이면 리턴
+	ARoom* PlayerCurRoom = ARoom::GetCurRoom();
+	if (PlayerCurRoom != ParentRoom) 
+	{
+		return;
+	}
+	// 게임이 일시정지라면 모두 정지
+	if (true == APlayGameMode::IsGamePaused()) 
+	{
+		return;
+	}
+
 
 	DestroyCollision(); // 충돌체를 파괴해야하는 경우
 	SwitchAnimation(); // 눈물, 폭탄 등과 상호작용해서 이미지가 바뀌어야 하는 경우
@@ -188,7 +204,7 @@ bool ARoomObject::IsDeath()
 		IsDead = true;
 
 		CanExplode = false;
-		IsTearDamageable = false; 
+		//IsTearDamageable = false; 
 		IsBlockingPath = false;
 		IsAttackable = false;
 		return true;
@@ -210,6 +226,7 @@ void ARoomObject::DealDamageToPlayer(AActor* _Actor)
 	}
 
 	Player->ApplyDamaged(Player, 1, FVector2D::ZERO);
+
 }
 
 void ARoomObject::PlayerCollision(APlayer* _Player, FVector2D _Pos)

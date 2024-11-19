@@ -132,43 +132,45 @@ void APlayer::ClampPositionToRoom()
 // 데미지 처리, 무적 및 애니메이션 출력 함수
 int APlayer::ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir)
 {
+	if (true == IsHit)
 	{
-		APlayer* Player = dynamic_cast<APlayer*>(_Player);
-		if (nullptr == Player)
-		{
-			return 0;
-		}
-		else if (true == Player->IsInvincible()) // 무적이면 리턴
-		{
-			return 0;
-		}
-
-		if (true == Player->IsDeath())
-		{
-			return 0;
-		}
-
-		Player->ShowHitAnimation(_Player);
-		Player->BeginBlinkEffect();
-
-		IsHit = true; // 피격시 잠시 이동 불가
-
-		KnockbackStartPos = GetActorLocation();
-		UpPos = KnockbackStartPos + FVector2D(0.0f, -50.0f);
-		FVector2D Offset = _Dir;
-		Offset.Normalize();
-		KnockbackDistance = Offset * 20.0f; // 넉백거리 Lerp 적용
-
-		// 0.3초 뒤 이동가능
-		TimeEventer.PushEvent(KnockbackDuration, std::bind(&APlayer::SwitchIsHit, this));
-
-		Heart -= _Att;
-		if (Heart < 0)
-		{
-			Heart = 0;
-		}
-		return Heart;
+		return 0;
 	}
+	APlayer* Player = dynamic_cast<APlayer*>(_Player);
+	if (nullptr == Player)
+	{
+		return 0;
+	}
+	else if (true == Player->IsInvincible()) // 무적이면 리턴
+	{
+		return 0;
+	}
+
+	if (true == Player->IsDeath())
+	{
+		return 0;
+	}
+
+	Player->ShowHitAnimation(_Player);
+	Player->BeginBlinkEffect();
+
+	IsHit = true;
+	Invincibility = true;
+
+	KnockbackStartPos = GetActorLocation();
+	UpPos = KnockbackStartPos + FVector2D(0.0f, -50.0f);
+	FVector2D Offset = _Dir;
+	Offset.Normalize();
+	KnockbackDistance = Offset * 20.0f; // 넉백거리 Lerp 적용
+
+	TimeEventer.PushEvent(1.0f, std::bind(&APlayer::SwitchIsHit, this)); // 데미지를 다시 입기까지 걸리는 시간
+
+	Heart -= _Att;
+	if (Heart < 0)
+	{
+		Heart = 0;
+	}
+	return Heart;
 }
 
 void APlayer::KnockbackTick(float _DeltaTime)
@@ -409,10 +411,6 @@ void APlayer::Reset()
 
 void APlayer::Move(float _DeltaTime)
 {
-	if (true == IsHit)
-	{
-		return;
-	}
 	if (true == CameraMove) // 방 이동을 중에 캐릭터는 움직일 수 없다.
 	{
 		return;

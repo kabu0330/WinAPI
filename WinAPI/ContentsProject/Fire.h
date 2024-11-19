@@ -18,10 +18,13 @@ public:
 	void BeginPlay();
 	void Tick(float _DeltaTime);
 
+	void SwitchAnimation();
+
 protected:
 
 private:
-	USpriteRenderer* FlameHeaderRenderer = nullptr;
 	USpriteRenderer* FlameBaseRenderer = nullptr;
+	FVector2D BodyCollisionScale = FVector2D::ZERO;
+	FVector2D BodyCollisionLocation = FVector2D::ZERO;
 };
 
