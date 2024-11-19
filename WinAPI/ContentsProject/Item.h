@@ -26,6 +26,9 @@ public:
 	void FailToPickup(class APlayer* _Player);
 	void ReverseForce(float _DeltaTime);
 
+	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
+	FVector2D Reflect(FVector2D _Dir);
+
 	virtual void IdleAnimation(); // 기본 애니메이션
 	void HoverAnimation(); // 플레이어가 아이템을 습득하고 공중에 들고 있는 경우
 	void GlowAnimation(); // 플레이어가 아이템을 습득하고 공중에 들고 있을 때 출력할 이펙트 효과
@@ -64,5 +67,7 @@ private:
 	FVector2D BodyCollisionLocation = FVector2D::ZERO;
 
 	FVector2D Force = FVector2D::ZERO;
+
+	bool IsAtBoundary = false;
 };
 

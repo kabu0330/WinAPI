@@ -44,7 +44,7 @@ private:
 	void FollowBoss(float _DeltaTime);
 	AMonster* ParentBoss = nullptr;
 	bool IsFollowBoss = false;
-	float OrbitRadius = 100.0f;
+	float OrbitRadius = 120.0f;
 	float OrbitSpeed = 2.0f;
 	float Angle = 0.0f;
 

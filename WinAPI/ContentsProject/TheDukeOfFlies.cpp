@@ -18,7 +18,7 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	/* 이름     : */ SetName("TheDukeOfFlies");
 	/* 체력     : */ SetHp(110);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(0);
+	/* 이동속도 : */ SetMoveSpeed(50);
 	/* 이동시간 : */ SetMoveDuration(1.0f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
 	/* 탐색범위 : */ SetDetectRange({ 300 , 300 });
@@ -281,7 +281,7 @@ void ATheDukeOfFlies::BeginBlowAwayLogic()
 		FVector2D Dir = Fly->GetActorLocation() - GetActorLocation();
 		Dir.Normalize();
 
-		Fly->GetForce() = Dir * 150.0f;
+		Fly->GetForce() = Dir * 200.0f;
 		
 	}
 }
