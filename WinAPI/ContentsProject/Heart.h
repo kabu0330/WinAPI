@@ -26,7 +26,9 @@ public:
 		{
 			return false;
 		}
-		_Player->SetHp(HealAmount);
+		_Player->SetHp(ItemCount);
+		
+
 		IsUseEnd = true;
 
 		return true;
@@ -35,6 +37,5 @@ public:
 protected:
 
 private:
-	int HealAmount = 0;
 };
 

@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Monster.h"
 #include "RoomObject.h"
+#include "Global.h"
 
 // 설명 : 모든 아이템의 속성을 정의하는 클래스
 class AItem : public AActor
@@ -23,12 +24,12 @@ public:
 	AItem& operator=(AItem&& _Other) noexcept = delete;
 
 	void BeginPlay() override;
-	void Tick(float _DeltaTime);
+	void Tick(float _DeltaTime) override;
 	void CollisionSetting();
 	
-	void RemoveRoomData();
 	void ItemDestroy();
 	
+	virtual void RemoveRoomData(); // 아이템 습득 시 룸에서 렌더러 삭제
 	virtual bool EatFunction(APlayer* _Player) = 0; // 아이템 습득 즉시
 	virtual void UseItem(APlayer* _Player) {}; // 아이템 사용
 	
@@ -37,6 +38,16 @@ public:
 	void DropSuccess();
 	void FailToPickup(class APlayer* _Player);
 	void ReverseForce(float _DeltaTime);
+
+	void DropEffect()
+	{
+		if (false == IsDropEffect)
+		{
+			return;
+		}
+		DropEffectRenderer->SetActive(true);
+		DropEffectRenderer->ChangeAnimation("StarFlash");
+	}
 
 	// 폭탄
 	void AreaWideAttack(AActor* _Actor);
@@ -49,11 +60,6 @@ public:
 		std::string Name = _Name.data();
 		DropRenderer->ChangeAnimation(Name);
 	}
-
-	virtual void IdleAnimation(); // 기본 애니메이션
-	void SpawnAnimation(); 
-	void HoverAnimation(); // 플레이어가 아이템을 습득하고 공중에 들고 있는 경우
-	void GlowAnimation(); // 플레이어가 아이템을 습득하고 공중에 들고 있을 때 출력할 이펙트 효과
 
 	void SetParentRoom(class ARoom* _Parent)
 	{
@@ -91,7 +97,10 @@ protected:
 	class ARoom* ParentRoom = nullptr;
 
 	USpriteRenderer* DropRenderer = nullptr;
+	USpriteRenderer* DropEffectRenderer = nullptr;
 	USpriteRenderer* BodyRenderer = nullptr;
+
+	USpriteRenderer* HeadRenderer = nullptr; // 얼굴 바뀌는 아이템
 
 	U2DCollision* PlayerCollision = nullptr; // 플레이어와 습득 상호작용을 하려면 반드시 만들어야 함
 	U2DCollision* MonsterCollision = nullptr;
@@ -105,11 +114,13 @@ protected:
 	FVector2D BodyCollisionLocation = FVector2D::ZERO;
 
 	FVector2D Force = FVector2D::ZERO;
+	FVector2D DownForce = FVector2D::ZERO;
 
 	bool IsAtBoundary = false;  // 맵 경계면에 위치했냐 -> 반사
 
 	bool IsUseEnd = false;
 	bool IsDrop = false; // 맵에서 자신의 정보를 삭제
+	bool IsDropEffect = false;
 
 private:
 

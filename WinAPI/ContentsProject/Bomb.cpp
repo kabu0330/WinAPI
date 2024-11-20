@@ -87,13 +87,15 @@ void ABomb::Tick(float _DeltaTime)
 
 bool ABomb::EatFunction(APlayer* _Player)
 {
-	int CurItemCount = _Player->GetBombCount();
+	int CurItemCount = _Player->GetItemCount(GetName());
 	if (CurItemCount > 99)
 	{
 		return false; // ¸ø¸ÔÀ¸¸é Æ¨°Ü³½´Ù.
 	}
 
 	IsDrop = true;
+	DropRenderer->SetActive(false); 
+
 	return true;
 }
 

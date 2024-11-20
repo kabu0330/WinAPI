@@ -7,6 +7,7 @@ class Global
 public:
 	static FVector2D WindowSize ;
 	static FVector2D WindowHalfScale;
+	static FVector2D PlayerHeadOffset;
 
 	template<typename EnumType>
 	static FVector2D SwitchEnumToDir(EnumType _Dir)

@@ -1,8 +1,10 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include <EngineCore/2DCollision.h>
+#include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineSound.h>
 #include "Tear.h"
+
 
 // 설명 : 아이작
 class APlayer : public AActor
@@ -136,19 +138,6 @@ public:
 	void ShowDeathReport();
 	void Reset();
 
-	// 아이템
-	bool Drop(class AItem* _Item, int _Count);
-	int CheckPickupItemCount(std::string_view _ItemName);
-	AItem* ReturnItem(std::string_view _ItemName);
-
-	void InputItem();
-
-	// 아이템 습득
-	int GetBombCount()
-	{
-		return CheckPickupItemCount("Bomb");
-	}
-
 
 
 	// Stat
@@ -198,6 +187,43 @@ public:
 	}
 
 	void ReverseForce(float _DeltaTime);
+
+
+	// 아이템
+	bool Drop(class AItem* _Item, int _Count);
+	int CheckPickupItemCount(std::string_view _ItemName);
+	AItem* ReturnItem(std::string_view _ItemName);
+	std::list<AItem*> PlayerItemsList()
+	{
+		return Items;
+	}
+
+	void InputItem();
+
+	// 아이템 습득
+	int GetItemCount(std::string_view _GetName)
+	{
+		return CheckPickupItemCount(_GetName);
+	}
+	void ChangePlayerAnimation(float _Time, std::string_view _Name)
+	{
+		FullRenderer->SetActive(true);
+		FullRenderer->ChangeAnimation(_Name);
+
+		BodyRenderer->SetActive(false);
+		HeadRenderer->SetActive(false);
+
+		IsMovementStopped = true;
+		FinalSpeed = FVector2D::ZERO;
+
+		TimeEventer.PushEvent(_Time, [this]() {
+			FullRenderer->SetActive(false);
+			BodyRenderer->SetActive(true);
+			HeadRenderer->SetActive(true);
+			IsMovementStopped = false;
+			});
+	}
+
 protected:
 
 private:
@@ -287,7 +313,7 @@ private:
 	// 카메라 이동관련 멤버
 	float CameraMoveTime = 0.0f;
 	float LerpAlpha      = 0.0f;
-	bool  CameraMove     = false;
+	bool  IsMovementStopped  = false;
 	FVector2D CameraMoveDir  = FVector2D::ZERO;
 	FVector2D StartCameraPos = FVector2D::ZERO;
 	FVector2D EndCameraPos   = FVector2D::ZERO;

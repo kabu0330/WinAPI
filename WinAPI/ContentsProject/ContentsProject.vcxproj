@@ -220,6 +220,14 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Penny.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Polyphemus.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Poop.h">
       <SubType>
       </SubType>
@@ -353,6 +361,14 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="LoadingScene.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Penny.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Polyphemus.cpp">
       <SubType>
       </SubType>
     </ClCompile>

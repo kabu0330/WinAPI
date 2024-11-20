@@ -9,6 +9,14 @@
 
 AItem::AItem()
 {
+	BodyRendererScale = FVector2D(64, 64);
+	DropEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	DropEffectRenderer->CreateAnimation("StarFlash", "effect_023_starflash.png", 0, 11, 0.1f, true);
+	DropEffectRenderer->SetComponentLocation({ 0, 0 });
+	DropEffectRenderer->SetComponentScale({0, 0});
+	DropEffectRenderer->SetOrder(ERenderOrder::Item_Back);
+	DropEffectRenderer->ChangeAnimation("StarFlash");
+
 
 	DebugOn();
 }
@@ -52,7 +60,6 @@ void AItem::RemoveRoomData()
 	}
 
 	ParentRoom->RemoveItem(this);
-	DropRenderer->SetActive(false);
 	PlayerCollision->SetActive(false);
 }
 
@@ -108,7 +115,7 @@ void AItem::FailToPickup(APlayer* _Player)
 
 void AItem::ReverseForce(float _DeltaTime)
 {
-	FVector2D ReverseForce = -Force;
+	FVector2D ReverseForce = -Force + DownForce;
 	ReverseForce.Normalize();
 
 	Force += ReverseForce * _DeltaTime * 150.0f;
@@ -244,23 +251,6 @@ FVector2D AItem::Reflect(FVector2D _Dir)
 {
 	FVector2D ReflectedForce = Force - (_Dir * (2.0f * Force.Dot(_Dir)));
 	return ReflectedForce;
-}
-
-void AItem::IdleAnimation()
-{
-	
-}
-
-void AItem::SpawnAnimation()
-{
-}
-
-void AItem::HoverAnimation()
-{
-}
-
-void AItem::GlowAnimation()
-{
 }
 
 AItem::~AItem()

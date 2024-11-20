@@ -9,7 +9,6 @@
 #include <EngineBase/EngineMath.h>
 #include <EngineCore/EngineAPICore.h>
 #include <EnginePlatform/EngineInput.h>
-#include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/EngineCoreDebug.h>
 
 #include "ContentsEnum.h"
@@ -24,6 +23,7 @@
 #include "PickupNumberUI.h"
 
 #include "Item.h"
+#include "Heart.h"
 
 int APlayer::Heart = 6;
 int APlayer::HeartMax = 8;
@@ -34,6 +34,7 @@ APlayer::APlayer()
 
 	SetActorLocation(Global::WindowSize.Half()); // 1. Actor의 위치는 의미가 있어도 크기는 의미가 없다.
 	InitPos = GetActorLocation();
+	Global::PlayerHeadOffset = { 0, -32 };
 
 	SpriteSetting(); // 2. 상태에 따른 애니메이션 동작을 정의한다.
 	CollisionSetting(); // 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다. 
@@ -295,9 +296,9 @@ void APlayer::StayBlinkEffect()
 void APlayer::UITick(float _DeltaTime)
 {
 	  PlayerHpToHeart->SetPlayerHp(Heart);
-	PennyPickupNumber->SetValue(0);
+	PennyPickupNumber->SetValue(CheckPickupItemCount("Penny"));
  	 BombPickupNumber->SetValue(CheckPickupItemCount("Bomb"));
-	  KeyPickupNumber->SetValue(0);
+	 // KeyPickupNumber->SetValue(CheckPickupItemCount("Key"));
 }
 
 void APlayer::CollisionSetting()
@@ -438,12 +439,22 @@ bool APlayer::Drop(AItem* _Item, int _Count)
 	}
 
 	// 아이템과 상호작용에 성공하면 아이템 데이터를 저장
+
+	_Item->DropEffect();
+	_Item->DropSuccess(); // 맵에서 아이템 정보 삭제
+	// 하트는 즉시 사용 및 소멸되므로 저장하지 않는다.
+	AHeart* HeartItem = dynamic_cast<AHeart*>(_Item);
+	if (nullptr != HeartItem)
+	{
+		return true;
+	}
+
 	for (int i = 0; i < _Count; i++)
 	{
 		Items.push_back(_Item);
 	}
 	
-	_Item->DropSuccess(); // 맵에서 아이템 정보 삭제
+
 
 	return true;
 }
@@ -469,15 +480,9 @@ int APlayer::CheckPickupItemCount(std::string_view _ItemName)
 	std::list<AItem*>::iterator StartIter = Items.begin();
 	std::list<AItem*>::iterator EndIter = Items.end();
 
-
 	for (; StartIter != EndIter; ++StartIter)
 	{
 		AItem* Item = *StartIter;
-		if (nullptr == Item)
-		{
-			int a = 0;
-			continue;
-		}
 		std::string ItemName = Item->GetName();
 
 		if (FindItemName == ItemName)
@@ -509,7 +514,7 @@ AItem* APlayer::ReturnItem(std::string_view _ItemName)
 
 void APlayer::Move(float _DeltaTime)
 {
-	if (true == CameraMove) // 방 이동을 중에 캐릭터는 움직일 수 없다.
+	if (true == IsMovementStopped) // 방 이동을 중에 캐릭터는 움직일 수 없다.
 	{
 		return;
 	}
@@ -699,30 +704,30 @@ void APlayer::CameraPosMove(float _DeltaTime)
 
 	if (UEngineInput::GetInst().IsDown('H'))
 	{
-		CameraMove = true;
+		IsMovementStopped = true;
 		CameraMoveDir = FVector2D::LEFT;
 		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
 	}
 	if (UEngineInput::GetInst().IsDown('K'))
 	{
-		CameraMove = true;
+		IsMovementStopped = true;
 		CameraMoveDir = FVector2D::RIGHT;
 		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
 	}
 	if (UEngineInput::GetInst().IsDown('U'))
 	{
-		CameraMove = true;
+		IsMovementStopped = true;
 		CameraMoveDir = FVector2D::UP;
 		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
 	}
 	if (UEngineInput::GetInst().IsDown('J'))
 	{
-		CameraMove = true;
+		IsMovementStopped = true;
 		CameraMoveDir = FVector2D::DOWN;
 		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
 	}
 
-	if (true == CameraMove)
+	if (true == IsMovementStopped)
 	{
 		LerpAlpha = CameraMoveTime / 1.0f;
 		FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
@@ -733,7 +738,7 @@ void APlayer::CameraPosMove(float _DeltaTime)
 		CameraMoveTime += _DeltaTime;
 		if (1.0f <= CameraMoveTime)
 		{
-			CameraMove = false;
+			IsMovementStopped = false;
 			CameraMoveTime = 0.0f;
 		}
 	}
@@ -785,7 +790,7 @@ void APlayer::Attack(float _DeltaTime)
 {
 	TearFire = true; // true일 때, Cooldown시간 동안 Attack 함수가 호출될 수 없다.
 
-	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() - HeadRenderer->GetComponentScale().Half().iY() + 10 };
+	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() + Global::PlayerHeadOffset.iY() + 10};
 
 	// 눈물이 좌/우로 번갈아 발사되는 디테일을 위해 Pos를 한번 더 조정한다.
 	if (UEngineInput::GetInst().IsPress(VK_LEFT))
@@ -899,10 +904,9 @@ void APlayer::SpriteSetting()
 	HeadRenderer->CreateAnimation("Head_Attack_Up", "Head.png", { 5, 4, 5 }, 0.12f);
 	HeadRenderer->CreateAnimation("Head_Death", "Death_Head.png", 0, 0, 0.5f);
 
-	HeadRenderer->SetComponentLocation({ 0, -BodyRenderer->GetComponentScale().Half().iY() + 4 });
+	HeadRenderer->SetComponentLocation({ 0, Global::PlayerHeadOffset.iY() + 4});
 	HeadRenderer->SetComponentScale({ 64, 64 });
 	HeadRenderer->ChangeAnimation("Head_Down");
-
 
 	BodyRenderer->SetOrder(ERenderOrder::Player);
 	HeadRenderer->SetOrder(ERenderOrder::PlayerHead);
@@ -912,6 +916,8 @@ void APlayer::SpriteSetting()
 	FullRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	FullRenderer->CreateAnimation("Death", "Isaac.png", { 0, 6, 3 }, {0.2f, 0.12f, 0.1f}, false);
 	FullRenderer->CreateAnimation("Damaged", "Isaac.png", 6, 6, 0.1f);
+	FullRenderer->CreateAnimation("Drop", "Isaac.png", 5, 5, 0.1f);
+	FullRenderer->CreateAnimation("Consume", "Isaac.png", 2, 2, 0.1f);
 	FullRenderer->SetComponentScale({ 128, 128 });
 	FullRenderer->SetOrder(ERenderOrder::Player);
 	FullRenderer->SetPivot({ 0, -20 });

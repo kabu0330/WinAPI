@@ -106,6 +106,12 @@
     <ClInclude Include="Bomb.h">
       <Filter>04_Play\Item\Pickup</Filter>
     </ClInclude>
+    <ClInclude Include="Penny.h">
+      <Filter>04_Play\Item\Pickup</Filter>
+    </ClInclude>
+    <ClInclude Include="Polyphemus.h">
+      <Filter>04_Play\Item\Pickup</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -211,6 +217,12 @@
       <Filter>04_Play\Item\Pickup</Filter>
     </ClCompile>
     <ClCompile Include="Bomb.cpp">
+      <Filter>04_Play\Item\Pickup</Filter>
+    </ClCompile>
+    <ClCompile Include="Penny.cpp">
+      <Filter>04_Play\Item\Pickup</Filter>
+    </ClCompile>
+    <ClCompile Include="Polyphemus.cpp">
       <Filter>04_Play\Item\Pickup</Filter>
     </ClCompile>
   </ItemGroup>

@@ -90,7 +90,9 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("bomb_spark.png", 4, 2);
 	UImageManager::GetInst().CuttingSprite("hot_flames.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("Explosion.png", 5, 3);
-
+	UImageManager::GetInst().CuttingSprite("penny.png", 5, 5);
+	UImageManager::GetInst().CuttingSprite("costume_106_polyphemus.png", 8, 1);
+	UImageManager::GetInst().CuttingSprite("effect_023_starflash.png", 5, 3);
 
 	// Player
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);

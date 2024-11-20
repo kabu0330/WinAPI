@@ -35,6 +35,8 @@
 #include "Item.h"
 #include "Heart.h"
 #include "Bomb.h"
+#include "Penny.h"
+#include "Polyphemus.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -79,13 +81,13 @@ void APlayGameMode::Spawn()
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
-	BaseRoom->CreateMonster<AAttackFly>({ 140, 0 });
-	BaseRoom->CreateMonster<AAttackFly>({ 160, 0 });
-	BaseRoom->CreateMonster<AAttackFly>({ 150, -30 });
-	BaseRoom->CreateMonster<AAttackFly>({ 150, -100 });
-	BaseRoom->CreateMonster<AAttackFly>({ 150, 30 });
-	BaseRoom->CreateMonster<AAttackFly>({ 150, 50 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 140, 0 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 160, 0 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 150, -30 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 150, -100 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 150, 30 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 150, 50 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ 150, 100 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ 50, 50 });
 	//MinionRoom0->CreateMonster<AFly>({ 100, 30 });
@@ -113,13 +115,14 @@ void APlayGameMode::Spawn()
 	//ARoomObject* Poop = BaseRoom->CreateObject<AFire>({ 100, 0 });
 	
 	// Item
-	AItem* Heart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
-	AItem* Heart2 = BaseRoom->CreateItem<AHeart>(nullptr, { 0, 100 });
+	//AItem* Heart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
+	AItem* Heart2 = BaseRoom->CreateItem<AHeart>(nullptr, { -100, -100 });
 	AItem* Bomb = BaseRoom->CreateItem<ABomb>(nullptr, { 0, -100 });
+	AItem* Penny = BaseRoom->CreateItem<APenny>(nullptr, { -50, 100 });
 	//AItem* HalfHeart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
 	//HalfHeart->ChangeAnimation("HalfHeart");
 
-
+	AItem* Polyphemus = BaseRoom->CreateItem<APolyphemus>(nullptr, { 100, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
