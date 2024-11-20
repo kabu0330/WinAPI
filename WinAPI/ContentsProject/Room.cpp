@@ -31,6 +31,31 @@ ARoom::ARoom()
 	DebugOn();
 }
 
+void ARoom::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Player = GetWorld()->GetPawn();
+
+	// 맵 이름에 따라 이미지를 바꾼다.
+	if ("BaseRoom" == GetName())
+	{
+		ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
+		ControlsRenderer->SetSprite("controls.png");
+		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowHalfScale.iX(), GetActorLocation().iY() - Global::WindowHalfScale.iY() - 20 });
+		ControlsRenderer->SetComponentScale({ 655, 145 }); // 385, 85
+		ControlsRenderer->SetOrder(ERenderOrder::Controls);
+	}
+	else if ("BossRoom" == GetName())
+	{
+		RoomRenderer->SetSprite("Room_03.png");
+	}
+	else // 베이스룸을 제외한 맵의 이미지를 바꿀 수 있다.
+	{
+		RoomRenderer->SetSprite("Room_02.png");
+	}
+}
+
 void ARoom::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
@@ -89,6 +114,9 @@ void ARoom::Warp(float _DeltaTime)
 		return;
 	}
 
+	APlayer* DynamicPlayer = dynamic_cast<APlayer*>(Player);
+	DynamicPlayer->SetDir(FVector2D::ZERO);
+
 	// 플레이어 위치 이동
 	WarpPlayerSetting(); 
 
@@ -105,7 +133,7 @@ void ARoom::Warp(float _DeltaTime)
 		CurRoom = Rooms[MoveDir];
 
 		// 카메라 이동이 완료되고도, 잠시동안 플레이어의 움직임을 제한
-		float PlayerMovementCooldown = CameraLerpTime + 0.1f;
+		float PlayerMovementCooldown = CameraLerpTime + 0.3f;
 		if (PlayerMovementCooldown < CameraMoveTime)
 		{
 			CameraMove = false;
@@ -129,10 +157,10 @@ void ARoom::WarpPlayerSetting()
 		Offset = FVector2D(GetActorScale().Half().iX() + 180, 0);
 		break;
 	case RoomDir::UP:
-		Offset = -FVector2D(0, GetActorScale().Half().iY() + 110);
+		Offset = -FVector2D(0, GetActorScale().Half().iY() + 120);
 		break;
 	case RoomDir::DOWN:
-		Offset = FVector2D(0, GetActorScale().Half().iY() + 110);
+		Offset = FVector2D(0, GetActorScale().Half().iY() + 120);
 		break;
 	default:
 		break;
@@ -140,6 +168,10 @@ void ARoom::WarpPlayerSetting()
 
 	TargetPlayerPos = GetActorLocation() + Offset;
 	Player->SetActorLocation(TargetPlayerPos);
+
+	TemporarilyHideDoorCollision();
+	TimeEventer.PushEvent(1.0f, [this]() {IsWarp = false; });
+
 }
 
 bool ARoom::IsLinking(ARoom* _Room)
@@ -327,6 +359,10 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 
 void ARoom::OpenTheDoor()
 {
+	if (true == IsWarp)
+	{
+		return;
+	}
 	if (0 != GetAliveMonsterCount())
 	{
 		return;
@@ -425,28 +461,22 @@ std::string ARoom::SwitchEnumToString(RoomDir _Dir)
 	}
 }
 
-void ARoom::BeginPlay()
+void ARoom::TemporarilyHideDoorCollision()
 {
-	Super::BeginPlay();
+	IsWarp = true;
 
-	Player = GetWorld()->GetPawn();
+	std::map<RoomDir, U2DCollision*>::iterator StartIter = DoorCollisionMap.begin();
+	std::map<RoomDir, U2DCollision*>::iterator EndIter = DoorCollisionMap.end();
 
-	// 맵 이름에 따라 이미지를 바꾼다.
-	if ("BaseRoom" == GetName())
+	for (; StartIter != EndIter; ++StartIter)
 	{
-		ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
-		ControlsRenderer->SetSprite("controls.png");
-		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowHalfScale.iX(), GetActorLocation().iY() - Global::WindowHalfScale.iY() - 20 });
-		ControlsRenderer->SetComponentScale({ 655, 145 }); // 385, 85
-		ControlsRenderer->SetOrder(ERenderOrder::Controls);
-	}
-	else if ("BossRoom" == GetName())
-	{
-		RoomRenderer->SetSprite("Room_03.png");
-	}
-	else // 베이스룸을 제외한 맵의 이미지를 바꿀 수 있다.
-	{
-		RoomRenderer->SetSprite("Room_02.png");
+		RoomDir Dir = StartIter->first;
+		U2DCollision* Door = StartIter->second;
+
+		if (nullptr != Door)
+		{
+			Door->SetComponentScale({ 0, 0 });
+		}
 	}
 }
 

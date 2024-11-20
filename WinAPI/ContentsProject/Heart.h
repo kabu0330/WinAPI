@@ -21,12 +21,12 @@ public:
 	bool EatFunction(APlayer* _Player) override
 	{
 		int CurHp = _Player->GetHp();
-		int MaxHp = _Player->GetPlayerHptMax();
+		int MaxHp = _Player->GetHptMax();
 		if (CurHp == MaxHp)
 		{
 			return false;
 		}
-		_Player->SetHp(ItemCount);
+		_Player->AddHp(ItemCount);
 		
 
 		IsUseEnd = true;

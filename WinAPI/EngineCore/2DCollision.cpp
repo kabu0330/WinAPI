@@ -40,7 +40,10 @@ void U2DCollision::ComponentTick(float _DeltaTime)
 		FTransform ActorTransform = GetActorTransform();
 		FVector2D CameraPos = GetActor()->GetWorld()->GetCameraPos();
 
-		ActorTransform.Location -= CameraPos;
+		if (true == IsCameraEffect)
+		{
+			ActorTransform.Location -= CameraPos;
+		}
 
 		switch (CollisionType)
 		{

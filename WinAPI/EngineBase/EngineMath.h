@@ -90,6 +90,12 @@ public:
 		return Result;
 	}
 
+	template <typename DataType>
+	static DataType Lerp(DataType A, DataType B, DataType Alpha)
+	{
+		return A * (1 - Alpha) + B * Alpha;
+	}
+
 	// Àý´ñ°ª
 	static FVector2D Abs(FVector2D& _Vector);
 	static int       Abs(int&   _Value);

@@ -4,9 +4,11 @@
 
 enum class PivotType
 {
-	CENTER,
-	BOT,
-	TOP
+	Center,
+	Left,
+	Bot,
+	Top,
+	LeftTop,
 };
 
 // 설명 : 화면에 이미지를 띄우기 위한 모든 기능을 수행
@@ -96,10 +98,7 @@ public:
 		IsCameraEffect = _Value;
 	}
 
-	void SetPivot(FVector2D _Pivot)
-	{
-		Pivot = _Pivot;
-	}
+	void SetPivot(FVector2D _Value);
 
 	void SetPivotType(PivotType _Type);
 
@@ -151,7 +150,6 @@ private:
 	bool IsCameraEffect = true;
 	float CameraEffectScale = 1.0f;
 	float CurAnimationSpeed = 1.0f;
-	FVector2D Pivot = FVector2D::ZERO;
 
 	class UEngineSprite* Sprite = nullptr;
 	std::string CurAnimationName = "";
@@ -161,5 +159,7 @@ private:
 
 	// 다이렉트는 모든 색상을 0~1.0f로 표현한다.
 	unsigned char Alpha = 255;
+
+	FVector2D Pivot = FVector2D(0.5f, 0.5f);
 };
 

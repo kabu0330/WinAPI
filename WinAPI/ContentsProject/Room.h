@@ -40,9 +40,11 @@ public:
 	bool InterLinkRoom(ARoom* _Room, RoomDir _Dir);
 	ARoom* LinkRoom(ARoom* _Room, RoomDir _Dir);
 	void AddDoor(RoomDir _Dir, ARoom* ConnectedRoom);
+
 	void OpenTheDoor();
 	void CloseTheDoor();
 	std::string SwitchEnumToString(RoomDir _Dir);
+	void TemporarilyHideDoorCollision();
 
 	void DoorSpriteSetting();
 	void SpriteSetting();
@@ -209,6 +211,8 @@ private:
 	std::list<AMonster*> Monsters;
 	std::list<ARoomObject*> Objects;
 	std::list<AItem*> Items;
+
+	bool IsWarp = false; // 잠깐 워프 불가능하게 충돌체를 숨긴다.
 
 	// 카메라 이동관련 멤버
 	AActor* Player = nullptr;

@@ -388,9 +388,9 @@ void APlayer::SpiritAnimation()
 	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
 
 	float SpiritSpeed = 100.0f;
-	Dir = FVector2D::UP;
-	BodyRenderer->AddComponentLocation(Dir * SpiritSpeed * DeltaTime);
-	HeadRenderer->AddComponentLocation(Dir * SpiritSpeed * DeltaTime);
+	Direction = FVector2D::UP;
+	BodyRenderer->AddComponentLocation(Direction * SpiritSpeed * DeltaTime);
+	HeadRenderer->AddComponentLocation(Direction * SpiritSpeed * DeltaTime);
 }
 
 void APlayer::ShowDeathReport()
@@ -429,7 +429,7 @@ void APlayer::Reset()
 	APlayGameMode::SetGamePaused(false);
 	IsDead = false;
 	IsResetReady = false;
-	Dir = FVector2D::ZERO;
+	Direction = FVector2D::ZERO;
 }
 
 bool APlayer::Drop(AItem* _Item, int _Count)
@@ -531,12 +531,12 @@ void APlayer::Move(float _DeltaTime)
 
 		if (true == ProcessMovementInput())
 		{
-			if (FVector2D::ZERO != Dir)
+			if (FVector2D::ZERO != Direction)
 			{
-				Dir.Normalize();
+				Direction.Normalize();
 			}
 
-			TargetSpeed = Dir * SpeedMax;
+			TargetSpeed = Direction * SpeedMax;
 
 			const float FinalSpeedLength = FinalSpeed.Length(); 
 			FVector2D CurDir = FVector2D::ZERO;
@@ -552,7 +552,7 @@ void APlayer::Move(float _DeltaTime)
 			// 기본 출발속도를 주어 최저 속도를 보장
 			if (30.0f > FinalSpeed.Length())
 			{
-				FinalSpeed += Dir * (SpeedMax * 0.2f); 
+				FinalSpeed += Direction * (SpeedMax * 0.2f); 
 			}
 
 			// 방향전환
@@ -561,11 +561,11 @@ void APlayer::Move(float _DeltaTime)
 				// 속도가 낮을 때 새로운 방향으로 이동할 경우 부드럽게 이동
 				FinalSpeed = FVector2D::Lerp(FinalSpeed, TargetSpeed, MoveAcc * DeltaTime);
 			}
-			else if (FVector2D::DotProduct(CurDir, Dir) < 0.0f)
+			else if (FVector2D::DotProduct(CurDir, Direction) < 0.0f)
 			{
 				// 반대 방향이라면 기존속도의 영향을 빠르게 줄이고 최저 속도를 보장하여 답답하지 않게 함
 				FinalSpeed = FVector2D::Lerp(FinalSpeed, FVector2D::ZERO, MoveAcc * DeltaTime);
-				FinalSpeed += Dir * (SpeedMax * 0.3f);
+				FinalSpeed += Direction * (SpeedMax * 0.3f);
 			}
 			else // 같은 방향이라면 그대로
 			{
@@ -644,30 +644,30 @@ void APlayer::Move(float _DeltaTime)
 
 bool APlayer::ProcessMovementInput()
 {
-	Dir = FVector2D::ZERO;
+	Direction = FVector2D::ZERO;
 	IsMove = false;
 
 	if (true == UEngineInput::GetInst().IsPress('A'))
 	{
-		Dir += FVector2D::LEFT;
+		Direction += FVector2D::LEFT;
 		BodyState = LowerState::LEFT;
 		IsMove = true;
 	}
 	if (true == UEngineInput::GetInst().IsPress('D'))
 	{
-		Dir += FVector2D::RIGHT;
+		Direction += FVector2D::RIGHT;
 		BodyState = LowerState::RIGHT;
 		IsMove = true;
 	}
 	if (true == UEngineInput::GetInst().IsPress('W'))
 	{
-		Dir += FVector2D::UP;
+		Direction += FVector2D::UP;
 		BodyState = LowerState::UP;
 		IsMove = true;
 	}
 	if (true == UEngineInput::GetInst().IsPress('S'))
 	{
-		Dir += FVector2D::DOWN;
+		Direction += FVector2D::DOWN;
 		BodyState = LowerState::DOWN;
 		IsMove = true;
 	}

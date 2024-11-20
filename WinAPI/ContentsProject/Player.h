@@ -141,9 +141,13 @@ public:
 
 
 	// Stat
-	static int GetPlayerHptMax() 
+	static int GetHptMax() 
 	{
 		return HeartMax;
+	}
+	static void AddHpMax(int _Value)
+	{
+		HeartMax += _Value;
 	}
 
 	int GetAtt() const
@@ -151,7 +155,7 @@ public:
 		return Att;
 	}
 
-	int ApplyAtt(int _Value)
+	int AddAtt(int _Value)
 	{
 		return Att += _Value;
 	}
@@ -160,13 +164,26 @@ public:
 	{
 		return Heart;
 	}
-	void SetHp(int _Value)
+	void AddHp(int _Value)
 	{
 		if (Heart >= HeartMax)
 		{
 			Heart = HeartMax;
 		}
 		Heart += _Value;
+	}
+
+	float GetSpeed() const
+	{
+		return SpeedMax;
+	}
+	void AddSpeedMax(float _Value)
+	{
+		SpeedMax += _Value;
+	}
+	void SetDir(FVector2D _Dir)
+	{
+		Direction = _Dir;
 	}
 
 	void SwitchIsHit()
@@ -235,7 +252,7 @@ private:
 
 	// Stat
 	// Speed : MoveAcc
-	FVector2D Dir = FVector2D::ZERO;
+	FVector2D Direction = FVector2D::ZERO;
 	FVector2D FinalSpeed = FVector2D::ZERO;
 	FVector2D TargetSpeed = FVector2D::ZERO;
 	float MoveAcc = 5.0f;

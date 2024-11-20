@@ -35,7 +35,14 @@ void USpriteRenderer::Render(float _DeltaTime)
 		Trans.Location = Trans.Location - (Level->CameraPos * CameraEffectScale);
 	}
 
-	Trans.Location += Pivot;
+	FVector2D PivotRealScale;
+
+	//                 소수점 버림
+	PivotRealScale.X = std::floorf((0.5f - Pivot.X) * Trans.Scale.X);
+	PivotRealScale.Y = std::floorf((0.5f - Pivot.Y) * Trans.Scale.Y);
+
+	Trans.Location += PivotRealScale;
+
 
 
 	if (Alpha == 255)
@@ -68,6 +75,7 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 	// 일단 여기서 다 짠다.
 	if (nullptr != CurAnimation)
 	{
+		CurAnimation->IsEnd = false;
 		std::vector<int>& Indexs = CurAnimation->FrameIndex;
 		std::vector<float>& Times = CurAnimation->FrameTime;
 
@@ -328,7 +336,7 @@ void USpriteRenderer::SetAnimationEvent(std::string_view _AnimationName, int _Fr
 
 void USpriteRenderer::SetPivotType(PivotType _Type)
 {
-	if (PivotType::CENTER == _Type)
+	if (PivotType::Center == _Type)
 	{
 		Pivot = FVector2D::ZERO;
 		return;
@@ -340,17 +348,23 @@ void USpriteRenderer::SetPivotType(PivotType _Type)
 		return;
 	}
 
-	UEngineSprite::USpriteData CurData = Sprite->GetSpriteData(CurIndex);
-
 	switch (_Type)
 	{
-	case PivotType::BOT:
-		Pivot.X = 0.0f;
-		Pivot.Y -= CurData.Transform.Scale.Y * 0.5f;
+	case PivotType::Center:
+		Pivot.X = 0.5f;
+		Pivot.Y = 0.5f;
 		break;
-	case PivotType::TOP:
+	case PivotType::Bot:
+		Pivot.X = 0.5f;
+		Pivot.Y = 1.0f;
+		break;
+	case PivotType::Top:
+		Pivot.X = 0.5f;
+		Pivot.Y = 0.0f;
+		break;
+	case PivotType::LeftTop:
 		Pivot.X = 0.0f;
-		Pivot.Y += CurData.Transform.Scale.Y * 0.5f;
+		Pivot.Y = 0.0f;
 		break;
 	default:
 		break;
@@ -360,4 +374,9 @@ void USpriteRenderer::SetPivotType(PivotType _Type)
 void USpriteRenderer::SetCameraEffectScale(float _Effect)
 {
 	CameraEffectScale = _Effect;
+}
+
+void USpriteRenderer::SetPivot(FVector2D _Value)
+{
+	Pivot = _Value;
 }
