@@ -13,10 +13,13 @@ ABomb::ABomb()
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 1;
 	Att = 60; // 몬스터에게 가할 피해
+	FVector2D UnversalScale = { 150, 150 };
+
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Bomb", "bomb.png", 8, 8, 0.3f, false);
-	BodyRenderer->CreateAnimation("HalfHeart", "HalfHeart", 0, 3, 0.3f);
+	BodyRenderer->CreateAnimation("BombTimer2.0", "Bomb", { 0, 1, 2, 1, 0, 3 }, 0.2f);
+	BodyRenderer->CreateAnimation("BombTimer1.0", "Bomb", { 0, 1, 2, 1, 0, 3 }, 0.05f);
 	BodyRenderer->SetComponentLocation({ 0, 0 });
 	BodyRenderer->SetComponentScale(BodyRendererScale);
 	BodyRenderer->SetOrder(ERenderOrder::Item);
@@ -24,31 +27,20 @@ ABomb::ABomb()
 	BodyRenderer->SetActive(true);
 
 	BobmSparkEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BobmSparkEffectRenderer->CreateAnimation("Bomb", "bomb.png", 8, 8, 0.3f, false);
-	BobmSparkEffectRenderer->CreateAnimation("HalfHeart", "HalfHeart", 0, 3, 0.3f);
-	BobmSparkEffectRenderer->SetComponentLocation({ 0, 0 });
-	BobmSparkEffectRenderer->SetComponentScale(BodyRendererScale);
-	BobmSparkEffectRenderer->SetOrder(ERenderOrder::Item);
-	BobmSparkEffectRenderer->ChangeAnimation("Bomb");
+	BobmSparkEffectRenderer->CreateAnimation("Spark", "bomb_spark.png", 0, 7, 0.2f);
+	BobmSparkEffectRenderer->SetComponentLocation({ -16, -16 });
+	BobmSparkEffectRenderer->SetComponentScale(BodyRendererScale * 0.3f);
+	BobmSparkEffectRenderer->SetOrder(ERenderOrder::Item_Front);
+	BobmSparkEffectRenderer->ChangeAnimation("Spark");
 	BobmSparkEffectRenderer->SetActive(true);
 
-	FlamesEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	FlamesEffectRenderer->CreateAnimation("Bomb", "bomb.png", 8, 8, 0.3f, false);
-	FlamesEffectRenderer->CreateAnimation("HalfHeart", "HalfHeart", 0, 3, 0.3f);
-	FlamesEffectRenderer->SetComponentLocation({ 0, 0 });
-	FlamesEffectRenderer->SetComponentScale(BodyRendererScale);
-	FlamesEffectRenderer->SetOrder(ERenderOrder::Item);
-	FlamesEffectRenderer->ChangeAnimation("Bomb");
-	FlamesEffectRenderer->SetActive(true);
-
 	ExplosionEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	ExplosionEffectRenderer->CreateAnimation("Bomb", "bomb.png", 8, 8, 0.3f, false);
-	ExplosionEffectRenderer->CreateAnimation("HalfHeart", "HalfHeart", 0, 3, 0.3f);
-	ExplosionEffectRenderer->SetComponentLocation({ 0, 0 });
-	ExplosionEffectRenderer->SetComponentScale(BodyRendererScale);
-	ExplosionEffectRenderer->SetOrder(ERenderOrder::Item);
-	ExplosionEffectRenderer->ChangeAnimation("Bomb");
-	ExplosionEffectRenderer->SetActive(true);
+	ExplosionEffectRenderer->CreateAnimation("Explosion", "Explosion.png", 0, 11, 0.1f, false);
+	ExplosionEffectRenderer->SetComponentLocation({ 0, 50 });
+	ExplosionEffectRenderer->SetComponentScale(UnversalScale * 4);
+	ExplosionEffectRenderer->SetOrder(ERenderOrder::ItemEffect);
+	ExplosionEffectRenderer->ChangeAnimation("Explosion");
+	ExplosionEffectRenderer->SetActive(false);
 
 
 	ImpactCollision = CreateDefaultSubObject<U2DCollision>();
@@ -59,8 +51,8 @@ ABomb::ABomb()
 
 	UniversalCollision = CreateDefaultSubObject<U2DCollision>();
 	UniversalCollision->SetComponentLocation({ 0, 0 });
-	UniversalCollision->SetComponentScale({150, 150});
-	UniversalCollision->SetCollisionGroup(ECollisionGroup::Item);
+	UniversalCollision->SetComponentScale(UnversalScale);
+	UniversalCollision->SetCollisionGroup(ECollisionGroup::Item_UniversalHit);
 	UniversalCollision->SetCollisionType(ECollisionType::Rect);
 	UniversalCollision->SetActive(false);
 }
@@ -70,7 +62,17 @@ void ABomb::BeginPlay()
 	Super::BeginPlay();
 	AItem::BeginPlay();
 	BombCollisionSetting();
-	TimeEventer.PushEvent(3.0f, std::bind(&ABomb::Explosion, this));
+
+	TimeEventer.PushEvent(0.8f, [this]() {
+		BodyRenderer->ChangeAnimation("BombTimer2.0"); 
+		BodyRenderer->SetComponentScale(BodyRendererScale * 0.25); 
+		BobmSparkEffectRenderer->SetComponentLocation({ -12, -14 }); });
+
+	TimeEventer.PushEvent(2.5f, [this]() {
+		BodyRenderer->ChangeAnimation("BombTimer1.0"); 
+		BodyRenderer->SetComponentScale(BodyRendererScale * 0.25); });
+
+	TimeEventer.PushEvent(4.0f, std::bind(&ABomb::Explosion, this));
 }
 
 void ABomb::Tick(float _DeltaTime)
@@ -93,9 +95,8 @@ void ABomb::Explosion()
 
 	BodyRenderer->SetActive(false);
 	BobmSparkEffectRenderer->SetActive(false);
-	FlamesEffectRenderer->SetActive(false);
 
-	Destroy(1.0f);
+	Destroy(1.5f);
 }
 
 ABomb::~ABomb()

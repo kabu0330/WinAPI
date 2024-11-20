@@ -88,7 +88,8 @@ void ContentsCore::SpriteSetting()
 	// Item
 	UImageManager::GetInst().CuttingSprite("bomb.png", 5, 6);
 	UImageManager::GetInst().CuttingSprite("bomb_spark.png", 4, 2);
-	UImageManager::GetInst().CuttingSprite("hot_flames.png", 4, 2);
+	UImageManager::GetInst().CuttingSprite("hot_flames.png", 5, 2);
+	UImageManager::GetInst().CuttingSprite("Explosion.png", 5, 3);
 
 
 	// Player
@@ -148,6 +149,11 @@ void ContentsCore::FolderSetting()
 	ItemHalfHeart.MoveParentToDirectory("Resources//Image//Play//Item");
 	ItemHalfHeart.Append("HalfHeart");
 	UImageManager::GetInst().LoadFolder(ItemHalfHeart.GetPathToString());
+
+	UEngineDirectory Bomb;
+	Bomb.MoveParentToDirectory("Resources//Image//Play//Item");
+	Bomb.Append("Bomb");
+	UImageManager::GetInst().LoadFolder(Bomb.GetPathToString());
 }
 
 void ContentsCore::ResourceLoad()

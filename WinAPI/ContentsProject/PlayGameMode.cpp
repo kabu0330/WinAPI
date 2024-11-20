@@ -79,7 +79,7 @@ void APlayGameMode::Spawn()
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	//MinionRoom0->CreateMonster<AAttackFly>({ 150, 0 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ 150, 100 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ 50, 50 });
 	//MinionRoom0->CreateMonster<AFly>({ 100, 30 });
@@ -94,7 +94,7 @@ void APlayGameMode::Spawn()
 	//MinionRoom3->CreateMonster<APooter>({ 250, 50 });
 	//BossRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 	
-	BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
+	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 
 	// Object
 	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});
@@ -151,6 +151,8 @@ void APlayGameMode::CollisionGroupLinkSetting()
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Player_Body);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Monster_Body);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Monster_FlyingBody);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Monster_FlyingBodyNonCollision);
 }
 
 void APlayGameMode::Tick(float _DeltaTime)

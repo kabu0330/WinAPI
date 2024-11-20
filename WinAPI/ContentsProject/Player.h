@@ -3,6 +3,7 @@
 #include <EngineCore/2DCollision.h>
 #include <EnginePlatform/EngineSound.h>
 #include "Tear.h"
+#include "Item.h"
 
 // 설명 : 아이작
 class APlayer : public AActor

@@ -25,7 +25,6 @@ protected:
 
 private:
 	USpriteRenderer* BobmSparkEffectRenderer = nullptr;
-	USpriteRenderer* FlamesEffectRenderer = nullptr;
 	USpriteRenderer* ExplosionEffectRenderer = nullptr;
 
 };

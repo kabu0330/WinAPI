@@ -1,8 +1,8 @@
 #pragma once
 #include <EngineCore/Actor.h>
 #include "BloodTear.h"
-#include "Player.h"
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/2DCollision.h>
 #include <EngineBase/EngineRandom.h>
 #include <numbers>
 
@@ -260,10 +260,10 @@ public:
 	}
 
 protected:
-	class U2DCollision* BodyCollision = nullptr;
+	U2DCollision* BodyCollision = nullptr;
 	class USpriteRenderer* BodyRenderer = nullptr;
 
-	class U2DCollision* HeadCollision = nullptr;
+	U2DCollision* HeadCollision = nullptr;
 	FVector2D HeadCollisionScale = FVector2D::ZERO;
 
 	MonsterState State = MonsterState::LEFT;
@@ -329,7 +329,7 @@ protected:
 	FVector2D TearDir = FVector2D::ZERO;
 
 	class ARoom* ParentRoom = nullptr;
-	APlayer* Player = nullptr;
+	class APlayer* Player = nullptr;
 
 
 	// Random
