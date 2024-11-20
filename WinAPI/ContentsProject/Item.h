@@ -24,10 +24,19 @@ public:
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime);
+	void CollisionSetting();
+	
+	void RemoveRoomData();
+	
+	virtual void EatFunction(APlayer* _Player) {}; // 아이템 습득 즉시
+	virtual void UseItem() {}; // 아이템 사용
 	
 	// 드랍, 드랍실패
-	void CollisionSetting();
 	void Drop(AActor* _Player);
+	void DropSuccess()
+	{
+		IsDrop = true;
+	}
 	void FailToPickup(class APlayer* _Player);
 	void ReverseForce(float _DeltaTime);
 
@@ -75,6 +84,7 @@ public:
 		return nullptr;
 	}
 
+
 protected:
 	int ItemCount = 0;
 	int Att = 0;
@@ -97,7 +107,10 @@ protected:
 
 	FVector2D Force = FVector2D::ZERO;
 
-	bool IsAtBoundary = false; 
+	bool IsAtBoundary = false;  // 맵 경계면에 위치했냐 -> 반사
+
+	bool IsUseEnd = false;
+	bool IsDrop = false; // 맵에서 자신의 정보를 삭제
 
 private:
 

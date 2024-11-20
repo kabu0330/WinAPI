@@ -107,11 +107,11 @@ void APlayGameMode::Spawn()
 	//ARoomObject* Poop = BaseRoom->CreateObject<AFire>({ 100, 0 });
 	
 	// Item
-	//AItem* Heart = BaseRoom->CreateItem<AHeart>(nullptr, { 100, 0 });
+	AItem* Heart = BaseRoom->CreateItem<AHeart>(nullptr, { 100, 0 });
 	//AItem* HalfHeart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
 	//HalfHeart->ChangeAnimation("HalfHeart");
 
-	AItem* Bomb = BaseRoom->CreateItem<ABomb>(nullptr, { 100, 0 });
+	//AItem* Bomb = BaseRoom->CreateItem<ABomb>(nullptr, { 100, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()

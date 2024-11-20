@@ -3,7 +3,6 @@
 #include <EngineCore/2DCollision.h>
 #include <EnginePlatform/EngineSound.h>
 #include "Tear.h"
-#include "Item.h"
 
 // 설명 : 아이작
 class APlayer : public AActor
@@ -160,6 +159,14 @@ public:
 	{
 		return Heart;
 	}
+	void SetHp(int _Value)
+	{
+		if (Heart >= HeartMax)
+		{
+			Heart = HeartMax;
+		}
+		Heart += _Value;
+	}
 
 	void SwitchIsHit()
 	{
@@ -223,8 +230,14 @@ private:
 	void FadeOut();
 	void SpiritFadeOut();
 
+	void AddItem(class AItem* _Item)
+	{
+		_Item->EatFunction(this);
+	}
+
 
 	// Item
+	std::list<class AItem*> Items;
 	int PennyCount = 0;
 	int BombCount = 1;
 	int KeyCount = 1;

@@ -18,9 +18,15 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime);
 
+	void EatFunction(APlayer* _Player) override
+	{
+		_Player->SetHp(HealAmount);
+		IsUseEnd = true;
+	}
+
 protected:
 
 private:
-
+	int HealAmount = 1;
 };
 

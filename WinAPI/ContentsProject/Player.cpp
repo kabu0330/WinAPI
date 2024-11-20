@@ -430,6 +430,9 @@ void APlayer::Reset()
 
 bool APlayer::Drop(AItem* _Item, int _Count)
 {
+	_Item->DropSuccess(); // 맵에서 아이템 정보 삭제
+
+	AddItem(_Item);
 	return false;
 }
 

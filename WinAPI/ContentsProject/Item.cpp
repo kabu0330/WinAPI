@@ -35,8 +35,21 @@ void AItem::Tick(float _DeltaTime)
 
 	Super::Tick(_DeltaTime);
 
+
 	ReverseForce(_DeltaTime);
+
 	ClampPositionToRoom();
+	RemoveRoomData();
+}
+
+void AItem::RemoveRoomData()
+{
+	if (false == IsDrop)
+	{
+		return;
+	}
+
+	ParentRoom->RemoveItem(this);
 }
 
 void AItem::CollisionSetting()
