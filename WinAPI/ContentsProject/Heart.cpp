@@ -11,16 +11,16 @@ AHeart::AHeart()
 	SetName("Heart");
 	BodyRendererScale = { 64, 64 };
 	BodyCollisionScale = { 32, 32 };
-	HealAmount = 1;
+	HealAmount = 2;
 
-	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BodyRenderer->CreateAnimation("Heart", "Heart", 0, 3, 0.3f);
-	BodyRenderer->CreateAnimation("HalfHeart", "HalfHeart", 0, 3, 0.3f);
-	BodyRenderer->SetComponentLocation({ 0, 0 });
-	BodyRenderer->SetComponentScale(BodyRendererScale);
-	BodyRenderer->SetOrder(ERenderOrder::Item);
-	BodyRenderer->ChangeAnimation("Heart");
-	BodyRenderer->SetActive(true);
+	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	DropRenderer->CreateAnimation("Heart", "Heart", 0, 3, 0.3f);
+	DropRenderer->CreateAnimation("HalfHeart", "HalfHeart", 0, 3, 0.3f);
+	DropRenderer->SetComponentLocation({ 0, 0 });
+	DropRenderer->SetComponentScale(BodyRendererScale);
+	DropRenderer->SetOrder(ERenderOrder::Item);
+	DropRenderer->ChangeAnimation("Heart");
+	DropRenderer->SetActive(true);
 
 	PlayerCollision = CreateDefaultSubObject<U2DCollision>();
 	PlayerCollision->SetComponentLocation({ 0, 0 });

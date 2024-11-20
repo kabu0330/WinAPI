@@ -40,8 +40,10 @@ void AItem::Tick(float _DeltaTime)
 
 	ClampPositionToRoom();
 	RemoveRoomData();
+	ItemDestroy();
 }
 
+// Room에 저장된 Item 정보는 삭제한다.
 void AItem::RemoveRoomData()
 {
 	if (false == IsDrop)
@@ -50,6 +52,17 @@ void AItem::RemoveRoomData()
 	}
 
 	ParentRoom->RemoveItem(this);
+	DropRenderer->SetActive(false);
+	PlayerCollision->SetActive(false);
+}
+
+void AItem::ItemDestroy()
+{
+	if (false == IsUseEnd)
+	{
+		return;
+	}
+	Destroy();
 }
 
 void AItem::CollisionSetting()
@@ -78,6 +91,11 @@ void AItem::Drop(AActor* _Player)
 		// 아이템을 먹지 못하고 튕겨내야 함
 		FailToPickup(Player);
 	}
+}
+
+void AItem::DropSuccess()
+{
+	IsDrop = true;
 }
 
 void AItem::FailToPickup(APlayer* _Player)

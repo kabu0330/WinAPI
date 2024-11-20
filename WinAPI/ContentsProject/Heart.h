@@ -18,15 +18,23 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime);
 
-	void EatFunction(APlayer* _Player) override
+	bool EatFunction(APlayer* _Player) override
 	{
+		int CurHp = _Player->GetHp();
+		int MaxHp = _Player->GetPlayerHptMax();
+		if (CurHp == MaxHp)
+		{
+			return false;
+		}
 		_Player->SetHp(HealAmount);
 		IsUseEnd = true;
+
+		return true;
 	}
 
 protected:
 
 private:
-	int HealAmount = 1;
+	int HealAmount = 0;
 };
 

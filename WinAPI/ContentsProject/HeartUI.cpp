@@ -66,6 +66,11 @@ void AHeartUI::SetPlayerHp(int _PlayerHp)
 	int FullHeart = static_cast<int>(HeartCount); // 3
 	float HalfHeart = HeartCount - static_cast<float>(FullHeart); // 0.5
 
+	if (HeartCount > HeartMax)
+	{
+		HalfHeart = 0;
+	}
+
 	for (int i = 0; i < FullHeart; i++)
 	{
 		Renders[i]->SetSprite(TextSpriteName, 0); // Full Heart

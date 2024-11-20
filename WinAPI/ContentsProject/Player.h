@@ -138,6 +138,18 @@ public:
 
 	// 아이템
 	bool Drop(class AItem* _Item, int _Count);
+	int CheckPickupItemCount(std::string_view _ItemName);
+	AItem* ReturnItem(std::string_view _ItemName);
+
+	void InputItem();
+
+	// 아이템 습득
+	int GetBombCount()
+	{
+		return CheckPickupItemCount("Bomb");
+	}
+
+
 
 	// Stat
 	static int GetPlayerHptMax() 
@@ -230,17 +242,9 @@ private:
 	void FadeOut();
 	void SpiritFadeOut();
 
-	void AddItem(class AItem* _Item)
-	{
-		_Item->EatFunction(this);
-	}
-
 
 	// Item
 	std::list<class AItem*> Items;
-	int PennyCount = 0;
-	int BombCount = 1;
-	int KeyCount = 1;
 
 	//Bullet
 	ATear* Tear = nullptr;

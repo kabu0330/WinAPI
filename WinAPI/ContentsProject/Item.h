@@ -27,16 +27,14 @@ public:
 	void CollisionSetting();
 	
 	void RemoveRoomData();
+	void ItemDestroy();
 	
-	virtual void EatFunction(APlayer* _Player) {}; // 아이템 습득 즉시
-	virtual void UseItem() {}; // 아이템 사용
+	virtual bool EatFunction(APlayer* _Player) = 0; // 아이템 습득 즉시
+	virtual void UseItem(APlayer* _Player) {}; // 아이템 사용
 	
 	// 드랍, 드랍실패
 	void Drop(AActor* _Player);
-	void DropSuccess()
-	{
-		IsDrop = true;
-	}
+	void DropSuccess();
 	void FailToPickup(class APlayer* _Player);
 	void ReverseForce(float _DeltaTime);
 
@@ -49,7 +47,7 @@ public:
 	void ChangeAnimation(std::string_view _Name)
 	{
 		std::string Name = _Name.data();
-		BodyRenderer->ChangeAnimation(Name);
+		DropRenderer->ChangeAnimation(Name);
 	}
 
 	virtual void IdleAnimation(); // 기본 애니메이션
@@ -92,9 +90,10 @@ protected:
 	float TimeElapsed = 0.0f;
 	class ARoom* ParentRoom = nullptr;
 
+	USpriteRenderer* DropRenderer = nullptr;
 	USpriteRenderer* BodyRenderer = nullptr;
 
-	U2DCollision* PlayerCollision = nullptr;
+	U2DCollision* PlayerCollision = nullptr; // 플레이어와 습득 상호작용을 하려면 반드시 만들어야 함
 	U2DCollision* MonsterCollision = nullptr;
 	U2DCollision* UniversalCollision = nullptr;
 

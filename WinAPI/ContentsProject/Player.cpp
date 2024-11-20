@@ -89,6 +89,7 @@ void APlayer::Tick(float _DeltaTime)
 
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
+	InputItem();
 
 }
 
@@ -294,9 +295,9 @@ void APlayer::StayBlinkEffect()
 void APlayer::UITick(float _DeltaTime)
 {
 	  PlayerHpToHeart->SetPlayerHp(Heart);
-	PennyPickupNumber->SetValue(PennyCount);
- 	 BombPickupNumber->SetValue(BombCount);
-	  KeyPickupNumber->SetValue(KeyCount);
+	PennyPickupNumber->SetValue(0);
+ 	 BombPickupNumber->SetValue(CheckPickupItemCount("Bomb"));
+	  KeyPickupNumber->SetValue(0);
 }
 
 void APlayer::CollisionSetting()
@@ -430,10 +431,80 @@ void APlayer::Reset()
 
 bool APlayer::Drop(AItem* _Item, int _Count)
 {
+	// 아이템 먹었는데 플레이어와 상호작용을 할 수 없는 상황이면 false 반환
+	if (false == _Item->EatFunction(this))
+	{
+		return false;
+	}
+
+	// 아이템과 상호작용에 성공하면 아이템 데이터를 저장
+	for (int i = 0; i < _Count; i++)
+	{
+		Items.push_back(_Item);
+	}
+	
 	_Item->DropSuccess(); // 맵에서 아이템 정보 삭제
 
-	AddItem(_Item);
-	return false;
+	return true;
+}
+
+void APlayer::InputItem()
+{
+	AItem* Item = nullptr;
+	if (UEngineInput::GetInst().IsDown('E'))
+	{
+		Item = ReturnItem("Bomb");
+		if (nullptr != Item)
+		{
+			Item->UseItem(this);
+			Items.remove(Item);
+		}
+	}
+}
+
+int APlayer::CheckPickupItemCount(std::string_view _ItemName)
+{
+	std::string FindItemName = _ItemName.data();
+	int Count = 0;
+	std::list<AItem*>::iterator StartIter = Items.begin();
+	std::list<AItem*>::iterator EndIter = Items.end();
+
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		AItem* Item = *StartIter;
+		if (nullptr == Item)
+		{
+			int a = 0;
+			continue;
+		}
+		std::string ItemName = Item->GetName();
+
+		if (FindItemName == ItemName)
+		{
+			++Count;
+		}
+	}
+
+	return Count;
+}
+
+AItem* APlayer::ReturnItem(std::string_view _ItemName)
+{
+	std::string FindItemName = _ItemName.data();
+	std::list<AItem*>::iterator StartIter = Items.begin();
+	std::list<AItem*>::iterator EndIter = Items.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		AItem* Item = *StartIter;
+		std::string ItemName = Item->GetName();
+		if (FindItemName == ItemName)
+		{
+			return Item;
+		}
+	}
+	return nullptr;
 }
 
 void APlayer::Move(float _DeltaTime)
@@ -890,7 +961,6 @@ void APlayer::UISetting()
 	BombPickupNumber->SetOrder(ERenderOrder::UI);
 	BombPickupNumber->SetTextScale({ 20, 24 }); // 10, 12
 	BombPickupNumber->SetActorLocation(PennyPickupNumber->GetActorLocation() + Offset);
-	BombPickupNumber->SetValue(BombCount);
 
 	// Key
 	KeyUI = GetWorld()->SpawnActor<APickupItemUI>();
@@ -1066,14 +1136,14 @@ void APlayer::UIDebug(float _DeltaTime)
 	}
 	if (UEngineInput::GetInst().IsDown('O'))
 	{
-		PennyCount += 1;
+	
 	}
 	if (UEngineInput::GetInst().IsDown('P'))
 	{
-		BombCount += 1;
+
 	}
 	if (UEngineInput::GetInst().IsDown('L'))
 	{
-		KeyCount += 1;
+
 	}
 }
