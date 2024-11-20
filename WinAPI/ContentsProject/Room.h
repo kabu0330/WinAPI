@@ -40,6 +40,9 @@ public:
 	bool InterLinkRoom(ARoom* _Room, RoomDir _Dir);
 	ARoom* LinkRoom(ARoom* _Room, RoomDir _Dir);
 	void AddDoor(RoomDir _Dir, ARoom* ConnectedRoom);
+	void OpenTheDoor();
+	void CloseTheDoor();
+	std::string SwitchEnumToString(RoomDir _Dir);
 
 	void DoorSpriteSetting();
 	void SpriteSetting();
@@ -133,11 +136,12 @@ public:
 	{
 		Monsters.remove(_Monster);
 	}
+	int GetAliveMonsterCount();
 
 	int CountFly();
 
 	template<typename ObjectType>
-	ARoomObject* CreateObject(FVector2D _Pivot)
+	ARoomObject* CreateObject(FVector2D _Pivot = {0, 0})
 	{
 		ARoomObject* NewObject = GetWorld()->SpawnActor<ObjectType>();
 		NewObject->SetActorLocation(this->GetActorLocation() + _Pivot);
@@ -185,6 +189,7 @@ private:
 	
 	RoomDir Directon = RoomDir::NONE;
 	FVector2D RoomScale = FVector2D::ZERO;
+	FVector2D DoorCollisionScale = FVector2D::ZERO;
 
 	float RoomSizeOffsetX = 0.0f;
 	float RoomSizeOffsetY = 0.0f;

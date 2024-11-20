@@ -38,8 +38,9 @@ public:
 	void DropSuccess();
 	void FailToPickup(class APlayer* _Player);
 	void ReverseForce(float _DeltaTime);
+	void SetLocation();
 
-	void DropEffect()
+	virtual void DropEffect()
 	{
 		if (false == IsDropEffect)
 		{
@@ -114,13 +115,14 @@ protected:
 	FVector2D BodyCollisionLocation = FVector2D::ZERO;
 
 	FVector2D Force = FVector2D::ZERO;
-	FVector2D DownForce = FVector2D::ZERO;
 
+	APlayer* Player = nullptr;
 	bool IsAtBoundary = false;  // 맵 경계면에 위치했냐 -> 반사
 
 	bool IsUseEnd = false;
 	bool IsDrop = false; // 맵에서 자신의 정보를 삭제
-	bool IsDropEffect = false;
+	bool IsDropEffect = false; // 플레이어 위로 번쩍 들어올리는 아이템만 해당
+	bool IsOwnedByPlayer = false; // 위치 플레이어한테 부착
 
 private:
 

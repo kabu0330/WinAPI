@@ -159,7 +159,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="BloodPool.h">
+    <ClInclude Include="DecalObject.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -213,6 +213,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Item.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Key.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -303,7 +307,7 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="BloodPool.cpp">
+    <ClCompile Include="DecalObject.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -357,6 +361,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Item.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Key.cpp">
       <SubType>
       </SubType>
     </ClCompile>

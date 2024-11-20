@@ -103,7 +103,7 @@ void ABloodTear::Explode(AActor* _Other)
 	BoundaryExplosion();
 
 	// 3. 오브젝트와 충돌하면 터진다.
-
+	MapObjectCollision(_Other);
 
 	// 4. 액터와 충돌하면 터진다.
 	HandleMonsterCollision(_Other);
@@ -158,6 +158,24 @@ void ABloodTear::BoundaryExplosion()
 	{
 		Explosion();
 	}
+}
+
+void ABloodTear::MapObjectCollision(AActor* _Other)
+{
+	ARoomObject* CollisionOther = dynamic_cast<ARoomObject*>(_Other);
+	if (nullptr == CollisionOther)
+	{
+		return;
+	}
+	ECollisionGroup CollisionType = static_cast<ECollisionGroup>(CollisionOther->GetBodyCollision()->GetGroup());
+
+	CollisionActor = TearCollision->CollisionOnce(CollisionType);
+	if (nullptr == CollisionActor)
+	{
+		return;
+	}
+
+	Explosion();
 }
 
 void ABloodTear::HandleMonsterCollision(AActor* _Other)

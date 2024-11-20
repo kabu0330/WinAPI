@@ -5,6 +5,7 @@
 #include "Room.h"
 #include "PlayGameMode.h"
 #include "Player.h"
+#include "DecalObject.h"
 
 ABomb::ABomb()
 {
@@ -14,7 +15,6 @@ ABomb::ABomb()
 	ItemCount = 1;
 	Att = 60; // 몬스터에게 가할 피해
 	FVector2D UnversalScale = { 150, 150 };
-
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DropRenderer->CreateAnimation("Bomb", "bomb.png", 8, 8, 0.3f, false);
@@ -134,6 +134,10 @@ void ABomb::Explosion()
 	BodyRenderer->SetActive(false);
 	BobmSparkEffectRenderer->SetActive(false);
 
+	ARoomObject* Bombradius = ParentRoom->CreateObject<ADecalObject>();
+	Bombradius->SetSprite("bombradius", BodyCollisionScale);
+	Bombradius->SetActive(true);
+	Bombradius->SetActorScale({ 256, 256 });
 	Destroy(1.5f);
 }
 

@@ -37,6 +37,7 @@
 #include "Bomb.h"
 #include "Penny.h"
 #include "Polyphemus.h"
+#include "Key.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -81,18 +82,18 @@ void APlayGameMode::Spawn()
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	//BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
+	BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 140, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 160, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 150, -30 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 150, -100 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 150, 30 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 150, 50 });
-	//MinionRoom0->CreateMonster<AAttackFly>({ 150, 100 });
+	MinionRoom0->CreateMonster<AAttackFly>({ 150, 100 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ 50, 50 });
 	//MinionRoom0->CreateMonster<AFly>({ 100, 30 });
 	//MinionRoom0->CreateMonster<AFly>({ 100, -50 });
-	//MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
+	MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
 	//MinionRoom1->CreateMonster<AHopper>({ 100, 100 });
 	//MinionRoom2->CreateMonster<AHost>({ 150, 0 });
 	//MinionRoom2->CreateMonster<AHost>({ 150, -50 });
@@ -122,7 +123,8 @@ void APlayGameMode::Spawn()
 	//AItem* HalfHeart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
 	//HalfHeart->ChangeAnimation("HalfHeart");
 
-	AItem* Polyphemus = BaseRoom->CreateItem<APolyphemus>(nullptr, { 100, 0 });
+	//AItem* Polyphemus = BaseRoom->CreateItem<APolyphemus>(nullptr, { 100, 0 });
+	AItem* Key = BaseRoom->CreateItem<AKey>(nullptr, { 100, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
@@ -136,7 +138,7 @@ void APlayGameMode::CollisionGroupLinkSetting()
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_Body); // 플레이어는 몬스터를 공격할 수 있다.
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_BodyNonCollision);
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_FlyingBody); // 플레이어는 공중의 몬스터도 데미지를 입힌다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_FlyingBody); 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_FlyingBodyNonCollision);
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Monster_Barrier); // 플레이어의 공격을 막으며 즉시 터진다.
@@ -150,6 +152,7 @@ void APlayGameMode::CollisionGroupLinkSetting()
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Player_Body); 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Room_Wall); 
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Object);
 
 	// Object
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Player_Warp);

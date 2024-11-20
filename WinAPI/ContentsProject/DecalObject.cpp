@@ -1,9 +1,9 @@
 #include "PreCompile.h"
-#include "BloodPool.h"
+#include "DecalObject.h"
 
-ABloodPool::ABloodPool()
+ADecalObject::ADecalObject()
 {
-	SetName("BloodPool");
+	SetName("DecalObject");
 	BodyRendererScale = { 64, 64 };
 
 	CanExplode = false;
@@ -37,28 +37,36 @@ ABloodPool::ABloodPool()
 	BodyRenderer->CreateAnimation("bloodpool22", "effect_bloodpool.png", 22, 22, 0.1f, false);
 	BodyRenderer->CreateAnimation("bloodpool23", "effect_bloodpool.png", 23, 23, 0.1f, false);
 	BodyRenderer->CreateAnimation("bloodpool24", "effect_bloodpool.png", 24, 24, 0.1f, false);
+
+	BodyRenderer->CreateAnimation("bombradius" , "effect_017_bombradius.png", 0, 8, 0.1f, false);
+
+
 	BodyRenderer->SetComponentLocation({ 0, 0 });
 	BodyRenderer->SetComponentScale(BodyRendererScale);
 	BodyRenderer->SetOrder(ERenderOrder::Decal);
 	BodyRenderer->ChangeAnimation("bloodpool00");
+	BodyRenderer->SetAlphaFloat(1.0f);
 	BodyRenderer->SetActive(true);
-	BodyRenderer->SetAlphaFloat(0.9f);
 
 }
 
-void ABloodPool::BeginPlay()
+void ADecalObject::BeginPlay()
 {
 	Super::BeginPlay();
 	ARoomObject::BeginPlay();
 }
 
-void ABloodPool::Tick(float _DeltaTime)
+void ADecalObject::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	ARoomObject::Tick(_DeltaTime);
 
+	this;
+
+	int a = 0;
+
 }
 
-ABloodPool::~ABloodPool()
+ADecalObject::~ADecalObject()
 {
 }

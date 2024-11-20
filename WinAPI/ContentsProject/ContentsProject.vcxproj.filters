@@ -97,7 +97,7 @@
     <ClInclude Include="Item.h">
       <Filter>04_Play\Item</Filter>
     </ClInclude>
-    <ClInclude Include="BloodPool.h">
+    <ClInclude Include="DecalObject.h">
       <Filter>04_Play\MapObject</Filter>
     </ClInclude>
     <ClInclude Include="Heart.h">
@@ -110,6 +110,9 @@
       <Filter>04_Play\Item\Pickup</Filter>
     </ClInclude>
     <ClInclude Include="Polyphemus.h">
+      <Filter>04_Play\Item\Pickup</Filter>
+    </ClInclude>
+    <ClInclude Include="Key.h">
       <Filter>04_Play\Item\Pickup</Filter>
     </ClInclude>
   </ItemGroup>
@@ -210,7 +213,7 @@
     <ClCompile Include="Item.cpp">
       <Filter>04_Play\Item</Filter>
     </ClCompile>
-    <ClCompile Include="BloodPool.cpp">
+    <ClCompile Include="DecalObject.cpp">
       <Filter>04_Play\MapObject</Filter>
     </ClCompile>
     <ClCompile Include="Heart.cpp">
@@ -223,6 +226,9 @@
       <Filter>04_Play\Item\Pickup</Filter>
     </ClCompile>
     <ClCompile Include="Polyphemus.cpp">
+      <Filter>04_Play\Item\Pickup</Filter>
+    </ClCompile>
+    <ClCompile Include="Key.cpp">
       <Filter>04_Play\Item\Pickup</Filter>
     </ClCompile>
   </ItemGroup>

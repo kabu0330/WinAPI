@@ -31,8 +31,12 @@ public:
 		std::string UpperName = UEngineString::ToUpper(_Name);
 		ObjectName = UpperName;
 	}
-	virtual void SetSprite(std::string_view _StrNum, FVector2D _Scale) {};
+	virtual void SetSprite(std::string_view _AnimName, FVector2D _Scale) {};
 
+	USpriteRenderer* GetBodyRenderer()
+	{
+		return BodyRenderer;
+	}
 	U2DCollision* GetBodyCollision()
 	{
 		return BodyCollision;

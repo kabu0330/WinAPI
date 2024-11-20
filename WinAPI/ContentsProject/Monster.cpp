@@ -33,7 +33,7 @@ AMonster::AMonster()
 	SpawnEffectRenderer->SetActive(false);
 
 	BloodEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BloodEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 30.0f }, false);
+	BloodEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.2f }, false);
 	BloodEffectRenderer->SetComponentLocation({0, -30});
 	BloodEffectRenderer->SetComponentScale({256, 256});
 	BloodEffectRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);

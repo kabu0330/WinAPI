@@ -1,19 +1,16 @@
 #include "PreCompile.h"
-#include "Penny.h"
-#include "Room.h"
+#include "Key.h"
 
-APenny::APenny()
+AKey::AKey()
 {
-	SetName("Penny");
+	SetName("Key");
 	BodyRendererScale = { 128, 128 };
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 1;
 
-
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DropRenderer->CreateAnimation("Appearance", "penny.png", 7, 13, 0.2f, false);
-	DropRenderer->CreateAnimation("Drop", "penny.png", 0, 5, 0.3f);
-	DropRenderer->CreateAnimation("DropEffect", "penny.png", 14, 23, 0.1f, false);
+	DropRenderer->CreateAnimation("Appearance", "pickup_003_key.png", 0, 0, 0.2f, false);
+	DropRenderer->CreateAnimation("DropEffect", "pickup_003_key.png", 0, 0, 0.1f, false);
 	DropRenderer->SetComponentLocation({ 0, 0 });
 	DropRenderer->SetComponentScale(BodyRendererScale);
 	DropRenderer->SetOrder(ERenderOrder::ItemEffect);
@@ -27,24 +24,23 @@ APenny::APenny()
 	PlayerCollision->SetCollisionType(ECollisionType::Rect);
 }
 
-APenny::~APenny()
+AKey::~AKey()
 {
 }
 
-void APenny::BeginPlay()
+void AKey::BeginPlay()
 {
-    Super::BeginPlay();
-    AItem::BeginPlay();
-	TimeEventer.PushEvent(1.0f, [this]() {DropRenderer->ChangeAnimation("Drop"); });
+	Super::BeginPlay();
+	AItem::BeginPlay();
 }
 
-void APenny::Tick(float _DeltaTime)
+void AKey::Tick(float _DeltaTime)
 {
-    Super::Tick(_DeltaTime);
-    AItem::Tick(_DeltaTime);
+	Super::Tick(_DeltaTime);
+	AItem::Tick(_DeltaTime);
 }
 
-bool APenny::EatFunction(APlayer* _Player)
+bool AKey::EatFunction(APlayer* _Player)
 {
 	int CurItemCount = _Player->GetItemCount(GetName());
 	if (CurItemCount > 99)
@@ -53,19 +49,21 @@ bool APenny::EatFunction(APlayer* _Player)
 	}
 
 	DropSucessAnimation();
+	IsDrop = true;
 
 	return true;
 }
 
-void APenny::UseItem(APlayer* _Player)
+void AKey::UseItem(APlayer* _Player)
 {
 }
 
-void APenny::DropSucessAnimation()
+void AKey::DropSucessAnimation()
 {
 	if (nullptr == DropRenderer)
 	{
 		return;
 	}
 	DropRenderer->ChangeAnimation("DropEffect");
+	DropRenderer->SetActive(false);
 }

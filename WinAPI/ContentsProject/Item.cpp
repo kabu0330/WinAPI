@@ -25,6 +25,10 @@ void AItem::BeginPlay()
 {
 	Super::BeginPlay();
 	CollisionSetting();
+
+	AActor* MainPlayer = GetWorld()->GetPawn();
+	Player = dynamic_cast<APlayer*>(MainPlayer);
+
 }
 
 void AItem::Tick(float _DeltaTime)
@@ -47,8 +51,11 @@ void AItem::Tick(float _DeltaTime)
 	ReverseForce(_DeltaTime);
 
 	ClampPositionToRoom();
+	SetLocation();
+
 	RemoveRoomData();
 	ItemDestroy();
+
 }
 
 // Room에 저장된 Item 정보는 삭제한다.
@@ -115,7 +122,7 @@ void AItem::FailToPickup(APlayer* _Player)
 
 void AItem::ReverseForce(float _DeltaTime)
 {
-	FVector2D ReverseForce = -Force + DownForce;
+	FVector2D ReverseForce = -Force;
 	ReverseForce.Normalize();
 
 	Force += ReverseForce * _DeltaTime * 150.0f;
@@ -154,6 +161,21 @@ void AItem::ReverseForce(float _DeltaTime)
 	}
 
 	AddActorLocation(Force * _DeltaTime);
+}
+
+void AItem::SetLocation()
+{
+	if (false == IsDrop)
+	{
+		return;
+	}
+	if (false == IsOwnedByPlayer)
+	{
+		return;
+	}
+
+	FVector2D PlayerPos = Player->GetActorLocation();
+	SetActorLocation(PlayerPos);
 }
 
 void AItem::AreaWideAttack(AActor* _Actor)

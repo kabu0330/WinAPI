@@ -90,7 +90,9 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("bomb_spark.png", 4, 2);
 	UImageManager::GetInst().CuttingSprite("hot_flames.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("Explosion.png", 5, 3);
+	UImageManager::GetInst().CuttingSprite("effect_017_bombradius.png", 3, 3);
 	UImageManager::GetInst().CuttingSprite("penny.png", 5, 5);
+	UImageManager::GetInst().CuttingSprite("pickup_003_key.png", 5, 1);
 	UImageManager::GetInst().CuttingSprite("costume_106_polyphemus.png", 8, 1);
 	UImageManager::GetInst().CuttingSprite("effect_023_starflash.png", 5, 3);
 
@@ -134,12 +136,12 @@ void ContentsCore::FolderSetting()
 	// 2. Playing
 	UEngineDirectory DoorLockSprite;
 	DoorLockSprite.MoveParentToDirectory("Resources//Image//Play");
-	DoorLockSprite.Append("NormalDoor");
+	DoorLockSprite.Append("Normal_CloseDoor");
 	UImageManager::GetInst().LoadFolder(DoorLockSprite.GetPathToString());
 
 	UEngineDirectory DoorOpenSprite;
 	DoorOpenSprite.MoveParentToDirectory("Resources//Image//Play");
-	DoorOpenSprite.Append("OpenDoor");
+	DoorOpenSprite.Append("Normal_OpenDoor");
 	UImageManager::GetInst().LoadFolder(DoorOpenSprite.GetPathToString());
 
 	UEngineDirectory ItemHeart;

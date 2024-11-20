@@ -24,6 +24,8 @@
 
 #include "Item.h"
 #include "Heart.h"
+#include "Bomb.h"
+#include "Key.h"
 
 int APlayer::Heart = 6;
 int APlayer::HeartMax = 8;
@@ -298,7 +300,7 @@ void APlayer::UITick(float _DeltaTime)
 	  PlayerHpToHeart->SetPlayerHp(Heart);
 	PennyPickupNumber->SetValue(CheckPickupItemCount("Penny"));
  	 BombPickupNumber->SetValue(CheckPickupItemCount("Bomb"));
-	 // KeyPickupNumber->SetValue(CheckPickupItemCount("Key"));
+	  KeyPickupNumber->SetValue(CheckPickupItemCount("Key"));
 }
 
 void APlayer::CollisionSetting()
@@ -442,6 +444,7 @@ bool APlayer::Drop(AItem* _Item, int _Count)
 
 	_Item->DropEffect();
 	_Item->DropSuccess(); // 맵에서 아이템 정보 삭제
+
 	// 하트는 즉시 사용 및 소멸되므로 저장하지 않는다.
 	AHeart* HeartItem = dynamic_cast<AHeart*>(_Item);
 	if (nullptr != HeartItem)
@@ -453,8 +456,6 @@ bool APlayer::Drop(AItem* _Item, int _Count)
 	{
 		Items.push_back(_Item);
 	}
-	
-
 
 	return true;
 }
@@ -477,6 +478,7 @@ int APlayer::CheckPickupItemCount(std::string_view _ItemName)
 {
 	std::string FindItemName = _ItemName.data();
 	int Count = 0;
+
 	std::list<AItem*>::iterator StartIter = Items.begin();
 	std::list<AItem*>::iterator EndIter = Items.end();
 
@@ -1122,8 +1124,6 @@ void APlayer::ResetDebug()
 		Reset();
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
 	}
-
-
 }
 
 void APlayer::UIDebug(float _DeltaTime)
