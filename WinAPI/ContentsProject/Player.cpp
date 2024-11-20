@@ -920,7 +920,7 @@ void APlayer::SpriteSetting()
 	FullRenderer->CreateAnimation("Consume", "Isaac.png", 2, 2, 0.1f);
 	FullRenderer->SetComponentScale({ 128, 128 });
 	FullRenderer->SetOrder(ERenderOrder::Player);
-	FullRenderer->SetPivot({ 0, -20 });
+	FullRenderer->SetPivot({ 5, -20 });
 	FullRenderer->SetActive(false);
 
 }
