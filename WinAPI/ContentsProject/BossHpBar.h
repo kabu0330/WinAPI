@@ -24,6 +24,8 @@ public:
 	void SetHpBar(class AMonster* _Monster);
 	void Update();
 
+	void SetDisplay(bool _Value);
+
 
 protected:
 	void BeginPlay() override;
@@ -38,5 +40,6 @@ private:
 	int HpMax = 1;
 	float HpRatio = 0.0f;
 	FVector2D Scale = FVector2D::ZERO;
+	FVector2D FrontScale = FVector2D::ZERO;
 };
 

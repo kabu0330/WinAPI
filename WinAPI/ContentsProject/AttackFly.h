@@ -29,6 +29,11 @@ public:
 	{
 		ParentBoss = _Boss;
 		IsFollowBoss = true;
+
+		if (nullptr == SpawnEffectRenderer)
+		{
+			return;
+		}
 		SpawnEffectRenderer->Destroy();
 		SpawnEffectRenderer = nullptr;
 	}

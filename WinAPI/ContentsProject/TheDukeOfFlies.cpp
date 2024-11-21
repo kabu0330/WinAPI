@@ -17,7 +17,7 @@
 ATheDukeOfFlies::ATheDukeOfFlies()
 {
 	/* 이름     : */ SetName("TheDukeOfFlies");
-	/* 체력     : */ SetHp(110);
+	/* 체력     : */ SetHp(3);
 	/* 공격력   : */ SetAtt(1);
 	/* 이동속도 : */ SetMoveSpeed(0);
 	/* 이동시간 : */ SetMoveDuration(1.0f);
@@ -76,7 +76,7 @@ void ATheDukeOfFlies::BeginPlay()
 	Super::BeginPlay();
 	AMonster::BeginPlay();
 
-	ABossHpBar* BossHpBor = GetWorld()->SpawnActor<ABossHpBar>();
+	BossHpBor = GetWorld()->SpawnActor<ABossHpBar>();
 	BossHpBor->SetHpBar(this);
 
 	DamagedEffectRenderer->SetComponentLocation({ 0, -30 });
@@ -96,7 +96,6 @@ void ATheDukeOfFlies::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
 
-	//Hp -= 1 * _DeltaTime;
 
 	ARoom* PlayerCurRoom = ARoom::GetCurRoom();
 	if (PlayerCurRoom != ParentRoom)
@@ -111,11 +110,77 @@ void ATheDukeOfFlies::Tick(float _DeltaTime)
 
 	if (true == IsDeath())
 	{
+		BossHpBor->SetDisplay(false);
 		return;
 	}
 	
 	SummonFlies();
 	BlowAway();
+	DisplayBossHpBar();
+}
+
+void ATheDukeOfFlies::Death(float _DeltaTime)
+{
+	// 1. 충돌체(바디 + 탐색) 끄고
+	if (nullptr != BodyCollision)
+	{
+		CollisionDestroy();
+	}
+
+	// 3. 액터 지우고
+	if (nullptr == BodyRenderer)
+	{
+		ParentRoom->RemoveMonster(this);
+		Destroy();
+		return;
+	}
+
+	RemoveFlies();
+	SetMoveSpeed(0);
+	BloodEffectRenderer->SetActive(true);
+	BloodEffectRenderer->ChangeAnimation("DeathEffect");
+
+	if (true == BloodEffectRenderer->IsCurAnimationEnd())
+	{
+		BodyRenderer->Destroy();
+		BodyRenderer = nullptr;
+
+		return;
+	}
+
+	BodyRenderer->SetActive(false);
+}
+
+void ATheDukeOfFlies::RemoveFlies()
+{
+	std::list<AMonster*>::iterator StartIter = Flies.begin();
+	std::list<AMonster*>::iterator EndIter = Flies.end();
+
+	for (; StartIter != EndIter; )
+	{
+		AAttackFly* Fly = dynamic_cast<AAttackFly*>(*StartIter);
+		if (nullptr == Fly)
+		{
+			++StartIter;
+			continue;
+		}
+		Fly->SetIsFollowBoss(nullptr);
+		StartIter = Flies.erase(StartIter);
+	}
+	Flies.clear();
+}
+
+void ATheDukeOfFlies::DisplayBossHpBar()
+{
+	if (true == IsDeath())
+	{
+		return;
+	}
+	if (ParentRoom != ARoom::GetCurRoom())
+	{
+		return;
+	}
+	BossHpBor->SetDisplay(true);
 }
 
 void ATheDukeOfFlies::SummonFlies()

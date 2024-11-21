@@ -66,14 +66,13 @@ void APlayGameMode::Spawn()
 	ARoom* TreasureRoom = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
+	//ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* BossRoom = GetWorld()->SpawnActor<ARoom>();
 
 	BaseRoom->InterLinkRoom(MinionRoom0, RoomDir::LEFT);
 	BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::RIGHT);
 	BaseRoom->InterLinkRoom(TreasureRoom, RoomDir::UP);
-	//BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::UP);
 	BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN);
 	MinionRoom3->InterLinkRoom(BossRoom, RoomDir::DOWN);
 
@@ -81,7 +80,7 @@ void APlayGameMode::Spawn()
 	TreasureRoom->SetName("TreasureRoom");
 	MinionRoom0->SetName("MinionRoom0");
 	MinionRoom1->SetName("MinionRoom1");
-	MinionRoom2->SetName("MinionRoom2");
+	//MinionRoom2->SetName("MinionRoom2");
 	MinionRoom3->SetName("MinionRoom3");
 	BossRoom->SetName("BossRoom");
 
@@ -109,7 +108,7 @@ void APlayGameMode::Spawn()
 	//MinionRoom3->CreateMonster<APooter>({ 250, 50 });
 	//BossRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 	
-	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
+	BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 
 	// Object
 	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});
@@ -128,13 +127,13 @@ void APlayGameMode::Spawn()
 	//AItem* Penny = BaseRoom->CreateItem<APenny>(nullptr, { -50, 100 });
 	//AItem* HalfHeart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
 	//HalfHeart->ChangeAnimation("HalfHeart");
-	AItem* Key = TreasureRoom->CreateItem<AKey>(nullptr, { 0, 0 });
+	//AItem* Key = TreasureRoom->CreateItem<AKey>(nullptr, { 0, 0 });
 
-	AItem* Polyphemus = TreasureRoom->CreateItem<APolyphemus>(nullptr, { -200, -0 });
-	AItem* CrecketsHead = TreasureRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
-	AItem* Dessert = TreasureRoom->CreateItem<ADessert>(nullptr, { 100, -0 });
+	//AItem* Polyphemus = TreasureRoom->CreateItem<APolyphemus>(nullptr, { -200, -0 });
+	//AItem* CrecketsHead = TreasureRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
+	//AItem* Dessert = TreasureRoom->CreateItem<ADessert>(nullptr, { 100, -0 });
 
-	AItem* CrecketsHead1 = BaseRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
+	//AItem* CrecketsHead1 = BaseRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()

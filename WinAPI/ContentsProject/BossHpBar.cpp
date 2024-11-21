@@ -17,15 +17,15 @@ ABossHpBar::ABossHpBar()
 	BackRenderer->SetComponentLocation(Pos);
 	BackRenderer->SetComponentScale(Scale);
 	BackRenderer->SetOrder(ERenderOrder::UI_Back);
-	BackRenderer->SetActive(true);
+	BackRenderer->SetActive(false);
 	BackRenderer->SetCameraEffect(false);
 
 	FrontRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	FrontRenderer->SetSprite("fullbar.png");
-	FrontRenderer->SetComponentLocation(Pos);
-	FrontRenderer->SetPivotValue({ 0.0f, 0.5f });
+	FrontRenderer->SetComponentLocation({ Pos.X - 165, Pos.Y  });
+	FrontRenderer->SetPivotValue({ 0.f, 0.5f });
 	FrontRenderer->SetOrder(ERenderOrder::UI_Back);
-	FrontRenderer->SetActive(true);
+	FrontRenderer->SetActive(false);
 	FrontRenderer->SetCameraEffect(false);
 	
 }
@@ -57,7 +57,14 @@ void ABossHpBar::Update()
 	}
 	int CurHp = Monster->GetHp();
 	HpRatio = static_cast<float>(CurHp) / static_cast<float>(HpMax);
+	FrontScale = { 300, 95 };
 	FrontRenderer->SetComponentScale({ Scale.X * HpRatio, Scale.Y });
+}
+
+void ABossHpBar::SetDisplay(bool _Value)
+{
+	BackRenderer->SetActive(_Value);
+	FrontRenderer->SetActive(_Value);
 }
 
 ABossHpBar::~ABossHpBar()

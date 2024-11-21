@@ -48,6 +48,10 @@ void ARoom::BeginPlay()
 		ControlsRenderer->SetComponentScale({ 655, 145 }); // 385, 85
 		ControlsRenderer->SetOrder(ERenderOrder::Controls);
 	}
+	else if ("TreasureRoom" == GetName())
+	{
+		RoomRenderer->SetSprite("Room_01.png");
+	}
 	else if ("BossRoom" == GetName())
 	{
 		RoomRenderer->SetSprite("Room_03.png");

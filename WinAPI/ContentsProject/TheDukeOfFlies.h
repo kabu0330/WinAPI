@@ -18,10 +18,14 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	void DisplayBossHpBar();
+
 	void Attack(float _DeltaTime) override
 	{
 
 	}
+	void Death(float _DeltaTime) override;
+	void RemoveFlies();
 
 	// 패턴 1 : SummonFlies : 파리 세마리 소환
 	bool HasMaxFlies(); // 스킬 발동 조건 검사
@@ -56,6 +60,7 @@ private:
 	float BlowAwayCooldownElapesd = 0.0f;
 	float BlowAwayCooldownDuration = 6.0f;
 	
-
+	// UI
+	class ABossHpBar* BossHpBor = nullptr;
 };
 
