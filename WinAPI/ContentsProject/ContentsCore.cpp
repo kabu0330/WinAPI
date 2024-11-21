@@ -22,7 +22,7 @@ void ContentsCore::WindowSetting()
 
 
 	// 2. 윈도우 사이즈를 반드시 정의해야 한다.
-	Global::WindowSize = { 960, 540 };
+	Global::WindowSize = { 960, 600 };
 	Global::WindowHalfScale = Global::WindowSize.Half();
 	UEngineAPICore::GetCore()->GetMainWindow().SetWindowPosAndScale({ 0, 0 }, Global::WindowSize);
 }

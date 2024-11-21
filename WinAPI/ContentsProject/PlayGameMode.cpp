@@ -82,7 +82,7 @@ void APlayGameMode::Spawn()
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 140, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 160, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 150, -30 });
@@ -93,7 +93,7 @@ void APlayGameMode::Spawn()
 	//MinionRoom0->CreateMonster<AAttackFly>({ 50, 50 });
 	//MinionRoom0->CreateMonster<AFly>({ 100, 30 });
 	//MinionRoom0->CreateMonster<AFly>({ 100, -50 });
-	MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
+	//MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
 	//MinionRoom1->CreateMonster<AHopper>({ 100, 100 });
 	//MinionRoom2->CreateMonster<AHost>({ 150, 0 });
 	//MinionRoom2->CreateMonster<AHost>({ 150, -50 });
@@ -123,8 +123,8 @@ void APlayGameMode::Spawn()
 	//AItem* HalfHeart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
 	//HalfHeart->ChangeAnimation("HalfHeart");
 
-	//AItem* Polyphemus = BaseRoom->CreateItem<APolyphemus>(nullptr, { 100, 0 });
-	AItem* Key = BaseRoom->CreateItem<AKey>(nullptr, { 100, 0 });
+	AItem* Polyphemus = BaseRoom->CreateItem<APolyphemus>(nullptr, { 100, 0 });
+	//AItem* Key = BaseRoom->CreateItem<AKey>(nullptr, { 100, 0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
@@ -145,13 +145,13 @@ void APlayGameMode::CollisionGroupLinkSetting()
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Object);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Item_Impact);
 
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Room_Wall); // 플레이어의 공격이 벽에 닿으면 즉시 터진다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Room_TearBoundary); // 플레이어의 공격이 벽에 닿으면 즉시 터진다.
 
 	// Monster
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Body, ECollisionGroup::Room_Wall); // 몬스터는 맵 밖을 나갈 수 없다.
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Player_Body); 
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Room_Wall); 
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Room_TearBoundary);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Attack, ECollisionGroup::Object);
 
 	// Object

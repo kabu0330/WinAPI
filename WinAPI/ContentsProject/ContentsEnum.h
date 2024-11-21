@@ -40,6 +40,7 @@ enum class ECollisionGroup
 	Monster_Barrier = 2550,
 	Monster_DetectInRange = 2999,
 	Room_Wall = 3000,
+	Room_TearBoundary = 3100,
 	Object = 4000, 
 	Item = 5000,
 	Item_UniversalHit = 5500, // ÆøÅº

@@ -295,7 +295,7 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	FVector2D DoorOffestX = FVector2D(RoomScale.Half().iX(), 0);
 	FVector2D DoorOffestY = FVector2D(0, RoomScale.Half().iY());
 	FVector2D OffestX = { 110, 0 };
-	FVector2D OffestY = { 0, 57};
+	FVector2D OffestY = { 0, 64};
 	DoorCollisionScale = FVector2D(70, 75);
 
 	switch (_Dir)
@@ -505,7 +505,7 @@ void ARoom::CollisionSetting()
 	ClampTearCollision = CreateDefaultSubObject<U2DCollision>();
 	ClampTearCollision->SetComponentLocation({ 0, 0 });
 	ClampTearCollision->SetComponentScale({ RoomScale.X + OffsetX, RoomScale.Y + OffsetY });
-	ClampTearCollision->SetCollisionGroup(ECollisionGroup::Room_Wall);
+	ClampTearCollision->SetCollisionGroup(ECollisionGroup::Room_TearBoundary);
 	ClampTearCollision->SetCollisionType(ECollisionType::Rect);
 
 

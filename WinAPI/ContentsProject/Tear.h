@@ -24,7 +24,7 @@ public:
 	void Explode(AActor* _Other);
 
 	void TimeBasedExplosion();
-	void BoundaryExplosion();
+	void BoundaryExplosion(AActor* _Other);
 	void MapObjectCollision(AActor* _Other);
 	void ItemImpackCollision(AActor* _Other);
 	void HandleMonsterCollision(AActor* _Other);

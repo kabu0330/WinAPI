@@ -163,7 +163,7 @@ void ATear::Explode(AActor* _Other)
 	TimeBasedExplosion();
 
 	// 2. 맵 밖으로 벗어나면 터진다.
-	BoundaryExplosion();
+	BoundaryExplosion(_Other);
 
 	// 3. 오브젝트와 충돌하면 터진다.
 	MapObjectCollision(_Other);
@@ -190,7 +190,7 @@ void ATear::TimeBasedExplosion()
 }
 
 // 맵 밖으로 나가려하면 폭발
-void ATear::BoundaryExplosion() 
+void ATear::BoundaryExplosion(AActor* _Other)
 {
 	if (nullptr == TearCollision)
 	{
@@ -203,7 +203,7 @@ void ATear::BoundaryExplosion()
 	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2;
 	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 2;
 
-	float Offset = 37.0f; // 맵 경계면보다 더 멀리 나가서 터지도록 설정하고 싶다.
+	float Offset = 55.0f; // 맵 경계면보다 더 멀리 나가서 터지도록 설정하고 싶다.
 	int LeftEdge  = static_cast<int>(std::round(RoomPos.X - RoomScale.X - RoomSizeOffsetX - Offset));
 	int RightEdge = static_cast<int>(std::round(RoomPos.X + RoomScale.X + RoomSizeOffsetX + Offset));
 	int TopEdge   = static_cast<int>(std::round(RoomPos.Y - RoomScale.Y - RoomSizeOffsetY - Offset));
