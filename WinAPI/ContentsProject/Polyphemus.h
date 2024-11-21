@@ -24,7 +24,7 @@ public:
 
 	// 플레이어와 상호작용하는 아이템 드랍
 	void DropSucessAnimation(APlayer* _Player);
-
+	void ChangeHeadRenderer();
 
 protected:
 

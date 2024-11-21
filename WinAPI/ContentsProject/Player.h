@@ -224,8 +224,8 @@ public:
 	}
 	void ChangePlayerAnimation(float _Time, std::string_view _Name)
 	{
-		FullRenderer->SetActive(true);
 		FullRenderer->ChangeAnimation(_Name);
+		FullRenderer->SetActive(true);
 
 		BodyRenderer->SetActive(false);
 		HeadRenderer->SetActive(false);
@@ -240,9 +240,9 @@ public:
 			IsMovementStopped = false;
 			});
 	}
-	void SetFullRenderer(bool _Value)
+	void ChangeHeadRenderer(USpriteRenderer* _HeadRenderer)
 	{
-		FullRenderer->SetActive(_Value);
+		HeadRenderer = _HeadRenderer;
 	}
 
 protected:
