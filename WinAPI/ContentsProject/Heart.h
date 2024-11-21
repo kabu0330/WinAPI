@@ -26,6 +26,8 @@ public:
 		{
 			return false;
 		}
+
+		IsPushback = false;
 		_Player->AddHp(ItemCount);
 		
 

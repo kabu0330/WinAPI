@@ -11,6 +11,7 @@
 #include "PlayGameMode.h"
 #include "Player.h"
 #include "AttackFly.h"
+#include "Fade.h"
 
 ARoom* ARoom::CurRoom = nullptr;
 
@@ -35,11 +36,12 @@ void ARoom::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Player = GetWorld()->GetPawn();
+	Player = dynamic_cast<APlayer*>(GetWorld()->GetPawn());
 
 	// 맵 이름에 따라 이미지를 바꾼다.
 	if ("BaseRoom" == GetName())
 	{
+		RoomRenderer->SetSprite("Room_01.png");
 		ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		ControlsRenderer->SetSprite("controls.png");
 		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowHalfScale.iX(), GetActorLocation().iY() - Global::WindowHalfScale.iY() - 20 });
@@ -71,7 +73,6 @@ void ARoom::Tick(float _DeltaTime)
 	
 	OpenTheDoor();
 	CloseTheDoor();
-
 }
 
 void ARoom::WarpCollisionCheck(float _DeltaTime)
@@ -95,6 +96,14 @@ void ARoom::WarpCollisionCheck(float _DeltaTime)
 		FTransform DoorTrans = Collision->GetActorTransform();
 		if (true == FTransform::RectToRect(PlayerTrans, DoorTrans))
 		{
+			// 플레이어 정지
+			Player->SetMovement(false);
+			Player->SetDir(FVector2D::ZERO);
+
+			// 문 충돌체 임시 제거
+			IsWarp = true;
+			TemporarilyHideDoorCollision(); 
+
 			MoveDir = StartIter->first;
 			CameraMoveDir = Global::SwitchEnumToDir(MoveDir); // FVector2D:: Left, Right, Up, Down
 
@@ -121,26 +130,22 @@ void ARoom::Warp(float _DeltaTime)
 	WarpPlayerSetting(); 
 
 	float CameraLerpTime = 0.1f;
+	LerpAlpha += _DeltaTime / CameraLerpTime;
 	LerpAlpha = FVector2D::Clamp(CameraMoveTime / CameraLerpTime, 0.0f, 1.0f);
 
 	FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
 	GetWorld()->SetCameraPos(CamPos);
 
 	CameraMoveTime += _DeltaTime;
-	if (CameraLerpTime < CameraMoveTime)
+	if (LerpAlpha >= 1.0f)
 	{
 		CameraMoveDir = FVector2D::ZERO;
 		CurRoom = Rooms[MoveDir];
 
-		// 카메라 이동이 완료되고도, 잠시동안 플레이어의 움직임을 제한
-		float PlayerMovementCooldown = CameraLerpTime + 0.3f;
-		if (PlayerMovementCooldown < CameraMoveTime)
-		{
-			CameraMove = false;
-			CameraMoveTime = 0.0f;
-		}
-	}
-	
+		CameraMove = false;
+		CameraMoveTime = 0.0f;
+		TimeEventer.PushEvent(0.0f, [this]() { Player->SetMovement(false); });
+	}	
 }
 
 void ARoom::WarpPlayerSetting()
@@ -169,8 +174,7 @@ void ARoom::WarpPlayerSetting()
 	TargetPlayerPos = GetActorLocation() + Offset;
 	Player->SetActorLocation(TargetPlayerPos);
 
-	TemporarilyHideDoorCollision();
-	TimeEventer.PushEvent(1.0f, [this]() {IsWarp = false; });
+	TimeEventer.PushEvent(1.5f, [this]() {IsWarp = false; });
 
 }
 
@@ -296,7 +300,7 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	FVector2D DoorOffestY = FVector2D(0, RoomScale.Half().iY());
 	FVector2D OffestX = { 110, 0 };
 	FVector2D OffestY = { 0, 64};
-	DoorCollisionScale = FVector2D(70, 75);
+	DoorCollisionScale = FVector2D(60, 60);
 
 	switch (_Dir)
 	{

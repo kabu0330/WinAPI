@@ -376,7 +376,7 @@ void USpriteRenderer::SetCameraEffectScale(float _Effect)
 	CameraEffectScale = _Effect;
 }
 
-void USpriteRenderer::SetPivot(FVector2D _Value)
+void USpriteRenderer::SetPivotValue(FVector2D _Value)
 {
 	Pivot = _Value;
 }

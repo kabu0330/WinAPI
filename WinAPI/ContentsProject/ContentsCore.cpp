@@ -93,8 +93,12 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("effect_017_bombradius.png", 3, 3);
 	UImageManager::GetInst().CuttingSprite("penny.png", 5, 5);
 	UImageManager::GetInst().CuttingSprite("pickup_003_key.png", 5, 1);
-	UImageManager::GetInst().CuttingSprite("costume_106_polyphemus.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("effect_023_starflash.png", 5, 3);
+
+	UImageManager::GetInst().CuttingSprite("costume_106_polyphemus.png", 5, 2);
+	UImageManager::GetInst().CuttingSprite("costume_037_maxshead.png", 8, 1);
+
+	UImageManager::GetInst().CuttingSprite("collectibles_024_dessert.png", 1, 1);
 
 	// Player
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);

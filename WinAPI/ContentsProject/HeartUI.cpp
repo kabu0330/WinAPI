@@ -5,7 +5,7 @@
 
 AHeartUI::AHeartUI()
 {
-	for (int i = 0; i < APlayer::GetHptMax() / 2; i++)
+	for (int i = 0; i < 12; i++)
 	{
 		USpriteRenderer* Sprite = CreateDefaultSubObject<USpriteRenderer>();
 		Sprite->SetCameraEffect(false); // 카메라 이동에 영향을 받지 않음. 윈도우 위치에 고정

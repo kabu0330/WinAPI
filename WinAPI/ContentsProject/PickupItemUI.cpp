@@ -37,10 +37,12 @@ void APickupItemUI::SetValue(int _Value)
 
 void APickupItemUI::BeginPlay()
 {
+	Super::BeginPlay();
 }
 
 void APickupItemUI::Tick(float _DeltaTime)
 {
+	Super::Tick(_DeltaTime);
 }
 
 APickupItemUI::~APickupItemUI()

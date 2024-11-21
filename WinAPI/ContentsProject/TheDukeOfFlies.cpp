@@ -12,6 +12,7 @@
 #include "Room.h"
 #include "AttackFly.h"
 #include "PlayGameMode.h"
+#include"BossHpBar.h"
 
 ATheDukeOfFlies::ATheDukeOfFlies()
 {
@@ -75,6 +76,9 @@ void ATheDukeOfFlies::BeginPlay()
 	Super::BeginPlay();
 	AMonster::BeginPlay();
 
+	ABossHpBar* BossHpBor = GetWorld()->SpawnActor<ABossHpBar>();
+	BossHpBor->SetHpBar(this);
+
 	DamagedEffectRenderer->SetComponentLocation({ 0, -30 });
 	DamagedEffectRenderer->SetComponentScale({ 128, 128 });
 
@@ -91,6 +95,8 @@ void ATheDukeOfFlies::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	AMonster::Tick(_DeltaTime);
+
+	//Hp -= 1 * _DeltaTime;
 
 	ARoom* PlayerCurRoom = ARoom::GetCurRoom();
 	if (PlayerCurRoom != ParentRoom)

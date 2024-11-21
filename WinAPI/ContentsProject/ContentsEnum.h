@@ -19,6 +19,7 @@ enum class ERenderOrder
 	MonsterEffect = 500,
 	Tear = 1000,
 	ItemEffect = 2000, 
+	UI_Back = 9998,
 	UI = 9999,
 	Fade = 20000,
 	Loading = 30000,

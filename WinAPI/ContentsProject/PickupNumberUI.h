@@ -40,8 +40,8 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-	std::string TextSpriteName;
-	FVector2D UIScale;
+	std::string TextSpriteName = "";
+	FVector2D UIScale = FVector2D::ZERO;
 	std::vector<class USpriteRenderer*> Renders;
 };
 

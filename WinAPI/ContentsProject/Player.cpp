@@ -28,7 +28,8 @@
 #include "Key.h"
 
 int APlayer::Heart = 6;
-int APlayer::HeartMax = 8;
+int APlayer::HeartMax = 8;	
+int APlayer::TotalHeartMax = 24;
 
 APlayer::APlayer()
 {
@@ -93,6 +94,7 @@ void APlayer::Tick(float _DeltaTime)
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
 	InputItem();
+	UpdateItemPos();
 
 }
 
@@ -183,26 +185,26 @@ int APlayer::ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir)
 
 void APlayer::KnockbackTick(float _DeltaTime)
 {
-	if (false == IsHit)
-	{
-		return;
-	}
+	//if (false == IsHit)
+	//{
+	//	return;
+	//}
 
-	KnockbackDuration -= _DeltaTime;
-	if (KnockbackDuration <= 0.0f)
-	{
-		KnockbackDuration = 0.0f;
-		return; // 넉백 지속 시간 종료
-	}
+	//KnockbackDuration -= _DeltaTime;
+	//if (KnockbackDuration <= 0.0f)
+	//{
+	//	KnockbackDuration = 0.0f;
+	//	return; // 넉백 지속 시간 종료
+	//}
 
 
-	float KnockbackLerpAlpha = 1.0f - (KnockbackDuration / 1.0f);
-	FVector2D StartPos = FVector2D::ZERO;
-	FVector2D CurPos = FVector2D::Lerp(KnockbackStartPos, KnockbackStartPos + KnockbackDistance, KnockbackLerpAlpha);
+	//float KnockbackLerpAlpha = 1.0f - (KnockbackDuration / 1.0f);
+	//FVector2D StartPos = FVector2D::ZERO;
+	//FVector2D CurPos = FVector2D::Lerp(KnockbackStartPos, KnockbackStartPos + KnockbackDistance, KnockbackLerpAlpha);
 
-	float UpOffset = -50.0f * std::sin(KnockbackLerpAlpha * static_cast<float>(std::numbers::pi));
-	FVector2D FinalPos = CurPos + FVector2D(0.0f, UpOffset);
-	SetActorLocation(FinalPos);
+	//float UpOffset = -50.0f * std::sin(KnockbackLerpAlpha * static_cast<float>(std::numbers::pi));
+	//FVector2D FinalPos = CurPos + FVector2D(0.0f, UpOffset);
+	//SetActorLocation(FinalPos);
 }
 
 void APlayer::ReverseForce(float _DeltaTime)
@@ -226,10 +228,6 @@ void APlayer::ShowHitAnimation(AActor* _Other)
 	{
 		return;
 	}
-	if (true == FullRenderer->IsActive()) // 이미 피격 상태면 리턴
-	{
-		return;
-	}
 	if (true == IsDead) // 죽었으면 리턴
 	{
 		return;
@@ -242,8 +240,8 @@ void APlayer::ShowHitAnimation(AActor* _Other)
 
 	Invincibility = true; // 무적
 
-	// 원래 애니메이션으로 복귀
-	TimeEventer.PushEvent(0.3f, std::bind(&APlayer::RestoreDefaultMotion, this));
+	// 원래 무적 해제 및 애니메이션으로 복귀
+	TimeEventer.PushEvent(InvincibilityDuration, std::bind(&APlayer::RestoreDefaultMotion, this));
 }
 
 void APlayer::RestoreDefaultMotion()
@@ -253,7 +251,7 @@ void APlayer::RestoreDefaultMotion()
 		return;
 	}
 
-	SwitchInvincibility();
+	Invincibility = false; // 무적해제
 	FullRenderer->SetActive(false);
 	BodyRenderer->SetActive(true);
 	HeadRenderer->SetActive(true);
@@ -269,7 +267,7 @@ void APlayer::BeginBlinkEffect()
 	FullRenderer->SetAlphaFloat(0.0f);
 	BodyRenderer->SetAlphaFloat(0.0f);
 	HeadRenderer->SetAlphaFloat(0.0f);
-	TimeEventer.PushEvent(0.1f, std::bind(&APlayer::StayBlinkEffect, this));
+	TimeEventer.PushEvent(0.1f, std::bind(&APlayer::StayBlinkEffect, this)); 
 }
 
 void APlayer::StayBlinkEffect()
@@ -287,7 +285,8 @@ void APlayer::StayBlinkEffect()
 	HeadRenderer->SetAlphaFloat(1.0f);
 
 	++FadeCount;
-	if (5 < FadeCount)
+	int BlinkCount = 4;
+	if (BlinkCount < FadeCount)
 	{
 		FadeCount = 0;
 		return;
@@ -446,8 +445,12 @@ bool APlayer::Drop(AItem* _Item, int _Count)
 	_Item->DropSuccess(); // 맵에서 아이템 정보 삭제
 
 	// 하트는 즉시 사용 및 소멸되므로 저장하지 않는다.
-	AHeart* HeartItem = dynamic_cast<AHeart*>(_Item);
-	if (nullptr != HeartItem)
+	//AHeart* HeartItem = dynamic_cast<AHeart*>(_Item);
+	//if (nullptr != HeartItem)
+	//{
+	//	return true;
+	//}
+	if (false == _Item->IsPushBackItems()) // 아이템 효과만 적용하고 즉시 소멸할거라면
 	{
 		return true;
 	}
@@ -472,6 +475,24 @@ void APlayer::InputItem()
 			Items.remove(Item);
 		}
 	}
+}
+
+void APlayer::UpdateItemPos()
+{
+	std::list<AItem*>::iterator StartIter = Items.begin();
+	std::list<AItem*>::iterator EndIter = Items.end();
+
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		AItem* Item = *StartIter;
+		// 아이템의 소유권이 완전히 플레이어한테 귀속되면 위치도 플레이어한테 고정
+		if (true == Item->IsOwned()) 
+		{
+			FVector2D PlayerPos = GetActorLocation();
+			Item->SetActorLocation(PlayerPos);
+		}
+	}
+
 }
 
 int APlayer::CheckPickupItemCount(std::string_view _ItemName)
@@ -700,48 +721,54 @@ bool APlayer::HasMovementInput()
 
 void APlayer::CameraPosMove(float _DeltaTime)
 {
-	FVector2D RoomScale = Global::WindowSize;
-	FVector2D PlayerMovePos = GetActorLocation();
-	StartCameraPos = GetWorld()->GetCameraPos();
+	if (UEngineInput::GetInst().IsPress('H') ||
+		UEngineInput::GetInst().IsPress('K') ||
+		UEngineInput::GetInst().IsPress('U') ||
+		UEngineInput::GetInst().IsPress('J'))
+	{
+		FVector2D RoomScale = Global::WindowSize;
+		FVector2D PlayerMovePos = GetActorLocation();
+		StartCameraPos = GetWorld()->GetCameraPos();
 
-	if (UEngineInput::GetInst().IsDown('H'))
-	{
-		IsMovementStopped = true;
-		CameraMoveDir = FVector2D::LEFT;
-		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
-	}
-	if (UEngineInput::GetInst().IsDown('K'))
-	{
-		IsMovementStopped = true;
-		CameraMoveDir = FVector2D::RIGHT;
-		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
-	}
-	if (UEngineInput::GetInst().IsDown('U'))
-	{
-		IsMovementStopped = true;
-		CameraMoveDir = FVector2D::UP;
-		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
-	}
-	if (UEngineInput::GetInst().IsDown('J'))
-	{
-		IsMovementStopped = true;
-		CameraMoveDir = FVector2D::DOWN;
-		EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
-	}
-
-	if (true == IsMovementStopped)
-	{
-		LerpAlpha = CameraMoveTime / 1.0f;
-		FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
-
-		GetWorld()->SetCameraPos(CamPos);
-		SetActorLocation(PlayerMovePos);
-
-		CameraMoveTime += _DeltaTime;
-		if (1.0f <= CameraMoveTime)
+		if (UEngineInput::GetInst().IsDown('H'))
 		{
-			IsMovementStopped = false;
-			CameraMoveTime = 0.0f;
+			IsMovementStopped = true;
+			CameraMoveDir = FVector2D::LEFT;
+			EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+		}
+		if (UEngineInput::GetInst().IsDown('K'))
+		{
+			IsMovementStopped = true;
+			CameraMoveDir = FVector2D::RIGHT;
+			EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+		}
+		if (UEngineInput::GetInst().IsDown('U'))
+		{
+			IsMovementStopped = true;
+			CameraMoveDir = FVector2D::UP;
+			EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+		}
+		if (UEngineInput::GetInst().IsDown('J'))
+		{
+			IsMovementStopped = true;
+			CameraMoveDir = FVector2D::DOWN;
+			EndCameraPos = GetWorld()->GetCameraPos() + RoomScale * CameraMoveDir;
+		}
+
+		if (true == IsMovementStopped)
+		{
+			LerpAlpha = CameraMoveTime / 1.0f;
+			FVector2D CamPos = FVector2D::Lerp(StartCameraPos, EndCameraPos, LerpAlpha);
+
+			GetWorld()->SetCameraPos(CamPos);
+			SetActorLocation(PlayerMovePos);
+
+			CameraMoveTime += _DeltaTime;
+			if (1.0f <= CameraMoveTime)
+			{
+				IsMovementStopped = false;
+				CameraMoveTime = 0.0f;
+			}
 		}
 	}
 }
@@ -910,6 +937,7 @@ void APlayer::SpriteSetting()
 	HeadRenderer->SetComponentScale({ 64, 64 });
 	HeadRenderer->ChangeAnimation("Head_Down");
 
+
 	BodyRenderer->SetOrder(ERenderOrder::Player);
 	HeadRenderer->SetOrder(ERenderOrder::PlayerHead);
 
@@ -922,8 +950,26 @@ void APlayer::SpriteSetting()
 	FullRenderer->CreateAnimation("Consume", "Isaac.png", 2, 2, 0.1f);
 	FullRenderer->SetComponentScale({ 128, 128 });
 	FullRenderer->SetOrder(ERenderOrder::Player);
-	FullRenderer->SetPivot({ 5, -20 });
-	FullRenderer->SetActive(false);
+	FullRenderer->SetPivotValue({ 5, -20 });
+	FullRenderer->ChangeAnimation("Damaged");
+	//FullRenderer->SetActive(false);
+
+	////////////////////////////////////////////////////////////////////////////////////
+	// Accessory Item
+	AccessoryRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	AccessoryRenderer->CreateAnimation("Head_Left", "Head.png", 1, 1, 0.5f, false);
+	AccessoryRenderer->CreateAnimation("Head_Right", "Head.png", 3, 3, 0.5f, false);
+	AccessoryRenderer->CreateAnimation("Head_Down", "Head.png", 7, 7, 0.5f, false);
+	AccessoryRenderer->CreateAnimation("Head_Up", "Head.png", 5, 5, 0.5f, false);
+	AccessoryRenderer->CreateAnimation("Head_Attack_Left", "Head.png", { 1, 0, 1 }, 0.12f);
+	AccessoryRenderer->CreateAnimation("Head_Attack_Right", "Head.png", { 3, 2, 3 }, 0.12f);
+	AccessoryRenderer->CreateAnimation("Head_Attack_Down", "Head.png", { 7, 6, 7 }, 0.12f);
+	AccessoryRenderer->CreateAnimation("Head_Attack_Up", "Head.png", { 5, 4, 5 }, 0.12f);
+	AccessoryRenderer->CreateAnimation("Head_Death", "Death_Head.png", 0, 0, 0.5f);
+	
+	AccessoryRenderer->SetComponentLocation({ 0, Global::PlayerHeadOffset.iY() + 4 });
+	AccessoryRenderer->SetComponentScale({ 0, 0 });
+	AccessoryRenderer->ChangeAnimation("Head_Down");
 
 }
 
@@ -1054,30 +1100,39 @@ void APlayer::CurStateAnimation(float _DeltaTime)
 	{
 	case APlayer::UpperState::IDLE:
 		HeadRenderer->ChangeAnimation("Head_Down");
+		AccessoryRenderer->ChangeAnimation("Head_Down");
 		break;
 	case APlayer::UpperState::LEFT:
 		HeadRenderer->ChangeAnimation("Head_Left");
+		AccessoryRenderer->ChangeAnimation("Head_Left");
 		break;
 	case APlayer::UpperState::RIGHT:
 		HeadRenderer->ChangeAnimation("Head_RIght");
+		AccessoryRenderer->ChangeAnimation("Head_RIght");
 		break;
 	case APlayer::UpperState::UP:
 		HeadRenderer->ChangeAnimation("Head_Up");
+		AccessoryRenderer->ChangeAnimation("Head_Up");
 		break;
 	case APlayer::UpperState::DOWN:
 		HeadRenderer->ChangeAnimation("Head_Down");
+		AccessoryRenderer->ChangeAnimation("Head_Down");
 		break;
 	case APlayer::UpperState::ATTACK_LEFT:
 		HeadRenderer->ChangeAnimation("Head_Attack_Left");
+		AccessoryRenderer->ChangeAnimation("Head_Left");
 		break;
 	case APlayer::UpperState::ATTACK_RIGHT:
 		HeadRenderer->ChangeAnimation("Head_Attack_Right");
+		AccessoryRenderer->ChangeAnimation("Head_RIght");
 		break;
 	case APlayer::UpperState::ATTACK_UP:
 		HeadRenderer->ChangeAnimation("Head_Attack_Up");
+		AccessoryRenderer->ChangeAnimation("Head_Up");
 		break;
 	case APlayer::UpperState::ATTACK_DOWN:
 		HeadRenderer->ChangeAnimation("Head_Attack_Down");
+		AccessoryRenderer->ChangeAnimation("Head_Down");
 		break;
 	case APlayer::UpperState::DEATH:
 		HeadRenderer->ChangeAnimation("Head_Death");
@@ -1102,7 +1157,7 @@ void APlayer::CurStateAnimation(float _DeltaTime)
 
 void APlayer::PlayerDebugSetting(float _DeltaTime)
 {
-	CameraPosMove(_DeltaTime);
+	//CameraPosMove(_DeltaTime);
 	UIDebug(_DeltaTime);
 	ResetDebug();
 

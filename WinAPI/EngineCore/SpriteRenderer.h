@@ -98,7 +98,7 @@ public:
 		IsCameraEffect = _Value;
 	}
 
-	void SetPivot(FVector2D _Value);
+	void SetPivotValue(FVector2D _Value);
 
 	void SetPivotType(PivotType _Type);
 

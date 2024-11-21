@@ -26,6 +26,7 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 	void CollisionSetting();
+	void Move(float _DeltaTIme);
 	
 	void ItemDestroy();
 	
@@ -88,11 +89,21 @@ public:
 		}				
 		return nullptr;
 	}
+	bool IsPushBackItems() const
+	{
+		return IsPushback;
+	}
 
+	bool IsOwned()
+	{
+		return IsOwnedByPlayer;
+	}
 
 protected:
 	int ItemCount = 0;
 	int Att = 0;
+
+	float DropAnimationDuration = 2.0f;
 
 	float TimeElapsed = 0.0f;
 	class ARoom* ParentRoom = nullptr;
@@ -102,6 +113,7 @@ protected:
 	USpriteRenderer* BodyRenderer = nullptr;
 
 	USpriteRenderer* HeadRenderer = nullptr; // 얼굴 바뀌는 아이템
+
 
 	U2DCollision* PlayerCollision = nullptr; // 플레이어와 습득 상호작용을 하려면 반드시 만들어야 함
 	U2DCollision* MonsterCollision = nullptr;
@@ -115,6 +127,12 @@ protected:
 	FVector2D BodyCollisionLocation = FVector2D::ZERO;
 
 	FVector2D Force = FVector2D::ZERO;
+	FVector2D DropLocation = FVector2D::ZERO;
+	FVector2D Direction = FVector2D::UP;
+
+	// EatMotionSpeed
+	FVector2D HoverForce = FVector2D(0.0f, -350.0f);
+	FVector2D Gravity = FVector2D(0.0f, 150.0f);
 
 	APlayer* Player = nullptr;
 	bool IsAtBoundary = false;  // 맵 경계면에 위치했냐 -> 반사
@@ -122,6 +140,8 @@ protected:
 	bool IsUseEnd = false;
 	bool IsDrop = false; // 맵에서 자신의 정보를 삭제
 	bool IsDropEffect = false; // 플레이어 위로 번쩍 들어올리는 아이템만 해당
+	bool IsPushback = true; // 플레이어 아이템 리스트에 들어갈 것인지.
+	bool IsMove = false; // 맵에 등장했을 때 위 아래로 움직일거냐
 	bool IsOwnedByPlayer = false; // 위치 플레이어한테 부착
 
 private:

@@ -68,8 +68,12 @@ public:
 	bool ProcessMovementInput();
 	void UpdateHeadState();
 	bool HasMovementInput();
+	void SetMovement(bool _IsMovementStopped)
+	{
+		IsMovementStopped = _IsMovementStopped;
+	}
 
-	bool PlayerIsMove()
+	bool PlayerIsMove() // Tear
 	{
 		return IsMove;
 	}
@@ -244,7 +248,12 @@ public:
 	{
 		HeadRenderer = _HeadRenderer;
 	}
-
+	void UpdateItemPos();
+	 
+	static int GetTotalHpMax()
+	{
+		return TotalHeartMax;
+	}
 protected:
 
 private:
@@ -253,6 +262,7 @@ private:
 	// Heart
 	static int Heart;
 	static int HeartMax;
+	static int TotalHeartMax;
 
 	// Stat
 	// Speed : MoveAcc
@@ -266,6 +276,8 @@ private:
 	bool IsHit = false;
 	float TimeElapsed = 0.0f;
 	int Att = 3;
+
+	float InvincibilityDuration = 0.5f; // 무적 지속시간
 
 	FVector2D KnockbackDistance = FVector2D::ZERO;
 	FVector2D KnockbackStartPos = FVector2D::ZERO;
@@ -309,6 +321,7 @@ private:
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* HeadRenderer = nullptr;
 	class USpriteRenderer* FullRenderer = nullptr;
+	class USpriteRenderer* AccessoryRenderer = nullptr;
 	float StateElapsed = 0.0f;
 
 	// Animation State

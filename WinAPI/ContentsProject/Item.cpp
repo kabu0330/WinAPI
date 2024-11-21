@@ -29,6 +29,7 @@ void AItem::BeginPlay()
 	AActor* MainPlayer = GetWorld()->GetPawn();
 	Player = dynamic_cast<APlayer*>(MainPlayer);
 
+	DropLocation = GetActorLocation();
 }
 
 void AItem::Tick(float _DeltaTime)
@@ -50,6 +51,7 @@ void AItem::Tick(float _DeltaTime)
 
 	ReverseForce(_DeltaTime);
 
+	Move(_DeltaTime);
 	ClampPositionToRoom();
 	SetLocation();
 
@@ -90,6 +92,36 @@ void AItem::CollisionSetting()
 		UniversalCollision->SetCollisionEnter(std::bind(&AItem::AreaWideAttack, this, std::placeholders::_1));
 	}
 
+}
+
+void AItem::Move(float _DeltaTIme)
+{
+	if (false == IsMove)
+	{
+		Direction = FVector2D::ZERO;
+		return;
+	}
+	if (true == IsDrop)
+	{
+		Direction = FVector2D::ZERO;
+		return;
+	}
+
+	//FVector2D MoveUpperLimit = DropLocation + FVector2D(0, -10);
+	//FVector2D MoveLowerLimit = DropLocation + FVector2D(0, 10);
+	//FVector2D CurPos = GetActorLocation();
+
+	//if (CurPos.Y < MoveUpperLimit.Y )
+	//{
+	//	Dir = FVector2D::DOWN;
+	//}
+	//else if (CurPos.Y > MoveLowerLimit.Y)
+	//{
+	//	Dir = FVector2D::UP;
+	//}
+
+	//float MoveSpeed = 20.0f;
+	//AddActorLocation(Dir * MoveSpeed * _DeltaTIme);
 }
 
 void AItem::Drop(AActor* _Player)

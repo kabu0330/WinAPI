@@ -215,7 +215,7 @@ private:
 	bool IsWarp = false; // 잠깐 워프 불가능하게 충돌체를 숨긴다.
 
 	// 카메라 이동관련 멤버
-	AActor* Player = nullptr;
+	APlayer* Player = nullptr;
 	float CameraMoveTime = 0.0f;
 	float LerpAlpha = 0.0f;
 	bool  CameraMove = false;

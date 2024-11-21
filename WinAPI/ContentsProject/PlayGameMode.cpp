@@ -36,8 +36,10 @@
 #include "Heart.h"
 #include "Bomb.h"
 #include "Penny.h"
-#include "Polyphemus.h"
 #include "Key.h"
+#include "Polyphemus.h"
+#include "CrecketsHead.h"
+#include "Dessert.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -54,12 +56,14 @@ void APlayGameMode::BeginPlay()
 
 	CollisionGroupLinkSetting();
 	UISetting();
+
 }
 
 void APlayGameMode::Spawn()
 {
 	// Room
 	ARoom* BaseRoom = GetWorld()->SpawnActor<ARoom>();
+	ARoom* TreasureRoom = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
@@ -68,11 +72,13 @@ void APlayGameMode::Spawn()
 
 	BaseRoom->InterLinkRoom(MinionRoom0, RoomDir::LEFT);
 	BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::RIGHT);
-	BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::UP);
+	BaseRoom->InterLinkRoom(TreasureRoom, RoomDir::UP);
+	//BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::UP);
 	BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN);
 	MinionRoom3->InterLinkRoom(BossRoom, RoomDir::DOWN);
 
 	BaseRoom->SetName("BaseRoom");
+	TreasureRoom->SetName("TreasureRoom");
 	MinionRoom0->SetName("MinionRoom0");
 	MinionRoom1->SetName("MinionRoom1");
 	MinionRoom2->SetName("MinionRoom2");
@@ -82,14 +88,14 @@ void APlayGameMode::Spawn()
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 140, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 160, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 150, -30 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 150, -100 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 150, 30 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 150, 50 });
-	MinionRoom0->CreateMonster<AAttackFly>({ 150, 100 });
+	//MinionRoom0->CreateMonster<AAttackFly>({ 150, 100 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ 50, 50 });
 	//MinionRoom0->CreateMonster<AFly>({ 100, 30 });
 	//MinionRoom0->CreateMonster<AFly>({ 100, -50 });
@@ -117,14 +123,18 @@ void APlayGameMode::Spawn()
 	
 	// Item
 	//AItem* Heart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
-	AItem* Heart2 = BaseRoom->CreateItem<AHeart>(nullptr, { -100, -100 });
-	AItem* Bomb = BaseRoom->CreateItem<ABomb>(nullptr, { 0, -100 });
-	AItem* Penny = BaseRoom->CreateItem<APenny>(nullptr, { -50, 100 });
+	//AItem* Heart2 = BaseRoom->CreateItem<AHeart>(nullptr, { -100, -100 });
+	//AItem* Bomb = BaseRoom->CreateItem<ABomb>(nullptr, { 0, -100 });
+	//AItem* Penny = BaseRoom->CreateItem<APenny>(nullptr, { -50, 100 });
 	//AItem* HalfHeart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
 	//HalfHeart->ChangeAnimation("HalfHeart");
+	AItem* Key = TreasureRoom->CreateItem<AKey>(nullptr, { 0, 0 });
 
-	AItem* Polyphemus = BaseRoom->CreateItem<APolyphemus>(nullptr, { 100, 0 });
-	//AItem* Key = BaseRoom->CreateItem<AKey>(nullptr, { 100, 0 });
+	AItem* Polyphemus = TreasureRoom->CreateItem<APolyphemus>(nullptr, { -200, -0 });
+	AItem* CrecketsHead = TreasureRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
+	AItem* Dessert = TreasureRoom->CreateItem<ADessert>(nullptr, { 100, -0 });
+
+	AItem* CrecketsHead1 = BaseRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()
@@ -226,7 +236,7 @@ void APlayGameMode::EngineDebug(float _DeltaTime)
 {
 	FVector2D MousePos = UEngineAPICore::GetCore()->GetMainWindow().GetMousePos();
 	UEngineDebug::CoreOutPutString("FPS : " + std::to_string(static_cast<int>(1.0f / _DeltaTime)));
-	UEngineDebug::CoreOutPutString("Player Pos : " + GetWorld()->GetPawn()->GetActorLocation().ToString(), { 0, Global::WindowSize.iY() - 60 });
+	UEngineDebug::CoreOutPutString("Player Pos : " + GetWorld()->GetPawn()->GetActorLocation().ToString(), { 0, Global::WindowSize.iY() - 20 });
 	UEngineDebug::CoreOutPutString("Camera Pos : " + GetWorld()->GetCameraPos().ToString(), { 0, Global::WindowSize.iY() - 40 });
 	//UEngineDebug::CoreOutPutString("Mouse Pos : " + MousePos.ToString(), { 0, Global::WindowSize.iY() - 20 });
 	UEngineDebug::CoreOutPutString("Room : " + ARoom::GetCurRoom()->GetName(), { Global::WindowSize.iX() - 200, 0});

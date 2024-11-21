@@ -109,11 +109,20 @@
     <ClInclude Include="Penny.h">
       <Filter>04_Play\Item\Pickup</Filter>
     </ClInclude>
-    <ClInclude Include="Polyphemus.h">
-      <Filter>04_Play\Item\Pickup</Filter>
-    </ClInclude>
     <ClInclude Include="Key.h">
       <Filter>04_Play\Item\Pickup</Filter>
+    </ClInclude>
+    <ClInclude Include="Polyphemus.h">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="CrecketsHead.h">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="Dessert.h">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="BossHpBar.h">
+      <Filter>04_Play\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -225,11 +234,20 @@
     <ClCompile Include="Penny.cpp">
       <Filter>04_Play\Item\Pickup</Filter>
     </ClCompile>
-    <ClCompile Include="Polyphemus.cpp">
-      <Filter>04_Play\Item\Pickup</Filter>
-    </ClCompile>
     <ClCompile Include="Key.cpp">
       <Filter>04_Play\Item\Pickup</Filter>
+    </ClCompile>
+    <ClCompile Include="CrecketsHead.cpp">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="Polyphemus.cpp">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="Dessert.cpp">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="BossHpBar.cpp">
+      <Filter>04_Play\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +286,9 @@
     </Filter>
     <Filter Include="04_Play\Item\Pickup">
       <UniqueIdentifier>{079671b1-8a15-491e-904a-a758f86c03c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Play\Item\Passive">
+      <UniqueIdentifier>{88ee54ce-f73a-4517-b1e7-ff3089954e55}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -159,6 +159,14 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="BossHpBar.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="CrecketsHead.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="DecalObject.h">
       <SubType>
       </SubType>
@@ -172,6 +180,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="DeathReportScene.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Dessert.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -307,6 +319,14 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="BossHpBar.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="CrecketsHead.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="DecalObject.cpp">
       <SubType>
       </SubType>
@@ -320,6 +340,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="DeathReportScene.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Dessert.cpp">
       <SubType>
       </SubType>
     </ClCompile>
