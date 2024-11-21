@@ -82,7 +82,7 @@ void APlayGameMode::Spawn()
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	//BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
+	BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 140, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 160, 0 });
 	//BaseRoom->CreateMonster<AAttackFly>({ 150, -30 });

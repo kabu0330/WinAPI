@@ -240,6 +240,10 @@ public:
 			IsMovementStopped = false;
 			});
 	}
+	void SetFullRenderer(bool _Value)
+	{
+		FullRenderer->SetActive(_Value);
+	}
 
 protected:
 

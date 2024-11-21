@@ -94,8 +94,10 @@ void APolyphemus::DropSucessAnimation(APlayer* _Player)
 
 	Force = Dir * FVector2D(0.0f, -350.0f);
 	
-	_Player->ChangePlayerAnimation(2.0f, "Drop");
+	Player->ChangePlayerAnimation(2.0f, "Drop");
 	DropEffectRenderer->SetComponentScale({ 160, 160 });
+
+
 	TimeEventer.PushEvent(2.0f, [this]() { Force = FVector2D(0, 1) * 120.0f; });
 	TimeEventer.PushEvent(3.0f, [this]() { 	
 		DropRenderer->SetActive(false); 
