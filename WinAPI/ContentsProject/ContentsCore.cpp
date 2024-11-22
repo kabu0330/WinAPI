@@ -138,6 +138,27 @@ void ContentsCore::FolderSetting()
 	PlayModeLoading.Append("PlayModeLoading");
 	UImageManager::GetInst().LoadFolder(PlayModeLoading.GetPathToString());
 
+	UEngineDirectory BossIntroDuke;
+	BossIntroDuke.MoveParentToDirectory("Resources//Image//Play//Boss//BossIntro");
+	BossIntroDuke.Append("Duke");
+	UImageManager::GetInst().LoadFolder(BossIntroDuke.GetPathToString());
+
+	UEngineDirectory BossIntroIsaac;
+	BossIntroIsaac.MoveParentToDirectory("Resources//Image//Play//Boss//BossIntro");
+	BossIntroIsaac.Append("Isaac");
+	UImageManager::GetInst().LoadFolder(BossIntroIsaac.GetPathToString());
+
+	UEngineDirectory BossIntroSpot;
+	BossIntroSpot.MoveParentToDirectory("Resources//Image//Play//Boss//BossIntro");
+	BossIntroSpot.Append("Spot");
+	UImageManager::GetInst().LoadFolder(BossIntroSpot.GetPathToString());
+
+	UEngineDirectory BossIntroVs;
+	BossIntroVs.MoveParentToDirectory("Resources//Image//Play//Boss//BossIntro");
+	BossIntroVs.Append("Vs");
+	UImageManager::GetInst().LoadFolder(BossIntroVs.GetPathToString());
+
+
 	// 2. Playing
 	UEngineDirectory DoorLockSprite;
 	DoorLockSprite.MoveParentToDirectory("Resources//Image//Play");

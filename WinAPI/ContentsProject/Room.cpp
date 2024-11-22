@@ -29,7 +29,7 @@ ARoom::ARoom()
 
 	CollisionSetting();
 
-	DebugOn();
+	// DebugOn();
 }
 
 void ARoom::BeginPlay()

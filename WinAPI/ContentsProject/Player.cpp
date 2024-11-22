@@ -62,15 +62,13 @@ void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-	//FullRenderer->SetActive(true);
-	//BodyRenderer->SetActive(false);
-	//HeadRenderer->SetActive(false);
 
 
 	// 디버그 기능 집합
 	PlayerDebugSetting(_DeltaTime);
 
 	Death(_DeltaTime);
+	PlayerLimit();
 	UITick(_DeltaTime);
 
 	if (true == APlayGameMode::IsGamePaused()) // 메뉴를 열면 정지
@@ -1185,6 +1183,14 @@ void APlayer::ResetDebug()
 	{
 		Reset();
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
+	}
+}
+
+void APlayer::PlayerLimit()
+{
+	if (Heart >= HeartMax)
+	{
+		Heart = HeartMax;
 	}
 }
 

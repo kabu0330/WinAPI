@@ -110,9 +110,9 @@ void APlayGameMode::Spawn()
 	MinionRoom3->CreateMonster<APooter>({ -250, 50 });
 	MinionRoom3->CreateMonster<APooter>({ -100, 50 });
 
-	BossRoom->CreateMonster<ATheDukeOfFlies>({ -200, 0 });
+	//BossRoom->CreateMonster<ATheDukeOfFlies>({ -200, 0 });
 	
-	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
+	BaseRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
 
 	// Object
 	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});

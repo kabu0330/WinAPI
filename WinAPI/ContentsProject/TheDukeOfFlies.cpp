@@ -12,7 +12,8 @@
 #include "Room.h"
 #include "AttackFly.h"
 #include "PlayGameMode.h"
-#include"BossHpBar.h"
+#include "BossHpBar.h"
+#include "BossIntroScene.h"
 
 ATheDukeOfFlies::ATheDukeOfFlies()
 {
@@ -121,6 +122,7 @@ void ATheDukeOfFlies::Tick(float _DeltaTime)
 		BossHpBor->SetDisplay(false);
 		return;
 	}
+	DisplayBossIntro();
 	DisplayBossHpBar();
 	
 	SkillCooldown(_DeltaTime);
@@ -128,6 +130,32 @@ void ATheDukeOfFlies::Tick(float _DeltaTime)
 	SummonFlies();
 	BlowAway();
 	SummonBigFlies();
+}
+
+void ATheDukeOfFlies::DisplayBossIntro()
+{
+	if (ParentRoom != ARoom::GetCurRoom())
+	{
+		return;
+	}
+	// 플레이어가 보스 방에 들어오면
+	APlayGameMode::SetGamePaused(true);
+	ABossIntroScene* BossIntro = GetWorld()->SpawnActor<ABossIntroScene>();
+	BossIntro->ShowScene();
+	
+}
+
+void ATheDukeOfFlies::DisplayBossHpBar()
+{
+	if (true == IsDeath())
+	{
+		return;
+	}
+	if (ParentRoom != ARoom::GetCurRoom())
+	{
+		return;
+	}
+	BossHpBor->SetDisplay(true);
 }
 
 void ATheDukeOfFlies::Death(float _DeltaTime)
@@ -181,18 +209,6 @@ void ATheDukeOfFlies::RemoveFlies()
 	Flies.clear();
 }
 
-void ATheDukeOfFlies::DisplayBossHpBar()
-{
-	if (true == IsDeath())
-	{
-		return;
-	}
-	if (ParentRoom != ARoom::GetCurRoom())
-	{
-		return;
-	}
-	BossHpBor->SetDisplay(true);
-}
 
 void ATheDukeOfFlies::SummonFlies()
 {

@@ -124,6 +124,9 @@
     <ClInclude Include="BossHpBar.h">
       <Filter>04_Play\UI</Filter>
     </ClInclude>
+    <ClInclude Include="BossIntroScene.h">
+      <Filter>04_Play\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -248,6 +251,9 @@
     </ClCompile>
     <ClCompile Include="BossHpBar.cpp">
       <Filter>04_Play\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BossIntroScene.cpp">
+      <Filter>04_Play\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -22,6 +22,7 @@ enum class ERenderOrder
 	UI_Back = 9998,
 	UI = 9999,
 	Fade = 20000,
+	Loading_Back = 29999,
 	Loading = 30000,
 	Menu = 40000
 };

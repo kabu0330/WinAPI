@@ -57,6 +57,7 @@ public:
 	void UISetting();
 	void UITick(float _DeltaTime);
 	void ResetDebug();
+	void PlayerLimit();
 
 	// Debug
 	void PlayerDebugSetting(float _DeltaTime);
