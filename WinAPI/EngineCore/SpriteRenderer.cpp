@@ -17,6 +17,8 @@ USpriteRenderer::~USpriteRenderer()
 // StaticMeshRenderer : public URenderer
 void USpriteRenderer::Render(float _DeltaTime)
 {
+	TestDebugCheck();
+
 	if (nullptr == Sprite)
 	{
 		MSGASSERT("스프라이트가 세팅되지 않은 액터를 랜더링을 할수 없습니다.");

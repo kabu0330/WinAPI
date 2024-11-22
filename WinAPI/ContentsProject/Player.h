@@ -229,7 +229,7 @@ public:
 	void ChangePlayerAnimation(float _Time, std::string_view _Name)
 	{
 		FullRenderer->ChangeAnimation(_Name);
-		FullRenderer->SetActive(true);
+		FullRenderer->SetActive(true);	
 
 		BodyRenderer->SetActive(false);
 		HeadRenderer->SetActive(false);
@@ -237,12 +237,12 @@ public:
 		IsMovementStopped = true;
 		FinalSpeed = FVector2D::ZERO;
 
-		//TimeEventer.PushEvent(_Time, [this]() {
-		//	FullRenderer->SetActive(false);
-		//	BodyRenderer->SetActive(true);
-		//	HeadRenderer->SetActive(true);
-		//	IsMovementStopped = false;
-		//	});
+		TimeEventer.PushEvent(_Time, [this]() {
+			FullRenderer->SetActive(false);
+			BodyRenderer->SetActive(true);
+			HeadRenderer->SetActive(true);
+			IsMovementStopped = false;
+			});
 	}
 	void ChangeHeadRenderer(USpriteRenderer* _HeadRenderer)
 	{

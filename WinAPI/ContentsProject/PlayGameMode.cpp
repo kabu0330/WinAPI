@@ -87,28 +87,29 @@ void APlayGameMode::Spawn()
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
-	//BaseRoom->CreateMonster<AAttackFly>({ 150, 0 });
-	//BaseRoom->CreateMonster<AAttackFly>({ 140, 0 });
-	//BaseRoom->CreateMonster<AAttackFly>({ 160, 0 });
-	//BaseRoom->CreateMonster<AAttackFly>({ 150, -30 });
-	//BaseRoom->CreateMonster<AAttackFly>({ 150, -100 });
-	//BaseRoom->CreateMonster<AAttackFly>({ 150, 30 });
-	//BaseRoom->CreateMonster<AAttackFly>({ 150, 50 });
-	//MinionRoom0->CreateMonster<AAttackFly>({ 150, 100 });
-	//MinionRoom0->CreateMonster<AAttackFly>({ 50, 50 });
-	//MinionRoom0->CreateMonster<AFly>({ 100, 30 });
-	//MinionRoom0->CreateMonster<AFly>({ 100, -50 });
-	//MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
-	//MinionRoom1->CreateMonster<AHopper>({ 100, 100 });
-	//MinionRoom2->CreateMonster<AHost>({ 150, 0 });
-	//MinionRoom2->CreateMonster<AHost>({ 150, -50 });
-	//MinionRoom3->CreateMonster<ADip>({ 150, 50 });
-	//MinionRoom3->CreateMonster<ADip>({ 150, 0 });
-	//MinionRoom3->CreateMonster<APooter>({ 100, 100 });
-	//MinionRoom3->CreateMonster<APooter>({ 250, 50 });
-	//BossRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
+
+	MinionRoom0->CreateMonster<AAttackFly>({ -150, 100 });
+	MinionRoom0->CreateMonster<AAttackFly>({ -50, 50 });
+	MinionRoom0->CreateMonster<AAttackFly>({ 0, 0 });
+	MinionRoom0->CreateMonster<AFly>({ 0, 30 });
+	MinionRoom0->CreateMonster<AFly>({ -100, -150 });
+	MinionRoom0->CreateMonster<AFly>({ -100, -50 });
+
+	MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
+	MinionRoom1->CreateMonster<AHopper>({ 100, 100 });
+	MinionRoom1->CreateMonster<AHost>({ 0, 150 });
+	MinionRoom1->CreateMonster<AHost>({ -50, -50 });
+	MinionRoom1->CreateMonster<APooter>({ -100, 100 });
+	MinionRoom1->CreateMonster<APooter>({ -100, -100 });
+
+	MinionRoom3->CreateMonster<ADip>({ 150, 50 });
+	MinionRoom3->CreateMonster<ADip>({ 150, 0 });
+	MinionRoom3->CreateMonster<APooter>({ 100, 100 });
+	MinionRoom3->CreateMonster<APooter>({ 250, 50 });
+
+	BossRoom->CreateMonster<ATheDukeOfFlies>({ -200, 0 });
 	
-	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
+	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
 
 	// Object
 	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});
@@ -121,13 +122,12 @@ void APlayGameMode::Spawn()
 	//ARoomObject* Poop = BaseRoom->CreateObject<AFire>({ 100, 0 });
 	
 	// Item
-	//AItem* Heart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
-	//AItem* Heart2 = BaseRoom->CreateItem<AHeart>(nullptr, { -100, -100 });
-	//AItem* Bomb = BaseRoom->CreateItem<ABomb>(nullptr, { 0, -100 });
-	//AItem* Penny = BaseRoom->CreateItem<APenny>(nullptr, { -50, 100 });
-	//AItem* HalfHeart = BaseRoom->CreateItem<AHeart>(nullptr, { -100, 0 });
-	//HalfHeart->ChangeAnimation("HalfHeart");
-	//AItem* Key = TreasureRoom->CreateItem<AKey>(nullptr, { 0, 0 });
+	AItem* Heart = TreasureRoom->CreateItem<AHeart>(nullptr, { -300, -150 });
+	AItem* Bomb = TreasureRoom->CreateItem<ABomb>(nullptr, { -250, -150 });
+	AItem* Penny = TreasureRoom->CreateItem<APenny>(nullptr, { -200, -150 });
+	AItem* HalfHeart = TreasureRoom->CreateItem<AHeart>(nullptr, { -150, -150 });
+	HalfHeart->ChangeAnimation("HalfHeart");
+	AItem* Key = TreasureRoom->CreateItem<AKey>(nullptr, { -100, -150 });
 
 	AItem* Polyphemus = TreasureRoom->CreateItem<APolyphemus>(nullptr, { -200, -0 });
 	AItem* CrecketsHead = TreasureRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });

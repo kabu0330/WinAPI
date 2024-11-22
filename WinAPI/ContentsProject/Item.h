@@ -131,8 +131,8 @@ protected:
 	FVector2D Direction = FVector2D::UP;
 
 	// EatMotionSpeed
-	FVector2D HoverForce = FVector2D(0.0f, -350.0f);
-	FVector2D Gravity = FVector2D(0.0f, 150.0f);
+	FVector2D HoverForce = FVector2D(0.0f, -300.0f);
+	FVector2D Gravity = FVector2D(0.0f, 120.0f);
 
 	APlayer* Player = nullptr;
 	bool IsAtBoundary = false;  // 맵 경계면에 위치했냐 -> 반사

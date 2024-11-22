@@ -71,7 +71,7 @@ bool ACrecketsHead::EatFunction(APlayer* _Player)
 		return false; // 이미 동일 아이템이 있다.
 	}
 
-	SetActorLocation(_Player->GetActorLocation());
+	SetActorLocation({ _Player->GetActorLocation().iX(), _Player->GetActorLocation().iY() - 10 });
 
 	FVector2D Dir = { _Player->GetActorLocation().X, abs(_Player->GetActorLocation().Y) };
 	Dir.Normalize(); // 방향벡터
@@ -85,7 +85,6 @@ bool ACrecketsHead::EatFunction(APlayer* _Player)
 
 	FVector2D Pos = Player->GetActorLocation();
 	FVector2D ThisPos = GetActorLocation();
-	int a = 0;
 
 	// 아이템 효과 설정
 	Player->ChangeHeadRenderer(HeadRenderer); // 얼굴 변경

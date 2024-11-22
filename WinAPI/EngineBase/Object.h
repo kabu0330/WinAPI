@@ -114,6 +114,21 @@ public:
 		IsDebugValue = !IsDebugValue;
 	}
 
+	void TestDebugOn()
+	{
+		TestDebugValue = true;
+	}
+
+	void TestDebugCheck()
+	{
+		if (true == TestDebugValue)
+		{
+			int a = 0;
+		}
+	}
+
+	
+
 
 protected:
 
@@ -128,5 +143,10 @@ private:
 	std::string Name;
 
 	bool IsDebugValue = false;
+
+
+	bool TestDebugValue = false;
 };
+
+
 

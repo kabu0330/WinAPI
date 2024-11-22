@@ -10,7 +10,7 @@ AFire::AFire()
 	FVector2D BlockingPathCollisionScale = { 30 , 30 };
 	FVector2D BlockingPathCollisionPivot = { 0, 5 };
 
-	Hp = 4;
+	Hp = 3;
 	CanExplode = false;
 	IsTearDamageable = true;
 	IsBlockingPath = false;
@@ -78,17 +78,10 @@ void AFire::SwitchAnimation()
 	case 4:
 		break;
 	case 3:
-		FlameBaseRenderer->SetComponentLocation({ 0, 0 });
-		FlameBaseRenderer->SetComponentScale(BodyRendererScale * 2.5f);
-
-		BodyCollisionLocation = { 0, -15 };
-		BodyCollisionScale = { 30, 30 };
-		BodyCollision->SetComponentLocation(BodyCollisionLocation);
-		BodyCollision->SetComponentScale(BodyCollisionScale);
 		break;
 	case 2:
 		FlameBaseRenderer->SetComponentLocation({ 0, 0 });
-		FlameBaseRenderer->SetComponentScale(BodyRendererScale * 1.8f);
+		FlameBaseRenderer->SetComponentScale(BodyRendererScale * 2.0f);
 
 		BodyCollisionLocation = { 0, -10 };
 		BodyCollisionScale = { 20, 20 };

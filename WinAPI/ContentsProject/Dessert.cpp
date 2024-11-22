@@ -15,7 +15,7 @@ ADessert::ADessert()
 	DropRenderer->CreateAnimation("Drop", "collectibles_024_dessert.png", 0, 0, 0.3f);
 	DropRenderer->SetComponentLocation({ 0, 0 });
 	DropRenderer->SetComponentScale(BodyRendererScale);
-	DropRenderer->SetOrder(ERenderOrder::Item);
+	DropRenderer->SetOrder(ERenderOrder::ItemEffect);
 	DropRenderer->ChangeAnimation("Drop");
 	DropRenderer->SetActive(true);
 
@@ -57,7 +57,7 @@ bool ADessert::EatFunction(APlayer* _Player)
 		// 더이상 증가할 필요가 없어도 먹고 끝낸다
 	}
 
-	SetActorLocation(_Player->GetActorLocation());
+	SetActorLocation({ _Player->GetActorLocation().iX(), _Player->GetActorLocation().iY() - 10 });
 
 	FVector2D Dir = { _Player->GetActorLocation().X, abs(_Player->GetActorLocation().Y) };
 	Dir.Normalize(); // 방향벡터

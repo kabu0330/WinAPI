@@ -44,6 +44,8 @@ APlayer::APlayer()
 
 	DebugOn(); // 디버그 대상에 포함
 	//SwitchInvincibility(); // 디버깅용 무적
+
+	//FullRenderer->TestDebugOn();
 }
 
 void APlayer::BeginPlay()
@@ -59,6 +61,11 @@ void APlayer::BeginPlay()
 void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
+
+	//FullRenderer->SetActive(true);
+	//BodyRenderer->SetActive(false);
+	//HeadRenderer->SetActive(false);
+
 
 	// 디버그 기능 집합
 	PlayerDebugSetting(_DeltaTime);
@@ -950,9 +957,9 @@ void APlayer::SpriteSetting()
 	FullRenderer->CreateAnimation("Consume", "Isaac.png", 2, 2, 0.1f);
 	FullRenderer->SetComponentScale({ 128, 128 });
 	FullRenderer->SetOrder(ERenderOrder::Player);
-	FullRenderer->SetPivotValue({ 5, -20 });
+	FullRenderer->SetComponentLocation({ 5, -20 });
 	FullRenderer->ChangeAnimation("Damaged");
-	//FullRenderer->SetActive(false);
+	FullRenderer->SetActive(false);
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// Accessory Item

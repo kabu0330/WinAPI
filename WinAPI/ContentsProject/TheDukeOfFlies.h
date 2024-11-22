@@ -27,6 +27,9 @@ public:
 	void Death(float _DeltaTime) override;
 	void RemoveFlies();
 
+	void SkillCooldown(float _DeltaTime);
+	void ModifySkillCooldownElapsed();
+
 	// 패턴 1 : SummonFlies : 파리 세마리 소환
 	bool HasMaxFlies(); // 스킬 발동 조건 검사
 	void SummonFlies();
@@ -45,21 +48,38 @@ public:
 	void BeginBlowAwayAnimaition();
 	void EndBlowAwayAnimaition();
 
+	// 패턴 3 : 왕파리 소환
+	bool CanSummonBigFlies();
+	void SummonBigFlies();
+	void BeginSummonBigFliesLogic();
+
 protected:
 
 private:
 	USpriteRenderer* BlackDustEffectRenderer = nullptr;
 	USpriteRenderer* DustEffectRenderer = nullptr;
 
+	bool IsAttacking = false;
+	float SkillCastDelay = 0.0f;
+	float SkillPostActionTime = 0.0f;
+	FVector2D BodyScale = FVector2D::ZERO;
+
 	// 패턴 1 : SummonFlies
 	std::list<AMonster*> Flies; // 내가 소환한 파리들
 	int MaxFlyCount = 0;
+	float SummonCooldownDuration = 4.0f;
 
 	// 패턴 2 : BlowAway
 	int BlowAwayTriggerValue = 0; // 스킬 발동 조건을 지정할 변수
 	float BlowAwayCooldownElapesd = 0.0f;
-	float BlowAwayCooldownDuration = 6.0f;
+	float BlowAwayCooldownDuration = 3.0f;
 	
+	// 패턴 3 : SummonBigFly
+	float SummonBigFlyCooldownElapsed = 0.0f;
+	float SummonBigFlyCooldownDuration = 6.0f;
+	
+	
+
 	// UI
 	class ABossHpBar* BossHpBor = nullptr;
 };

@@ -15,23 +15,24 @@
 AAttackFly::AAttackFly()
 {
 	/* 이름     : */ SetName("AttackFly");
-	/* 체력     : */ SetHp(5);
+	/* 체력     : */ SetHp(Hp);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(0); // 110
+	/* 이동속도 : */ SetMoveSpeed(100); 
 	/* 이동시간 : */ SetMoveDuration(1.5f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
-	/* 탐색범위 : */ SetDetectRange({ 300 , 300 });
+	/* 탐색범위 : */ SetDetectRange({ 450, 450 });
 
+	Hp = 5;
+	RendererScale = { 256, 256 };
+	CollisionScale = { 25, 25 };
 
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
-	BodyCollision->SetComponentScale({ 25, 25 });
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_FlyingBody);
 	BodyCollision->SetCollisionType(ECollisionType::Circle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "Fly.png", {1, 2, 1, 2, 1, 2, 3, 2, 1, 2, 1, 2, 1, 0} , 0.15f);
-	BodyRenderer->SetComponentScale({ 256, 256 });
 	BodyRenderer->ChangeAnimation("Idle");
 	BodyRenderer->SetOrder(ERenderOrder::Monster);
 
@@ -60,6 +61,9 @@ void AAttackFly::BeginPlay()
 	{
 		OrbitSpeed = GetMoveSpeed() / OrbitRadius; // 회전 속도 계산
 	}
+
+	BodyCollision->SetComponentScale(CollisionScale);
+	BodyRenderer->SetComponentScale(RendererScale);
 }
 
 void AAttackFly::Tick(float _DeltaTime)

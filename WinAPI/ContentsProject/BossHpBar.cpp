@@ -11,7 +11,7 @@ ABossHpBar::ABossHpBar()
 	SetName("BossHpBar");
 
 	FVector2D Pos = { Global::WindowSize.X * 0.5f, Global::WindowSize.Y * 0.12f };
-	Scale = { 330, 75 };
+	Scale = { 300, 60 };
 	std::string SpriteName= "ui_bosshealthbar.png";
 	BackRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BackRenderer->CreateAnimation("Back", SpriteName, 1, 1);
@@ -25,7 +25,7 @@ ABossHpBar::ABossHpBar()
 	FrontRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	FrontRenderer->SetSprite("hpbar.png");
 	//FrontRenderer->CreateAnimation("Back", SpriteName, 0, 0);
-	FrontRenderer->SetComponentLocation({ Pos.X - 165, Pos.Y  });
+	FrontRenderer->SetComponentLocation({ Pos.X - 105, Pos.Y - 2 });
 	FrontRenderer->SetPivotValue({ 0.0f, 0.5f });
 	FrontRenderer->SetOrder(ERenderOrder::UI);
 	//FrontRenderer->ChangeAnimation("Back");
@@ -63,8 +63,8 @@ void ABossHpBar::Update()
 	}
 	int CurHp = Monster->GetHp();
 	HpRatio = static_cast<float>(CurHp) / static_cast<float>(HpMax);
-	FrontScale = { 300, 95 };
-	FrontRenderer->SetComponentScale({ Scale.X * HpRatio, Scale.Y });
+	FrontScale = { 215, 14 };
+	FrontRenderer->SetComponentScale({ FrontScale.X * HpRatio, FrontScale.Y });
 }
 
 void ABossHpBar::SetDisplay(bool _Value)

@@ -43,17 +43,36 @@ public:
 	void ChaseMove(float _DeltaTime) override;
 
 	void RemoveFly();
-	
+	bool GetIsFollowBoss()
+	{
+		return IsFollowBoss;
+	}
+	void SetHp(int _Value)
+	{
+		Hp = _Value;
+	}
+	void SetScale(float _Value)
+	{
+		RendererScale *= _Value;
+		CollisionScale *= _Value;
+	}
+
+
 protected:
 
 private:
 	
 	void FollowBoss(float _DeltaTime);
+
 	AMonster* ParentBoss = nullptr;
 	bool IsFollowBoss = false;
 	float OrbitRadius = 120.0f;
 	float OrbitSpeed = 2.0f;
 	float Angle = 0.0f;
+
+	FVector2D RendererScale = FVector2D::ZERO;
+	FVector2D CollisionScale = FVector2D::ZERO;
+	float AdjustScale = 0.0f;
 
 
 };
