@@ -119,6 +119,7 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("banner.png", 26, 1); // (12, 10)
 	UImageManager::GetInst().CuttingSprite("hearts.png", 5, 2); // (80, 32)
 	UImageManager::GetInst().CuttingSprite("ui_crafting.png", 8, 4); // (128, 64)
+	UImageManager::GetInst().CuttingSprite("ui_bosshealthbar.png", 1, 2); 
 
 }
 

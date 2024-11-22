@@ -35,6 +35,8 @@ private:
 	std::string TextSpriteName = "";
 	class USpriteRenderer* BackRenderer = nullptr;
 	class USpriteRenderer* FrontRenderer = nullptr;
+
+
 	class AMonster* Monster = nullptr;
 	bool IsGetHp = false;
 	int HpMax = 1;

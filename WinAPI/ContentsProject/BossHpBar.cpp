@@ -10,23 +10,29 @@ ABossHpBar::ABossHpBar()
 {
 	SetName("BossHpBar");
 
-	FVector2D Pos = { Global::WindowSize.X * 0.5f, Global::WindowSize.Y * 0.11f };
-	Scale = { 330, 150 };
+	FVector2D Pos = { Global::WindowSize.X * 0.5f, Global::WindowSize.Y * 0.12f };
+	Scale = { 330, 75 };
+	std::string SpriteName= "ui_bosshealthbar.png";
 	BackRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BackRenderer->SetSprite("emptybar.png");
+	BackRenderer->CreateAnimation("Back", SpriteName, 1, 1);
 	BackRenderer->SetComponentLocation(Pos);
 	BackRenderer->SetComponentScale(Scale);
 	BackRenderer->SetOrder(ERenderOrder::UI_Back);
+	BackRenderer->ChangeAnimation("Back");
 	BackRenderer->SetActive(false);
 	BackRenderer->SetCameraEffect(false);
 
 	FrontRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	FrontRenderer->SetSprite("fullbar.png");
+	FrontRenderer->SetSprite("hpbar.png");
+	//FrontRenderer->CreateAnimation("Back", SpriteName, 0, 0);
 	FrontRenderer->SetComponentLocation({ Pos.X - 165, Pos.Y  });
-	FrontRenderer->SetPivotValue({ 0.f, 0.5f });
-	FrontRenderer->SetOrder(ERenderOrder::UI_Back);
+	FrontRenderer->SetPivotValue({ 0.0f, 0.5f });
+	FrontRenderer->SetOrder(ERenderOrder::UI);
+	//FrontRenderer->ChangeAnimation("Back");
 	FrontRenderer->SetActive(false);
 	FrontRenderer->SetCameraEffect(false);
+
+
 	
 }
 

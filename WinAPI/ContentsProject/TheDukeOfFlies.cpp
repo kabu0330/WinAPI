@@ -17,7 +17,7 @@
 ATheDukeOfFlies::ATheDukeOfFlies()
 {
 	/* 이름     : */ SetName("TheDukeOfFlies");
-	/* 체력     : */ SetHp(3);
+	/* 체력     : */ SetHp(30);
 	/* 공격력   : */ SetAtt(1);
 	/* 이동속도 : */ SetMoveSpeed(0);
 	/* 이동시간 : */ SetMoveDuration(1.0f);

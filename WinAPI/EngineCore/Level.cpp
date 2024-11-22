@@ -328,6 +328,7 @@ void ULevel::Release(float _DeltaTime)
 				// 랜더러는 레벨이 지울 필요가 없다.
 				// (*RenderStartIter) 누가 지울 권한을 가졌느냐.
 				// 컴포넌트의 메모리를 삭제할수 권한은 오로지 액터만 가지고 있다.
+
 				RenderStartIter = RendererList.erase(RenderStartIter);
 			}
 		}

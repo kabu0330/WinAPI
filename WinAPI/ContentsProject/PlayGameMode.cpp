@@ -108,7 +108,7 @@ void APlayGameMode::Spawn()
 	//MinionRoom3->CreateMonster<APooter>({ 250, 50 });
 	//BossRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 	
-	BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
+	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ 150, 0 });
 
 	// Object
 	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});
@@ -129,9 +129,9 @@ void APlayGameMode::Spawn()
 	//HalfHeart->ChangeAnimation("HalfHeart");
 	//AItem* Key = TreasureRoom->CreateItem<AKey>(nullptr, { 0, 0 });
 
-	//AItem* Polyphemus = TreasureRoom->CreateItem<APolyphemus>(nullptr, { -200, -0 });
-	//AItem* CrecketsHead = TreasureRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
-	//AItem* Dessert = TreasureRoom->CreateItem<ADessert>(nullptr, { 100, -0 });
+	AItem* Polyphemus = TreasureRoom->CreateItem<APolyphemus>(nullptr, { -200, -0 });
+	AItem* CrecketsHead = TreasureRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
+	AItem* Dessert = TreasureRoom->CreateItem<ADessert>(nullptr, { 100, -0 });
 
 	//AItem* CrecketsHead1 = BaseRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
 }
