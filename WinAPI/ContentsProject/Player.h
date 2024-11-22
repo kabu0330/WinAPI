@@ -237,7 +237,7 @@ public:
 		IsMovementStopped = true;
 		FinalSpeed = FVector2D::ZERO;
 
-		TimeEventer.PushEvent(_Time, [this]() {
+		TimeEventer.PushEvent(_Time - 1.5f, [this]() {
 			FullRenderer->SetActive(false);
 			BodyRenderer->SetActive(true);
 			HeadRenderer->SetActive(true);

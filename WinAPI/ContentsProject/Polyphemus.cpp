@@ -72,7 +72,7 @@ bool APolyphemus::EatFunction(APlayer* _Player)
 		return false; // 이미 동일 아이템이 있다.
 	}
 
-	SetActorLocation({ _Player->GetActorLocation().iX(), _Player->GetActorLocation().iY() - 10 });
+	SetActorLocation({ _Player->GetActorLocation().iX(), _Player->GetActorLocation().iY() + 2 });
 
 	FVector2D Dir = { _Player->GetActorLocation().X, abs(_Player->GetActorLocation().Y) };
 	Dir.Normalize(); // 방향벡터

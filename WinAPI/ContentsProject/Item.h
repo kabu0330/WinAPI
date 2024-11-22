@@ -51,6 +51,9 @@ public:
 		DropEffectRenderer->ChangeAnimation("StarFlash");
 	}
 
+	// Heart
+	virtual void SetHalfHeart() {};
+
 	// ÆøÅº
 	void AreaWideAttack(AActor* _Actor);
 	void Knockback(AActor* _Actor);
@@ -103,7 +106,7 @@ protected:
 	int ItemCount = 0;
 	int Att = 0;
 
-	float DropAnimationDuration = 2.0f;
+	float DropAnimationDuration = 3.0f;
 
 	float TimeElapsed = 0.0f;
 	class ARoom* ParentRoom = nullptr;
@@ -131,7 +134,7 @@ protected:
 	FVector2D Direction = FVector2D::UP;
 
 	// EatMotionSpeed
-	FVector2D HoverForce = FVector2D(0.0f, -300.0f);
+	FVector2D HoverForce = FVector2D(0.0f, -280.0f);
 	FVector2D Gravity = FVector2D(0.0f, 120.0f);
 
 	APlayer* Player = nullptr;

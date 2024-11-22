@@ -38,6 +38,7 @@ void ABloodTear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed,  int _A
 	SetActorLocation(_StartPos);
 	Dir = _Dir; // Dir는 터질 때 영벡터로 만들어야 하므로
 	KnockbackDir = _Dir; // 날아오는 방향을 계속 저장할 벡터가 필요하다.
+	Speed = _Speed;
 	ActorAtt = _Att;
 }
 

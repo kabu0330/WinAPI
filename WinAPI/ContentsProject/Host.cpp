@@ -22,7 +22,7 @@ AHost::AHost()
 
 	SetInvincible(false);
 
-	HeadCollisionScale = FVector2D(35, 30);
+	HeadCollisionScale = FVector2D(25, 20);
 
 	HeadCollision = CreateDefaultSubObject<U2DCollision>();
 	HeadCollision->SetComponentLocation({ 0, 10});

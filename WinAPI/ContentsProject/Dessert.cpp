@@ -57,7 +57,7 @@ bool ADessert::EatFunction(APlayer* _Player)
 		// 더이상 증가할 필요가 없어도 먹고 끝낸다
 	}
 
-	SetActorLocation({ _Player->GetActorLocation().iX(), _Player->GetActorLocation().iY() - 10 });
+	SetActorLocation({ _Player->GetActorLocation().iX(), _Player->GetActorLocation().iY() - 35 });
 
 	FVector2D Dir = { _Player->GetActorLocation().X, abs(_Player->GetActorLocation().Y) };
 	Dir.Normalize(); // 방향벡터

@@ -38,6 +38,7 @@ public:
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
+
 	void MonsterInputDebug();
 	void CollisionFuctionSetting();
 	void ReverseForce(float _DeltaTime);
@@ -45,9 +46,12 @@ public:
 	virtual void Move(float _DeltaTime);
 	virtual void ChaseMove(float _DeltaTime);
 	virtual void ChasePlayer(float _DeltaTime);
+
 	virtual void Attack(float _DeltaTime);
-	virtual void CurStateAnimation(float _DeltaTime);
+
 	virtual FVector2D GetRandomDir();
+
+	virtual void CurStateAnimation(float _DeltaTime);
 	virtual void ChangeAnimIdle();
 	virtual void HandleCollisionDamage();
 	virtual void Death(float _DeltaTime);

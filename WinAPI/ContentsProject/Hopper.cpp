@@ -15,7 +15,7 @@ AHopper::AHopper()
 	/* 이동속도 : */ SetMoveSpeed(180);
 	/* 이동시간 : */ SetMoveDuration(0.8f);
 	/* 정지시간 : */ SetMoveCooldown(1.2f);
-	/* 탐색범위 : */ SetDetectRange({ 0 , 0 });
+	/* 탐색범위 : */ SetDetectRange({ 350 , 350 });
 
 	
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
@@ -31,6 +31,12 @@ AHopper::AHopper()
 	BodyRenderer->SetComponentScale({ 64, 64 });
 	BodyRenderer->ChangeAnimation("Hopper_Idle");
 	BodyRenderer->SetOrder(ERenderOrder::Monster);
+
+	DetectCollision = CreateDefaultSubObject<U2DCollision>();
+	DetectCollision->SetComponentScale(GetDetectRange());
+	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
+	DetectCollision->SetCollisionType(ECollisionType::Circle);
+	DetectCollision->SetActive(true);
 }
 
 AHopper::~AHopper()

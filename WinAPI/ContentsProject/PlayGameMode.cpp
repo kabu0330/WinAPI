@@ -95,17 +95,20 @@ void APlayGameMode::Spawn()
 	MinionRoom0->CreateMonster<AFly>({ -100, -150 });
 	MinionRoom0->CreateMonster<AFly>({ -100, -50 });
 
-	MinionRoom1->CreateMonster<AHopper>({ 150, 0 });
+	MinionRoom1->CreateMonster<AHopper>({ 0, 0 });
 	MinionRoom1->CreateMonster<AHopper>({ 100, 100 });
-	MinionRoom1->CreateMonster<AHost>({ 0, 150 });
+	MinionRoom1->CreateMonster<AHost>({ 50, 150 });
 	MinionRoom1->CreateMonster<AHost>({ -50, -50 });
-	MinionRoom1->CreateMonster<APooter>({ -100, 100 });
-	MinionRoom1->CreateMonster<APooter>({ -100, -100 });
+
 
 	MinionRoom3->CreateMonster<ADip>({ 150, 50 });
 	MinionRoom3->CreateMonster<ADip>({ 150, 0 });
+	MinionRoom3->CreateMonster<ADip>({ 50, 50 });
+	MinionRoom3->CreateMonster<ADip>({ -150, 0 });
 	MinionRoom3->CreateMonster<APooter>({ 100, 100 });
 	MinionRoom3->CreateMonster<APooter>({ 250, 50 });
+	MinionRoom3->CreateMonster<APooter>({ -250, 50 });
+	MinionRoom3->CreateMonster<APooter>({ -100, 50 });
 
 	BossRoom->CreateMonster<ATheDukeOfFlies>({ -200, 0 });
 	
@@ -126,7 +129,8 @@ void APlayGameMode::Spawn()
 	AItem* Bomb = TreasureRoom->CreateItem<ABomb>(nullptr, { -250, -150 });
 	AItem* Penny = TreasureRoom->CreateItem<APenny>(nullptr, { -200, -150 });
 	AItem* HalfHeart = TreasureRoom->CreateItem<AHeart>(nullptr, { -150, -150 });
-	HalfHeart->ChangeAnimation("HalfHeart");
+	HalfHeart->SetHalfHeart();
+
 	AItem* Key = TreasureRoom->CreateItem<AKey>(nullptr, { -100, -150 });
 
 	AItem* Polyphemus = TreasureRoom->CreateItem<APolyphemus>(nullptr, { -200, -0 });

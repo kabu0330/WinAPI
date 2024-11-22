@@ -35,6 +35,11 @@ public:
 
 		return true;
 	}
+	void SetHalfHeart() override
+	{
+		DropRenderer->ChangeAnimation("HalfHeart");
+		ItemCount = 1;
+	}
 
 protected:
 

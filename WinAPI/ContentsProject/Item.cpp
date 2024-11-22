@@ -107,21 +107,21 @@ void AItem::Move(float _DeltaTIme)
 		return;
 	}
 
-	//FVector2D MoveUpperLimit = DropLocation + FVector2D(0, -10);
-	//FVector2D MoveLowerLimit = DropLocation + FVector2D(0, 10);
-	//FVector2D CurPos = GetActorLocation();
+	FVector2D MoveUpperLimit = DropLocation + FVector2D(0, -10);
+	FVector2D MoveLowerLimit = DropLocation + FVector2D(0, 10);
+	FVector2D CurPos = GetActorLocation();
 
-	//if (CurPos.Y < MoveUpperLimit.Y )
-	//{
-	//	Dir = FVector2D::DOWN;
-	//}
-	//else if (CurPos.Y > MoveLowerLimit.Y)
-	//{
-	//	Dir = FVector2D::UP;
-	//}
+	if (CurPos.Y < MoveUpperLimit.Y )
+	{
+		Direction = FVector2D::DOWN;
+	}
+	else if (CurPos.Y > MoveLowerLimit.Y)
+	{
+		Direction = FVector2D::UP;
+	}
 
-	//float MoveSpeed = 20.0f;
-	//AddActorLocation(Dir * MoveSpeed * _DeltaTIme);
+	float MoveSpeed = 20.0f;
+	AddActorLocation(Direction * MoveSpeed * _DeltaTIme);
 }
 
 void AItem::Drop(AActor* _Player)
