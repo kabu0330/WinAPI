@@ -17,22 +17,23 @@ ATear::ATear()
 	SetName("Player Tear");
 	SetActorLocation(FVector2D::ZERO);
 
+	RendererScale = { 92, 92 };
+	CollisionScale = { 24, 24 };
+
 	TearCollision = CreateDefaultSubObject<U2DCollision>();
-	TearCollision->SetComponentLocation({ 0, 0 });
-	TearCollision->SetComponentScale({ 50, 50 });
+	TearCollision->SetComponentLocation({ 2, -1 });
+	TearCollision->SetComponentScale(CollisionScale);
 	TearCollision->SetCollisionGroup(ECollisionGroup::Player_Attack);
 	TearCollision->SetCollisionType(ECollisionType::Circle);
 	
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
 	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.05f, false);
-	TearEffectRenderer->SetComponentScale({ 92, 92 }); // 64, 64
+	TearEffectRenderer->SetComponentScale(RendererScale); // 64, 64
 	TearEffectRenderer->SetOrder(ERenderOrder::Tear);
 	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
 	TearEffectRenderer->SetActive(true);
 
-	TearTrans.Location = TearCollision->GetComponentLocation();
-	TearTrans.Scale = TearCollision->GetComponentScale();
 	DebugOn();
 }
 
@@ -71,25 +72,47 @@ void ATear::Tick(float _DeltaTime)
 }
 
 // 값만 받아서 멤버에 저장한다.
-void ATear::Fire(APlayer* _Player, FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att)
+void ATear::Fire(APlayer* _Player, USpriteRenderer* _TearRenderer, FVector2D _StartPos, FVector2D _Dir, int _Att, float _TearSpeed,  float _ItemTearSpeed, float _Duration, FVector2D _Scale)
 {
+	TearEffectRenderer->SetActive(true);
+	
 	Player = _Player;
 
-	TearEffectRenderer->SetActive(true);
+	if (nullptr != _TearRenderer)
+	{
+		TearEffectRenderer = _TearRenderer;
+	}
+
 	SetActorLocation(_StartPos);
-	KnockbackDir = _Dir;
+
 
 	if (FVector2D::UP == _Dir || FVector2D::DOWN == _Dir)
 	{
 		IsUpDownDir = true;
+		Duration -= 0.1f;
 	}
 	Dir = _Dir.GetNormal();
+	KnockbackDir = _Dir;
 
 	ActorAtt = _Att;
-	Speed += _Speed;
 
-	Velocity = Dir * Speed;
-	int a = 0;
+	float DefulatSpeed = 600.0f;
+	float PlayerMinSpeed = 200.0f;
+	float PlayerSpeed = (_TearSpeed <= PlayerMinSpeed) ? DefulatSpeed : DefulatSpeed + ((_TearSpeed - PlayerMinSpeed) * 0.3f);
+	TearSpeed = PlayerSpeed + _ItemTearSpeed;
+
+	Velocity = Dir * TearSpeed;
+
+	Duration += _Duration;
+
+	
+	CollisionScale += _Scale * 0.5f;
+	RendererScale += _Scale * 2.67f;
+
+	TearCollision->SetComponentScale(CollisionScale);
+	TearEffectRenderer->SetComponentScale(RendererScale); 
+
+
 }
 
 void ATear::UpdateTearPosion(float _DeltaTime)
@@ -99,10 +122,9 @@ void ATear::UpdateTearPosion(float _DeltaTime)
 
 	int a = 0;
 
-	float MaxSpeed = 750.0f; // Speed랑 연계지으면 너무 빨라짐
-	if (Velocity.Length() > MaxSpeed)
+	if (Velocity.Length() > TearMaxSpeed)
 	{
-		Velocity = Velocity.GetNormal() * MaxSpeed;
+		Velocity = Velocity.GetNormal() * TearMaxSpeed;
 	}
 
 	AddActorLocation(Velocity * _DeltaTime);
@@ -120,6 +142,7 @@ void ATear::ApplyGravity(FVector2D _Gravity)
 	{
 		return;
 	}
+
 	TearCollision->SetComponentScale({ 0, 0 });
 	Force += _Gravity;
 }
@@ -128,7 +151,7 @@ void ATear::ApplyForce(float _DeltaTime)
 {
 	FVector2D Reverse = -Velocity;
 	Reverse.Normalize();
-	Reverse = Reverse * 810.0f * _DeltaTime;
+	Reverse = Reverse * 400.0f * _DeltaTime;
 	Force += Reverse;
 }
 

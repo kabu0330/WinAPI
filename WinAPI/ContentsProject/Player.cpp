@@ -97,6 +97,7 @@ void APlayer::Tick(float _DeltaTime)
 	InputAttack(_DeltaTime);
 	InputItem();
 	UpdateItemPos();
+	ChangeDetectCollisionDirection();
 
 }
 
@@ -104,6 +105,7 @@ void APlayer::CollisionFuctionSetting()
 {
 	BodyCollision->SetCollisionEnter(std::bind(&APlayer::ShowHitAnimation, this, std::placeholders::_1));
 	WarpCollision->SetCollisionStay(std::bind(&APlayer::ClampPositionToRoom, this));
+	DetectCollision->SetCollisionStay(std::bind(&APlayer::ChaseDirection, this, std::placeholders::_1));
 }
 
 // 맵 바깥으로 나가지 못하게 막는 함수
@@ -115,8 +117,8 @@ void APlayer::ClampPositionToRoom()
 	ARoom* CurRoom = ARoom::GetCurRoom();
 	FVector2D RoomPos = CurRoom->GetActorLocation();
 	FVector2D RoomScale = CurRoom->GetActorScale().Half();
-	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 1.95f;
-	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 1.9f;
+	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2.0f;
+	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 2.0f;
 
 	float LeftEdge = RoomPos.X - RoomScale.X - RoomSizeOffsetX;
 	float RightEdge = RoomPos.X + RoomScale.X + RoomSizeOffsetX;
@@ -294,6 +296,11 @@ void APlayer::CollisionSetting()
 	WarpCollision->SetCollisionGroup(ECollisionGroup::Player_Warp);
 	WarpCollision->SetCollisionType(ECollisionType::Rect);
 
+	DetectCollision = CreateDefaultSubObject<U2DCollision>();
+	DetectCollision->SetComponentScale({0, 0});
+	DetectCollision->SetCollisionGroup(ECollisionGroup::Player_DetectInRange);
+	DetectCollision->SetCollisionType(ECollisionType::Rect);
+
 	SetActorScale(WarpCollision->GetComponentScale());
 }
 
@@ -448,6 +455,7 @@ void APlayer::InputItem()
 	}
 }
 
+
 void APlayer::UpdateItemPos()
 {
 	std::list<AItem*>::iterator StartIter = Items.begin();
@@ -464,6 +472,66 @@ void APlayer::UpdateItemPos()
 		}
 	}
 
+}
+
+void APlayer::ChaseDirection(AActor* _Monster)
+{
+	if (nullptr == DetectCollision)
+	{
+		return;
+	}
+
+	if (false == DetectCollision->IsActive())
+	{
+		return;
+	}
+
+	if (nullptr == _Monster)
+	{
+		ChaseTearDir = FVector2D::ZERO;
+		return;
+	}
+
+	ChaseTearDir = FVector2D::ZERO;
+
+	FVector2D NewDir =_Monster->GetActorLocation() - GetActorLocation();
+	NewDir.Normalize();
+
+	ChaseTearDir = NewDir;
+
+}
+
+void APlayer::ChangeDetectCollisionDirection()
+{
+	if (FVector2D::ZERO == DetectCollision->GetComponentScale())
+	{
+		return;
+	}
+
+	ChaseTearDir = FVector2D::ZERO;
+
+	float OffsetX = DetectCollision->GetComponentScale().Half().X;
+	float OffsetY = DetectCollision->GetComponentScale().Half().Y;
+	if (HeadState == UpperState::ATTACK_LEFT)
+	{
+		DetectCollision->SetComponentLocation({ -OffsetX, 0.0f });
+	}
+	else if (HeadState == UpperState::ATTACK_RIGHT)
+	{
+		DetectCollision->SetComponentLocation({ OffsetX, 0.0f });
+	}
+	else if (HeadState == UpperState::ATTACK_UP)
+	{
+		DetectCollision->SetComponentLocation({ 0.0f, -OffsetY });
+	}
+	else if (HeadState == UpperState::ATTACK_DOWN)
+	{
+		DetectCollision->SetComponentLocation({ 0.0f, OffsetY });
+	}
+
+
+	FVector2D Pos = DetectCollision->GetComponentLocation();
+	int a = 0;
 }
 
 int APlayer::CheckPickupItemCount(std::string_view _ItemName)
@@ -764,6 +832,7 @@ void APlayer::InputAttack(float _DeltaTime)
 		UEngineInput::GetInst().IsDown(VK_DOWN)))
 	{
 		Attack(_DeltaTime);
+		return;
 	}
 
 	if (true == TearFire)				// false니까 공격. true로 변환.
@@ -781,6 +850,8 @@ void APlayer::InputAttack(float _DeltaTime)
 				UEngineInput::GetInst().IsPress(VK_DOWN))
 			{
 				Attack(_DeltaTime);
+				TearCoolDownElapsed = 0.0f;
+				return;
 			}
 		}
 	}
@@ -859,11 +930,19 @@ void APlayer::Attack(float _DeltaTime)
 		}
 	}
 
+	// 아이템 능력
+	if (nullptr != DetectCollision)
+	{
+		if (FVector2D::ZERO != ChaseTearDir)
+		{
+			TearDir = ChaseTearDir;
+		}	
+	}
+
 	ATear* Tear = GetWorld()->SpawnActor<ATear>();
 
 	float PlayerSpeed = FinalSpeed.Length();
-	float TearInitialSpeed = (PlayerSpeed > MaxSpeed * 0.8f) ? PlayerSpeed + 100.0f : 0.0f;
-	Tear->Fire(this, TearPos, TearDir, TearInitialSpeed, Att);
+	Tear->Fire(this, ItemTearRenderer, TearPos, TearDir, Att, PlayerSpeed, TearSpeed, TearDuration, TearScale);
 
 	SetAttackDir(HeadState);
 }

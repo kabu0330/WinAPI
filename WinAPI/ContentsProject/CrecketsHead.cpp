@@ -89,7 +89,9 @@ bool ACrecketsHead::EatFunction(APlayer* _Player)
 	// 아이템 효과 설정
 	Player->ChangeHeadRenderer(HeadRenderer); // 얼굴 변경
 
-
+	Player->InitTear();
+	Player->AddAtt(1);
+	Player->AddTearScale({10, 10});
 
 	return true;
 }

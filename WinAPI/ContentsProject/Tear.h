@@ -19,7 +19,7 @@ public:
 	void Tick(float _DeltaTime) override;
 	void CollisionSetting();
 
-	void Fire(class APlayer* _Player, FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att);
+	void Fire(class APlayer* _Player, class USpriteRenderer* _TearRenderer, FVector2D _StartPos, FVector2D _Dir, int _Att, float _TearSpeed, float _ItemTearSpeed, float _Duration, FVector2D _Scale);
 
 
 	void UpdateTearPosion(float _DeltaTime);
@@ -33,41 +33,38 @@ public:
 	void BoundaryExplosion(AActor* _Other);
 	void MapObjectCollision(AActor* _Other);
 	void ItemImpackCollision(AActor* _Other);
-	void HandleMonsterCollision(AActor* _Other);
-
+	virtual void HandleMonsterCollision(AActor* _Other);
 
 protected:
-
-private:
 	int ActorAtt = 0;
 
-	float Speed = 720.0f;
+	float TearSpeed = 0.0f;
 	float TimeElapesd = 0.0f;
-	float Duration = 0.7f;
+	float Duration = 0.8f;
 
-	float ResistanceActivationTime = Duration - 0.2f;
-	float Resistance = 0.8f;
+	float TearMaxSpeed = 1000.0f;
 
-	float GravityActivationTime = Duration - 0.1f;
-	//FVector2D Gravity = FVector2D(Resistance * 0.85f, 0.35f);
-	FVector2D GravityDir = FVector2D::ZERO;
-	FTransform TearTrans;
-
+	// 아이템 관련 스텟
+	FVector2D RendererScale = FVector2D::ZERO;
+	FVector2D CollisionScale = FVector2D::ZERO;
 
 	FVector2D Velocity = FVector2D::ZERO;
 	FVector2D Force = FVector2D::ZERO;
-	FVector2D Gravity = FVector2D(0.0f, 6000.0f);
+	FVector2D Gravity = FVector2D(0.0f, 3500.0f);
+	float GravityActivationTime = Duration - 0.15f;
 
 	FVector2D Dir = FVector2D::ZERO;
 	bool IsUpDownDir = false;
-	
+
 	class APlayer* Player = nullptr;
-	
+
 	FVector2D KnockbackDir = FVector2D::ZERO;
 
 	class USpriteRenderer* TearEffectRenderer = nullptr;
 	class U2DCollision* TearCollision = nullptr;
 
 	AActor* CollisionActor = nullptr;
+private:
+	
 };
 

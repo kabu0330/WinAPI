@@ -228,6 +228,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="InnerEye.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Item.h">
       <SubType>
       </SubType>
@@ -245,6 +249,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Polyphemus.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="PolyphemusTear.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -273,6 +281,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Pooter.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="SpoonBender.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -392,6 +404,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="InnerEye.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Item.cpp">
       <SubType>
       </SubType>
@@ -409,6 +425,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Polyphemus.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="PolyphemusTear.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -437,6 +457,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Pooter.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="SpoonBender.cpp">
       <SubType>
       </SubType>
     </ClCompile>

@@ -40,6 +40,8 @@
 #include "Polyphemus.h"
 #include "CrecketsHead.h"
 #include "Dessert.h"
+#include "InnerEye.h"
+#include "SpoonBender.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -88,12 +90,12 @@ void APlayGameMode::Spawn()
 
 	// Monster
 
-	MinionRoom0->CreateMonster<AAttackFly>({ -150, 100 });
-	MinionRoom0->CreateMonster<AAttackFly>({ -50, 50 });
-	MinionRoom0->CreateMonster<AAttackFly>({ 0, 0 });
-	MinionRoom0->CreateMonster<AFly>({ 0, 30 });
-	MinionRoom0->CreateMonster<AFly>({ -100, -150 });
-	MinionRoom0->CreateMonster<AFly>({ -100, -50 });
+	//MinionRoom0->CreateMonster<AAttackFly>({ -150, 100 });
+	//MinionRoom0->CreateMonster<AAttackFly>({ -50, 50 });
+	//MinionRoom0->CreateMonster<AAttackFly>({ 0, 0 });
+	MinionRoom0->CreateMonster<AFly>({ 0, 0 });
+	MinionRoom0->CreateMonster<AFly>({ -30, 0 });
+	MinionRoom0->CreateMonster<AFly>({ -60, 0 });
 
 	MinionRoom1->CreateMonster<AHopper>({ 0, 0 });
 	MinionRoom1->CreateMonster<AHopper>({ 100, 100 });
@@ -135,7 +137,9 @@ void APlayGameMode::Spawn()
 
 	AItem* Polyphemus = TreasureRoom->CreateItem<APolyphemus>(nullptr, { -200, -0 });
 	AItem* CrecketsHead = TreasureRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
-	AItem* Dessert = TreasureRoom->CreateItem<ADessert>(nullptr, { 100, -0 });
+	//AItem* Dessert = TreasureRoom->CreateItem<ADessert>(nullptr, { 100, -0 });
+	AItem* InnerEye = TreasureRoom->CreateItem<AInnerEye>(nullptr, { 0, -0 });
+	AItem* SpoonBender = TreasureRoom->CreateItem<ASpoonBender>(nullptr, { 100, -0 });
 
 	//AItem* CrecketsHead1 = BaseRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
 }
@@ -159,6 +163,11 @@ void APlayGameMode::CollisionGroupLinkSetting()
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Item_Impact);
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Room_TearBoundary); // 플레이어의 공격이 벽에 닿으면 즉시 터진다.
+
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_DetectInRange, ECollisionGroup::Monster_Body);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_DetectInRange, ECollisionGroup::Monster_BodyNonCollision);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_DetectInRange, ECollisionGroup::Monster_FlyingBody);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_DetectInRange, ECollisionGroup::Monster_FlyingBodyNonCollision);
 
 	// Monster
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Monster_Body, ECollisionGroup::Room_Wall); // 몬스터는 맵 밖을 나갈 수 없다.

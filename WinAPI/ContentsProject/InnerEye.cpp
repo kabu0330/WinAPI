@@ -1,16 +1,16 @@
 #include "PreCompile.h"
-#include "Polyphemus.h"
+#include "InnerEye.h"
 
-APolyphemus::APolyphemus()
+AInnerEye::AInnerEye()
 {
-	SetName("Polyphemus");
+	SetName("InnerEye");
 	BodyRendererScale = { 64, 64 };
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 1;
 	IsMove = true;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DropRenderer->SetSprite("Polyphemus.png");
+	DropRenderer->SetSprite("collectibles_002_theinnereye.png");
 	DropRenderer->SetComponentLocation({ 0, 0 });
 	DropRenderer->SetComponentScale(BodyRendererScale);
 	DropRenderer->SetOrder(ERenderOrder::ItemEffect);
@@ -23,11 +23,11 @@ APolyphemus::APolyphemus()
 	PlayerCollision->SetCollisionType(ECollisionType::Circle);
 }
 
-APolyphemus::~APolyphemus()
+AInnerEye::~AInnerEye()
 {
 }
 
-void APolyphemus::BeginPlay()
+void AInnerEye::BeginPlay()
 {
 	Super::BeginPlay();
 	AItem::BeginPlay();
@@ -35,28 +35,28 @@ void APolyphemus::BeginPlay()
 	SpriteSetting();
 }
 
-void APolyphemus::Tick(float _DeltaTime)
+void AInnerEye::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	AItem::Tick(_DeltaTime);
 }
 
-void APolyphemus::SpriteSetting()
+void AInnerEye::SpriteSetting()
 {
-	std::string SpriteName = "costume_106_polyphemus.png";
+	std::string SpriteName = "TheInnerEye.png";
 	HeadRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	HeadRenderer->CreateAnimation("Head_Left"        , SpriteName, 6, 6, 0.5f, false);
-	HeadRenderer->CreateAnimation("Head_Right"       , SpriteName, 2, 2, 0.5f, false);
-	HeadRenderer->CreateAnimation("Head_Down"        , SpriteName, 0, 0, 0.5f, false);
-	HeadRenderer->CreateAnimation("Head_Up"          , SpriteName, 4, 4, 0.5f, false);
-	HeadRenderer->CreateAnimation("Head_Attack_Left" , SpriteName, { 6, 7, 6 }, 0.2f);
+	HeadRenderer->CreateAnimation("Head_Left", SpriteName, 6, 6, 0.5f, false);
+	HeadRenderer->CreateAnimation("Head_Right", SpriteName, 2, 2, 0.5f, false);
+	HeadRenderer->CreateAnimation("Head_Down", SpriteName, 0, 0, 0.5f, false);
+	HeadRenderer->CreateAnimation("Head_Up", SpriteName, 4, 4, 0.5f, false);
+	HeadRenderer->CreateAnimation("Head_Attack_Left", SpriteName, { 6, 7, 6 }, 0.2f);
 	HeadRenderer->CreateAnimation("Head_Attack_Right", SpriteName, { 2, 3, 2 }, 0.2f);
-	HeadRenderer->CreateAnimation("Head_Attack_Down" , SpriteName, { 0, 1, 0 }, 0.2f);
-	HeadRenderer->CreateAnimation("Head_Attack_Up"   , SpriteName, { 4, 5, 4 }, 0.2f);
-	HeadRenderer->CreateAnimation("Head_Death"       , "Death_Head.png", 0, 0, 0.5f);
+	HeadRenderer->CreateAnimation("Head_Attack_Down", SpriteName, { 0, 1, 0 }, 0.2f);
+	HeadRenderer->CreateAnimation("Head_Attack_Up", SpriteName, { 4, 5, 4 }, 0.2f);
+	HeadRenderer->CreateAnimation("Head_Death", "Death_Head.png", 0, 0, 0.5f);
 
-	HeadRenderer->SetComponentLocation({ 0, Global::PlayerHeadOffset.iY() + 29});
-	HeadRenderer->SetComponentScale({ 120, 120});
+	HeadRenderer->SetComponentLocation({ 0, Global::PlayerHeadOffset.iY() + 7 });
+	HeadRenderer->SetComponentScale({ 64, 64 });
 	HeadRenderer->ChangeAnimation("Head_Down");
 
 
@@ -64,7 +64,7 @@ void APolyphemus::SpriteSetting()
 	HeadRenderer->SetActive(false);
 }
 
-bool APolyphemus::EatFunction(APlayer* _Player)
+bool AInnerEye::EatFunction(APlayer* _Player)
 {
 	int CurItemCount = _Player->GetItemCount(GetName());
 	if (CurItemCount > 1)
@@ -83,13 +83,13 @@ bool APolyphemus::EatFunction(APlayer* _Player)
 	Player->ChangeHeadRenderer(HeadRenderer); // 얼굴 변경
 
 	Player->InitTear();
-	Player->AddAtt(1);
-	Player->AddTearCooldown(0.2f);
+	Player->AddTearSpeed(200.0f);
+	// 눈물 한방 더 쏘는거 어떻게 만들지?
 
 	return true;
 }
 
-void APolyphemus::DropSucessAnimation(APlayer* _Player)
+void AInnerEye::DropSucessAnimation(APlayer* _Player)
 {
 	if (false == IsDrop)
 	{
@@ -106,12 +106,8 @@ void APolyphemus::DropSucessAnimation(APlayer* _Player)
 	DropEffectRenderer->SetComponentScale({ 160, 160 });
 
 	TimeEventer.PushEvent(DropAnimationDuration, [this]() {
-		DropRenderer->SetActive(false); 
-		DropEffectRenderer->SetActive(false); 
+		DropRenderer->SetActive(false);
+		DropEffectRenderer->SetActive(false);
 		IsOwnedByPlayer = true;
 		});
 }
-
-
-
-

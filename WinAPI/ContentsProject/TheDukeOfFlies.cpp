@@ -18,7 +18,7 @@
 ATheDukeOfFlies::ATheDukeOfFlies()
 {
 	/* 이름     : */ SetName("TheDukeOfFlies");
-	/* 체력     : */ SetHp(150);
+	/* 체력     : */ SetHp(200);
 	/* 공격력   : */ SetAtt(1);
 	/* 이동속도 : */ SetMoveSpeed(50);
 	/* 이동시간 : */ SetMoveDuration(1.0f);
@@ -76,7 +76,7 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	DetectCollision->SetActive(true);
 
 	// 맵에 존재할 수 있는 파리 숫자는 최대 12마리임, 11마리까지는 파리 소환 패턴을 쓸 수 있음
-	MaxFlyCount = 12; // 원작은 12마리
+	MaxFlyCount = 15; // 원작은 12마리
 }
 
 void ATheDukeOfFlies::BeginPlay()
@@ -237,8 +237,6 @@ FVector2D ATheDukeOfFlies::GetRandomDir()
 	FVector2D RightBot = FVector2D::RIGHT + FVector2D::DOWN;
 	RightBot.Normalize();
 
-	//static UEngineRandom MonsterRandomDir;
-	//MonsterRandomDir.SetSeed(time(nullptr));
 	int Result = MonsterRandom.RandomInt(4, 7);
 
 	if (-1 != PrevDir)
@@ -388,14 +386,16 @@ void ATheDukeOfFlies::BeginSummonFliesLogic()
 	FVector2D SetFliesPos = this->GetActorLocation() - ParentRoom->GetActorLocation() + FVector2D(0, 100);
 
 	float OrbitRadius = 150.0f;
-	float Angles[3] = { // 스폰 위치를 각도로 지정
+	const int Count = 4;
+	float Angles[Count] = { // 스폰 위치를 각도로 지정
 	static_cast<float>(50.0f * std::numbers::pi / 180.0f), 
 	static_cast<float>(90.0f * std::numbers::pi / 180.0f), 
-	static_cast<float>(130.0f * std::numbers::pi / 180.0f) 
+	static_cast<float>(130.0f * std::numbers::pi / 180.0f), 
+	static_cast<float>(170.0f * std::numbers::pi / 180.0f) 
 	};
 
-	AAttackFly* ChildFly[3] = { nullptr, };
-	for (int i = 0; i < 3; i++)
+	AAttackFly* ChildFly[Count] = { nullptr, };
+	for (int i = 0; i < Count; i++)
 	{
 		// 부하의 상대 위치 계산
 		FVector2D Offset;

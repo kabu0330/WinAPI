@@ -16,7 +16,7 @@ ABloodTear::ABloodTear()
 
 	TearCollision = CreateDefaultSubObject<U2DCollision>();
 	TearCollision->SetComponentLocation({ 0, 0 });
-	TearCollision->SetComponentScale({ 25, 25 });
+	TearCollision->SetComponentScale({ 23, 23 });
 	TearCollision->SetCollisionGroup(ECollisionGroup::Monster_Attack);
 	TearCollision->SetCollisionType(ECollisionType::Circle);
 

@@ -2,18 +2,18 @@
 #include "Item.h"
 
 // Ό³Έν :
-class ACrecketsHead : public AItem
+class AInnerEye : public AItem
 {
 public:
 	// constrcuter destructer
-	ACrecketsHead();
-	~ACrecketsHead();
+	AInnerEye();
+	~AInnerEye();
 
 	// delete Function
-	ACrecketsHead(const ACrecketsHead& _Other) = delete;
-	ACrecketsHead(ACrecketsHead&& _Other) noexcept = delete;
-	ACrecketsHead& operator=(const ACrecketsHead& _Other) = delete;
-	ACrecketsHead& operator=(ACrecketsHead&& _Other) noexcept = delete;
+	AInnerEye(const AInnerEye& _Other) = delete;
+	AInnerEye(AInnerEye&& _Other) noexcept = delete;
+	AInnerEye& operator=(const AInnerEye& _Other) = delete;
+	AInnerEye& operator=(AInnerEye&& _Other) noexcept = delete;
 
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -28,5 +28,6 @@ public:
 protected:
 
 private:
+
 };
 

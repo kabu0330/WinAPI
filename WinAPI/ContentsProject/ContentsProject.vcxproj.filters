@@ -16,9 +16,6 @@
     <ClInclude Include="Room.h">
       <Filter>04_Play</Filter>
     </ClInclude>
-    <ClInclude Include="Tear.h">
-      <Filter>04_Play</Filter>
-    </ClInclude>
     <ClInclude Include="Global.h">
       <Filter>03_Global</Filter>
     </ClInclude>
@@ -45,9 +42,6 @@
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>04_Play\Monster</Filter>
-    </ClInclude>
-    <ClInclude Include="BloodTear.h">
-      <Filter>04_Play</Filter>
     </ClInclude>
     <ClInclude Include="LoadingScene.h">
       <Filter>04_Play\Scene</Filter>
@@ -127,6 +121,21 @@
     <ClInclude Include="BossIntroScene.h">
       <Filter>04_Play\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="PolyphemusTear.h">
+      <Filter>04_Play\Tear</Filter>
+    </ClInclude>
+    <ClInclude Include="Tear.h">
+      <Filter>04_Play\Tear</Filter>
+    </ClInclude>
+    <ClInclude Include="BloodTear.h">
+      <Filter>04_Play\Tear</Filter>
+    </ClInclude>
+    <ClInclude Include="InnerEye.h">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="SpoonBender.h">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -142,9 +151,6 @@
       <Filter>03_Global</Filter>
     </ClCompile>
     <ClCompile Include="Room.cpp">
-      <Filter>04_Play</Filter>
-    </ClCompile>
-    <ClCompile Include="Tear.cpp">
       <Filter>04_Play</Filter>
     </ClCompile>
     <ClCompile Include="Global.cpp">
@@ -173,9 +179,6 @@
     </ClCompile>
     <ClCompile Include="Monster.cpp">
       <Filter>04_Play\Monster</Filter>
-    </ClCompile>
-    <ClCompile Include="BloodTear.cpp">
-      <Filter>04_Play</Filter>
     </ClCompile>
     <ClCompile Include="LoadingScene.cpp">
       <Filter>04_Play\Scene</Filter>
@@ -255,6 +258,21 @@
     <ClCompile Include="BossIntroScene.cpp">
       <Filter>04_Play\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="BloodTear.cpp">
+      <Filter>04_Play\Tear</Filter>
+    </ClCompile>
+    <ClCompile Include="PolyphemusTear.cpp">
+      <Filter>04_Play\Tear</Filter>
+    </ClCompile>
+    <ClCompile Include="Tear.cpp">
+      <Filter>04_Play\Tear</Filter>
+    </ClCompile>
+    <ClCompile Include="InnerEye.cpp">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="SpoonBender.cpp">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="00_PreCompile">
@@ -295,6 +313,9 @@
     </Filter>
     <Filter Include="04_Play\Item\Passive">
       <UniqueIdentifier>{88ee54ce-f73a-4517-b1e7-ff3089954e55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04_Play\Tear">
+      <UniqueIdentifier>{394d927e-3013-4022-9cb3-fa9ffdec5996}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

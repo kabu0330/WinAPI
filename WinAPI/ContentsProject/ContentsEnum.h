@@ -34,6 +34,7 @@ enum class ECollisionGroup
 	Player_Warp = 99,
 	Player_Body = 100,
 	Player_Attack = 101,
+	Player_DetectInRange = 102,
 	Monster_Body = 2000,
 	Monster_BodyNonCollision = 2100,
 	Monster_FlyingBody = 2200,

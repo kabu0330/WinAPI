@@ -97,6 +97,9 @@ void ContentsCore::SpriteSetting()
 
 	UImageManager::GetInst().CuttingSprite("costume_106_polyphemus.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("costume_037_maxshead.png", 8, 1);
+	UImageManager::GetInst().CuttingSprite("TheInnerEye.png", 8, 1);
+	UImageManager::GetInst().CuttingSprite("collectibles_003_spoonbender.png", 8, 1);
+	UImageManager::GetInst().CuttingSprite("SpoonBender.png", 8, 1);
 
 	UImageManager::GetInst().CuttingSprite("collectibles_024_dessert.png", 1, 1);
 

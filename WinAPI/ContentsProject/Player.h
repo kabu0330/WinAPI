@@ -4,6 +4,7 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EnginePlatform/EngineSound.h>
 #include "Tear.h"
+#include "Global.h"
 
 
 // 설명 : 아이작
@@ -253,6 +254,50 @@ public:
 	{
 		return TotalHeartMax;
 	}
+	
+	// 아이템 눈물 효과
+	void InitTear()
+	{
+		TearDuration = 0.0f;
+		TearScale = FVector2D::ZERO;
+		ItemTearRenderer = nullptr;
+		TearCooldown = 0.5f;
+		ChaseTearDir = FVector2D::ZERO;
+		DetectCollision->SetComponentScale(FVector2D::ZERO);
+	}
+	
+	void AddTearSpeed(float _TearSpeed)
+	{
+		TearSpeed += _TearSpeed;
+	}
+	void AddTearDuration(float _TearDuration)
+	{
+		TearDuration += _TearDuration;
+	}
+	void AddTearScale(FVector2D _Scale)
+	{
+		TearScale = _Scale;
+	}
+	void SetTear(class USpriteRenderer* _ItemTearRenderer)
+	{
+		ItemTearRenderer = _ItemTearRenderer;
+	}
+	void AddTearCooldown(float _TearCooldown)
+	{
+		TearCooldown -= _TearCooldown;
+	}
+
+	// 윤겔라
+	void SetDetectCollision()
+	{
+		DetectCollision->SetComponentScale({ 400, 350 });
+		float OffsetX = DetectCollision->GetComponentScale().Half().X;
+
+		DetectCollision->SetComponentLocation({OffsetX, 0.0f});
+	}
+	void ChaseDirection(AActor* _Monster);
+	void ChangeDetectCollisionDirection();
+
 protected:
 
 private:
@@ -304,10 +349,18 @@ private:
 	// Item
 	std::list<class AItem*> Items;
 
-	//Bullet
+	// 아이템으로 눈물 효과 변경을 위해서
+	class USpriteRenderer* ItemTearRenderer = nullptr;
+	float TearSpeed = 0.0f;
+	float TearDuration = 0.0f;
+	FVector2D TearScale = FVector2D::ZERO;
+	class U2DCollision* DetectCollision = nullptr;
+
+	// TearFire
 	float TearCooldown = 0.5f; // 쿨타임
 	float TearCoolDownElapsed = 0.0f;
 	FVector2D TearDir = FVector2D::ZERO;
+	FVector2D ChaseTearDir = FVector2D::ZERO;
 	bool TearFire = false;
 	bool LeftFire = true;
 
