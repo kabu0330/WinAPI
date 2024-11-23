@@ -20,10 +20,10 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	/* 이름     : */ SetName("TheDukeOfFlies");
 	/* 체력     : */ SetHp(150);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(40);
+	/* 이동속도 : */ SetMoveSpeed(50);
 	/* 이동시간 : */ SetMoveDuration(1.0f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
-	/* 탐색범위 : */ SetDetectRange({ 400 , 400 });
+	/* 탐색범위 : */ SetDetectRange({ 200 , 200 });
 	/* 발사속도 : */ SetShootingSpeed(300.0f);
 	/* 쿨타임   : */ SetCooldown(5.0f);
 	CanKnockback = false;
@@ -97,7 +97,7 @@ void ATheDukeOfFlies::BeginPlay()
 	BloodEffectRenderer->SetComponentScale({ 512, 512 });
 
 	// 스킬을 쓰지 않아도 쿨타임을 먼저 적용시켜버림
-	CooldownElapsed = 3.0f;
+	CooldownElapsed = 4.0f;
 }
 
 void ATheDukeOfFlies::Tick(float _DeltaTime)
@@ -221,6 +221,117 @@ void ATheDukeOfFlies::Death(float _DeltaTime)
 	}
 
 	BodyRenderer->SetActive(false);
+}
+
+FVector2D ATheDukeOfFlies::GetRandomDir()
+{
+	FVector2D LeftTop = FVector2D::LEFT + FVector2D::UP;
+	LeftTop.Normalize();
+
+	FVector2D LeftBot = FVector2D::LEFT + FVector2D::DOWN;
+	LeftBot.Normalize();
+
+	FVector2D RightTop = FVector2D::RIGHT + FVector2D::UP;
+	RightTop.Normalize();
+
+	FVector2D RightBot = FVector2D::RIGHT + FVector2D::DOWN;
+	RightBot.Normalize();
+
+	//static UEngineRandom MonsterRandomDir;
+	//MonsterRandomDir.SetSeed(time(nullptr));
+	int Result = MonsterRandom.RandomInt(4, 7);
+
+	if (-1 != PrevDir)
+	{
+		if (PrevDir == Result) // 이전에 이동한 방향과 같으면 다시 이동할 방향 랜덤 돌려
+		{
+			static UEngineRandom Reroll;
+			Reroll.SetSeed(time(nullptr) + Result + 1); // Result가 0일수도 있으니까 1 더해서 반드시 시드값을 바꾼다.
+			int RerollResult = Reroll.RandomInt(4, 7);
+			Result = RerollResult;
+		}
+	}
+
+	FVector2D Dir = FVector2D::ZERO;
+	switch (Result)
+	{
+	case 4:
+		State = MonsterState::LEFT;
+		Dir = LeftTop;
+		PrevDir = 4;
+		break;
+	case 5:
+		Dir = LeftBot;
+		State = MonsterState::LEFT;
+		PrevDir = 5;
+		break;
+	case 6:
+		Dir = RightTop;
+		State = MonsterState::RIGHT;
+		PrevDir = 6;
+		break;
+	case 7:
+		Dir = RightBot;
+		State = MonsterState::RIGHT;
+		PrevDir = 7;
+		break;
+	default:
+		break;
+	}
+
+	return FVector2D(Dir);
+}
+
+void ATheDukeOfFlies::ClampPositionToRoom()
+{
+	if (nullptr == BodyCollision)
+	{
+		return;
+	}
+
+	FVector2D Pos = GetActorLocation();
+	FVector2D OffsetPos = Pos + BodyCollision->GetComponentLocation();
+
+	ARoom* CurRoom = ParentRoom;
+	FVector2D RoomPos = CurRoom->GetActorLocation();
+	FVector2D RoomScale = CurRoom->GetActorScale().Half();
+	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 1.8f;
+	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 1.7f;
+
+	float LeftEdge = RoomPos.X - RoomScale.X - RoomSizeOffsetX;
+	float RightEdge = RoomPos.X + RoomScale.X + RoomSizeOffsetX;
+	float TopEdge = RoomPos.Y - RoomScale.Y - RoomSizeOffsetY;
+	float BotEdge = RoomPos.Y + RoomScale.Y + RoomSizeOffsetY;
+
+	if (LeftEdge > OffsetPos.X)
+	{
+		SetActorLocation(Pos + FVector2D{ 1, 0 });
+	}
+	if (RightEdge < OffsetPos.X)
+	{
+		SetActorLocation(Pos + FVector2D{ -1, 0 });
+	}
+	if (TopEdge > OffsetPos.Y)
+	{
+		SetActorLocation(Pos + FVector2D{ 0, 1 });
+	}
+	if (BotEdge < OffsetPos.Y)
+	{
+		SetActorLocation(Pos + FVector2D{ 0, -1 });
+	}
+}
+
+void ATheDukeOfFlies::BeginBlinkEffect()
+{
+	if (true == IsDeath()) // 죽었으면 리턴
+	{
+		return;
+	}
+
+	//BodyRenderer->SetAlphaFloat(0.0f);
+	//DamagedEffectRenderer->SetAlphaFloat(1.0f);
+	//TimeEventer.PushEvent(0.1f, std::bind(&AMonster::StayBlinkEffect, this));
+	TimeEventer.PushEvent(0.5f, std::bind_front(&AMonster::OffDamagedEffect, this));
 }
 
 void ATheDukeOfFlies::RemoveFlies()
@@ -414,7 +525,7 @@ void ATheDukeOfFlies::BeginBlowAwayLogic()
 		FVector2D Dir = Fly->GetActorLocation() - GetActorLocation();
 		Dir.Normalize();
 
-		Fly->GetForce() = Dir * 225.0f;
+		Fly->GetForce() = Dir * 230.0f;
 		
 	}
 	

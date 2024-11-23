@@ -196,8 +196,6 @@ public:
 		IsHit = !IsHit;
 	}
 
-	void KnockbackTick(float _DeltaTime);
-
 	FVector2D& GetForce()
 	{
 		return Force;

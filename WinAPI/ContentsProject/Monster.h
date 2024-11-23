@@ -63,10 +63,10 @@ public:
 	void BodyRender();
 
 	FVector2D GetDirectionToPlayer();
-	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
+	virtual void ClampPositionToRoom(); // 방 안으로 이동범위 고정
 	bool IsPlayerNearby();
 
-	void BeginBlinkEffect();
+	virtual void BeginBlinkEffect();
 	void StayBlinkEffect();
 
 	void SetParentRoom(class ARoom* _Parent)

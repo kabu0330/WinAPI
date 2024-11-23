@@ -14,7 +14,7 @@
 AMonster::AMonster()
 {
 	DamagedEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DamagedEffectRenderer->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 11, 0.05f, false);
+	DamagedEffectRenderer->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 11, 0.07f, false);
 	DamagedEffectRenderer->CreateAnimation("DamagedEffect_End", "effect_bloodpoof.png", 11, 11, 0.1f, false);
 	DamagedEffectRenderer->SetComponentScale({ 64, 64 });
 	DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
@@ -131,6 +131,7 @@ void AMonster::ChaseMove(float _DeltaTime)
 		return;
 	}
 
+	Force = FVector2D::ZERO;
 	Direction = GetDirectionToPlayer();
 	FVector2D MovePos = Direction * Speed * _DeltaTime;
 	AddActorLocation(MovePos);
@@ -512,7 +513,6 @@ int AMonster::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)
 
 	DamagedEffectRenderer->SetActive(true);
 	DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
-	//TimeEventer.PushEvent(0.8f, std::bind(&AMonster::SwitchDamagedEffectRenderer, this));
 	BeginBlinkEffect();
 
 	IsHit = true;

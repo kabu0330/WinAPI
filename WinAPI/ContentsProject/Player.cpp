@@ -188,30 +188,6 @@ int APlayer::ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir)
 	return Heart;
 }
 
-void APlayer::KnockbackTick(float _DeltaTime)
-{
-	//if (false == IsHit)
-	//{
-	//	return;
-	//}
-
-	//KnockbackDuration -= _DeltaTime;
-	//if (KnockbackDuration <= 0.0f)
-	//{
-	//	KnockbackDuration = 0.0f;
-	//	return; // 넉백 지속 시간 종료
-	//}
-
-
-	//float KnockbackLerpAlpha = 1.0f - (KnockbackDuration / 1.0f);
-	//FVector2D StartPos = FVector2D::ZERO;
-	//FVector2D CurPos = FVector2D::Lerp(KnockbackStartPos, KnockbackStartPos + KnockbackDistance, KnockbackLerpAlpha);
-
-	//float UpOffset = -50.0f * std::sin(KnockbackLerpAlpha * static_cast<float>(std::numbers::pi));
-	//FVector2D FinalPos = CurPos + FVector2D(0.0f, UpOffset);
-	//SetActorLocation(FinalPos);
-}
-
 void APlayer::ReverseForce(float _DeltaTime)
 {
 	FVector2D Reverse = -Force;

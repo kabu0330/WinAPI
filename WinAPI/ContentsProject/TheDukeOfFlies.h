@@ -25,7 +25,9 @@ public:
 	}
 	void Death(float _DeltaTime) override;
 
-
+	FVector2D GetRandomDir() override;
+	void ClampPositionToRoom() override;
+	void BeginBlinkEffect() override;
 
 	// 인트로
 	void DisplayBossIntro();
@@ -76,12 +78,12 @@ private:
 	// 패턴 1 : SummonFlies
 	std::list<AMonster*> Flies; // 내가 소환한 파리들
 	int MaxFlyCount = 0;
-	float SummonCooldownDuration = 4.0f;
+	float SummonCooldownDuration = 4.5f;
 
 	// 패턴 2 : BlowAway
 	int BlowAwayTriggerValue = 0; // 스킬 발동 조건을 지정할 변수
 	float BlowAwayCooldownElapesd = 0.0f;
-	float BlowAwayCooldownDuration = 4.0f;
+	float BlowAwayCooldownDuration = 5.5f;
 	
 	// 패턴 3 : SummonBigFly
 	float SummonBigFlyCooldownElapsed = 0.0f;

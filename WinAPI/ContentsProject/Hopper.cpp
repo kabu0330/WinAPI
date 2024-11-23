@@ -14,8 +14,8 @@ AHopper::AHopper()
 	/* 공격력   : */ SetAtt(1);
 	/* 이동속도 : */ SetMoveSpeed(180);
 	/* 이동시간 : */ SetMoveDuration(0.8f);
-	/* 정지시간 : */ SetMoveCooldown(1.2f);
-	/* 탐색범위 : */ SetDetectRange({ 350 , 350 });
+	/* 정지시간 : */ SetMoveCooldown(1.4f);
+	/* 탐색범위 : */ SetDetectRange({ 0 , 0 });
 
 	
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
@@ -26,17 +26,11 @@ AHopper::AHopper()
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Hopper_Idle", "Hopper.png", { 0, 0 }, 0.1f);
-	BodyRenderer->CreateAnimation("Hopper_Move", "Hopper.png", { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 0}, 0.15f, false);
+	BodyRenderer->CreateAnimation("Hopper_Move", "Hopper.png", { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 0}, 0.12f, false);
 	BodyRenderer->SetComponentLocation({ -7, -15 });
 	BodyRenderer->SetComponentScale({ 64, 64 });
 	BodyRenderer->ChangeAnimation("Hopper_Idle");
 	BodyRenderer->SetOrder(ERenderOrder::Monster);
-
-	DetectCollision = CreateDefaultSubObject<U2DCollision>();
-	DetectCollision->SetComponentScale(GetDetectRange());
-	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
-	DetectCollision->SetCollisionType(ECollisionType::Circle);
-	DetectCollision->SetActive(true);
 }
 
 AHopper::~AHopper()
@@ -74,6 +68,7 @@ void AHopper::Move(float _DeltaTime)
 		if (true == BodyRenderer->IsCurAnimationEnd())
 		{
 			BodyRenderer->ChangeAnimation("Hopper_Idle");
+			return;
 		}
 		if (MoveElapsedTime > MoveCooldown) // 멈춘 뒤 일정 시간이 흐르면 다시 이동
 		{
