@@ -339,6 +339,9 @@ protected:
 	// Random
 	__int64 RandomSeed = 0;
 	UEngineRandom MonsterRandom;
+
+	// Boss
+
 private:
 
 };

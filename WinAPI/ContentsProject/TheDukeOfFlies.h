@@ -29,6 +29,7 @@ public:
 
 	// 인트로
 	void DisplayBossIntro();
+	void SpawnAnimation() override;
 
 	// UI
 	void DisplayBossHpBar();
@@ -80,11 +81,11 @@ private:
 	// 패턴 2 : BlowAway
 	int BlowAwayTriggerValue = 0; // 스킬 발동 조건을 지정할 변수
 	float BlowAwayCooldownElapesd = 0.0f;
-	float BlowAwayCooldownDuration = 3.0f;
+	float BlowAwayCooldownDuration = 4.0f;
 	
 	// 패턴 3 : SummonBigFly
 	float SummonBigFlyCooldownElapsed = 0.0f;
-	float SummonBigFlyCooldownDuration = 6.0f;
+	float SummonBigFlyCooldownDuration = 8.0f;
 	
 	
 

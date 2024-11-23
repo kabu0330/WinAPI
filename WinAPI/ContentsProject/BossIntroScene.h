@@ -22,6 +22,8 @@ public:
 	void CloseScene();
 
 	void Move(float _DeltaTime);
+	void AnimateScale(float _DeltaTime);
+	void Oscillation(float _DeltaTime);
 
 	void FadeOut();
 	void FadeIn();
@@ -44,13 +46,17 @@ private:
 	float FadeValue = 0.0f;
 	float FadeDir = 1.0f;
 
-	FVector2D PlayerDir = FVector2D::ZERO;
-	FVector2D BossDir = FVector2D::ZERO;
-	FVector2D VsScale = FVector2D::ZERO;
-	FVector2D VsScaleOffset = FVector2D::ZERO;
-
-
 	float IntroTime = 0.0f;
 	float FadeTime = 0.0f;
+
+	FVector2D PlayerDir = FVector2D::ZERO;
+	FVector2D BossDir = FVector2D::ZERO;
+	bool ReverseMove = false;
+
+	FVector2D VsScale = FVector2D::ZERO;
+	FVector2D VsScaleOffset = FVector2D::ZERO;
+	bool IsShrinking = true;
+	const FVector2D	MinScale = { 324.0f, 162.0f };
+	const FVector2D MaxScale = MinScale * 1.1f;
 };
 

@@ -18,12 +18,12 @@
 ATheDukeOfFlies::ATheDukeOfFlies()
 {
 	/* 이름     : */ SetName("TheDukeOfFlies");
-	/* 체력     : */ SetHp(110);
+	/* 체력     : */ SetHp(150);
 	/* 공격력   : */ SetAtt(1);
 	/* 이동속도 : */ SetMoveSpeed(40);
 	/* 이동시간 : */ SetMoveDuration(1.0f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
-	/* 탐색범위 : */ SetDetectRange({ 300 , 300 });
+	/* 탐색범위 : */ SetDetectRange({ 400 , 400 });
 	/* 발사속도 : */ SetShootingSpeed(300.0f);
 	/* 쿨타임   : */ SetCooldown(5.0f);
 	CanKnockback = false;
@@ -138,11 +138,44 @@ void ATheDukeOfFlies::DisplayBossIntro()
 	{
 		return;
 	}
+	if (true == ReadyToBossIntro)
+	{
+		return;
+	}
 	// 플레이어가 보스 방에 들어오면
+	ReadyToBossIntro = true;
+
 	APlayGameMode::SetGamePaused(true);
+
 	ABossIntroScene* BossIntro = GetWorld()->SpawnActor<ABossIntroScene>();
 	BossIntro->ShowScene();
-	
+
+	BossIntro->Destroy(5.5f);
+}
+
+void ATheDukeOfFlies::SpawnAnimation()
+{
+	if (ParentRoom != ARoom::GetCurRoom())
+	{
+		return;
+	}
+	if (false == ReadyToBossIntro)
+	{
+		return;
+	}
+
+	// 플레이어와 같은 방에 있으면
+	if (nullptr != SpawnEffectRenderer)
+	{
+		SpawEvent = true; // FadeOut Trigger
+		SpawnEffectRenderer->SetActive(true);
+		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
+
+	}
+	else
+	{
+		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
+	}
 }
 
 void ATheDukeOfFlies::DisplayBossHpBar()
@@ -381,7 +414,7 @@ void ATheDukeOfFlies::BeginBlowAwayLogic()
 		FVector2D Dir = Fly->GetActorLocation() - GetActorLocation();
 		Dir.Normalize();
 
-		Fly->GetForce() = Dir * 250.0f;
+		Fly->GetForce() = Dir * 225.0f;
 		
 	}
 	
@@ -526,19 +559,6 @@ void ATheDukeOfFlies::SkillCooldown(float _DeltaTime)
 void ATheDukeOfFlies::ModifySkillCooldownElapsed()
 {
 	IsAttacking = true;
-	/*if (SkillCastDelay < CooldownElapsed)
-	{
-		CooldownElapsed -= SkillCastDelay;
-	}
-	if (SkillCastDelay < BlowAwayCooldownElapesd)
-	{
-		BlowAwayCooldownElapesd -= SkillCastDelay;
-	}
-	if (SkillCastDelay < SummonBigFlyCooldownElapsed)
-	{
-		SummonBigFlyCooldownElapsed -= SkillCastDelay;
-	}
-	*/
 }
 
 ATheDukeOfFlies::~ATheDukeOfFlies()
