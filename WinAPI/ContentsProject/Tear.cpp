@@ -36,36 +36,6 @@ ATear::ATear()
 	DebugOn();
 }
 
-// 값만 받아서 멤버에 저장한다.
-void ATear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att)
-{
-	TearEffectRenderer->SetActive(true);
-	SetActorLocation(_StartPos);
-	Dir = _Dir;
-	KnockbackDir = _Dir;
-	ActorAtt = _Att;
-
-	APlayer* Player = dynamic_cast<APlayer*>(GetWorld()->GetPawn());
-	float FinalSpeed = 0.0f;
-	if (true == Player->PlayerIsMove())
-	{
-		FinalSpeed = SpeedMax;	
-	}
-	else
-	{
-		FinalSpeed = Speed;
-	}
-
-	Speed = FinalSpeed / Duration;
-	if (Speed >= SpeedMax)
-	{
-		Speed = SpeedMax;
-		ResistanceActivationTime = 0.2f;
-		Resistance = 0.9f;
-		GravityActivationTime = 0.5f;
-	}
-}
-
 void ATear::BeginPlay()
 {
 	Super::BeginPlay();
@@ -93,16 +63,82 @@ void ATear::Tick(float _DeltaTime)
 	}
 
 	TimeElapesd += _DeltaTime;
+
+	ApplyGravity(Gravity * _DeltaTime);
+	ApplyForce(_DeltaTime);
+
 	UpdateTearPosion(_DeltaTime);
+}
+
+// 값만 받아서 멤버에 저장한다.
+void ATear::Fire(APlayer* _Player, FVector2D _StartPos, FVector2D _Dir, float _Speed, int _Att)
+{
+	Player = _Player;
+
+	TearEffectRenderer->SetActive(true);
+	SetActorLocation(_StartPos);
+	KnockbackDir = _Dir;
+
+	if (FVector2D::UP == _Dir || FVector2D::DOWN == _Dir)
+	{
+		IsUpDownDir = true;
+	}
+	Dir = _Dir.GetNormal();
+
+	ActorAtt = _Att;
+	Speed += _Speed;
+
+	Velocity = Dir * Speed;
+	int a = 0;
+}
+
+void ATear::UpdateTearPosion(float _DeltaTime)
+{
+	Velocity += Force;
+	FVector2D Result = Velocity;
+
+	int a = 0;
+
+	float MaxSpeed = 750.0f; // Speed랑 연계지으면 너무 빨라짐
+	if (Velocity.Length() > MaxSpeed)
+	{
+		Velocity = Velocity.GetNormal() * MaxSpeed;
+	}
+
+	AddActorLocation(Velocity * _DeltaTime);
+	
+	Force = FVector2D::ZERO;
+}
+
+void ATear::ApplyGravity(FVector2D _Gravity)
+{
+	if (true == IsUpDownDir)
+	{
+		return;
+	}
+	if (TimeElapesd < GravityActivationTime)
+	{
+		return;
+	}
+	TearCollision->SetComponentScale({ 0, 0 });
+	Force += _Gravity;
+}
+
+void ATear::ApplyForce(float _DeltaTime)
+{
+	FVector2D Reverse = -Velocity;
+	Reverse.Normalize();
+	Reverse = Reverse * 810.0f * _DeltaTime;
+	Force += Reverse;
 }
 
 void ATear::Explosion()
 {
 	if (nullptr != TearCollision)
 	{
-		TearCollision->Destroy(); 
+		TearCollision->Destroy();
 		TearCollision = nullptr;
-		Dir = FVector2D::ZERO;  
+		Dir = FVector2D::ZERO;
 		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
 		SetActorLocation(GetActorLocation());
 
@@ -111,45 +147,6 @@ void ATear::Explosion()
 			Destroy(0.4f);
 		}
 	}
-}
-
-void ATear::UpdateTearPosion(float _DeltaTime)
-{
-	// 좌우 공격만 중력을 준다.
-	if (Dir == FVector2D::LEFT || Dir == FVector2D::RIGHT)
-	{
-		if (GravityActivationTime + 0.1 < TimeElapesd) // 마지막에 중력으로 떨어뜨린다.
-		{
-			GravityDir = Dir + FVector2D(0, 1);
-			AddActorLocation(GravityDir * _DeltaTime * Speed * Gravity);
-		}
-
-		else if (GravityActivationTime < TimeElapesd) // 속도를 늦춘다.
-		{
-			GravityDir = Dir + FVector2D(0, 1);
-			AddActorLocation(GravityDir * _DeltaTime * Speed * Gravity);
-		}
-		else if (ResistanceActivationTime < TimeElapesd) // 저항력
-		{
-			AddActorLocation(Dir * _DeltaTime * Speed * Resistance);
-		}
-		else
-		{
-			AddActorLocation(Dir * _DeltaTime * Speed);
-		}
-	}
-	else // 위아래 공격에는 중력이 없다.
-	{
-		if (ResistanceActivationTime < TimeElapesd) // 저항력
-		{
-			AddActorLocation(Dir * _DeltaTime * Speed * Resistance);
-		}
-		else
-		{
-			AddActorLocation(Dir * _DeltaTime * Speed);
-		}
-	}
-
 }
 
 void ATear::CollisionSetting()
@@ -192,25 +189,20 @@ void ATear::TimeBasedExplosion()
 // 맵 밖으로 나가려하면 폭발
 void ATear::BoundaryExplosion(AActor* _Other)
 {
-	if (nullptr == TearCollision)
-	{
-		return;
-	}
-
 	ARoom* CurRoom = ARoom::GetCurRoom();
 	FVector2D RoomPos = CurRoom->GetActorLocation();
 	FVector2D RoomScale = CurRoom->GetActorScale().Half();
 	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2;
 	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 2;
 
-	float Offset = 55.0f; // 맵 경계면보다 더 멀리 나가서 터지도록 설정하고 싶다.
+	float Offset = 60.0f; // 맵 경계면보다 더 멀리 나가서 터지도록 설정하고 싶다.
 	int LeftEdge  = static_cast<int>(std::round(RoomPos.X - RoomScale.X - RoomSizeOffsetX - Offset));
 	int RightEdge = static_cast<int>(std::round(RoomPos.X + RoomScale.X + RoomSizeOffsetX + Offset));
 	int TopEdge   = static_cast<int>(std::round(RoomPos.Y - RoomScale.Y - RoomSizeOffsetY - Offset));
 	int BotEdge   = static_cast<int>(std::round(RoomPos.Y + RoomScale.Y + RoomSizeOffsetY + Offset));
 
 	FVector2D TearCenter = this->GetActorLocation();
-	FVector2D TearSize = TearCollision->GetComponentScale().Half();
+	FVector2D TearSize = { 32, 32 };
 
 	int TearLeft   = static_cast<int>(std::round(TearCenter.X - TearSize.X));
 	int TearRight  = static_cast<int>(std::round(TearCenter.X + TearSize.X));

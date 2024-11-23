@@ -180,11 +180,11 @@ public:
 
 	float GetSpeed() const
 	{
-		return SpeedMax;
+		return MaxSpeed;
 	}
-	void AddSpeedMax(float _Value)
+	void AddMaxSpeed(float _Value)
 	{
-		SpeedMax += _Value;
+		MaxSpeed += _Value;
 	}
 	void SetDir(FVector2D _Dir)
 	{
@@ -270,7 +270,7 @@ private:
 	FVector2D TargetSpeed = FVector2D::ZERO;
 	float MoveAcc = 5.0f;
 	float Deceleration = 15.0f;
-	float SpeedMax = 370.0f; // Speed
+	float MaxSpeed = 370.0f; // Speed
 	bool IsMove = false; // 가속도 노멀라이즈를 제어할 변수
 	bool IsHit = false;
 	float TimeElapsed = 0.0f;
@@ -305,9 +305,8 @@ private:
 	std::list<class AItem*> Items;
 
 	//Bullet
-	ATear* Tear = nullptr;
-	float Cooldown = 0.5f;
-	float CoolDownElapsed = 0.0f;
+	float TearCooldown = 0.5f; // 쿨타임
+	float TearCoolDownElapsed = 0.0f;
 	FVector2D TearDir = FVector2D::ZERO;
 	bool TearFire = false;
 	bool LeftFire = true;

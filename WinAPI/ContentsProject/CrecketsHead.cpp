@@ -71,12 +71,12 @@ bool ACrecketsHead::EatFunction(APlayer* _Player)
 		return false; // 이미 동일 아이템이 있다.
 	}
 
-	SetActorLocation({ _Player->GetActorLocation().iX(), _Player->GetActorLocation().iY() - 10 });
+	SetActorLocation({ _Player->GetActorLocation().iX(), _Player->GetActorLocation().iY() - 70 });
 
-	FVector2D Dir = { _Player->GetActorLocation().X, abs(_Player->GetActorLocation().Y) };
-	Dir.Normalize(); // 방향벡터
+	//FVector2D Dir = { _Player->GetActorLocation().X, abs(_Player->GetActorLocation().Y) };
+	//Dir.Normalize(); // 방향벡터
 
-	Force = Dir * HoverForce;
+	//Force = Dir * HoverForce;
 
 	IsMove = false;
 	IsPushback = true;
@@ -110,7 +110,7 @@ void ACrecketsHead::DropSucessAnimation(APlayer* _Player)
 
 	DropEffectRenderer->SetComponentScale({ 160, 160 });
 
-	TimeEventer.PushEvent(DropAnimationDuration / 2.0f, [this]() { Force = Gravity; });
+	//TimeEventer.PushEvent(DropAnimationDuration / 2.0f, [this]() { Force = Gravity; });
 	TimeEventer.PushEvent(DropAnimationDuration, [this]() {
 		DropRenderer->SetActive(false);
 		DropEffectRenderer->SetActive(false);

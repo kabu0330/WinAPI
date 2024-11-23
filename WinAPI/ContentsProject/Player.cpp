@@ -62,8 +62,6 @@ void APlayer::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-
-
 	// 디버그 기능 집합
 	PlayerDebugSetting(_DeltaTime);
 
@@ -117,8 +115,8 @@ void APlayer::ClampPositionToRoom()
 	ARoom* CurRoom = ARoom::GetCurRoom();
 	FVector2D RoomPos = CurRoom->GetActorLocation();
 	FVector2D RoomScale = CurRoom->GetActorScale().Half();
-	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2;
-	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 2;
+	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 1.95f;
+	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 1.9f;
 
 	float LeftEdge = RoomPos.X - RoomScale.X - RoomSizeOffsetX;
 	float RightEdge = RoomPos.X + RoomScale.X + RoomSizeOffsetX;
@@ -420,16 +418,9 @@ bool APlayer::Drop(AItem* _Item, int _Count)
 	}
 
 	// 아이템과 상호작용에 성공하면 아이템 데이터를 저장
-
 	_Item->DropEffect();
 	_Item->DropSuccess(); // 맵에서 아이템 정보 삭제
 
-	// 하트는 즉시 사용 및 소멸되므로 저장하지 않는다.
-	//AHeart* HeartItem = dynamic_cast<AHeart*>(_Item);
-	//if (nullptr != HeartItem)
-	//{
-	//	return true;
-	//}
 	if (false == _Item->IsPushBackItems()) // 아이템 효과만 적용하고 즉시 소멸할거라면
 	{
 		return true;
@@ -537,7 +528,7 @@ void APlayer::Move(float _DeltaTime)
 				Direction.Normalize();
 			}
 
-			TargetSpeed = Direction * SpeedMax;
+			TargetSpeed = Direction * MaxSpeed;
 
 			const float FinalSpeedLength = FinalSpeed.Length(); 
 			FVector2D CurDir = FVector2D::ZERO;
@@ -553,7 +544,7 @@ void APlayer::Move(float _DeltaTime)
 			// 기본 출발속도를 주어 최저 속도를 보장
 			if (30.0f > FinalSpeed.Length())
 			{
-				FinalSpeed += Direction * (SpeedMax * 0.2f); 
+				FinalSpeed += Direction * (MaxSpeed * 0.2f); 
 			}
 
 			// 방향전환
@@ -566,7 +557,7 @@ void APlayer::Move(float _DeltaTime)
 			{
 				// 반대 방향이라면 기존속도의 영향을 빠르게 줄이고 최저 속도를 보장하여 답답하지 않게 함
 				FinalSpeed = FVector2D::Lerp(FinalSpeed, FVector2D::ZERO, MoveAcc * DeltaTime);
-				FinalSpeed += Direction * (SpeedMax * 0.3f);
+				FinalSpeed += Direction * (MaxSpeed * 0.3f);
 			}
 			else // 같은 방향이라면 그대로
 			{
@@ -610,10 +601,10 @@ void APlayer::Move(float _DeltaTime)
 		}
 
 		// 최대속도 제한 : 항상 절댓값으로
-		if (abs(FinalSpeed.X) > SpeedMax || abs(FinalSpeed.Y) > SpeedMax)
+		if (abs(FinalSpeed.X) > MaxSpeed || abs(FinalSpeed.Y) > MaxSpeed)
 		{
 			FinalSpeed.Normalize();
-			FinalSpeed *= SpeedMax;
+			FinalSpeed *= MaxSpeed;
 		}
 
 		AddActorLocation(FinalSpeed * DeltaTime); // 실제 이동값
@@ -777,12 +768,12 @@ void APlayer::InputAttack(float _DeltaTime)
 
 	if (true == TearFire)				// false니까 공격. true로 변환.
 	{
-		CoolDownElapsed += _DeltaTime; 	// 공격했으면 쿨타임 계산 시작
-		if (CoolDownElapsed > Cooldown) //  쿨타임이 경과되면, 
+		TearCoolDownElapsed += _DeltaTime; 	// 공격했으면 쿨타임 계산 시작
+		if (TearCoolDownElapsed > TearCooldown) //  쿨타임이 경과되면, 
 		{
 			//TearFire를 false로 되돌려 공격 가능 상태로 바꾸고 쿨타임 초기화
 			TearFire = false;
-			CoolDownElapsed = 0.0f;
+			TearCoolDownElapsed = 0.0f;
 
 			if (UEngineInput::GetInst().IsPress(VK_LEFT) ||
 				UEngineInput::GetInst().IsPress(VK_RIGHT) ||
@@ -800,11 +791,14 @@ void APlayer::Attack(float _DeltaTime)
 	TearFire = true; // true일 때, Cooldown시간 동안 Attack 함수가 호출될 수 없다.
 
 	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() + Global::PlayerHeadOffset.iY() + 10};
+	TearDir = FVector2D::ZERO;
 
 	// 눈물이 좌/우로 번갈아 발사되는 디테일을 위해 Pos를 한번 더 조정한다.
 	if (UEngineInput::GetInst().IsPress(VK_LEFT))
 	{
-		Tear = GetWorld()->SpawnActor<ATear>();
+		TearDir = FVector2D::LEFT;
+		HeadState = UpperState::ATTACK_LEFT;
+
 		if (true == LeftFire)
 		{
 			TearPos = TearPos + FVector2D{ -15, -3 };
@@ -815,12 +809,12 @@ void APlayer::Attack(float _DeltaTime)
 			TearPos = TearPos + FVector2D{ -15, 3 };
 			LeftFire = true;
 		}
-		TearDir = FVector2D::LEFT;
-		HeadState = UpperState::ATTACK_LEFT;
 	}
 	if (UEngineInput::GetInst().IsPress(VK_RIGHT))
 	{
-		Tear = GetWorld()->SpawnActor<ATear>();
+		TearDir = FVector2D::RIGHT;
+		HeadState = UpperState::ATTACK_RIGHT;
+
 		if (true == LeftFire)
 		{
 			TearPos = TearPos + FVector2D{ +15, -3 };
@@ -831,12 +825,12 @@ void APlayer::Attack(float _DeltaTime)
 			TearPos = TearPos + FVector2D{ +15, 3 };
 			LeftFire = true;
 		}
-		TearDir = FVector2D::RIGHT;
-		HeadState = UpperState::ATTACK_RIGHT;
 	}
 	if (UEngineInput::GetInst().IsPress(VK_UP))
 	{
-		Tear = GetWorld()->SpawnActor<ATear>();
+		TearDir = FVector2D::UP;
+		HeadState = UpperState::ATTACK_UP;
+
 		if (true == LeftFire)
 		{
 			TearPos = TearPos + FVector2D{ -7, -15 };
@@ -847,12 +841,12 @@ void APlayer::Attack(float _DeltaTime)
 			TearPos = TearPos + FVector2D{ +7, -15 };
 			LeftFire = true;
 		}
-		TearDir = FVector2D::UP;
-		HeadState = UpperState::ATTACK_UP;
 	}
 	if (UEngineInput::GetInst().IsPress(VK_DOWN))
 	{
-		Tear = GetWorld()->SpawnActor<ATear>();
+		TearDir = FVector2D::DOWN;
+		HeadState = UpperState::ATTACK_DOWN;
+
 		if (true == LeftFire)
 		{
 			TearPos = TearPos + FVector2D{ -7, 0 };
@@ -863,11 +857,13 @@ void APlayer::Attack(float _DeltaTime)
 			TearPos = TearPos + FVector2D{ +7, 0 };
 			LeftFire = true;
 		}
-		TearDir = FVector2D::DOWN;
-		HeadState = UpperState::ATTACK_DOWN;
 	}
 
-	Tear->Fire(TearPos, TearDir, SpeedMax, Att);
+	ATear* Tear = GetWorld()->SpawnActor<ATear>();
+
+	float PlayerSpeed = FinalSpeed.Length();
+	float TearInitialSpeed = (PlayerSpeed > MaxSpeed * 0.8f) ? PlayerSpeed + 100.0f : 0.0f;
+	Tear->Fire(this, TearPos, TearDir, TearInitialSpeed, Att);
 
 	SetAttackDir(HeadState);
 }
