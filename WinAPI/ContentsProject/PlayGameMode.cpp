@@ -112,7 +112,7 @@ void APlayGameMode::Spawn()
 
 	//BossRoom->CreateMonster<ATheDukeOfFlies>({ -200, 0 });
 	
-	BaseRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
+	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
 
 	// Object
 	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});

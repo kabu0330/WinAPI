@@ -94,7 +94,6 @@ void APlayer::Tick(float _DeltaTime)
 	}
 
 	// ·ÎÁ÷
-	KnockbackTick(_DeltaTime);
 
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);

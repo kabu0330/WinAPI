@@ -37,15 +37,15 @@ protected:
 private:
 	int ActorAtt = 0;
 
-	float Speed = 350.0f;
+	float Speed = 300.0f;
 	float SpeedMax = 500.0f;
 	float TimeElapesd = 0.0f;
-	float Duration = 0.85f;
+	float Duration = 0.8f;
 
-	float ResistanceActivationTime = 0.6f;
+	float ResistanceActivationTime = Duration - 0.2f;
 	float Resistance = 0.8f;
 
-	float GravityActivationTime = 0.7f;
+	float GravityActivationTime = Duration - 0.15f;
 	FVector2D Gravity = FVector2D(Resistance * 0.85f, 0.35f);
 	FVector2D GravityDir = FVector2D::ZERO;
 	FTransform TearTrans;
