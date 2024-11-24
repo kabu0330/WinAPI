@@ -13,6 +13,15 @@ enum class TitleSceneDir
 	MAX
 };
 
+enum class ArrowPos
+{
+	NONE,
+	TOP,
+	MID,
+	BOT,
+	MAX
+};
+
 // Ό³Έν :
 class ATitleScene : public AActor
 {
@@ -38,6 +47,8 @@ public:
 	void SetSceneLocation(ATitleScene* _Scene, TitleSceneDir _Dir);
 
 	void CheckInput();
+	void CheckInputArrow();
+	void SwitchArrowPos(bool _UpDown);
 
 	void SetFirstScene();
 	bool IsLastScene();
@@ -66,6 +77,8 @@ private:
 	bool IsCameraMove = false;
 	bool IsNextScene = true;
 
+	static class USpriteRenderer* ArrowRenderer;
+	ArrowPos CurArrowPos = ArrowPos::TOP;
 
 };
 

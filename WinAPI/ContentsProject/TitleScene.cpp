@@ -11,6 +11,7 @@
 
 ATitleScene* ATitleScene::FirstScene  = nullptr;
 ATitleScene* ATitleScene::CurrentScene  = nullptr;
+USpriteRenderer* ATitleScene::ArrowRenderer = nullptr;
 
 ATitleScene::ATitleScene()
 {
@@ -21,9 +22,34 @@ ATitleScene::ATitleScene()
 	TitleRenderer->SetComponentScale(Global::WindowSize);
 	TitleRenderer->CreateAnimation("MainTitleScene", "MainTitle", 0, 7, 0.2f);
 	TitleRenderer->CreateAnimation("SaveFileScene", "SaveFile", 0, 1, 0.2f);
+	//TitleRenderer->CreateAnimation("SelectScene", "SelectScene.png", 0, 0, 0.2f, false);
+	TitleRenderer->CreateAnimation("SelectScene", "InGameSelectScene.png", 0, 0, 0.2f, false);
+	TitleRenderer->CreateAnimation("CharacterSelectScene", "InGameCharacterSelectScene.png", 0, 0, 0.2f, false);
 
+	//ArrowRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	//ArrowRenderer->SetComponentScale({ 80, 80 });
+	//ArrowRenderer->SetComponentLocation({830, 430}); // {830, 430}, {850, 580}, {860, 740} 
+	//ArrowRenderer->SetOrder(ERenderOrder::SceneTool);
+	//ArrowRenderer->SetSprite("arrow.png");
 
 	TitleRenderer->ChangeAnimation("MainTitleScene");
+}
+
+void ATitleScene::ChangeAnimationScene()
+{
+	std::string ThisName = GetName();
+	if ("SaveFileScene" == ThisName)
+	{
+		TitleRenderer->ChangeAnimation("SaveFileScene");
+	}
+	else if ("SelectScene" == ThisName)
+	{
+		TitleRenderer->ChangeAnimation("SelectScene");
+	}
+	else if ("CharacterSelectScene" == ThisName)
+	{
+		TitleRenderer->ChangeAnimation("CharacterSelectScene");
+	}
 }
 
 void ATitleScene::BeginPlay()
@@ -38,11 +64,8 @@ void ATitleScene::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 
-	if (this == CurrentScene)
-	{
-		CheckInput();
-	}
-
+	CheckInput();
+	//CheckInputArrow();
 	MoveToCamera(_DeltaTime);
 }
 
@@ -234,6 +257,74 @@ void ATitleScene::CheckInput()
 	}
 }
 
+void ATitleScene::CheckInputArrow()
+{
+	if (this != CurrentScene)
+	{
+		return;
+	}
+	if (true == IsCameraMove)
+	{
+		return;
+	}
+
+	std::string ThisName = GetName();
+	if ("SelectScene" != ThisName)
+	{
+		return;
+	}
+	
+	if (UEngineInput::GetInst().IsDown(VK_DOWN))
+	{
+		SwitchArrowPos(true);
+	}
+	if (UEngineInput::GetInst().IsDown(VK_UP))
+	{
+		SwitchArrowPos(false);
+	}
+}
+
+void ATitleScene::SwitchArrowPos(bool _UpDown)
+{
+	int Value = static_cast<bool>(_UpDown);
+	if (0 == Value)
+	{
+		Value = -1;
+	}
+	else if (1 == Value)
+	{
+		Value = 1;
+	}
+
+	int IntCurArrowPos = static_cast<int>(CurArrowPos);
+	IntCurArrowPos += Value;
+	CurArrowPos = static_cast<ArrowPos>(IntCurArrowPos);
+
+	if (ArrowPos::NONE == CurArrowPos)
+	{
+		CurArrowPos = ArrowPos::BOT;
+	}
+	if (ArrowPos::MAX == CurArrowPos)
+	{
+		CurArrowPos = ArrowPos::TOP;
+	}
+
+	switch (CurArrowPos)
+	{
+	case ArrowPos::TOP:
+		ArrowRenderer->SetComponentLocation({ 830, 430 });
+		break;
+	case ArrowPos::MID:
+		ArrowRenderer->SetComponentLocation({ 850, 580 });
+		break;
+	case ArrowPos::BOT:
+		ArrowRenderer->SetComponentLocation({ 860, 740 });
+		break;
+	default:
+		break;
+	}
+}
+
 bool ATitleScene::MoveToScene(TitleSceneDir _Dir)
 {
 	std::map<TitleSceneDir, ATitleScene*>::iterator FindScene = Scenes.find(_Dir);
@@ -251,8 +342,8 @@ bool ATitleScene::MoveToScene(TitleSceneDir _Dir)
 	{
 		return false;
 	}
-
-	// 현재 씬에서 다음 씬 위치로 카메라가 이동하면 되지 않을까?
+	
+	// 카메라 이동값 세팅, Tick에서 카메라 이동시킬 것임
 	MoveToCameraInitSetting(NextScene, _Dir);
 
 	return true;
@@ -355,15 +446,6 @@ void ATitleScene::ChangeCurrentScene()
 
 }
 
-void ATitleScene::ChangeAnimationScene()
-{
-	std::string ThisName = GetName();
-	if (ThisName == "SaveFileScene")
-	{
-		TitleRenderer->ChangeAnimation("SaveFileScene");
-	}
-}
-
 void ATitleScene::SetFirstScene()
 {
 	if (nullptr == CurrentScene)
@@ -377,10 +459,6 @@ bool ATitleScene::IsLastScene()
 {
 	ATitleScene* CurScene = this;
 
-	//if (FirstScene == Scene)
-	//{
-	//	return;
-	//}
 	if (CurrentScene != CurScene)
 	{
 		return false;

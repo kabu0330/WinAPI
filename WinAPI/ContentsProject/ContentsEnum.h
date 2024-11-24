@@ -5,6 +5,7 @@ enum class ERenderOrder
 {
 	Background = -1000,
 	Scene = -999,
+	SceneTool = -998,
 	Decal = -995,
 	Controls = -990,
 	MonsterDeathDebris = -900,

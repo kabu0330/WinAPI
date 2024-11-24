@@ -41,14 +41,17 @@ void ATitleGameMode::SetupScene()
 {
 	ATitleScene* MainTitleScene = GetWorld()->SpawnActor<ATitleScene>();
 	ATitleScene* SaveFileScene = GetWorld()->SpawnActor<ATitleScene>();
-	ATitleScene* SellectScene = GetWorld()->SpawnActor<ATitleScene>();
+	ATitleScene* SelectScene = GetWorld()->SpawnActor<ATitleScene>();
+	ATitleScene* CharacterSelectScene = GetWorld()->SpawnActor<ATitleScene>();
 
 	MainTitleScene->SetName("MainTitleScene");
 	SaveFileScene->SetName("SaveFileScene");
-	SellectScene->SetName("SellectScene");
+	SelectScene->SetName("SelectScene");
+	CharacterSelectScene->SetName("CharacterSelectScene");
 
 	MainTitleScene->InterLinkScene(SaveFileScene, TitleSceneDir::DOWN);
-	SaveFileScene->InterLinkScene(SellectScene, TitleSceneDir::DOWN);
+	SaveFileScene->InterLinkScene(SelectScene, TitleSceneDir::DOWN);
+	SelectScene->InterLinkScene(CharacterSelectScene, TitleSceneDir::RIGHT);
 }
 
 
