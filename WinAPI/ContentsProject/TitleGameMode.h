@@ -18,6 +18,8 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime);
 
+	void SetupScene();
+
 protected:
 
 private:

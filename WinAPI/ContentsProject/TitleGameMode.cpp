@@ -14,6 +14,7 @@
 
 ATitleGameMode::ATitleGameMode()
 {
+
 }
 
 ATitleGameMode::~ATitleGameMode()
@@ -23,17 +24,31 @@ ATitleGameMode::~ATitleGameMode()
 void ATitleGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	ATitleScene* Scene = GetWorld()->SpawnActor<ATitleScene>();
+
+	GetWorld()->SetCameraPos({ 0, 0 });
+	GetWorld()->SetCameraToMainPawn(false);
+
+	SetupScene();
 }
 
 void ATitleGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
-	if (true == UEngineInput::GetInst().IsDown(VK_SPACE))
-	{
-		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
-		UEngineAPICore::GetCore()->OpenLevel("Play");
-	}
+
+}
+
+void ATitleGameMode::SetupScene()
+{
+	ATitleScene* MainTitleScene = GetWorld()->SpawnActor<ATitleScene>();
+	ATitleScene* SaveFileScene = GetWorld()->SpawnActor<ATitleScene>();
+	ATitleScene* SellectScene = GetWorld()->SpawnActor<ATitleScene>();
+
+	MainTitleScene->SetName("MainTitleScene");
+	SaveFileScene->SetName("SaveFileScene");
+	SellectScene->SetName("SellectScene");
+
+	MainTitleScene->InterLinkScene(SaveFileScene, TitleSceneDir::DOWN);
+	SaveFileScene->InterLinkScene(SellectScene, TitleSceneDir::DOWN);
 }
 
 

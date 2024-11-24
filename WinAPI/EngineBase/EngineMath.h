@@ -40,6 +40,12 @@ public:
 		return (_A < _B) ? _A : _B;
 	}
 
+	template <typename DataType>
+	static DataType Max(DataType _A, DataType _B)
+	{
+		return (_A < _B) ? _B : _A;
+	}
+
 	template <typename VectorType>
 	static VectorType AngleToRadian(const float& _Angle)
 	{
@@ -159,6 +165,13 @@ public:
 	float Length() const
 	{
 		return UEngineMath::Sqrt(X * X + Y * Y);
+	}
+	
+	static float Distance(FVector2D _Vector0, FVector2D _Vector1)
+	{
+		float PowX = ::powf(_Vector0.X - _Vector1.X, 2);
+		float PowY = ::powf(_Vector0.Y - _Vector1.Y, 2);
+		return ::sqrtf(PowX + PowY);
 	}
 
 

@@ -1,5 +1,17 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include <map>
+#include <list>
+
+enum class TitleSceneDir
+{
+	NONE,
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN,
+	MAX
+};
 
 // Ό³Έν :
 class ATitleScene : public AActor
@@ -18,9 +30,42 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime);
 
+	bool IsLinking(ATitleScene* _Scene);
+	bool InterLinkScene(ATitleScene* _Scene, TitleSceneDir _Dir);
+	ATitleScene* LinkScene(ATitleScene* _Scene, TitleSceneDir _Dir);
+
+	TitleSceneDir SwitchTitleSceneDir(TitleSceneDir _Dir);
+	void SetSceneLocation(ATitleScene* _Scene, TitleSceneDir _Dir);
+
+	void CheckInput();
+
+	void SetFirstScene();
+	bool IsLastScene();
+
+	bool MoveToScene(TitleSceneDir _Dir);
+	void MoveToCameraInitSetting(ATitleScene*  _Scene, TitleSceneDir _Dir);
+	void MoveToCamera(float _DeltaTime);
+	bool IsAtDestination();
+	void ChangeCurrentScene();
+
+	void ChangeAnimationScene();
+
 protected:
 
 private:
-	class USpriteRenderer* TitleRenderer;
+	class USpriteRenderer* TitleRenderer = nullptr;
+
+	std::map<TitleSceneDir, ATitleScene*> Scenes;
+	
+	static ATitleScene* CurrentScene;
+	static ATitleScene* FirstScene;
+
+	FVector2D Force = FVector2D::ZERO;
+	FVector2D CameraMoveForce = FVector2D::ZERO;
+	FVector2D TargetScenePos = FVector2D::ZERO;
+	bool IsCameraMove = false;
+	bool IsNextScene = true;
+
+
 };
 

@@ -55,7 +55,7 @@ void ContentsCore::LevelSetting()
 
 	// 최초 실행될 레벨을 결정한다.
 	UEngineAPICore::GetCore()->OpenLevel("Title");
-	UEngineAPICore::GetCore()->OpenLevel("Play");
+	//UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
 void ContentsCore::SpriteSetting()
@@ -129,10 +129,15 @@ void ContentsCore::SpriteSetting()
 void ContentsCore::FolderSetting()
 {
 	// TitleGameMode
-	UEngineDirectory TitleDir;
-	TitleDir.MoveParentToDirectory("Resources//Image");
-	TitleDir.Append("Title");
-	UImageManager::GetInst().LoadFolder(TitleDir.GetPathToString());
+	UEngineDirectory TitleMain;
+	TitleMain.MoveParentToDirectory("Resources//Image//Title");
+	TitleMain.Append("MainTitle");
+	UImageManager::GetInst().LoadFolder(TitleMain.GetPathToString());
+
+	UEngineDirectory TitleSaveFile;
+	TitleSaveFile.MoveParentToDirectory("Resources//Image//Title");
+	TitleSaveFile.Append("SaveFile");
+	UImageManager::GetInst().LoadFolder(TitleSaveFile.GetPathToString());
 
 	// PlayGameMode
 	// 1. Loading
