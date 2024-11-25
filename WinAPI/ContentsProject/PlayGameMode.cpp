@@ -92,20 +92,20 @@ void APlayGameMode::Spawn()
 
 	// Monster
 
-	//MinionRoom0->CreateMonster<AAttackFly>({ -150, 100 });
+	//BaseRoom->CreateMonster<AAttackFly>({ -150, 100 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ -50, 50 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ 0, 0 });
-	MinionRoom0->CreateMonster<AFly>({ 0, 0 });
-	MinionRoom0->CreateMonster<AFly>({ -30, 0 });
-	MinionRoom0->CreateMonster<AFly>({ -60, 0 });
+	//MinionRoom0->CreateMonster<AFly>({ 0, 0 });
+	//MinionRoom0->CreateMonster<AFly>({ -30, 0 });
+	//MinionRoom0->CreateMonster<AFly>({ -60, 0 });
 
-	MinionRoom1->CreateMonster<AHopper>({ 0, 0 });
-	MinionRoom1->CreateMonster<AHopper>({ 100, 100 });
-	MinionRoom1->CreateMonster<AHost>({ 50, 150 });
-	MinionRoom1->CreateMonster<AHost>({ -50, -50 });
+	//MinionRoom1->CreateMonster<AHopper>({ 0, 0 });
+	//MinionRoom1->CreateMonster<AHopper>({ 100, 100 });
+	//MinionRoom1->CreateMonster<AHost>({ 50, 150 });
+	//MinionRoom1->CreateMonster<AHost>({ -50, -50 });
 
 
-	BossRoom->CreateMonster<ADip>({ 150, 50 });
+	//BossRoom->CreateMonster<ADip>({ 150, 50 });
 	//MinionRoom3->CreateMonster<ADip>({ 150, 0 });
 	//MinionRoom3->CreateMonster<ADip>({ 50, 50 });
 	//MinionRoom3->CreateMonster<ADip>({ -150, 0 });
@@ -129,23 +129,23 @@ void APlayGameMode::Spawn()
 	//ARoomObject* Poop = BaseRoom->CreateObject<AFire>({ 100, 0 });
 	
 	// Item
-	AItem* Heart = TreasureRoom->CreateItem<AHeart>(nullptr, { -300, -150 });
-	AItem* Bomb = TreasureRoom->CreateItem<ABomb>(nullptr, { -250, -150 });
-	AItem* Penny = TreasureRoom->CreateItem<APenny>(nullptr, { -200, -150 });
-	AItem* HalfHeart = TreasureRoom->CreateItem<AHeart>(nullptr, { -150, -150 });
-	HalfHeart->SetHalfHeart();
+	//AItem* Heart = TreasureRoom->CreateItem<AHeart>(nullptr, { -300, -150 });
+	//AItem* Bomb = TreasureRoom->CreateItem<ABomb>(nullptr, { -250, -150 });
+	//AItem* Penny = TreasureRoom->CreateItem<APenny>(nullptr, { -200, -150 });
+	//AItem* HalfHeart = TreasureRoom->CreateItem<AHeart>(nullptr, { -150, -150 });
+	//HalfHeart->SetHalfHeart();
 
-	AItem* Key = TreasureRoom->CreateItem<AKey>(nullptr, { -100, -150 });
+	//AItem* Key = TreasureRoom->CreateItem<AKey>(nullptr, { -100, -150 });
 
-	AItem* Polyphemus = TreasureRoom->CreateItem<APolyphemus>(nullptr, { -200, -0 });
-	AItem* CrecketsHead = TreasureRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
-	//AItem* Dessert = TreasureRoom->CreateItem<ADessert>(nullptr, { 100, -0 });
-	AItem* InnerEye = TreasureRoom->CreateItem<AInnerEye>(nullptr, { 0, -0 });
-	//AItem* SpoonBender = BaseRoom->CreateItem<ASpoonBender>(nullptr, { 100, 0 });
-	//AItem* SpeedBall = BaseRoom->CreateItem<ASpeedBall>(nullptr, { 100, 0 });
-	AItem* NumberOne = BaseRoom->CreateItem<ANumberOne>(nullptr, { 100, 0 });
+	//AItem* Polyphemus = TreasureRoom->CreateItem<APolyphemus>(nullptr, { -200, -0 });
+	//AItem* CrecketsHead = TreasureRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
+	////AItem* Dessert = TreasureRoom->CreateItem<ADessert>(nullptr, { 100, -0 });
+	//AItem* InnerEye = TreasureRoom->CreateItem<AInnerEye>(nullptr, { 0, -0 });
+	////AItem* SpoonBender = BaseRoom->CreateItem<ASpoonBender>(nullptr, { 100, 0 });
+	////AItem* SpeedBall = BaseRoom->CreateItem<ASpeedBall>(nullptr, { 100, 0 });
+	//AItem* NumberOne = BaseRoom->CreateItem<ANumberOne>(nullptr, { 100, 0 });
 
-	//AItem* CrecketsHead1 = BaseRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
+	////AItem* CrecketsHead1 = BaseRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
 }
 
 void APlayGameMode::CollisionGroupLinkSetting()

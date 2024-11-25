@@ -306,6 +306,8 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	FVector2D OffestY = { 0, 64};
 	DoorCollisionScale = FVector2D(60, 60);
 
+	float DoorEffectOffest = 85.0f;
+
 	switch (_Dir)
 	{
 	case RoomDir::LEFT:
@@ -319,6 +321,9 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 
 		DoorRendererMap.insert({ _Dir , DoorRenderers[0] });
 		DoorCollisionMap.insert({ _Dir ,DoorCollisions[0] });
+
+		BossDoorOpenEffect->SetComponentLocation({ DoorPos.X + DoorEffectOffest, DoorPos.Y });
+		BossDoorOpenEffect->ChangeAnimation("BossDoorEffect_Left");
 		break;
 	case RoomDir::RIGHT:
 		DoorPos = DoorOffestX - OffestX;
@@ -331,6 +336,9 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 
 		DoorRendererMap.insert({ _Dir , DoorRenderers[1] });
 		DoorCollisionMap.insert({ _Dir ,DoorCollisions[1]});
+
+		BossDoorOpenEffect->SetComponentLocation({ DoorPos.X - DoorEffectOffest, DoorPos.Y });
+		BossDoorOpenEffect->ChangeAnimation("BossDoorEffect_Right");
 		break;
 	case RoomDir::UP:
 		DoorPos = -1 * DoorOffestY + OffestY;
@@ -342,6 +350,9 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 		DoorCollisions[2]->SetActive(true);
 		DoorRendererMap.insert({ _Dir , DoorRenderers[2] });
 		DoorCollisionMap.insert({ _Dir ,DoorCollisions[2] });
+
+		BossDoorOpenEffect->SetComponentLocation({ DoorPos.X, DoorPos.Y + DoorEffectOffest });
+		BossDoorOpenEffect->ChangeAnimation("BossDoorEffect_Up");
 		break;
 	case RoomDir::DOWN:
 		DoorPos = DoorOffestY - OffestY;
@@ -354,6 +365,9 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 
 		DoorRendererMap.insert({ _Dir , DoorRenderers[3] });
 		DoorCollisionMap.insert({ _Dir ,DoorCollisions[3] });
+
+		BossDoorOpenEffect->SetComponentLocation({ DoorPos.X, DoorPos.Y - DoorEffectOffest });
+		BossDoorOpenEffect->ChangeAnimation("BossDoorEffect_Down");
 		break;
 	default:
 		break;
@@ -396,6 +410,7 @@ void ARoom::OpenTheDoor()
 		{
 			std::string AnimationName = "BossDoor_" + DirString + "_OpenAnim";
 			Door->ChangeAnimation(AnimationName);
+			BossDoorOpenEffect->SetComponentScale({ 96, 96 });
 			continue;
 		}
 		std::string AnimationName = "Door_" + DirString + "_OpenAnim";
@@ -442,6 +457,7 @@ void ARoom::CloseTheDoor()
 		std::string DirString = SwitchEnumToString(Dir);
 		std::string MyName = GetName();
 		std::string FindRoomName = "BossRoom";
+		BossDoorOpenEffect->SetComponentScale({ 0, 0});
 		if (true == IsNextRoom(FindRoomName, Dir) || FindRoomName == MyName)
 		{
 			std::string AnimationName = "BossDoor_" + DirString + "_CloseAnim";
@@ -613,6 +629,16 @@ void ARoom::DoorSpriteSetting()
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("BossDoor_Down_CloseAnim", "Boss_CloseDoor", 8, 11, AnimationSpeed, false);
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("BossDoor_Down_OpenAnim", "Boss_OpenDoor", 8, 11, AnimationSpeed, false);
 
+
+	BossDoorOpenEffect = CreateDefaultSubObject<USpriteRenderer>();
+	BossDoorOpenEffect->CreateAnimation("BossDoorEffect_Left" , "BossDoorEffect000.png", 0, 0, 0.1f, false);
+	BossDoorOpenEffect->CreateAnimation("BossDoorEffect_Right", "BossDoorEffect001.png", 0, 0, 0.1f, false);
+	BossDoorOpenEffect->CreateAnimation("BossDoorEffect_Up"   , "BossDoorEffect002.png", 0, 0, 0.1f, false);
+	BossDoorOpenEffect->CreateAnimation("BossDoorEffect_Down" , "BossDoorEffect003.png", 0, 0, 0.1f, false);
+	BossDoorOpenEffect->SetComponentScale({ 0, 0 });
+	BossDoorOpenEffect->SetAlphaFloat(0.15f);
+	BossDoorOpenEffect->SetOrder(ERenderOrder::Door);
+	BossDoorOpenEffect->ChangeAnimation("BossDoorEffect_Left");
 
 	DoorRenderers[static_cast<int>(RoomDir::LEFT)  - 1]->ChangeAnimation("Door_Left_Open");
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->ChangeAnimation("Door_Right_Open");

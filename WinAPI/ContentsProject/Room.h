@@ -203,6 +203,7 @@ private:
 
 	USpriteRenderer* RoomRenderer       = nullptr; // 임시 방 하나 생성
 	USpriteRenderer* ControlsRenderer   = nullptr; // BaseRoom 컨트롤러 이미지
+	USpriteRenderer* BossDoorOpenEffect = nullptr; 
 
 	// Door Collision And Renderer
 	std::vector<class U2DCollision*> DoorCollisions;
