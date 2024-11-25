@@ -111,3 +111,8 @@ void AInnerEye::DropSucessAnimation(APlayer* _Player)
 		IsOwnedByPlayer = true;
 		});
 }
+
+void AInnerEye::TearFire(APlayer* _Player, const FVector2D& _Dir)
+{
+	//GetWorld()->SpawnActor()
+}

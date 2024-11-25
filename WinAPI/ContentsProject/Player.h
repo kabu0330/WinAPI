@@ -5,7 +5,7 @@
 #include <EnginePlatform/EngineSound.h>
 #include "Tear.h"
 #include "Global.h"
-
+#include "Item.h"
 
 // 설명 : 아이작
 class APlayer : public AActor
@@ -214,10 +214,6 @@ public:
 	bool Drop(class AItem* _Item, int _Count);
 	int CheckPickupItemCount(std::string_view _ItemName);
 	AItem* ReturnItem(std::string_view _ItemName);
-	std::list<AItem*> PlayerItemsList()
-	{
-		return Items;
-	}
 
 	void InputItem();
 
@@ -260,7 +256,6 @@ public:
 	{
 		TearDuration = 0.0f;
 		TearScale = FVector2D::ZERO;
-		ItemTearRenderer = nullptr;
 		TearCooldown = 0.5f;
 		ChaseTearDir = FVector2D::ZERO;
 		DetectCollision->SetComponentScale(FVector2D::ZERO);
@@ -278,10 +273,7 @@ public:
 	{
 		TearScale = _Scale;
 	}
-	void SetTear(class USpriteRenderer* _ItemTearRenderer)
-	{
-		ItemTearRenderer = _ItemTearRenderer;
-	}
+
 	void AddTearCooldown(float _TearCooldown)
 	{
 		TearCooldown -= _TearCooldown;
@@ -349,8 +341,9 @@ private:
 	// Item
 	std::list<class AItem*> Items;
 
+	//std::map<EItemType, std::list<class AItem*>> Items;
+
 	// 아이템으로 눈물 효과 변경을 위해서
-	class USpriteRenderer* ItemTearRenderer = nullptr;
 	float TearSpeed = 0.0f;
 	float TearDuration = 0.0f;
 	FVector2D TearScale = FVector2D::ZERO;
@@ -372,7 +365,6 @@ private:
 	class USpriteRenderer* BodyRenderer = nullptr;
 	class USpriteRenderer* HeadRenderer = nullptr;
 	class USpriteRenderer* FullRenderer = nullptr;
-	class USpriteRenderer* AccessoryRenderer = nullptr;
 	float StateElapsed = 0.0f;
 
 	// Animation State

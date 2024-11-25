@@ -27,8 +27,8 @@ ATear::ATear()
 	TearCollision->SetCollisionType(ECollisionType::Circle);
 	
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
-	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.05f, false);
+	//TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
+	//TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.05f, false);
 	TearEffectRenderer->SetComponentScale(RendererScale); // 64, 64
 	TearEffectRenderer->SetOrder(ERenderOrder::Tear);
 	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
@@ -72,16 +72,18 @@ void ATear::Tick(float _DeltaTime)
 }
 
 // 값만 받아서 멤버에 저장한다.
-void ATear::Fire(APlayer* _Player, USpriteRenderer* _TearRenderer, FVector2D _StartPos, FVector2D _Dir, int _Att, float _TearSpeed,  float _ItemTearSpeed, float _Duration, FVector2D _Scale)
+void ATear::Fire(APlayer* _Player, AItem* _Item, FVector2D _StartPos, FVector2D _Dir, int _Att, float _TearSpeed,  float _ItemTearSpeed, float _Duration, FVector2D _Scale)
 {
-	TearEffectRenderer->SetActive(true);
-	
 	Player = _Player;
 
-	if (nullptr != _TearRenderer)
+	if (nullptr != _Item)
 	{
-		TearEffectRenderer = _TearRenderer;
+		/*TearEffectRenderer = _TearRenderer;
+		TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
+		TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.05f, false);
+		TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");*/
 	}
+	TearEffectRenderer->SetActive(true);
 
 	SetActorLocation(_StartPos);
 
@@ -112,7 +114,7 @@ void ATear::Fire(APlayer* _Player, USpriteRenderer* _TearRenderer, FVector2D _St
 	TearCollision->SetComponentScale(CollisionScale);
 	TearEffectRenderer->SetComponentScale(RendererScale); 
 
-
+	int a = 0;
 }
 
 void ATear::UpdateTearPosion(float _DeltaTime)

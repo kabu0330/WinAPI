@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include <EngineCore/SpriteRenderer.h>
 
 // 설명 : 플레이어의 공격 발사체 
 class ATear : public AActor
@@ -19,7 +20,7 @@ public:
 	void Tick(float _DeltaTime) override;
 	void CollisionSetting();
 
-	void Fire(class APlayer* _Player, class USpriteRenderer* _TearRenderer, FVector2D _StartPos, FVector2D _Dir, int _Att, float _TearSpeed, float _ItemTearSpeed, float _Duration, FVector2D _Scale);
+	void Fire(class APlayer* _Player, class AItem* _Item, FVector2D _StartPos, FVector2D _Dir, int _Att, float _TearSpeed, float _ItemTearSpeed, float _Duration, FVector2D _Scale);
 
 
 	void UpdateTearPosion(float _DeltaTime);
@@ -34,6 +35,12 @@ public:
 	void MapObjectCollision(AActor* _Other);
 	void ItemImpackCollision(AActor* _Other);
 	virtual void HandleMonsterCollision(AActor* _Other);
+
+	void SetTearRenderer(USpriteRenderer* _TearEffectRenderer)
+	{
+		TearEffectRenderer = _TearEffectRenderer;
+		TearEffectRenderer->SetActive(true);
+	}
 
 protected:
 	int ActorAtt = 0;

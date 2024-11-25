@@ -433,9 +433,11 @@ bool APlayer::Drop(AItem* _Item, int _Count)
 		return true;
 	}
 
+	EItemType ItemType = _Item->GetItemType();
+	std::list<AItem*> ItemList = Items[ItemType];
 	for (int i = 0; i < _Count; i++)
 	{
-		Items.push_back(_Item);
+		ItemList.push_back(_Item);
 	}
 
 	return true;
@@ -450,6 +452,8 @@ void APlayer::InputItem()
 		if (nullptr != Item)
 		{
 			Item->UseItem(this);
+
+			EItemType ItemType = EItemType::USE;
 			Items.remove(Item);
 		}
 	}
@@ -458,20 +462,26 @@ void APlayer::InputItem()
 
 void APlayer::UpdateItemPos()
 {
-	std::list<AItem*>::iterator StartIter = Items.begin();
-	std::list<AItem*>::iterator EndIter = Items.end();
+	std::map<EItemType, std::list<AItem*>>::iterator StartIter = Items.begin();
+	std::map<EItemType, std::list<AItem*>>::iterator EndIter = Items.end();
 
 	for (; StartIter != EndIter; ++StartIter)
 	{
-		AItem* Item = *StartIter;
-		// 아이템의 소유권이 완전히 플레이어한테 귀속되면 위치도 플레이어한테 고정
-		if (true == Item->IsOwned()) 
-		{
-			FVector2D PlayerPos = GetActorLocation();
-			Item->SetActorLocation(PlayerPos);
-		}
-	}
+		std::list<AItem*> ItemList = StartIter->second;
 
+		std::list<AItem*>::iterator ItemListStartIter = ItemList.begin();
+		std::list<AItem*>::iterator ItemListEndIter = ItemList.end();
+		for (;ItemListStartIter != ItemListEndIter; ++ItemListStartIter)
+		{
+			AItem* Item = *ItemListStartIter;
+			// 아이템의 소유권이 완전히 플레이어한테 귀속되면 위치도 플레이어한테 고정
+			if (true == Item->IsOwned())
+			{
+				FVector2D PlayerPos = GetActorLocation();
+				Item->SetActorLocation(PlayerPos);
+			}
+		}	
+	}
 }
 
 void APlayer::ChaseDirection(AActor* _Monster)
@@ -939,10 +949,19 @@ void APlayer::Attack(float _DeltaTime)
 		}	
 	}
 
-	ATear* Tear = GetWorld()->SpawnActor<ATear>();
+	std::list<AItem*>::iterator StartIter = Items.begin();
+	std::list<AItem*>::iterator EndIter = Items.end();
 
+	for (; StartIter != EndIter; ++StartIter)
+	{
+		AItem* Item = *StartIter;
+
+		Item->TearFire(this);
+	}
+
+	/*ATear* Tear = GetWorld()->SpawnActor<ATear>();
 	float PlayerSpeed = FinalSpeed.Length();
-	Tear->Fire(this, ItemTearRenderer, TearPos, TearDir, Att, PlayerSpeed, TearSpeed, TearDuration, TearScale);
+	Tear->Fire(this, ItemTearRenderer, TearPos, TearDir, Att, PlayerSpeed, TearSpeed, TearDuration, TearScale);*/
 
 	SetAttackDir(HeadState);
 }
@@ -1008,23 +1027,6 @@ void APlayer::SpriteSetting()
 	FullRenderer->SetComponentLocation({ 5, -20 });
 	FullRenderer->ChangeAnimation("Damaged");
 	FullRenderer->SetActive(false);
-
-	////////////////////////////////////////////////////////////////////////////////////
-	// Accessory Item
-	AccessoryRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	AccessoryRenderer->CreateAnimation("Head_Left", "Head.png", 1, 1, 0.5f, false);
-	AccessoryRenderer->CreateAnimation("Head_Right", "Head.png", 3, 3, 0.5f, false);
-	AccessoryRenderer->CreateAnimation("Head_Down", "Head.png", 7, 7, 0.5f, false);
-	AccessoryRenderer->CreateAnimation("Head_Up", "Head.png", 5, 5, 0.5f, false);
-	AccessoryRenderer->CreateAnimation("Head_Attack_Left", "Head.png", { 1, 0, 1 }, 0.12f);
-	AccessoryRenderer->CreateAnimation("Head_Attack_Right", "Head.png", { 3, 2, 3 }, 0.12f);
-	AccessoryRenderer->CreateAnimation("Head_Attack_Down", "Head.png", { 7, 6, 7 }, 0.12f);
-	AccessoryRenderer->CreateAnimation("Head_Attack_Up", "Head.png", { 5, 4, 5 }, 0.12f);
-	AccessoryRenderer->CreateAnimation("Head_Death", "Death_Head.png", 0, 0, 0.5f);
-	
-	AccessoryRenderer->SetComponentLocation({ 0, Global::PlayerHeadOffset.iY() + 4 });
-	AccessoryRenderer->SetComponentScale({ 0, 0 });
-	AccessoryRenderer->ChangeAnimation("Head_Down");
 
 }
 
@@ -1155,39 +1157,30 @@ void APlayer::CurStateAnimation(float _DeltaTime)
 	{
 	case APlayer::UpperState::IDLE:
 		HeadRenderer->ChangeAnimation("Head_Down");
-		AccessoryRenderer->ChangeAnimation("Head_Down");
 		break;
 	case APlayer::UpperState::LEFT:
 		HeadRenderer->ChangeAnimation("Head_Left");
-		AccessoryRenderer->ChangeAnimation("Head_Left");
 		break;
 	case APlayer::UpperState::RIGHT:
 		HeadRenderer->ChangeAnimation("Head_RIght");
-		AccessoryRenderer->ChangeAnimation("Head_RIght");
 		break;
 	case APlayer::UpperState::UP:
 		HeadRenderer->ChangeAnimation("Head_Up");
-		AccessoryRenderer->ChangeAnimation("Head_Up");
 		break;
 	case APlayer::UpperState::DOWN:
 		HeadRenderer->ChangeAnimation("Head_Down");
-		AccessoryRenderer->ChangeAnimation("Head_Down");
 		break;
 	case APlayer::UpperState::ATTACK_LEFT:
 		HeadRenderer->ChangeAnimation("Head_Attack_Left");
-		AccessoryRenderer->ChangeAnimation("Head_Left");
 		break;
 	case APlayer::UpperState::ATTACK_RIGHT:
 		HeadRenderer->ChangeAnimation("Head_Attack_Right");
-		AccessoryRenderer->ChangeAnimation("Head_RIght");
 		break;
 	case APlayer::UpperState::ATTACK_UP:
 		HeadRenderer->ChangeAnimation("Head_Attack_Up");
-		AccessoryRenderer->ChangeAnimation("Head_Up");
 		break;
 	case APlayer::UpperState::ATTACK_DOWN:
 		HeadRenderer->ChangeAnimation("Head_Attack_Down");
-		AccessoryRenderer->ChangeAnimation("Head_Down");
 		break;
 	case APlayer::UpperState::DEATH:
 		HeadRenderer->ChangeAnimation("Head_Death");

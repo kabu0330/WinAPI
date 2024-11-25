@@ -9,6 +9,15 @@
 #include "RoomObject.h"
 #include "Global.h"
 
+enum class EItemType
+{
+	NONE,
+	TEAR,    // 눈물 효과를 바꿀 아이템
+	USE,     // 사용과 함께 즉시 소멸
+	PASSIVE, // 능력치
+	MAX
+};
+
 // 설명 : 모든 아이템의 속성을 정의하는 클래스
 class AItem : public AActor
 {
@@ -40,6 +49,7 @@ public:
 	void FailToPickup(class APlayer* _Player);
 	void ReverseForce(float _DeltaTime);
 	void SetLocation();
+	virtual void TearFire(APlayer* _Player);
 
 	virtual void DropEffect()
 	{
@@ -57,6 +67,9 @@ public:
 	// 폭탄
 	void AreaWideAttack(AActor* _Actor);
 	void Knockback(AActor* _Actor);
+
+	// Tear를 바꾸는 패시브 아이템
+	virtual void TearFire(APlayer* _Player) {}; // 자식클래스에서 재정의
 
 	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
 	FVector2D Reflect(FVector2D _Dir);
@@ -102,7 +115,13 @@ public:
 		return IsOwnedByPlayer;
 	}
 
+	EItemType GetItemType() const
+	{
+		return ItemType;
+	}
+
 protected:
+	EItemType ItemType = EItemType::NONE;
 	int ItemCount = 0;
 	int Att = 0;
 
@@ -116,7 +135,7 @@ protected:
 	USpriteRenderer* BodyRenderer = nullptr;
 
 	USpriteRenderer* HeadRenderer = nullptr; // 얼굴 바뀌는 아이템
-
+	USpriteRenderer* TearEffectRenderer = nullptr; // 눈물 이미지 바꾸는 렌더러
 
 	U2DCollision* PlayerCollision = nullptr; // 플레이어와 습득 상호작용을 하려면 반드시 만들어야 함
 	U2DCollision* MonsterCollision = nullptr;

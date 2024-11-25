@@ -4,13 +4,13 @@
 ASpoonBender::ASpoonBender()
 {
 	SetName("SpoonBender");
-	BodyRendererScale = { 64, 64 };
+	BodyRendererScale = { 32, 32 };
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 1;
 	IsMove = true;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DropRenderer->SetSprite("collectibles_003_spoonbender.png");
+	DropRenderer->SetSprite("SpoonBender.png");
 	DropRenderer->SetComponentLocation({ 0, 0 });
 	DropRenderer->SetComponentScale(BodyRendererScale);
 	DropRenderer->SetOrder(ERenderOrder::ItemEffect);
@@ -43,7 +43,7 @@ void ASpoonBender::Tick(float _DeltaTime)
 
 void ASpoonBender::SpriteSetting()
 {
-	std::string SpriteName = "SpoonBender.png";
+	std::string SpriteName = "SpoonBenderHead.png";
 	HeadRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	HeadRenderer->CreateAnimation("Head_Left", SpriteName, 6, 6, 0.5f, false);
 	HeadRenderer->CreateAnimation("Head_Right", SpriteName, 2, 2, 0.5f, false);
@@ -62,6 +62,14 @@ void ASpoonBender::SpriteSetting()
 
 	HeadRenderer->SetOrder(ERenderOrder::PlayerHead);
 	HeadRenderer->SetActive(false);
+
+	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoof_purple.png", 0, 0, 0, false);
+	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoof_purple.png", 1, 15, 0.05f, false);
+	TearEffectRenderer->SetComponentScale({ 120, 120 });
+	TearEffectRenderer->SetOrder(ERenderOrder::Tear);
+	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
+	TearEffectRenderer->SetActive(false);
 }
 
 bool ASpoonBender::EatFunction(APlayer* _Player)

@@ -55,7 +55,7 @@ void ContentsCore::LevelSetting()
 
 	// 최초 실행될 레벨을 결정한다.
 	UEngineAPICore::GetCore()->OpenLevel("Title");
-	//UEngineAPICore::GetCore()->OpenLevel("Play");
+	UEngineAPICore::GetCore()->OpenLevel("Play");
 }
 
 void ContentsCore::SpriteSetting()
@@ -99,9 +99,11 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("costume_037_maxshead.png", 8, 1);
 	UImageManager::GetInst().CuttingSprite("TheInnerEye.png", 8, 1);
 	UImageManager::GetInst().CuttingSprite("collectibles_003_spoonbender.png", 8, 1);
-	UImageManager::GetInst().CuttingSprite("SpoonBender.png", 8, 1);
+	UImageManager::GetInst().CuttingSprite("SpoonBenderHead.png", 8, 1);
 
 	UImageManager::GetInst().CuttingSprite("collectibles_024_dessert.png", 1, 1);
+
+	UImageManager::GetInst().CuttingSprite("effect_tearpoof_purple.png", 4, 4);
 
 	// Player
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);

@@ -28,6 +28,6 @@ public:
 protected:
 
 private:
-
+	
 };
 
