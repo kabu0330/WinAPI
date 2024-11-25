@@ -62,8 +62,10 @@ void ADecalObject::Tick(float _DeltaTime)
 	ARoomObject::Tick(_DeltaTime);
 
 	this;
+}
 
-	int a = 0;
+void ADecalObject::ScatterDecalObject()
+{
 
 }
 

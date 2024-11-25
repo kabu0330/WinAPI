@@ -25,6 +25,8 @@ public:
 		BodyRenderer->SetComponentScale(_Scale);
 	}
 
+	void ScatterDecalObject();
+
 protected:
 
 private:
