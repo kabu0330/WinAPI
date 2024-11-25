@@ -24,7 +24,7 @@ public:
 
 	// 플레이어와 상호작용하는 아이템 드랍
 	void DropSucessAnimation(APlayer* _Player);
-	void TearFire(APlayer* _Player, const FVector2D& _Dir) override;
+	void TearFire(APlayer* _Player) override;
 protected:
 
 private:

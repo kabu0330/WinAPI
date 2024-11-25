@@ -433,11 +433,9 @@ bool APlayer::Drop(AItem* _Item, int _Count)
 		return true;
 	}
 
-	EItemType ItemType = _Item->GetItemType();
-	std::list<AItem*> ItemList = Items[ItemType];
 	for (int i = 0; i < _Count; i++)
 	{
-		ItemList.push_back(_Item);
+		Items.push_back(_Item);
 	}
 
 	return true;
@@ -453,7 +451,6 @@ void APlayer::InputItem()
 		{
 			Item->UseItem(this);
 
-			EItemType ItemType = EItemType::USE;
 			Items.remove(Item);
 		}
 	}
@@ -462,25 +459,18 @@ void APlayer::InputItem()
 
 void APlayer::UpdateItemPos()
 {
-	std::map<EItemType, std::list<AItem*>>::iterator StartIter = Items.begin();
-	std::map<EItemType, std::list<AItem*>>::iterator EndIter = Items.end();
+	std::list<AItem*>::iterator StartIter = Items.begin();
+	std::list<AItem*>::iterator EndIter = Items.end();
 
 	for (; StartIter != EndIter; ++StartIter)
 	{
-		std::list<AItem*> ItemList = StartIter->second;
-
-		std::list<AItem*>::iterator ItemListStartIter = ItemList.begin();
-		std::list<AItem*>::iterator ItemListEndIter = ItemList.end();
-		for (;ItemListStartIter != ItemListEndIter; ++ItemListStartIter)
+		AItem* Item = *StartIter;
+		// 아이템의 소유권이 완전히 플레이어한테 귀속되면 위치도 플레이어한테 고정
+		if (true == Item->IsOwned())
 		{
-			AItem* Item = *ItemListStartIter;
-			// 아이템의 소유권이 완전히 플레이어한테 귀속되면 위치도 플레이어한테 고정
-			if (true == Item->IsOwned())
-			{
-				FVector2D PlayerPos = GetActorLocation();
-				Item->SetActorLocation(PlayerPos);
-			}
-		}	
+			FVector2D PlayerPos = GetActorLocation();
+			Item->SetActorLocation(PlayerPos);
+		}
 	}
 }
 

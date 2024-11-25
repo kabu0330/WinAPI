@@ -49,7 +49,7 @@ public:
 	void FailToPickup(class APlayer* _Player);
 	void ReverseForce(float _DeltaTime);
 	void SetLocation();
-	virtual void TearFire(APlayer* _Player);
+
 
 	virtual void DropEffect()
 	{

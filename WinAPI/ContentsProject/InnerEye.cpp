@@ -112,7 +112,7 @@ void AInnerEye::DropSucessAnimation(APlayer* _Player)
 		});
 }
 
-void AInnerEye::TearFire(APlayer* _Player, const FVector2D& _Dir)
+void AInnerEye::TearFire(APlayer* _Player)
 {
 	//GetWorld()->SpawnActor()
 }
