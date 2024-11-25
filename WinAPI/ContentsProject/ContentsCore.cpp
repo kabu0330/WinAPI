@@ -173,16 +173,26 @@ void ContentsCore::FolderSetting()
 
 
 	// 2. Playing
-	UEngineDirectory DoorLockSprite;
-	DoorLockSprite.MoveParentToDirectory("Resources//Image//Play");
-	DoorLockSprite.Append("Normal_CloseDoor");
-	UImageManager::GetInst().LoadFolder(DoorLockSprite.GetPathToString());
+	UEngineDirectory DoorCloseSprite;
+	DoorCloseSprite.MoveParentToDirectory("Resources//Image//Play");
+	DoorCloseSprite.Append("Normal_CloseDoor");
+	UImageManager::GetInst().LoadFolder(DoorCloseSprite.GetPathToString());
 
 	UEngineDirectory DoorOpenSprite;
 	DoorOpenSprite.MoveParentToDirectory("Resources//Image//Play");
 	DoorOpenSprite.Append("Normal_OpenDoor");
 	UImageManager::GetInst().LoadFolder(DoorOpenSprite.GetPathToString());
 
+	UEngineDirectory BossRoomDoorCloseSprite;
+	BossRoomDoorCloseSprite.MoveParentToDirectory("Resources//Image//Play");
+	BossRoomDoorCloseSprite.Append("Boss_CloseDoor");
+	UImageManager::GetInst().LoadFolder(BossRoomDoorCloseSprite.GetPathToString());
+
+	UEngineDirectory BossRoomDoorOpenSprite;
+	BossRoomDoorOpenSprite.MoveParentToDirectory("Resources//Image//Play");
+	BossRoomDoorOpenSprite.Append("Boss_OpenDoor");
+	UImageManager::GetInst().LoadFolder(BossRoomDoorOpenSprite.GetPathToString());
+	
 	UEngineDirectory ItemHeart;
 	ItemHeart.MoveParentToDirectory("Resources//Image//Play//Item");
 	ItemHeart.Append("Heart");

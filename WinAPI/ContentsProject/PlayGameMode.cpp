@@ -71,21 +71,21 @@ void APlayGameMode::Spawn()
 	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();
 	//ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
+	//ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* BossRoom = GetWorld()->SpawnActor<ARoom>();
 
 	BaseRoom->InterLinkRoom(MinionRoom0, RoomDir::LEFT);
 	BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::RIGHT);
 	BaseRoom->InterLinkRoom(TreasureRoom, RoomDir::UP);
-	BaseRoom->InterLinkRoom(MinionRoom3, RoomDir::DOWN);
-	MinionRoom3->InterLinkRoom(BossRoom, RoomDir::DOWN);
+	BaseRoom->InterLinkRoom(BossRoom, RoomDir::DOWN);
+	//MinionRoom3->InterLinkRoom(BossRoom, RoomDir::DOWN);
 
 	BaseRoom->SetName("BaseRoom");
 	TreasureRoom->SetName("TreasureRoom");
 	MinionRoom0->SetName("MinionRoom0");
 	MinionRoom1->SetName("MinionRoom1");
 	//MinionRoom2->SetName("MinionRoom2");
-	MinionRoom3->SetName("MinionRoom3");
+	//MinionRoom3->SetName("MinionRoom3");
 	BossRoom->SetName("BossRoom");
 
 	ARoom::SetCurRoom(BaseRoom);
@@ -105,14 +105,14 @@ void APlayGameMode::Spawn()
 	MinionRoom1->CreateMonster<AHost>({ -50, -50 });
 
 
-	MinionRoom3->CreateMonster<ADip>({ 150, 50 });
-	MinionRoom3->CreateMonster<ADip>({ 150, 0 });
-	MinionRoom3->CreateMonster<ADip>({ 50, 50 });
-	MinionRoom3->CreateMonster<ADip>({ -150, 0 });
-	MinionRoom3->CreateMonster<APooter>({ 100, 100 });
-	MinionRoom3->CreateMonster<APooter>({ 250, 50 });
-	MinionRoom3->CreateMonster<APooter>({ -250, 50 });
-	MinionRoom3->CreateMonster<APooter>({ -100, 50 });
+	BossRoom->CreateMonster<ADip>({ 150, 50 });
+	//MinionRoom3->CreateMonster<ADip>({ 150, 0 });
+	//MinionRoom3->CreateMonster<ADip>({ 50, 50 });
+	//MinionRoom3->CreateMonster<ADip>({ -150, 0 });
+	//MinionRoom3->CreateMonster<APooter>({ 100, 100 });
+	//MinionRoom3->CreateMonster<APooter>({ 250, 50 });
+	//MinionRoom3->CreateMonster<APooter>({ -250, 50 });
+	//MinionRoom3->CreateMonster<APooter>({ -100, 50 });
 
 	//BossRoom->CreateMonster<ATheDukeOfFlies>({ -200, 0 });
 	

@@ -43,6 +43,7 @@ public:
 
 	void OpenTheDoor();
 	void CloseTheDoor();
+	bool IsNextRoom(std::string_view _RoomName, RoomDir _Dir);
 	std::string SwitchEnumToString(RoomDir _Dir);
 	void TemporarilyHideDoorCollision();
 

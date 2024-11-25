@@ -384,13 +384,22 @@ void ARoom::OpenTheDoor()
 		RoomDir Dir = StartIter->first;
 		USpriteRenderer* Door = StartIter->second;
 
-		if (nullptr != Door)
+		if (nullptr == Door)
 		{
-			std::string DirString = SwitchEnumToString(Dir);
-			std::string AnimationName = "Door_" + DirString + "_OpenAnim";
-			Door->ChangeAnimation(AnimationName);
-		
+			continue;
 		}
+
+		std::string DirString = SwitchEnumToString(Dir);
+		std::string MyName = GetName();
+		std::string FindRoomName = "BossRoom";
+		if (true == IsNextRoom(FindRoomName, Dir) || FindRoomName == MyName)
+		{
+			std::string AnimationName = "BossDoor_" + DirString + "_OpenAnim";
+			Door->ChangeAnimation(AnimationName);
+			continue;
+		}
+		std::string AnimationName = "Door_" + DirString + "_OpenAnim";
+		Door->ChangeAnimation(AnimationName);
 	}
 
 	{
@@ -425,13 +434,22 @@ void ARoom::CloseTheDoor()
 		RoomDir Dir = StartIter->first;
 		USpriteRenderer* Door = StartIter->second;
 
-		if (nullptr != Door)
+		if (nullptr == Door)
 		{
-			std::string DirString = SwitchEnumToString(Dir);
-			std::string AnimationName = "Door_" + DirString + "_LockAnim";
-			Door->ChangeAnimation(AnimationName);
-	
+			continue;
 		}
+
+		std::string DirString = SwitchEnumToString(Dir);
+		std::string MyName = GetName();
+		std::string FindRoomName = "BossRoom";
+		if (true == IsNextRoom(FindRoomName, Dir) || FindRoomName == MyName)
+		{
+			std::string AnimationName = "BossDoor_" + DirString + "_CloseAnim";
+			Door->ChangeAnimation(AnimationName);
+			continue;
+		}
+		std::string AnimationName = "Door_" + DirString + "_CloseAnim";
+		Door->ChangeAnimation(AnimationName);
 	}
 
 	{
@@ -450,6 +468,16 @@ void ARoom::CloseTheDoor()
 		}
 	}
 	
+}
+
+bool ARoom::IsNextRoom(std::string_view _RoomName, RoomDir _Dir)
+{
+	std::string RoomName = Rooms[_Dir]->GetName();
+	if (_RoomName == RoomName)
+	{
+		return true;
+	}
+	return false;
 }
 
 std::string ARoom::SwitchEnumToString(RoomDir _Dir)
@@ -548,21 +576,43 @@ void ARoom::DoorSpriteSetting()
 	}
 
 	float AnimationSpeed = 0.05f;
+
+	// Normal Door
 	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_Open"    , "NormalRoomDoor.png", 0, 0, 0.1f, false);
-	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_LockAnim", "Normal_CloseDoor"        , 12, 15, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_CloseAnim", "Normal_CloseDoor"        , 12, 15, AnimationSpeed, false);
 	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_OpenAnim", "Normal_OpenDoor"          , 12, 15, AnimationSpeed, false);
 
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_Open"    , "NormalRoomDoor.png", 1, 1, 0.1f, false);
-	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_LockAnim", "Normal_CloseDoor"        , 4, 7, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_CloseAnim", "Normal_CloseDoor"        , 4, 7, AnimationSpeed, false);
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Door_Right_OpenAnim", "Normal_OpenDoor"          , 4, 7, AnimationSpeed, false);
 
 	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_Open", "NormalRoomDoor.png", 2, 2, 0.1f, false);
-	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_LockAnim", "Normal_CloseDoor", 0, 3, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_CloseAnim", "Normal_CloseDoor", 0, 3, AnimationSpeed, false);
 	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Door_Up_OpenAnim", "Normal_OpenDoor", 0, 3, AnimationSpeed, false);
 
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_Open", "NormalRoomDoor.png", 3, 3, 0.1f, false);
-	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_LockAnim", "Normal_CloseDoor", 8, 11, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_CloseAnim", "Normal_CloseDoor", 8, 11, AnimationSpeed, false);
 	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Door_Down_OpenAnim", "Normal_OpenDoor", 8, 11, AnimationSpeed, false);
+
+	//////////////////////////////////////////////////
+	// Boss Door
+
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("BossDoor_Left_Open", "Boss_CloseDoor", 4, 4, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("BossDoor_Left_CloseAnim", "Boss_CloseDoor", 12, 15, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("BossDoor_Left_OpenAnim", "Boss_OpenDoor", 12, 15, AnimationSpeed, false);
+
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("BossDoor_Right_Open", "Boss_CloseDoor", 12, 12, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("BossDoor_Right_CloseAnim", "Boss_CloseDoor", 4, 7, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("BossDoor_Right_OpenAnim", "Boss_OpenDoor", 4, 7, AnimationSpeed, false);
+
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("BossDoor_Up_Open", "Boss_CloseDoor", 0, 0, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("BossDoor_Up_CloseAnim", "Boss_CloseDoor", 0, 3, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("BossDoor_Up_OpenAnim", "Boss_OpenDoor", 0, 3, AnimationSpeed, false);
+
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("BossDoor_Down_Open", "Boss_CloseDoor", 4, 4, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("BossDoor_Down_CloseAnim", "Boss_CloseDoor", 8, 11, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("BossDoor_Down_OpenAnim", "Boss_OpenDoor", 8, 11, AnimationSpeed, false);
+
 
 	DoorRenderers[static_cast<int>(RoomDir::LEFT)  - 1]->ChangeAnimation("Door_Left_Open");
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->ChangeAnimation("Door_Right_Open");
