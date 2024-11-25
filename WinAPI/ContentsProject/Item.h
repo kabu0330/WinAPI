@@ -12,9 +12,8 @@
 enum class EItemType
 {
 	NONE,
-	TEAR,    // 눈물 효과를 바꿀 아이템
+	PASSIVE, // 눈물 효과를 바꿀 아이템
 	USE,     // 사용과 함께 즉시 소멸
-	PASSIVE, // 능력치
 	MAX
 };
 
@@ -69,7 +68,7 @@ public:
 	void Knockback(AActor* _Actor);
 
 	// Tear를 바꾸는 패시브 아이템
-	virtual void TearFire(APlayer* _Player) {}; // 자식클래스에서 재정의
+	virtual void TearFire(APlayer* _Player, FVector2D _TearPos, FVector2D _TearDir, float _PlayerSpeed) {}; // 자식클래스에서 재정의
 
 	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
 	FVector2D Reflect(FVector2D _Dir);

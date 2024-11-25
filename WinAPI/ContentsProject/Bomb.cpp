@@ -15,6 +15,7 @@ ABomb::ABomb()
 	ItemCount = 1;
 	Att = 60; // 몬스터에게 가할 피해
 	FVector2D UnversalScale = { 150, 150 };
+	ItemType = EItemType::USE;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DropRenderer->CreateAnimation("Bomb", "bomb.png", 8, 8, 0.3f, false);

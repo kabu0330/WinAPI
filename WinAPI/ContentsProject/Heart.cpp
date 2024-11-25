@@ -12,6 +12,7 @@ AHeart::AHeart()
 	BodyRendererScale = { 64, 64 };
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 2;
+	ItemType = EItemType::USE;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DropRenderer->CreateAnimation("Heart", "Heart", 0, 3, 0.3f);

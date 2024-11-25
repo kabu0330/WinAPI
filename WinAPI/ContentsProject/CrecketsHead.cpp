@@ -8,6 +8,7 @@ ACrecketsHead::ACrecketsHead()
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 1;
 	IsMove = true;
+	ItemType = EItemType::NONE;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DropRenderer->SetSprite("collectibles_004_cricketshead.png");

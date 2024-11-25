@@ -7,6 +7,7 @@ AKey::AKey()
 	BodyRendererScale = { 128, 128 };
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 1;
+	ItemType = EItemType::USE;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DropRenderer->CreateAnimation("Appearance", "pickup_003_key.png", 0, 0, 0.2f, false);

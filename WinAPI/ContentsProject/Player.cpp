@@ -432,6 +432,12 @@ bool APlayer::Drop(AItem* _Item, int _Count)
 	{
 		return true;
 	}
+	EItemType ItemType = _Item->GetItemType();
+	if (EItemType::PASSIVE == ItemType)
+	{
+		PassiveItem = nullptr; // 기존 자료를 지우고
+		PassiveItem = _Item; // 새로운 아이템 정보를 넣는다.
+	}
 
 	for (int i = 0; i < _Count; i++)
 	{
@@ -939,19 +945,24 @@ void APlayer::Attack(float _DeltaTime)
 		}	
 	}
 
-	std::list<AItem*>::iterator StartIter = Items.begin();
-	std::list<AItem*>::iterator EndIter = Items.end();
+	float PlayerSpeed = FinalSpeed.Length();
 
-	for (; StartIter != EndIter; ++StartIter)
+	if (nullptr != PassiveItem)
 	{
-		AItem* Item = *StartIter;
+		std::list<AItem*>::iterator StartIter = Items.begin();
+		std::list<AItem*>::iterator EndIter = Items.end();
 
-		Item->TearFire(this);
+		for (; StartIter != EndIter; ++StartIter)
+		{
+			AItem* Item = *StartIter;
+
+			Item->TearFire(this, TearPos, TearDir, PlayerSpeed);
+		}
 	}
 
-	/*ATear* Tear = GetWorld()->SpawnActor<ATear>();
-	float PlayerSpeed = FinalSpeed.Length();
-	Tear->Fire(this, ItemTearRenderer, TearPos, TearDir, Att, PlayerSpeed, TearSpeed, TearDuration, TearScale);*/
+	ATear* Tear = GetWorld()->SpawnActor<ATear>();
+	Tear->Fire(this, nullptr, TearPos, TearDir, Att, PlayerSpeed, TearSpeed, TearDuration, TearScale);
+
 
 	SetAttackDir(HeadState);
 }

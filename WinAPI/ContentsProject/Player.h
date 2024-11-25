@@ -260,20 +260,36 @@ public:
 		ChaseTearDir = FVector2D::ZERO;
 		DetectCollision->SetComponentScale(FVector2D::ZERO);
 	}
-	
+	float GetTearSpeed() const
+	{
+		return TearSpeed;
+	}
 	void AddTearSpeed(float _TearSpeed)
 	{
 		TearSpeed += _TearSpeed;
 	}
+	float GetTearDuration() const
+	{
+		return TearDuration;
+	}
 	void AddTearDuration(float _TearDuration)
 	{
 		TearDuration += _TearDuration;
+	}
+	
+	FVector2D GetTearScale() const
+	{
+		return TearScale;
 	}
 	void AddTearScale(FVector2D _Scale)
 	{
 		TearScale = _Scale;
 	}
 
+	float GetTearCooldown() const
+	{
+		return TearCooldown;
+	}
 	void AddTearCooldown(float _TearCooldown)
 	{
 		TearCooldown -= _TearCooldown;
@@ -340,10 +356,10 @@ private:
 
 	// Item
 	std::list<class AItem*> Items;
-
 	//std::map<EItemType, std::list<class AItem*>> Items;
 
 	// 아이템으로 눈물 효과 변경을 위해서
+	AItem* PassiveItem = nullptr;
 	float TearSpeed = 0.0f;
 	float TearDuration = 0.0f;
 	FVector2D TearScale = FVector2D::ZERO;

@@ -8,6 +8,7 @@ ASpoonBender::ASpoonBender()
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 1;
 	IsMove = true;
+	ItemType = EItemType::PASSIVE; // ´«¹° ·ÎÁ÷, ·»´õ±îÁö ¹Ù²Ü°Å¶ó¸é
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DropRenderer->SetSprite("SpoonBender.png");
@@ -118,4 +119,16 @@ void ASpoonBender::DropSucessAnimation(APlayer* _Player)
 		DropEffectRenderer->SetActive(false);
 		IsOwnedByPlayer = true;
 		});
+}
+
+void ASpoonBender::TearFire(APlayer* _Player, FVector2D _TearPos, FVector2D _TearDir, float _PlayerSpeed)
+{
+	APlayer* Player = _Player;
+	int Att = Player->GetAtt();
+	float TearSpeed = Player->GetTearSpeed();
+	float TearDuration = Player->GetTearDuration();
+	FVector2D TearScale = Player->GetTearScale();
+
+	ATear* Tear = GetWorld()->SpawnActor<ATear>();
+	Tear->Fire(Player, this, _TearPos, _TearDir, Att, _PlayerSpeed, TearSpeed, TearDuration, TearScale);
 }

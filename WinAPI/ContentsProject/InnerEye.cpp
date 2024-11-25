@@ -8,6 +8,7 @@ AInnerEye::AInnerEye()
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 1;
 	IsMove = true;
+	ItemType = EItemType::PASSIVE;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DropRenderer->SetSprite("collectibles_002_theinnereye.png");
@@ -112,7 +113,7 @@ void AInnerEye::DropSucessAnimation(APlayer* _Player)
 		});
 }
 
-void AInnerEye::TearFire(APlayer* _Player)
+void AInnerEye::TearFire(APlayer* _Player, FVector2D _TearPos, FVector2D _TearDir, float _PlayerSpeed)
 {
 	//GetWorld()->SpawnActor()
 }

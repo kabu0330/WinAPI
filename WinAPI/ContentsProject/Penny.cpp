@@ -8,7 +8,7 @@ APenny::APenny()
 	BodyRendererScale = { 128, 128 };
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 1;
-
+	ItemType = EItemType::USE;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DropRenderer->CreateAnimation("Appearance", "penny.png", 7, 13, 0.2f, false);
