@@ -134,7 +134,7 @@ protected:
 	USpriteRenderer* BodyRenderer = nullptr;
 
 	USpriteRenderer* HeadRenderer = nullptr; // 얼굴 바뀌는 아이템
-	USpriteRenderer* TearEffectRenderer = nullptr; // 눈물 이미지 바꾸는 렌더러
+
 
 	U2DCollision* PlayerCollision = nullptr; // 플레이어와 습득 상호작용을 하려면 반드시 만들어야 함
 	U2DCollision* MonsterCollision = nullptr;

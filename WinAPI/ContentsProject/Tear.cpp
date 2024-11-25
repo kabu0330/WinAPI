@@ -27,12 +27,8 @@ ATear::ATear()
 	TearCollision->SetCollisionType(ECollisionType::Circle);
 	
 	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
-	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.05f, false);
 	TearEffectRenderer->SetComponentScale(RendererScale); // 64, 64
 	TearEffectRenderer->SetOrder(ERenderOrder::Tear);
-	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
-	TearEffectRenderer->SetActive(true);
 
 	DebugOn();
 }
@@ -76,14 +72,16 @@ void ATear::Fire(APlayer* _Player, AItem* _Item, FVector2D _StartPos, FVector2D 
 {
 	Player = _Player;
 
-	if (nullptr != _Item)
+	if(nullptr == _Item)
 	{
-		/*TearEffectRenderer = _TearRenderer;
 		TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoofa.png", 0, 0, 0, false);
 		TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoofa.png", 1, 15, 0.05f, false);
-		TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");*/
 	}
+
+	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
 	TearEffectRenderer->SetActive(true);
+
+ 	TearEffectRenderer->TestDebugOn();
 
 	SetActorLocation(_StartPos);
 

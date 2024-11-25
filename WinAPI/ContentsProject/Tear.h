@@ -39,7 +39,15 @@ public:
 	void SetTearRenderer(USpriteRenderer* _TearEffectRenderer)
 	{
 		TearEffectRenderer = _TearEffectRenderer;
-		TearEffectRenderer->SetActive(true);
+	}
+
+	USpriteRenderer* GetTearRenderer() const
+	{
+		if (nullptr == TearEffectRenderer)
+		{
+			return nullptr;
+		}
+		return TearEffectRenderer;
 	}
 
 protected:

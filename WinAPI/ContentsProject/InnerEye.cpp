@@ -84,8 +84,8 @@ bool AInnerEye::EatFunction(APlayer* _Player)
 	Player->ChangeHeadRenderer(HeadRenderer); // 얼굴 변경
 
 	Player->InitTear();
-	Player->AddTearSpeed(200.0f);
-	// 눈물 한방 더 쏘는거 어떻게 만들지?
+	//Player->AddTearSpeed(200.0f);
+
 
 	return true;
 }
@@ -115,5 +115,40 @@ void AInnerEye::DropSucessAnimation(APlayer* _Player)
 
 void AInnerEye::TearFire(APlayer* _Player, FVector2D _TearPos, FVector2D _TearDir, float _PlayerSpeed)
 {
-	//GetWorld()->SpawnActor()
+	APlayer* Player = _Player;
+	int Att = Player->GetAtt();
+	float TearSpeed = Player->GetTearSpeed();
+	float TearDuration = Player->GetTearDuration();
+	FVector2D TearScale = Player->GetTearScale();
+
+
+	ATear* Tear = GetWorld()->SpawnActor<ATear>();
+	Tear->Fire(Player, nullptr, _TearPos, _TearDir, Att, _PlayerSpeed, TearSpeed, TearDuration, TearScale);
+
+
+	UEngineRandom Random;
+	Random.SetSeed(time(NULL));
+	int Result = Random.RandomInt(0, 2);
+	if (0 != Result)
+	{
+		return;
+	}
+	// 두번째 발사
+
+
+	FVector2D SecondTearScale = { -10, -10 };
+	FVector2D SecondTearDir = _TearDir;
+	float SecondTearSpeed = TearSpeed - 50.0f;
+	float SecondTearDuration = TearDuration + 0.01f;
+	if (FVector2D::LEFT == SecondTearDir || FVector2D::RIGHT == SecondTearDir)
+	{
+		_TearPos += FVector2D{ 0, -20 };
+	}
+	else
+	{
+		_TearPos = { GetActorLocation().X, _TearPos.Y };
+	}
+
+	ATear* SecondTear = GetWorld()->SpawnActor<ATear>();
+	SecondTear->Fire(Player, nullptr, _TearPos, SecondTearDir, Att, _PlayerSpeed, SecondTearSpeed, SecondTearDuration, SecondTearScale);
 }

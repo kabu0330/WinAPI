@@ -45,7 +45,6 @@ APlayer::APlayer()
 	DebugOn(); // 디버그 대상에 포함
 	//SwitchInvincibility(); // 디버깅용 무적
 
-	//FullRenderer->TestDebugOn();
 }
 
 void APlayer::BeginPlay()
@@ -959,9 +958,12 @@ void APlayer::Attack(float _DeltaTime)
 			Item->TearFire(this, TearPos, TearDir, PlayerSpeed);
 		}
 	}
+	else
+	{
+		ATear* Tear = GetWorld()->SpawnActor<ATear>();
+		Tear->Fire(this, nullptr, TearPos, TearDir, Att, PlayerSpeed, TearSpeed, TearDuration, TearScale);
+	}
 
-	ATear* Tear = GetWorld()->SpawnActor<ATear>();
-	Tear->Fire(this, nullptr, TearPos, TearDir, Att, PlayerSpeed, TearSpeed, TearDuration, TearScale);
 
 
 	SetAttackDir(HeadState);

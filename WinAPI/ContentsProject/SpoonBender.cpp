@@ -63,14 +63,6 @@ void ASpoonBender::SpriteSetting()
 
 	HeadRenderer->SetOrder(ERenderOrder::PlayerHead);
 	HeadRenderer->SetActive(false);
-
-	TearEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoof_purple.png", 0, 0, 0, false);
-	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoof_purple.png", 1, 15, 0.05f, false);
-	TearEffectRenderer->SetComponentScale({ 120, 120 });
-	TearEffectRenderer->SetOrder(ERenderOrder::Tear);
-	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
-	TearEffectRenderer->SetActive(false);
 }
 
 bool ASpoonBender::EatFunction(APlayer* _Player)
@@ -129,6 +121,16 @@ void ASpoonBender::TearFire(APlayer* _Player, FVector2D _TearPos, FVector2D _Tea
 	float TearDuration = Player->GetTearDuration();
 	FVector2D TearScale = Player->GetTearScale();
 
-	ATear* Tear = GetWorld()->SpawnActor<ATear>();
-	Tear->Fire(Player, this, _TearPos, _TearDir, Att, _PlayerSpeed, TearSpeed, TearDuration, TearScale);
+	
+	ATear* ItemTear = GetWorld()->SpawnActor<ATear>();
+	USpriteRenderer* TearEffectRenderer = ItemTear->GetTearRenderer();
+	TearEffectRenderer->CreateAnimation("Player_Tear_Normal", "effect_tearpoof_purple.png", 0, 0, 0, false);
+	TearEffectRenderer->CreateAnimation("Player_Tear_Attack", "effect_tearpoof_purple.png", 1, 15, 0.05f, false);
+	TearEffectRenderer->SetComponentScale({ 120, 120 });
+	TearEffectRenderer->SetOrder(ERenderOrder::Tear);
+	TearEffectRenderer->ChangeAnimation("Player_Tear_Normal");
+
+	ItemTear->Fire(Player, this, _TearPos, _TearDir, Att, _PlayerSpeed, TearSpeed, TearDuration, TearScale);
+	
+	
 }
