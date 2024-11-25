@@ -244,15 +244,15 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="NumberOne.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Penny.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="Polyphemus.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
-    <ClInclude Include="PolyphemusTear.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -281,6 +281,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="Pooter.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="SpeedBall.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -420,15 +424,15 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="NumberOne.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Penny.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="Polyphemus.cpp">
-      <SubType>
-      </SubType>
-    </ClCompile>
-    <ClCompile Include="PolyphemusTear.cpp">
       <SubType>
       </SubType>
     </ClCompile>
@@ -457,6 +461,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Pooter.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="SpeedBall.cpp">
       <SubType>
       </SubType>
     </ClCompile>

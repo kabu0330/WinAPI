@@ -254,6 +254,10 @@ public:
 	// 아이템 눈물 효과
 	void InitTear()
 	{
+		if (nullptr != PassiveItem)
+		{
+			RemovePassiveItem();
+		}
 		TearDuration = 0.0f;
 		TearScale = FVector2D::ZERO;
 		TearCooldown = 0.5f;
@@ -306,6 +310,7 @@ public:
 	void ChaseDirection(AActor* _Monster);
 	void ChangeDetectCollisionDirection();
 
+	void RemovePassiveItem();
 protected:
 
 private:

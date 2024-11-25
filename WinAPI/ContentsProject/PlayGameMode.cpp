@@ -42,6 +42,8 @@
 #include "Dessert.h"
 #include "InnerEye.h"
 #include "SpoonBender.h"
+#include "SpeedBall.h"
+#include "NumberOne.h"
 
 bool APlayGameMode::GamePaused = false;
 
@@ -139,7 +141,9 @@ void APlayGameMode::Spawn()
 	AItem* CrecketsHead = TreasureRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
 	//AItem* Dessert = TreasureRoom->CreateItem<ADessert>(nullptr, { 100, -0 });
 	AItem* InnerEye = TreasureRoom->CreateItem<AInnerEye>(nullptr, { 0, -0 });
-	AItem* SpoonBender = BaseRoom->CreateItem<ASpoonBender>(nullptr, { 100, 0 });
+	//AItem* SpoonBender = BaseRoom->CreateItem<ASpoonBender>(nullptr, { 100, 0 });
+	//AItem* SpeedBall = BaseRoom->CreateItem<ASpeedBall>(nullptr, { 100, 0 });
+	AItem* NumberOne = BaseRoom->CreateItem<ANumberOne>(nullptr, { 100, 0 });
 
 	//AItem* CrecketsHead1 = BaseRoom->CreateItem<ACrecketsHead>(nullptr, { -100, -0 });
 }

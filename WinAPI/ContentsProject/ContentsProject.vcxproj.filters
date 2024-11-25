@@ -121,9 +121,6 @@
     <ClInclude Include="BossIntroScene.h">
       <Filter>04_Play\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="PolyphemusTear.h">
-      <Filter>04_Play\Tear</Filter>
-    </ClInclude>
     <ClInclude Include="Tear.h">
       <Filter>04_Play\Tear</Filter>
     </ClInclude>
@@ -134,6 +131,12 @@
       <Filter>04_Play\Item\Passive</Filter>
     </ClInclude>
     <ClInclude Include="SpoonBender.h">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="SpeedBall.h">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClInclude>
+    <ClInclude Include="NumberOne.h">
       <Filter>04_Play\Item\Passive</Filter>
     </ClInclude>
   </ItemGroup>
@@ -261,9 +264,6 @@
     <ClCompile Include="BloodTear.cpp">
       <Filter>04_Play\Tear</Filter>
     </ClCompile>
-    <ClCompile Include="PolyphemusTear.cpp">
-      <Filter>04_Play\Tear</Filter>
-    </ClCompile>
     <ClCompile Include="Tear.cpp">
       <Filter>04_Play\Tear</Filter>
     </ClCompile>
@@ -271,6 +271,12 @@
       <Filter>04_Play\Item\Passive</Filter>
     </ClCompile>
     <ClCompile Include="SpoonBender.cpp">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="SpeedBall.cpp">
+      <Filter>04_Play\Item\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="NumberOne.cpp">
       <Filter>04_Play\Item\Passive</Filter>
     </ClCompile>
   </ItemGroup>

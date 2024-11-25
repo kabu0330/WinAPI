@@ -539,6 +539,29 @@ void APlayer::ChangeDetectCollisionDirection()
 	int a = 0;
 }
 
+void APlayer::RemovePassiveItem()
+{
+	std::list<AItem*>::iterator StartIter = Items.begin();
+	std::list<AItem*>::iterator EndIter = Items.end();
+
+	for (; StartIter != EndIter; )
+	{
+		AItem* Item = *StartIter;
+		EItemType ItemType = Item->GetItemType();
+
+		if (ItemType != EItemType::PASSIVE)
+		{
+			++StartIter;
+			continue;
+		}
+		//Items.remove(Item);
+		StartIter = Items.erase(StartIter);
+		Item = nullptr;
+		PassiveItem = nullptr;
+		return;
+	}
+}
+
 int APlayer::CheckPickupItemCount(std::string_view _ItemName)
 {
 	std::string FindItemName = _ItemName.data();

@@ -100,10 +100,13 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("TheInnerEye.png", 8, 1);
 	UImageManager::GetInst().CuttingSprite("collectibles_003_spoonbender.png", 8, 1);
 	UImageManager::GetInst().CuttingSprite("SpoonBenderHead.png", 8, 1);
+	UImageManager::GetInst().CuttingSprite("SpeedBall_Head.png", 8, 1);
+	UImageManager::GetInst().CuttingSprite("NumberOne_Head.png", 8, 1);
 
 	UImageManager::GetInst().CuttingSprite("collectibles_024_dessert.png", 1, 1);
 
 	UImageManager::GetInst().CuttingSprite("effect_tearpoof_purple.png", 4, 4);
+	UImageManager::GetInst().CuttingSprite("effect_tearpoof_Yellow.png", 4, 4);
 
 	// Player
 	UImageManager::GetInst().CuttingSprite("Body.png", 5, 6);
