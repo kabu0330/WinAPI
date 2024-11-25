@@ -413,6 +413,15 @@ void ARoom::OpenTheDoor()
 			BossDoorOpenEffect->SetComponentScale({ 96, 96 });
 			continue;
 		}
+
+		FindRoomName = "TreasureRoom";
+		if (true == IsNextRoom(FindRoomName, Dir) || FindRoomName == MyName)
+		{
+			std::string AnimationName = "Treasure_" + DirString + "_OpenAnim";
+			Door->ChangeAnimation(AnimationName);
+			continue;
+		}
+
 		std::string AnimationName = "Door_" + DirString + "_OpenAnim";
 		Door->ChangeAnimation(AnimationName);
 	}
@@ -464,6 +473,15 @@ void ARoom::CloseTheDoor()
 			Door->ChangeAnimation(AnimationName);
 			continue;
 		}
+
+		FindRoomName = "TreasureRoom";
+		if (true == IsNextRoom(FindRoomName, Dir) || FindRoomName == MyName)
+		{
+			std::string AnimationName = "Treasure_" + DirString + "_CloseAnim";
+			Door->ChangeAnimation(AnimationName);
+			continue;
+		}
+
 		std::string AnimationName = "Door_" + DirString + "_CloseAnim";
 		Door->ChangeAnimation(AnimationName);
 	}
@@ -591,7 +609,7 @@ void ARoom::DoorSpriteSetting()
 		DoorRenderers[i]->SetActive(false); // 세팅해두고 일단 렌더를 끈다. AddDoor 함수에서 호출되는 RoomDir 방향의 문만 렌더한다.
 	}
 
-	float AnimationSpeed = 0.05f;
+	float AnimationSpeed = 0.07f;
 
 	// Normal Door
 	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_Open"    , "NormalRoomDoor.png", 0, 0, 0.1f, false);
@@ -639,6 +657,27 @@ void ARoom::DoorSpriteSetting()
 	BossDoorOpenEffect->SetAlphaFloat(0.15f);
 	BossDoorOpenEffect->SetOrder(ERenderOrder::Door);
 	BossDoorOpenEffect->ChangeAnimation("BossDoorEffect_Left");
+
+	//////////////////////////////////////////////////
+	// Treasure Door
+
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Treasure_Left_Open", "Treasure_CloseDoor", 4, 4, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Treasure_Left_CloseAnim", "Treasure_CloseDoor", 12, 15, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Treasure_Left_OpenAnim", "Treasure_OpenDoor", 12, 15, AnimationSpeed, false);
+
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Treasure_Right_Open", "Treasure_CloseDoor", 12, 12, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Treasure_Right_CloseAnim", "Treasure_CloseDoor", 4, 7, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->CreateAnimation("Treasure_Right_OpenAnim", "Treasure_OpenDoor", 4, 7, AnimationSpeed, false);
+
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Treasure_Up_Open", "Treasure_CloseDoor", 0, 0, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Treasure_Up_CloseAnim", "Treasure_CloseDoor", 0, 3, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::UP) - 1]->CreateAnimation("Treasure_Up_OpenAnim", "Treasure_OpenDoor", 0, 3, AnimationSpeed, false);
+
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Treasure_Down_Open", "Treasure_CloseDoor", 4, 4, 0.1f, false);
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Treasure_Down_CloseAnim", "Treasure_CloseDoor", 8, 11, AnimationSpeed, false);
+	DoorRenderers[static_cast<int>(RoomDir::DOWN) - 1]->CreateAnimation("Treasure_Down_OpenAnim", "Treasure_OpenDoor", 8, 11, AnimationSpeed, false);
+
+
 
 	DoorRenderers[static_cast<int>(RoomDir::LEFT)  - 1]->ChangeAnimation("Door_Left_Open");
 	DoorRenderers[static_cast<int>(RoomDir::RIGHT) - 1]->ChangeAnimation("Door_Right_Open");

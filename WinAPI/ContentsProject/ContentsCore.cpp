@@ -192,6 +192,16 @@ void ContentsCore::FolderSetting()
 	BossRoomDoorOpenSprite.MoveParentToDirectory("Resources//Image//Play");
 	BossRoomDoorOpenSprite.Append("Boss_OpenDoor");
 	UImageManager::GetInst().LoadFolder(BossRoomDoorOpenSprite.GetPathToString());
+
+	UEngineDirectory TreasureDoorCloseSprite;
+	TreasureDoorCloseSprite.MoveParentToDirectory("Resources//Image//Play");
+	TreasureDoorCloseSprite.Append("Treasure_CloseDoor");
+	UImageManager::GetInst().LoadFolder(TreasureDoorCloseSprite.GetPathToString());
+
+	UEngineDirectory TreasureDoorOpenSprite;
+	TreasureDoorOpenSprite.MoveParentToDirectory("Resources//Image//Play");
+	TreasureDoorOpenSprite.Append("Treasure_OpenDoor");
+	UImageManager::GetInst().LoadFolder(TreasureDoorOpenSprite.GetPathToString());
 	
 	UEngineDirectory ItemHeart;
 	ItemHeart.MoveParentToDirectory("Resources//Image//Play//Item");
