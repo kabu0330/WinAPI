@@ -49,51 +49,89 @@ bool APlayGameMode::GamePaused = false;
 
 void APlayGameMode::BeginPlay()
 {
-	// 레벨이 만들어지면 최초 1회 세팅은 여기서 한다.
-	
 	GetWorld()->SetCameraPos({0, 0});
 	GetWorld()->SetCameraToMainPawn(false);
-	//GetWorld()->SetCameraPos(GetWorld()->GetPawn()->GetActorLocation());
-	//GetWorld()->SetCameraToMainPawn(true); // 카메라가 플레이어 추적
 
 	Spawn();
 
 	CollisionGroupLinkSetting();
 	UISetting();
-
 }
 
 void APlayGameMode::Spawn()
 {
 	// Room
 	ARoom* BaseRoom = GetWorld()->SpawnActor<ARoom>();
-	ARoom* TreasureRoom = GetWorld()->SpawnActor<ARoom>();
+	ARoom* BossRoom = GetWorld()->SpawnActor<ARoom>();
+	ARoom* TreasureRoom0 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* TreasureRoom1 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* TreasureRoom2 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();
-	//ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
-	//ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* BossRoom = GetWorld()->SpawnActor<ARoom>();
-
-	BaseRoom->InterLinkRoom(MinionRoom0, RoomDir::LEFT);
-	BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::RIGHT);
-	BaseRoom->InterLinkRoom(TreasureRoom, RoomDir::UP);
-	BaseRoom->InterLinkRoom(BossRoom, RoomDir::DOWN);
-	//MinionRoom3->InterLinkRoom(BossRoom, RoomDir::DOWN);
-
-	BaseRoom->SetName("BaseRoom");
-	TreasureRoom->SetName("TreasureRoom");
-	MinionRoom0->SetName("MinionRoom0");
-	MinionRoom1->SetName("MinionRoom1");
-	//MinionRoom2->SetName("MinionRoom2");
-	//MinionRoom3->SetName("MinionRoom3");
-	BossRoom->SetName("BossRoom");
+	ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom4 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom5 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom6 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom7 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom8 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom9 = GetWorld()->SpawnActor<ARoom>();
 
 	// 현재 맵 초기 세팅
 	ARoom::SetCurRoom(BaseRoom);
 
+	BaseRoom->SetRoomType(ERoomType::BASE);
+	TreasureRoom0->SetRoomType(ERoomType::TREASURE);
+	TreasureRoom1->SetRoomType(ERoomType::TREASURE);
+	TreasureRoom2->SetRoomType(ERoomType::TREASURE);
+	BossRoom->SetRoomType(ERoomType::BOSS);
+
+	BaseRoom->SetName("BaseRoom");
+	TreasureRoom0->SetName("TreasureRoom0");
+	TreasureRoom1->SetName("TreasureRoom1");
+	TreasureRoom2->SetName("TreasureRoom2");
+	MinionRoom0->SetName("MinionRoom0");
+	MinionRoom1->SetName("MinionRoom1");
+	MinionRoom2->SetName("MinionRoom2");
+	MinionRoom3->SetName("MinionRoom3");
+	MinionRoom4->SetName("MinionRoom4");
+	MinionRoom5->SetName("MinionRoom5");
+	MinionRoom6->SetName("MinionRoom6");
+	MinionRoom7->SetName("MinionRoom7");
+	MinionRoom8->SetName("MinionRoom8");
+	MinionRoom9->SetName("MinionRoom9");
+	BossRoom->SetName("BossRoom");
+
+	BaseRoom->InterLinkRoom(TreasureRoom0, RoomDir::UP);
+	BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::LEFT);
+	BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::RIGHT);
+	//BaseRoom->InterLinkRoom(BossRoom, RoomDir::DOWN);
+
+	// Left Root
+	MinionRoom1->InterLinkRoom(MinionRoom0, RoomDir::UP);
+	MinionRoom1->InterLinkRoom(MinionRoom3, RoomDir::DOWN);
+
+	MinionRoom3->InterLinkRoom(TreasureRoom1, RoomDir::LEFT);
+	MinionRoom3->InterLinkRoom(MinionRoom6, RoomDir::DOWN);
+
+	MinionRoom6->InterLinkRoom(MinionRoom7, RoomDir::RIGHT);
+	MinionRoom6->InterLinkRoom(MinionRoom9, RoomDir::DOWN);
+
+	MinionRoom9->InterLinkRoom(BossRoom, RoomDir::LEFT);
+
+	MinionRoom7->InterLinkRoom(MinionRoom8, RoomDir::RIGHT);
+
+	// Right Root
+	MinionRoom2->InterLinkRoom(MinionRoom4, RoomDir::DOWN);
+
+	MinionRoom4->InterLinkRoom(MinionRoom5, RoomDir::RIGHT);
+	MinionRoom4->InterLinkRoom(MinionRoom8, RoomDir::DOWN); // Left Root Link
+	MinionRoom8->InterLinkRoom(TreasureRoom2, RoomDir::RIGHT);
+
+
 	// Monster
 
-	BaseRoom->CreateMonster<AAttackFly>({ 100, 0 });
+	//BaseRoom->CreateMonster<AAttackFly>({ 100, 0 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ -50, 50 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ 0, 0 });
 	//MinionRoom0->CreateMonster<AFly>({ 0, 0 });
@@ -131,7 +169,7 @@ void APlayGameMode::Spawn()
 	
 	// Item
 	//AItem* Heart = TreasureRoom->CreateItem<AHeart>(nullptr, { -300, -150 });
-	AItem* Bomb = BaseRoom->CreateItem<ABomb>(nullptr, { 0, 0 });
+	AItem* Bomb = BaseRoom->CreateItem<ABomb>(nullptr, { 50, 0 });
 	//AItem* Penny = TreasureRoom->CreateItem<APenny>(nullptr, { -200, -150 });
 	//AItem* HalfHeart = TreasureRoom->CreateItem<AHeart>(nullptr, { -150, -150 });
 	//HalfHeart->SetHalfHeart();

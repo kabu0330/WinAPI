@@ -39,26 +39,27 @@ void ARoom::BeginPlay()
 	Player = dynamic_cast<APlayer*>(GetWorld()->GetPawn());
 
 	// 맵 이름에 따라 이미지를 바꾼다.
-	if ("BaseRoom" == GetName())
+	switch (RoomType)
 	{
+	case ERoomType::BASE:
 		RoomRenderer->SetSprite("Room_01.png");
 		ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		ControlsRenderer->SetSprite("controls.png");
 		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowHalfScale.iX(), GetActorLocation().iY() - Global::WindowHalfScale.iY() - 20 });
 		ControlsRenderer->SetComponentScale({ 655, 145 }); // 385, 85
 		ControlsRenderer->SetOrder(ERenderOrder::Controls);
-	}
-	else if ("TreasureRoom" == GetName())
-	{
+		break;
+	case ERoomType::TREASURE:
 		RoomRenderer->SetSprite("Room_01.png");
-	}
-	else if ("BossRoom" == GetName())
-	{
+		break;
+	case ERoomType::BOSS:
 		RoomRenderer->SetSprite("Room_03.png");
-	}
-	else // 베이스룸을 제외한 맵의 이미지를 바꿀 수 있다.
-	{
+		break;
+	case ERoomType::NORMAL:
+	case ERoomType::NONE:
+	default:
 		RoomRenderer->SetSprite("Room_02.png");
+		break;
 	}
 }
 
@@ -406,7 +407,8 @@ void ARoom::OpenTheDoor()
 		std::string DirString = SwitchEnumToString(Dir);
 		std::string MyName = GetName();
 		std::string FindRoomName = "BossRoom";
-		if (true == IsNextRoom(FindRoomName, Dir) || FindRoomName == MyName)
+		ERoomType Type = ERoomType::BOSS;
+		if (true == IsNextRoom(Type, Dir) || Type == GetRoomType())
 		{
 			std::string AnimationName = "BossDoor_" + DirString + "_OpenAnim";
 			Door->ChangeAnimation(AnimationName);
@@ -415,7 +417,8 @@ void ARoom::OpenTheDoor()
 		}
 
 		FindRoomName = "TreasureRoom";
-		if (true == IsNextRoom(FindRoomName, Dir) || FindRoomName == MyName)
+		Type = ERoomType::TREASURE;
+		if (true == IsNextRoom(Type, Dir) || Type == GetRoomType())
 		{
 			std::string AnimationName = "Treasure_" + DirString + "_OpenAnim";
 			Door->ChangeAnimation(AnimationName);
@@ -466,8 +469,9 @@ void ARoom::CloseTheDoor()
 		std::string DirString = SwitchEnumToString(Dir);
 		std::string MyName = GetName();
 		std::string FindRoomName = "BossRoom";
+		ERoomType Type = ERoomType::BOSS;
 		BossDoorOpenEffect->SetComponentScale({ 0, 0});
-		if (true == IsNextRoom(FindRoomName, Dir) || FindRoomName == MyName)
+		if (true == IsNextRoom(Type, Dir) || Type == GetRoomType())
 		{
 			std::string AnimationName = "BossDoor_" + DirString + "_CloseAnim";
 			Door->ChangeAnimation(AnimationName);
@@ -475,7 +479,8 @@ void ARoom::CloseTheDoor()
 		}
 
 		FindRoomName = "TreasureRoom";
-		if (true == IsNextRoom(FindRoomName, Dir) || FindRoomName == MyName)
+		Type = ERoomType::TREASURE;
+		if (true == IsNextRoom(Type, Dir) || Type == GetRoomType())
 		{
 			std::string AnimationName = "Treasure_" + DirString + "_CloseAnim";
 			Door->ChangeAnimation(AnimationName);
@@ -504,10 +509,10 @@ void ARoom::CloseTheDoor()
 	
 }
 
-bool ARoom::IsNextRoom(std::string_view _RoomName, RoomDir _Dir)
+bool ARoom::IsNextRoom(ERoomType _RoomType, RoomDir _Dir)
 {
-	std::string RoomName = Rooms[_Dir]->GetName();
-	if (_RoomName == RoomName)
+	ERoomType Type = Rooms[_Dir]->GetRoomType();
+	if (_RoomType == Type)
 	{
 		return true;
 	}

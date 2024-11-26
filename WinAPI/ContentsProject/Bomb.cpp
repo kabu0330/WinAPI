@@ -13,12 +13,13 @@ ABomb::ABomb()
 	BodyRendererScale = {192, 192};
 	BodyCollisionScale = { 32, 32 };
 	ItemCount = 1;
-	Att = 60; // 몬스터에게 가할 피해
+	Att = 30; // 몬스터에게 가할 피해
 	FVector2D UnversalScale = { 150, 150 };
 	ItemType = EItemType::USE;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	DropRenderer->CreateAnimation("Bomb", "bomb.png", 8, 8, 0.3f, false);
+	DropRenderer->CreateAnimation("DropEffect", "Drop.png", 0, 3, 0.15f, false);
 	DropRenderer->SetComponentLocation({ 0, 0 });
 	DropRenderer->SetComponentScale(BodyRendererScale);
 	DropRenderer->SetOrder(ERenderOrder::Item);
@@ -31,7 +32,7 @@ ABomb::ABomb()
 	BodyRenderer->CreateAnimation("BombTimer1.0", "Bomb", { 0, 1, 2, 1, 0, 3 }, 0.05f);
 	BodyRenderer->SetComponentLocation({ 0, 0 });
 	BodyRenderer->SetComponentScale(BodyRendererScale);
-	BodyRenderer->SetOrder(ERenderOrder::Item);
+	BodyRenderer->SetOrder(ERenderOrder::Item_ObjectFront);
 	BodyRenderer->ChangeAnimation("Bomb");
 	BodyRenderer->SetActive(false);
 
@@ -39,12 +40,12 @@ ABomb::ABomb()
 	BobmSparkEffectRenderer->CreateAnimation("Spark", "bomb_spark.png", 0, 7, 0.2f);
 	BobmSparkEffectRenderer->SetComponentLocation({ -16, -16 });
 	BobmSparkEffectRenderer->SetComponentScale(BodyRendererScale * 0.3f);
-	BobmSparkEffectRenderer->SetOrder(ERenderOrder::Item_Front);
+	BobmSparkEffectRenderer->SetOrder(ERenderOrder::Item_ObjectFront);
 	BobmSparkEffectRenderer->ChangeAnimation("Spark");
 	BobmSparkEffectRenderer->SetActive(false);
 
 	ExplosionEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	ExplosionEffectRenderer->CreateAnimation("Explosion", "Explosion.png", 0, 11, 0.1f, false);
+	ExplosionEffectRenderer->CreateAnimation("Explosion", "Explosion.png", 0, 11, 0.12f, false);
 	ExplosionEffectRenderer->SetComponentLocation({ 0, 50 });
 	ExplosionEffectRenderer->SetComponentScale(UnversalScale * 4);
 	ExplosionEffectRenderer->SetOrder(ERenderOrder::ItemEffect);
@@ -94,7 +95,8 @@ bool ABomb::EatFunction(APlayer* _Player)
 	}
 
 	IsDrop = true;
-	DropRenderer->SetActive(false); 
+	DropRenderer->ChangeAnimation("DropEffect");
+	TimeEventer.PushEvent(0.8f, [this]() {DropRenderer->SetActive(false); });
 
 	return true;
 }

@@ -10,8 +10,8 @@ AKey::AKey()
 	ItemType = EItemType::USE;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DropRenderer->CreateAnimation("Appearance", "pickup_003_key.png", 0, 0, 0.2f, false);
-	DropRenderer->CreateAnimation("DropEffect", "pickup_003_key.png", 0, 0, 0.1f, false);
+	DropRenderer->CreateAnimation("Appearance", "pickup_003_key.png", 0, 0, 0.2f, false);	
+	DropRenderer->CreateAnimation("DropEffect", "Drop.png", 0, 3, 0.1f, false);
 	DropRenderer->SetComponentLocation({ 0, 0 });
 	DropRenderer->SetComponentScale(BodyRendererScale);
 	DropRenderer->SetOrder(ERenderOrder::ItemEffect);
@@ -66,5 +66,5 @@ void AKey::DropSucessAnimation()
 		return;
 	}
 	DropRenderer->ChangeAnimation("DropEffect");
-	DropRenderer->SetActive(false);
+	TimeEventer.PushEvent(0.4f, [this]() {DropRenderer->SetActive(false); });
 }

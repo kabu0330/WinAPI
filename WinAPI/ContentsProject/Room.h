@@ -18,6 +18,16 @@ enum class RoomDir
 	MAX
 };
 
+enum class ERoomType
+{
+	NONE,
+	BASE,
+	NORMAL,
+	TREASURE,
+	BOSS,
+	MAX
+};
+
 // 설명 : 플레이 레벨에 존재하는 맵 
 class ARoom : public AActor
 {
@@ -43,7 +53,15 @@ public:
 
 	void OpenTheDoor();
 	void CloseTheDoor();
-	bool IsNextRoom(std::string_view _RoomName, RoomDir _Dir);
+	bool IsNextRoom(ERoomType _RoomType, RoomDir _Dir);
+	ERoomType GetRoomType()
+	{
+		return RoomType;
+	}
+	void SetRoomType(ERoomType _RoomType)
+	{
+		RoomType = _RoomType;
+	}
 	std::string SwitchEnumToString(RoomDir _Dir);
 	void TemporarilyHideDoorCollision();
 
@@ -192,7 +210,7 @@ protected:
 
 private:
 	static ARoom* CurRoom;
-
+	ERoomType RoomType = ERoomType::NORMAL;
 	std::map<RoomDir, ARoom*> Rooms;
 	std::map<RoomDir, U2DCollision*> DoorCollisionMap;
 	std::map<RoomDir, USpriteRenderer*> DoorRendererMap;
