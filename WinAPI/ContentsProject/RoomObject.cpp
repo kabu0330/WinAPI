@@ -5,6 +5,11 @@
 #include "PlayGameMode.h"
 #include "Bomb.h"
 #include "Rock.h"
+#include "Heart.h"
+#include "Penny.h"
+#include "Bomb.h"
+#include "Key.h"
+#include "DecalObject.h"
 
 ARoomObject::ARoomObject()
 {
@@ -159,28 +164,25 @@ void ARoomObject::SwitchAnimation()
 	{
 		return;
 	}
-	if ("" == ObjectName)
+	if ("true" == ObjectName)
 	{
-		//MSGASSERT("RoomObject 중 SetSprite 함수로 설정해야만 하는 오브젝트를 생성했습니다.");
 		return;
 	}
 
 	switch (Hp)
 	{
-	case 4:
-		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(0));
-		break;
 	case 3:
-		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(1));
+		BodyRenderer->ChangeAnimation(ObjectName);
 		break;
 	case 2:
-		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(2));
+		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(1));
 		break;
 	case 1:
-		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(3));
+		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(2));
 		break;
 	case 0: // 충돌체가 파괴되고 남은 잔해물
-		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(4));
+		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(3));
+		BodyRenderer->SetOrder(ERenderOrder::Object_PlayerBack);
 		break;
 	default:
 		break;
@@ -202,6 +204,7 @@ void ARoomObject::DestroyCollision()
 
 	BodyCollision->Destroy();
 	BodyCollision = nullptr;
+	SpawnItem();
 
 	if (nullptr != BlockingPathCollision)
 	{
@@ -240,6 +243,49 @@ void ARoomObject::DealDamageToPlayer(AActor* _Actor)
 
 	Player->ApplyDamaged(Player, 1, FVector2D::ZERO);
 
+}
+
+void ARoomObject::SpawnItem()
+{
+	UEngineRandom Random;
+	Random.SetSeed(time(NULL));
+	int Result = Random.RandomInt(0, 8);
+	FVector2D Offset = FVector2D(0, -5);
+	if (4 > Result)
+	{
+		ARoomObject* ApperanceEffect = ParentRoom->CreateObject<ADecalObject>(this, Offset);
+		USpriteRenderer* Renderer = ApperanceEffect->GetBodyRenderer();
+		Renderer->ChangeAnimation("ApperanceEffect");
+		Renderer->SetComponentScale({ 256, 256 });
+		Renderer->SetOrder(ERenderOrder::ItemEffect);
+		ApperanceEffect->Destroy(0.2f);
+	}
+
+	switch (Result)
+	{
+	case 0:
+	{
+		ParentRoom->CreateItem<AHeart>(this, Offset);
+		break;
+	}
+	case 1:
+	{
+		ParentRoom->CreateItem<APenny>(this, Offset);
+		break;
+	}
+	case 2:
+	{
+		ParentRoom->CreateItem<ABomb>(this, Offset);
+		break;
+	}
+	case 3:
+	{
+		ParentRoom->CreateItem<AKey>(this, Offset);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void ARoomObject::BlockPlayerCollision(APlayer* _Player, FVector2D _Pos)

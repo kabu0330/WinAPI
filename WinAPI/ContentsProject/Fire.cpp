@@ -5,10 +5,8 @@ AFire::AFire()
 {
 	SetName("Fire");
 	BodyRendererScale = { 64, 64 };
-	BodyCollisionScale = { 40, 40 };
+	BodyCollisionScale = { 40, 60 };
 	BodyCollisionLocation = { 0, -20 };
-	FVector2D BlockingPathCollisionScale = { 30 , 30 };
-	FVector2D BlockingPathCollisionPivot = { 0, 5 };
 
 	Hp = 3;
 	CanExplode = false;
@@ -22,18 +20,18 @@ AFire::AFire()
 	BodyRenderer->CreateAnimation("FireBottom_Burned", "fire_bottom.png", 1, 1, 0.1f, false);
 	BodyRenderer->SetComponentLocation({ 0, 0 });
 	BodyRenderer->SetComponentScale(BodyRendererScale);
-	BodyRenderer->SetOrder(ERenderOrder::Object_Back);
+	BodyRenderer->SetOrder(ERenderOrder::Object_PlayerBack);
 	BodyRenderer->ChangeAnimation("FireBottom_Flame");
 	BodyRenderer->SetActive(true);
 
 	FlameBaseRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	FlameBaseRenderer->CreateAnimation("FireBottom_Flame", "fire_top.png", 0, 5, BurningFrame);
 	FlameBaseRenderer->SetComponentLocation({ 0, 0 });
-	FlameBaseRenderer->SetComponentScale(BodyRendererScale * 3.5f);
-	FlameBaseRenderer->SetOrder(ERenderOrder::Object_Back);
+	FlameBaseRenderer->SetComponentScale(BodyRendererScale * 4.0f);
+	FlameBaseRenderer->SetOrder(ERenderOrder::Object_PlayerBack);
 	FlameBaseRenderer->ChangeAnimation("FireBottom_Flame");
 	FlameBaseRenderer->SetActive(true);
-	FlameBaseRenderer->SetAlphaFloat(0.8f);
+	FlameBaseRenderer->SetAlphaFloat(0.7f);
 
 
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
@@ -42,11 +40,6 @@ AFire::AFire()
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Object);
 	BodyCollision->SetCollisionType(ECollisionType::Rect);
 
-	//BlockingPathCollision = CreateDefaultSubObject<U2DCollision>();
-	//BlockingPathCollision->SetComponentLocation(BlockingPathCollisionPivot);
-	//BlockingPathCollision->SetComponentScale(BlockingPathCollisionScale);
-	//BlockingPathCollision->SetCollisionGroup(ECollisionGroup::Object);
-	//BlockingPathCollision->SetCollisionType(ECollisionType::Rect);
 }
 
 AFire::~AFire()
@@ -81,10 +74,10 @@ void AFire::SwitchAnimation()
 		break;
 	case 2:
 		FlameBaseRenderer->SetComponentLocation({ 0, 0 });
-		FlameBaseRenderer->SetComponentScale(BodyRendererScale * 2.0f);
+		FlameBaseRenderer->SetComponentScale(BodyRendererScale * 3.0f);
 
 		BodyCollisionLocation = { 0, -10 };
-		BodyCollisionScale = { 20, 20 };
+		BodyCollisionScale = { 30, 30 };
 		BodyCollision->SetComponentLocation(BodyCollisionLocation);
 		BodyCollision->SetComponentScale(BodyCollisionScale);
 
@@ -92,10 +85,10 @@ void AFire::SwitchAnimation()
 	case 1:
 	{
 		FlameBaseRenderer->SetComponentLocation({ 0, 0 });
-		FlameBaseRenderer->SetComponentScale(BodyRendererScale * 1.2f);
+		FlameBaseRenderer->SetComponentScale(BodyRendererScale * 1.5f);
 
 		BodyCollisionLocation = { 0, -5 };
-		BodyCollisionScale = { 15, 15 };
+		BodyCollisionScale = { 20, 20 };
 		BodyCollision->SetComponentLocation(BodyCollisionLocation);
 		BodyCollision->SetComponentScale(BodyCollisionScale);
 
@@ -113,6 +106,8 @@ void AFire::SwitchAnimation()
 			BodyCollision->Destroy();
 		}
 		BodyRenderer->ChangeAnimation("FireBottom_Burned");
+
+
 	}
 		break;
 	default:

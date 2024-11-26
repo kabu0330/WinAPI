@@ -29,7 +29,8 @@ public:
 	void SetSprite(std::string_view _Name)
 	{
 		std::string UpperName = UEngineString::ToUpper(_Name);
-		ObjectName = UpperName;
+		BodyRenderer->ChangeAnimation(UpperName);
+		ObjectName = UpperName; // 눈물 피격에 따라 단계별로 애니메이션이 바뀌어야 한다면 이름이 있어야 함..
 	}
 	virtual void SetSprite(std::string_view _AnimName, FVector2D _Scale) {};
 
@@ -50,6 +51,9 @@ public:
 	// Fire
 	void DealDamageToPlayer(AActor* _Actor);
 	
+
+	// 아이템 드랍
+	void SpawnItem();
 
 	
 	int GetHp()

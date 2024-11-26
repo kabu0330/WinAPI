@@ -13,6 +13,7 @@ ADecalObject::ADecalObject()
 	IsAttackable = false;
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BodyRenderer->CreateAnimation("ApperanceEffect", "Drop.png", {3, 2, 1, 0, 4}, 0.06f, false);
 	BodyRenderer->CreateAnimation("bloodpool00", "effect_bloodpool.png",  0,  0, 0.1f, false);
 	BodyRenderer->CreateAnimation("bloodpool01", "effect_bloodpool.png",  1,  1, 0.1f, false);
 	BodyRenderer->CreateAnimation("bloodpool02", "effect_bloodpool.png",  2,  2, 0.1f, false);

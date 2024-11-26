@@ -168,6 +168,10 @@ void ABloodTear::MapObjectCollision(AActor* _Other)
 	{
 		return;
 	}
+	if (nullptr == TearCollision)
+	{
+		return;
+	}
 	ECollisionGroup CollisionType = static_cast<ECollisionGroup>(CollisionOther->GetBodyCollision()->GetGroup());
 
 	CollisionActor = TearCollision->CollisionOnce(CollisionType);

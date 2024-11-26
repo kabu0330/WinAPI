@@ -35,16 +35,16 @@ APlayer::APlayer()
 {
 	SetName("Isaac");
 
-	SetActorLocation(Global::WindowSize.Half()); // 1. Actor의 위치는 의미가 있어도 크기는 의미가 없다.
+	SetActorLocation({ Global::WindowSize.Half().iX(), Global::WindowSize.Half().iY() + 200});
+
 	InitPos = GetActorLocation();
 	Global::PlayerHeadOffset = { 0, -32 };
 
-	SpriteSetting(); // 2. 상태에 따른 애니메이션 동작을 정의한다.
-	CollisionSetting(); // 3. 캐릭터의 이동영역을 지정할 충돌체를 생성한다. 
+	SpriteSetting(); 
+	CollisionSetting(); 
 
-	DebugOn(); // 디버그 대상에 포함
+	DebugOn();
 	//SwitchInvincibility(); // 디버깅용 무적
-
 }
 
 void APlayer::BeginPlay()
@@ -53,8 +53,6 @@ void APlayer::BeginPlay()
 
 	UISetting();
 	CollisionFuctionSetting();
-
-	
 
 	//BGM = UEngineSound::Play("doorOpen.wav");
 }
@@ -83,7 +81,6 @@ void APlayer::Tick(float _DeltaTime)
 
 	IsCameraMove(); // 워프
 
-	// 렌더
 	CurStateAnimation(_DeltaTime);
 
 	ARoom* CurRoom = ARoom::GetCurRoom();
@@ -92,14 +89,11 @@ void APlayer::Tick(float _DeltaTime)
 		return; // 워프 후 몬스터가 스폰되는 연출시간 동안 움직이지 않도록 
 	}
 
-	// 로직
-
 	Move(_DeltaTime);
 	InputAttack(_DeltaTime);
 	InputItem();
 	UpdateItemPos();
 	ChangeDetectCollisionDirection();
-
 }
 
 void APlayer::CollisionFuctionSetting()

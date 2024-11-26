@@ -139,6 +139,9 @@
     <ClInclude Include="NumberOne.h">
       <Filter>04_Play\Item\Passive</Filter>
     </ClInclude>
+    <ClInclude Include="MetalBlock.h">
+      <Filter>04_Play\MapObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -278,6 +281,9 @@
     </ClCompile>
     <ClCompile Include="NumberOne.cpp">
       <Filter>04_Play\Item\Passive</Filter>
+    </ClCompile>
+    <ClCompile Include="MetalBlock.cpp">
+      <Filter>04_Play\MapObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

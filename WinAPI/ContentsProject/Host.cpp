@@ -16,7 +16,7 @@ AHost::AHost()
 	/* 이동속도 : */ SetMoveSpeed(0);
 	/* 이동시간 : */ SetMoveDuration(0.0f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
-	/* 탐색범위 : */ SetDetectRange({ 600 , 600 });
+	/* 탐색범위 : */ SetDetectRange({ 660 , 660 });
 	/* 발사속도 : */ SetShootingSpeed(400.0f);
 	/* 쿨타임   : */ SetCooldown(3.0f);
 

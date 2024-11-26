@@ -184,7 +184,7 @@ public:
 	}
 
 	template<typename ItemType>
-	AItem* CreateItem(AItem* _Item = nullptr, FVector2D _Pivot = {0, 0})
+	AItem* CreateItem(AActor* _Item = nullptr, FVector2D _Pivot = {0, 0})
 	{
 		AItem* NewItem = GetWorld()->SpawnActor<ItemType>();
 		if (nullptr == _Item)

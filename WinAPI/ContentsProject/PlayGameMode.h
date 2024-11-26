@@ -23,7 +23,7 @@ public:
 	void CollisionGroupLinkSetting();
 	void UISetting();
 	void Spawn();
-
+	void RandomSpawnItem(ARoom* _ParentRoom);
 
 	void EngineDebug(float _DeltaTime);
 
@@ -54,7 +54,8 @@ private:
 	bool IsShowMenu = false;
 	static bool GamePaused; // 게임 일시정지
 
-	std::list<AMonster*> Monsters;
+	std::vector<int> PrevRandomValues;
+
 };
 
 

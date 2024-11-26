@@ -17,10 +17,10 @@ AAttackFly::AAttackFly()
 	/* 이름     : */ SetName("AttackFly");
 	/* 체력     : */ SetHp(Hp);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(100); 
+	/* 이동속도 : */ SetMoveSpeed(70); 
 	/* 이동시간 : */ SetMoveDuration(1.5f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
-	/* 탐색범위 : */ SetDetectRange({ 450, 450 });
+	/* 탐색범위 : */ SetDetectRange({ 480, 480 });
 
 	Hp = 5;
 	RendererScale = { 256, 256 };
