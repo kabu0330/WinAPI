@@ -19,6 +19,7 @@ public:
 	void Tick(float _DeltaTime);
 
 	void DestroyRenderer() override;
+	void DestroyCollision() override;
 protected:
 
 private:

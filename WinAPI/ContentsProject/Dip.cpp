@@ -23,7 +23,7 @@ ADip::ADip()
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ 25, 25 });
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_Body);
-	BodyCollision->SetCollisionType(ECollisionType::Circle);
+	BodyCollision->SetCollisionType(ECollisionType::Rect);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "Dip.png", 0, 2, 0.4f);

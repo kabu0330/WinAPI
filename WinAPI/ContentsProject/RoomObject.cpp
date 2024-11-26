@@ -156,6 +156,7 @@ int ARoomObject::ApplyDamaged(AActor* _Actor)
 		return Hp;
 	}
 
+	return Hp;
 }
 
 void ARoomObject::SwitchAnimation()
@@ -249,7 +250,7 @@ void ARoomObject::SpawnItem()
 {
 	UEngineRandom Random;
 	Random.SetSeed(time(NULL));
-	int Result = Random.RandomInt(0, 8);
+	int Result = Random.RandomInt(0, 12);
 	FVector2D Offset = FVector2D(0, -5);
 	if (4 > Result)
 	{

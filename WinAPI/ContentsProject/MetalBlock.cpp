@@ -5,8 +5,8 @@ AMetalBlock::AMetalBlock()
 {
 	SetName("MetalBlock");
 	BodyRendererScale = { 64, 64 };
-	FVector2D BodyCollisionScale = { 40, 40 };
-	FVector2D BlockingPathCollisionScale = { 30 , 40 };
+	FVector2D BodyCollisionScale = { 50, 50 };
+	FVector2D BlockingPathCollisionScale = { 50 , 50 };
 	FVector2D BlockingPathCollisionPivot = { 0, 0 };
 
 	CanExplode = false; // Bomb과 상호 작용 가능 조건

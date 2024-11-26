@@ -1,12 +1,14 @@
 #include "PreCompile.h"
 #include "Rock.h"
+#include "DecalObject.h"
+#include "Room.h"
 
 ARock::ARock()
 {
 	SetName("Rock");
 	BodyRendererScale = { 64, 64 };
-	FVector2D BodyCollisionScale = { 40, 40 };
-	FVector2D BlockingPathCollisionScale = { 30 , 40 };
+	FVector2D BodyCollisionScale = { 50, 50 };
+	FVector2D BlockingPathCollisionScale = { 50 , 50 };
 	FVector2D BlockingPathCollisionPivot = { 0, 0 };
 
 	CanExplode = true; // Bomb과 상호 작용 가능 조건
@@ -69,8 +71,44 @@ void ARock::DestroyRenderer()
 	BodyRenderer->Destroy();
 	BodyRenderer = nullptr;
 
+	ARoomObject* Debris = ParentRoom->CreateObject<ADecalObject>(this);
+	ADecalObject* Decal = dynamic_cast<ADecalObject*>(Debris);
+	if (nullptr != Decal)
+	{
+		USpriteRenderer* GibRenderer = Debris->GetBodyRenderer();
+		GibRenderer->CreateAnimation("Decal", "rocks.png", 3, 3, 0.1f, false);
+		GibRenderer->SetComponentScale(BodyRendererScale);
+		GibRenderer->SetActive(true);
+		GibRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);
+		GibRenderer->ChangeAnimation("Decal");
+	}
+
 	DestroyCollision();
 	Destroy(0.5f);
+}
+
+void ARock::DestroyCollision()
+{
+	if (false == IsDeath())
+	{
+		return;
+	}
+	if (nullptr == BodyCollision)
+	{
+		return;
+	}
+
+	IsBlockingPath = false;
+
+	BodyCollision->Destroy();
+	BodyCollision = nullptr;
+	//SpawnItem();
+
+	if (nullptr != BlockingPathCollision)
+	{
+		BlockingPathCollision->Destroy();
+		BlockingPathCollision = nullptr;
+	}
 }
 
 ARock::~ARock()

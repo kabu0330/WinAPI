@@ -43,7 +43,7 @@ public:
 	int ApplyDamaged(AActor* _Actor);
 
 	bool IsDeath();
-	void DestroyCollision();
+	virtual void DestroyCollision();
 	virtual void DestroyRenderer() {}; // Rock에서 재정의
 	virtual void SwitchAnimation();
 	

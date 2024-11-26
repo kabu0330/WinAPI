@@ -5,8 +5,8 @@ APoop::APoop()
 {
 	SetName("Poop");
 	BodyRendererScale = { 64, 64 };	
-	FVector2D BodyCollisionScale = { 40, 40 };
-	FVector2D BlockingPathCollisionScale = { 30 , 30 };
+	FVector2D BodyCollisionScale = { 55, 55 };
+	FVector2D BlockingPathCollisionScale = { 55 , 55 };
 	FVector2D BlockingPathCollisionPivot = { 0, 5 };
 
 	Hp = 3;
@@ -36,7 +36,7 @@ APoop::APoop()
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale(BodyCollisionScale);
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Object);
-	BodyCollision->SetCollisionType(ECollisionType::Circle);
+	BodyCollision->SetCollisionType(ECollisionType::Rect);
 
 	BlockingPathCollision = CreateDefaultSubObject<U2DCollision>();
 	BlockingPathCollision->SetComponentLocation(BlockingPathCollisionPivot);

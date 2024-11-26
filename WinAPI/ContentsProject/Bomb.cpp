@@ -104,7 +104,7 @@ bool ABomb::EatFunction(APlayer* _Player)
 void ABomb::UseItem(APlayer* _Player)
 {
 	FVector2D Pos = _Player->GetActorLocation();
-	SetActorLocation(Pos);
+	SetActorLocation({ Pos.X, Pos.Y - 5.0f });
 	BodyRenderer->SetActive(true);
 	BobmSparkEffectRenderer->SetActive(true); // 폭탄에 불붙는 애니메이션 출력
 	ImpactCollision->SetActive(true); // 눈물 공격으로 밀어내는 상호작용 출력

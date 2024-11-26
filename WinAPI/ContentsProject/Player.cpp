@@ -35,7 +35,7 @@ APlayer::APlayer()
 {
 	SetName("Isaac");
 
-	SetActorLocation({ Global::WindowSize.Half().iX(), Global::WindowSize.Half().iY() + 200});
+	SetActorLocation({ Global::WindowSize.Half().iX(), Global::WindowSize.Half().iY() - 150});
 
 	InitPos = GetActorLocation();
 	Global::PlayerHeadOffset = { 0, -32 };

@@ -23,7 +23,7 @@ public:
 	void CollisionGroupLinkSetting();
 	void UISetting();
 	void Spawn();
-	void RandomSpawnItem(ARoom* _ParentRoom);
+	void SpawnRandomItem(ARoom* _ParentRoom);
 
 	void EngineDebug(float _DeltaTime);
 
@@ -47,6 +47,7 @@ public:
 		GamePaused = _OnOff;
 	}
 
+	void RandomIndex();
 protected:
 
 private:
@@ -54,8 +55,10 @@ private:
 	bool IsShowMenu = false;
 	static bool GamePaused; // 게임 일시정지
 
-	std::vector<int> PrevRandomValues;
-
+	UEngineRandom Random;
+	int Index = 0;
+	bool IsSwap = false;
+	int RandomValues[3] = { 0, };
 };
 
 
