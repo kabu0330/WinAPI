@@ -18,6 +18,7 @@ public:
 	void BeginPlay();
 	void Tick(float _DeltaTime);
 
+	void DestroyRenderer() override;
 protected:
 
 private:

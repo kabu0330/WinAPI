@@ -84,11 +84,11 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("fire_top.png", 3, 2);
 	UImageManager::GetInst().CuttingSprite("fire_bottom.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("effect_bloodpool.png", 4, 6);
+	UImageManager::GetInst().CuttingSprite("effect_030_bloodgibs.png", 4, 4);
 
 	// Item
 	UImageManager::GetInst().CuttingSprite("bomb.png", 5, 6);
 	UImageManager::GetInst().CuttingSprite("bomb_spark.png", 4, 2);
-	UImageManager::GetInst().CuttingSprite("hot_flames.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("Explosion.png", 5, 3);
 	UImageManager::GetInst().CuttingSprite("effect_017_bombradius.png", 3, 3);
 	UImageManager::GetInst().CuttingSprite("penny.png", 5, 5);

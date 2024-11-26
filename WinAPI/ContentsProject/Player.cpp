@@ -54,6 +54,8 @@ void APlayer::BeginPlay()
 	UISetting();
 	CollisionFuctionSetting();
 
+	
+
 	//BGM = UEngineSound::Play("doorOpen.wav");
 }
 

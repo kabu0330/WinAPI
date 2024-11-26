@@ -25,11 +25,18 @@ public:
 		BodyRenderer->SetComponentScale(_Scale);
 	}
 
-	void ScatterDecalObject();
+
+	void Move(float _DeltaTime);
+	void SetMove(AActor* _Actor = nullptr);
 
 protected:
 
 private:
+	bool IsMove = false;
+	FVector2D Force = FVector2D::ZERO;
+	FVector2D TargetPos = FVector2D::ZERO;
+	float TimeElapsed = 0.0f;
+
 
 };
 

@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "DecalObject.h"
+#include <EngineBase/EngineRandom.h>
 
 ADecalObject::ADecalObject()
 {
@@ -54,6 +55,7 @@ void ADecalObject::BeginPlay()
 {
 	Super::BeginPlay();
 	ARoomObject::BeginPlay();
+
 }
 
 void ADecalObject::Tick(float _DeltaTime)
@@ -61,12 +63,50 @@ void ADecalObject::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 	ARoomObject::Tick(_DeltaTime);
 
-	this;
+	Move(_DeltaTime);
 }
 
-void ADecalObject::ScatterDecalObject()
+void ADecalObject::Move(float _DeltaTime)
 {
+	if (false == IsMove)
+	{
+		return;
+	}
 
+	FVector2D Gravity = { 0.0f, 1.8f };
+	//Gravity *= _DeltaTime;
+	Force += Gravity;
+
+	FVector2D ThisPos = GetActorLocation();
+
+	float Duration = 0.5f;
+	TimeElapsed += _DeltaTime;
+	if (Duration < TimeElapsed)
+	{
+		IsMove = false;
+		Force = FVector2D::ZERO;
+		TimeElapsed = 0.0f;
+		return;
+	}
+
+	AddActorLocation(Force * _DeltaTime);
+}
+
+void ADecalObject::SetMove(AActor* _Actor)
+{
+	IsMove = true;
+	
+	UEngineRandom Random;
+	Random.SetSeed(time(NULL));
+	int ResultX = Random.RandomInt(-50, 50);
+	int ResultY = Random.RandomInt(50, 100);
+
+	FVector2D StartPos = _Actor->GetActorLocation();
+	TargetPos = FVector2D(StartPos.X + ResultX, StartPos.Y - ResultY);
+	FVector2D Dir = TargetPos - StartPos;
+	Dir.Normalize();
+
+	Force = Dir * 200.0f;
 }
 
 ADecalObject::~ADecalObject()

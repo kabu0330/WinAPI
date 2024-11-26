@@ -236,7 +236,7 @@ void AItem::AreaWideAttack(AActor* _Actor)
 	ARoomObject* Object = CastActorToType<ARoomObject>(_Actor);
 	if (nullptr != Object)
 	{
-		Object->ApplyDamaged(Object);
+		Object->ApplyDamaged(this);
 	}
 }
 

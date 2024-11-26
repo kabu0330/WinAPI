@@ -33,25 +33,19 @@ public:
 	}
 	virtual void SetSprite(std::string_view _AnimName, FVector2D _Scale) {};
 
-	USpriteRenderer* GetBodyRenderer()
-	{
-		return BodyRenderer;
-	}
-	U2DCollision* GetBodyCollision()
-	{
-		return BodyCollision;
-	}
-
 	void CollisionSetting();
 	void Blocker(AActor* _Actor);
 	void BlockPlayerCollision(class APlayer* _Player, FVector2D _Pos);
 	void BlockMonsterCollision(class AMonster* _Monster, FVector2D _Pos);
-
+	
 	// 파괴형 오브젝트
-	virtual void SwitchAnimation();
 	int ApplyDamaged(AActor* _Actor);
-	void DestroyCollision();
+
 	bool IsDeath();
+	void DestroyCollision();
+	virtual void DestroyRenderer() {}; // Rock에서 재정의
+	virtual void SwitchAnimation();
+	
 
 	// Fire
 	void DealDamageToPlayer(AActor* _Actor);
@@ -76,6 +70,17 @@ public:
 	void SetForce(FVector2D _Force)
 	{
 		Force = _Force;
+	}
+
+	// 맵에 렌더러를 남기고 싶을 때
+	USpriteRenderer* GetBodyRenderer()
+	{
+		return BodyRenderer;
+	}
+
+	U2DCollision* GetBodyCollision()
+	{
+		return BodyCollision;
 	}
 
 protected:

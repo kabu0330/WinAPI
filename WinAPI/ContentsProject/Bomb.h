@@ -21,7 +21,6 @@ public:
 	bool EatFunction(APlayer* _Player) override; // 아이템 습득 즉시
 	void UseItem(APlayer* _Player) override; // 아이템 사용
 
-	void BombCollisionSetting();
 	void Explosion();
 
 protected:

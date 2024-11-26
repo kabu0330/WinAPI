@@ -77,7 +77,6 @@ void ABomb::BeginPlay()
 {
 	Super::BeginPlay();
 	AItem::BeginPlay();
-	BombCollisionSetting();
 }
 
 void ABomb::Tick(float _DeltaTime)
@@ -120,11 +119,6 @@ void ABomb::UseItem(APlayer* _Player)
 	TimeEventer.PushEvent(4.0f, std::bind(&ABomb::Explosion, this));
 }
 
-void ABomb::BombCollisionSetting()
-{
-	UniversalCollision->SetCollisionEnter(std::bind(&AItem::AreaWideAttack, this, std::placeholders::_1));
-}
-
 void ABomb::Explosion()
 {
 	UniversalCollision->SetActive(true);
@@ -135,11 +129,15 @@ void ABomb::Explosion()
 	BodyRenderer->SetActive(false);
 	BobmSparkEffectRenderer->SetActive(false);
 
-	ARoomObject* Bombradius = ParentRoom->CreateObject<ADecalObject>();
-	Bombradius->SetSprite("bombradius", BodyCollisionScale);
-	Bombradius->SetActive(true);
-	Bombradius->SetActorScale({ 256, 256 });
-	Destroy(1.5f);
+	ARoomObject* Bombradius = ParentRoom->CreateObject<ADecalObject>(this, {0, 15});
+	USpriteRenderer* BombradiusRenderer = Bombradius->GetBodyRenderer();
+	BombradiusRenderer->CreateAnimation("Bombbradius", "effect_017_bombradius.png", 0, 1, 0.05f, false);
+	BombradiusRenderer->SetComponentScale({ 216, 160 });
+	BombradiusRenderer->SetActive(true);
+	BombradiusRenderer->SetAlphaFloat(0.6f);
+	BombradiusRenderer->SetOrder(ERenderOrder::Decal);
+	BombradiusRenderer->ChangeAnimation("Bombbradius");
+	Destroy(2.5f);
 }
 
 ABomb::~ABomb()

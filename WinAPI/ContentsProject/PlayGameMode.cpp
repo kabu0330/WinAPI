@@ -88,11 +88,12 @@ void APlayGameMode::Spawn()
 	//MinionRoom3->SetName("MinionRoom3");
 	BossRoom->SetName("BossRoom");
 
+	// 현재 맵 초기 세팅
 	ARoom::SetCurRoom(BaseRoom);
 
 	// Monster
 
-	//BaseRoom->CreateMonster<AAttackFly>({ -150, 100 });
+	BaseRoom->CreateMonster<AAttackFly>({ 100, 0 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ -50, 50 });
 	//MinionRoom0->CreateMonster<AAttackFly>({ 0, 0 });
 	//MinionRoom0->CreateMonster<AFly>({ 0, 0 });
@@ -119,7 +120,7 @@ void APlayGameMode::Spawn()
 	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
 
 	// Object
-	//ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>({100, 0});
+	ARoomObject* MetalBlock = BaseRoom->CreateObject<ARock>(nullptr, {100, 0});
 	//MetalBlock->SetSprite("METALBLOCKS");
 
 	//ARoomObject* Poop = BaseRoom->CreateObject <APoop>({ 100, 0 });
@@ -130,7 +131,7 @@ void APlayGameMode::Spawn()
 	
 	// Item
 	//AItem* Heart = TreasureRoom->CreateItem<AHeart>(nullptr, { -300, -150 });
-	//AItem* Bomb = TreasureRoom->CreateItem<ABomb>(nullptr, { -250, -150 });
+	AItem* Bomb = BaseRoom->CreateItem<ABomb>(nullptr, { 0, 0 });
 	//AItem* Penny = TreasureRoom->CreateItem<APenny>(nullptr, { -200, -150 });
 	//AItem* HalfHeart = TreasureRoom->CreateItem<AHeart>(nullptr, { -150, -150 });
 	//HalfHeart->SetHalfHeart();
@@ -193,6 +194,7 @@ void APlayGameMode::CollisionGroupLinkSetting()
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Monster_Body);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Monster_FlyingBody);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Monster_FlyingBodyNonCollision);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Object);
 }
 
 void APlayGameMode::Tick(float _DeltaTime)

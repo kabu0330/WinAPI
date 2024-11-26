@@ -144,10 +144,17 @@ public:
 	int CountFly();
 
 	template<typename ObjectType>
-	ARoomObject* CreateObject(FVector2D _Pivot = {0, 0})
+	ARoomObject* CreateObject(AActor* _Target = nullptr, FVector2D _Pivot = {0, 0})
 	{
 		ARoomObject* NewObject = GetWorld()->SpawnActor<ObjectType>();
-		NewObject->SetActorLocation(this->GetActorLocation() + _Pivot);
+		if (nullptr == _Target)
+		{
+			NewObject->SetActorLocation(this->GetActorLocation() + _Pivot);
+		}
+		else
+		{
+			NewObject->SetActorLocation(_Target->GetActorLocation() + _Pivot);
+		}
 		NewObject->SetParentRoom(this);
 		Objects.push_back(NewObject);
 

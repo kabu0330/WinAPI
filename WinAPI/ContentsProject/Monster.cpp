@@ -10,6 +10,7 @@
 
 #include "Global.h"
 #include "ContentsEnum.h"
+#include "DecalObject.h"
 
 AMonster::AMonster()
 {
@@ -23,7 +24,6 @@ AMonster::AMonster()
 
 	SpawnEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	SpawnEffectRenderer->CreateAnimation("SpawnEffect", "SpawnEffect_Large.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}, { 0.2f, 0.1f, 0.15f, 0.13f, 0.12f, 0.12f, 0.08f, 0.07f, 0.07f, 0.06f, 0.06f, 0.05f, 0.05f, 0.05f, 0.05f }, false);
-	//SpawnEffectRenderer->CreateAnimation("SpawnEffect", "SpawnEffect_Large.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 }, 0.1f, false);
 
 	SpawnEffectRenderer->SetComponentLocation({ 0, -40 });
 	SpawnEffectScale = { 128, 128 };
@@ -474,24 +474,41 @@ void AMonster::Death(float _DeltaTime)
 	}
 
 	// Death 애니메이션이 따로 있으면 재정의
-	// 2. Death 애니메이션 재생하고
-	// BodyRenderer->ChangeAnimation("Death")
-	// 
-	// 3. Body렌더 끄고
 	// RendererDestroy();
+
 	SetMoveSpeed(0);
 	BloodEffectRenderer->SetActive(true);
 	BloodEffectRenderer->ChangeAnimation("DeathEffect");
 
+
 	if (true == BloodEffectRenderer->IsCurAnimationEnd())
 	{
 		BodyRenderer->Destroy();
+		CreateGib();
 		BodyRenderer = nullptr;
-
 		return;
 	}
 
 	BodyRenderer->SetActive(false);
+}
+
+void AMonster::CreateGib()
+{
+	int Index = MonsterRandom.RandomInt(0, 13);
+
+	ARoomObject* Gib = ParentRoom->CreateObject<ADecalObject>(this);
+	ADecalObject* Decal = dynamic_cast<ADecalObject*>(Gib);
+	if (nullptr != Decal)
+	{
+		Decal->SetMove(this);
+	}
+
+	USpriteRenderer* GibRenderer = Gib->GetBodyRenderer();
+	GibRenderer->CreateAnimation("Gib", "effect_030_bloodgibs.png", Index, Index, 0.1f, false);
+	GibRenderer->SetComponentScale({ 64, 64 });
+	GibRenderer->SetActive(true);
+	GibRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);
+	GibRenderer->ChangeAnimation("Gib");
 }
 
 int AMonster::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)

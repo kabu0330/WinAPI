@@ -9,7 +9,7 @@ ARock::ARock()
 	FVector2D BlockingPathCollisionScale = { 30 , 30 };
 	FVector2D BlockingPathCollisionPivot = { 0, 5 };
 
-	CanExplode = true;
+	CanExplode = true; // Bomb과 상호 작용 가능 조건
 	IsTearDamageable = false;
 	IsBlockingPath = true;
 	IsAttackable = false;
@@ -52,6 +52,26 @@ void ARock::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	ARoomObject::Tick(_DeltaTime);
+}
+
+void ARock::DestroyRenderer()
+{
+	if (false == CanExplode)
+	{
+		return;
+	}
+	if (nullptr == BodyRenderer)
+	{
+		return;
+	}
+	
+	Hp = 0;
+
+	BodyRenderer->Destroy();
+	BodyRenderer = nullptr;
+
+	DestroyCollision();
+	Destroy(0.5f);
 }
 
 ARock::~ARock()

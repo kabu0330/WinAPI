@@ -3,6 +3,8 @@
 #include <EngineCore/EngineAPICore.h>
 #include "Room.h"
 #include "PlayGameMode.h"
+#include "Bomb.h"
+#include "Rock.h"
 
 ARoomObject::ARoomObject()
 {
@@ -80,6 +82,7 @@ void ARoomObject::CollisionSetting()
 		return;
 	}
 	BodyCollision->SetCollisionStay(std::bind(&ARoomObject::DealDamageToPlayer, this, std::placeholders::_1));
+	//BodyCollision->SetCollisionStay(std::bind(&ARoomObject::ApplyBomb, this, std::placeholders::_1));
 
 	if (nullptr == BlockingPathCollision)
 	{
@@ -123,25 +126,31 @@ int ARoomObject::ApplyDamaged(AActor* _Actor)
 	{
 		return Hp;
 	}
-	if (false == IsTearDamageable)
+
+
+	if (true == IsTearDamageable)
 	{
+		Hp -= 1;
+
+		if (Hp <= 0)
+		{
+			Hp = 0;
+		}
 		return Hp;
 	}
 
+	ABomb* Bomb = dynamic_cast<ABomb*>(_Actor);
+	if (nullptr == Bomb)
+	{
+		return Hp;
+	}
 	if (true == CanExplode) // 파괴가 가능한 오브젝트라면
 	{
-		DestroyCollision();
-		Hp = 0;
+		// 디스트로이 여부를 자식 클래스에서 결정해줘야 할듯 Hp = 0;
+		DestroyRenderer();
 		return Hp;
 	}
 
-	Hp -= 1;
-
-	if (Hp <= 0)
-	{
-		Hp = 0;
-	}
-	return Hp;
 }
 
 void ARoomObject::SwitchAnimation()
