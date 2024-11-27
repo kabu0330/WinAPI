@@ -86,11 +86,13 @@ void ABossIntroScene::BeginPlay()
 {
 	Super::BeginPlay();
 
-	IntroTime = 3.0f;
+	IntroTime = 5.5f;
 	FadeTime = 0.5f;
 
 	PlayerDir = FVector2D::RIGHT;
 	BossDir = FVector2D::RIGHT;
+
+	Sound = UEngineSound::Play("boss_fight_intro_jingle_01.ogg");
 }
 
 void ABossIntroScene::Tick(float _DeltaTime)

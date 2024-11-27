@@ -160,7 +160,7 @@ void APlayGameMode::Spawn()
 
 
 	// BaseRoom : 테스트용
-	//BaseRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
+	BaseRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
 	
 	// MinionRoom0 
 	// MinionRoom1 : 플레이어 오른쪽 : 파리맵

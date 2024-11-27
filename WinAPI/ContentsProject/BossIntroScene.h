@@ -58,5 +58,7 @@ private:
 	bool IsShrinking = true;
 	const FVector2D	MinScale = { 324.0f, 162.0f };
 	const FVector2D MaxScale = MinScale * 1.1f;
+
+	USoundPlayer Sound;
 };
 

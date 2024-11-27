@@ -618,7 +618,7 @@ void ARoom::Sounds()
 		if (false == CloseDoorSoundPlay)
 		{
 			Sound = UEngineSound::Play("door_heavy_close.wav");
-			Sound = UEngineSound::Play("summonsound.wav");
+			//Sound = UEngineSound::Play("summonsound.wav");
 			CloseDoorSoundPlay = true;
 			return;
 		}

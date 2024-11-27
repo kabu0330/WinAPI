@@ -150,7 +150,7 @@ void ATheDukeOfFlies::DisplayBossIntro()
 	ABossIntroScene* BossIntro = GetWorld()->SpawnActor<ABossIntroScene>();
 	BossIntro->ShowScene();
 
-	BossIntro->Destroy(5.5f);
+	BossIntro->Destroy(6.5f);
 }
 
 void ATheDukeOfFlies::SpawnAnimation()
