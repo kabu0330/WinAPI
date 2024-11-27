@@ -22,6 +22,12 @@ public:
 
 	int RandomInt(int _Min, int _Max)
 	{
+		if (_Max < _Min)
+		{
+			float SwapValue = _Min;
+			_Min = _Max;
+			_Max = SwapValue;
+		}
 		// _Min ~ _Max ·£´ý°ª »Ì¾ÆÁà
 		std::uniform_int_distribution<int> RandomCreate(_Min, _Max);
 
@@ -32,6 +38,12 @@ public:
 
 	float RandomFloat(float _Min, float _Max)
 	{
+		if (_Max < _Min)
+		{
+			float SwapValue = _Min;
+			_Min = _Max;
+			_Max = SwapValue;
+		}
 		// _Min ~ _Max ·£´ý°ª »Ì¾ÆÁà
 		std::uniform_real_distribution<float> RandomCreate(_Min, _Max);
 		return RandomCreate.operator()(MtGen);
