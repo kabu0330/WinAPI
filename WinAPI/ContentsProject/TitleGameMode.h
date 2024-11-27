@@ -23,6 +23,8 @@ public:
 protected:
 
 private:
-	
+	USoundPlayer IntroSound;
+	USoundPlayer BGM;
+	bool IsPlayingBGM = false;
 };
 

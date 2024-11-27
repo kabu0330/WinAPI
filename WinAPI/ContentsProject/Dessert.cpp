@@ -87,6 +87,8 @@ void ADessert::DropSucessAnimation(APlayer* _Player)
 		return;
 	}
 
+	Sound = UEngineSound::Play("power_up1.wav");
+
 	Player->ChangePlayerAnimation(DropAnimationDuration, "Drop");
 
 	DropEffectRenderer->SetComponentScale({ 160, 160 });

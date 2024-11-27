@@ -333,6 +333,8 @@ void APlayer::DeathAnimation()
 {
 	if (false == IsResetReady)
 	{
+		APlayGameMode::GetPlayGameModeBGM().Stop();
+		Sound = UEngineSound::Play("isaac died_02.ogg");
 		Sound = UEngineSound::Play("isaac_dies_1.wav");
 
 		FullRenderer->SetComponentScale({ 120, 120 });
@@ -970,10 +972,13 @@ void APlayer::Attack(float _DeltaTime)
 	// 아이템 능력
 	if (nullptr != DetectCollision)
 	{
-		if (FVector2D::ZERO != ChaseTearDir)
+		if (FVector2D::ZERO != DetectCollision->GetComponentScale())
 		{
-			TearDir = ChaseTearDir;
-		}	
+			if (FVector2D::ZERO != ChaseTearDir)
+			{
+				TearDir = ChaseTearDir;
+			}
+		}
 	}
 
 	float PlayerSpeed = FinalSpeed.Length();

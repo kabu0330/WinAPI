@@ -101,6 +101,8 @@ void ANumberOne::DropSucessAnimation(APlayer* _Player)
 		return;
 	}
 
+	Sound = UEngineSound::Play("power_up1.wav");
+
 	IsDropEffect = true;
 	Player->ChangePlayerAnimation(DropAnimationDuration, "Drop");
 

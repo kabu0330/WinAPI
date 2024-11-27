@@ -28,6 +28,10 @@ public:
 	void FadeOut();
 	void FadeIn();
 
+	float GetPlayTime()
+	{
+		return IntroTime + FadeTime;
+	}
 
 protected:
 
@@ -46,8 +50,8 @@ private:
 	float FadeValue = 0.0f;
 	float FadeDir = 1.0f;
 
-	float IntroTime = 0.0f;
-	float FadeTime = 0.0f;
+	float IntroTime = 5.5f;
+	float FadeTime = 0.5f;
 
 	FVector2D PlayerDir = FVector2D::ZERO;
 	FVector2D BossDir = FVector2D::ZERO;
@@ -60,5 +64,7 @@ private:
 	const FVector2D MaxScale = MinScale * 1.1f;
 
 	USoundPlayer Sound;
+	USoundPlayer BossFightBGM;
+
 };
 

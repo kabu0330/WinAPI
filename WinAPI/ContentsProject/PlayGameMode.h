@@ -47,10 +47,16 @@ public:
 		GamePaused = _OnOff;
 	}
 
-	void RandomIndex();
+	static USoundPlayer& GetPlayGameModeBGM()
+	{
+		return PlayGameModeBGM;
+	}
+
 protected:
 
 private:
+	void RandomIndex();
+	
 	class ALoadingScene* LoadingImage = nullptr;
 	bool IsShowMenu = false;
 	static bool GamePaused; // 게임 일시정지
@@ -59,6 +65,10 @@ private:
 	int Index = 0;
 	bool IsSwap = false;
 	int RandomValues[3] = { 0, };
+
+	static USoundPlayer PlayGameModeBGM;
+	USoundPlayer Sound;
+	bool IsPlayingBGM = false;
 };
 
 

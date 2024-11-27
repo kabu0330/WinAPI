@@ -67,5 +67,8 @@ void APenny::DropSucessAnimation()
 	{
 		return;
 	}
+
+	Sound = UEngineSound::Play("dime_pick_up.wav");
+
 	DropRenderer->ChangeAnimation("DropEffect");
 }

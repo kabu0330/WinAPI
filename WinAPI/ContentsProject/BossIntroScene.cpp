@@ -86,12 +86,9 @@ void ABossIntroScene::BeginPlay()
 {
 	Super::BeginPlay();
 
-	IntroTime = 5.5f;
-	FadeTime = 0.5f;
-
 	PlayerDir = FVector2D::RIGHT;
 	BossDir = FVector2D::RIGHT;
-
+	UEngineSound::AllSoundStop();  
 	Sound = UEngineSound::Play("boss_fight_intro_jingle_01.ogg");
 }
 
@@ -100,7 +97,6 @@ void ABossIntroScene::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 	Move(_DeltaTime);
 	AnimateScale(_DeltaTime);
-	//FadeIn();
 }
 
 void ABossIntroScene::Move(float _DeltaTime)
@@ -110,8 +106,6 @@ void ABossIntroScene::Move(float _DeltaTime)
 
 	float Force = 500.0f;
 	int OffestX = 100;
-	//FVector2D CurPlayerPos = PlayertitleRenderer->GetComponentLocation() + PlayertitleRenderer->GetComponentScale().Half();
-	//FVector2D TargetPlayerPos = { Global::WindowHalfScale.iX() - OffestX, 0 };
 
 	FVector2D CurBossPos = BosstitleRenderer->GetComponentLocation() - BosstitleRenderer->GetComponentScale().Half();
 	FVector2D TargetBossPos = { Global::WindowHalfScale.iX() + OffestX, 0};
@@ -256,4 +250,5 @@ void ABossIntroScene::VsRendererFadeChange()
 
 ABossIntroScene::~ABossIntroScene()
 {
+	BossFightBGM = UEngineSound::Play("basic_boss_fight.ogg");
 }

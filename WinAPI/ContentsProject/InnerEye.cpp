@@ -101,6 +101,8 @@ void AInnerEye::DropSucessAnimation(APlayer* _Player)
 		return;
 	}
 
+	Sound = UEngineSound::Play("power_up1.wav");
+
 	IsDropEffect = true;
 	Player->ChangePlayerAnimation(DropAnimationDuration, "Drop");
 
@@ -119,36 +121,37 @@ void AInnerEye::TearFire(APlayer* _Player, FVector2D _TearPos, FVector2D _TearDi
 	int Att = Player->GetAtt();
 	float TearSpeed = Player->GetTearSpeed();
 	float TearDuration = Player->GetTearDuration();
-	FVector2D TearScale = Player->GetTearScale();
-
+	FVector2D TearScale = Player->GetTearScale() + FVector2D(-12, -12);
+	FVector2D TearPos = _Player->GetActorLocation() + FVector2D(0, -25);
 
 	ATear* Tear = GetWorld()->SpawnActor<ATear>();
-	Tear->Fire(Player, nullptr, _TearPos, _TearDir, Att, _PlayerSpeed, TearSpeed, TearDuration, TearScale);
+	Tear->Fire(Player, nullptr, TearPos, _TearDir, Att, _PlayerSpeed, TearSpeed, TearDuration, TearScale);
 
-
-	UEngineRandom Random;
-	Random.SetSeed(time(NULL));
-	int Result = Random.RandomInt(0, 2);
-	if (0 != Result)
-	{
-		return;
-	}
 	// 두번째 발사
-
-
-	FVector2D SecondTearScale = { -10, -10 };
-	FVector2D SecondTearDir = _TearDir;
-	float SecondTearSpeed = TearSpeed - 50.0f;
-	float SecondTearDuration = TearDuration + 0.01f;
-	if (FVector2D::LEFT == SecondTearDir || FVector2D::RIGHT == SecondTearDir)
+	FVector2D SecondTearPos = FVector2D::ZERO;
+	if (FVector2D::LEFT == _TearDir || FVector2D::RIGHT == _TearDir)
 	{
-		_TearPos += FVector2D{ 0, -20 };
+		SecondTearPos = TearPos + FVector2D(0, -15);
 	}
 	else
 	{
-		_TearPos = { GetActorLocation().X, _TearPos.Y };
+		SecondTearPos = TearPos + FVector2D(15, 0);
 	}
 
 	ATear* SecondTear = GetWorld()->SpawnActor<ATear>();
-	SecondTear->Fire(Player, nullptr, _TearPos, SecondTearDir, Att, _PlayerSpeed, SecondTearSpeed, SecondTearDuration, SecondTearScale);
+	SecondTear->Fire(Player, nullptr, SecondTearPos, _TearDir, Att, _PlayerSpeed, TearSpeed, TearDuration, TearScale);
+
+	// 세번째 발사
+	FVector2D ThirdTearPos = FVector2D::ZERO;
+	if (FVector2D::LEFT == _TearDir || FVector2D::RIGHT == _TearDir)
+	{
+		ThirdTearPos = TearPos + FVector2D(0, 15);
+	}
+	else
+	{
+		ThirdTearPos = TearPos + FVector2D(-15, 0);
+	}
+
+	ATear* ThirdTear = GetWorld()->SpawnActor<ATear>();
+	ThirdTear->Fire(Player, nullptr, ThirdTearPos, _TearDir, Att, _PlayerSpeed, TearSpeed, TearDuration, TearScale);
 }

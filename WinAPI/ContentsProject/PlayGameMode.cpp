@@ -47,6 +47,7 @@
 #include "NumberOne.h"
 
 bool APlayGameMode::GamePaused = false;
+USoundPlayer APlayGameMode::PlayGameModeBGM;
 
 void APlayGameMode::BeginPlay()
 {
@@ -57,6 +58,9 @@ void APlayGameMode::BeginPlay()
 
 	CollisionGroupLinkSetting();
 	UISetting();
+
+	UEngineSound::AllSoundStop();
+	PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
 }
 
 void APlayGameMode::Spawn()
@@ -86,6 +90,8 @@ void APlayGameMode::Spawn()
 	TreasureRoom1->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom2->SetRoomType(ERoomType::TREASURE);
 	BossRoom->SetRoomType(ERoomType::BOSS);
+	BaseRoom->CreateItem<AInnerEye>(nullptr, { 100, 0 });
+
 
 	BaseRoom->SetName("BaseRoom");
 	TreasureRoom0->SetName("TreasureRoom0");
@@ -106,7 +112,8 @@ void APlayGameMode::Spawn()
 	BaseRoom->InterLinkRoom(TreasureRoom0, RoomDir::UP);
 	BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::LEFT);
 	BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::RIGHT);
-	//BaseRoom->InterLinkRoom(BossRoom, RoomDir::DOWN);
+	BaseRoom->InterLinkRoom(BossRoom, RoomDir::DOWN);
+	BossRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
 
 	// Left Root
 	MinionRoom1->InterLinkRoom(MinionRoom0, RoomDir::UP);
@@ -118,7 +125,7 @@ void APlayGameMode::Spawn()
 	MinionRoom6->InterLinkRoom(MinionRoom7, RoomDir::RIGHT);
 	MinionRoom6->InterLinkRoom(MinionRoom9, RoomDir::DOWN);
 
-	MinionRoom9->InterLinkRoom(BossRoom, RoomDir::LEFT);
+	//MinionRoom9->InterLinkRoom(BossRoom, RoomDir::LEFT);
 
 	MinionRoom7->InterLinkRoom(MinionRoom8, RoomDir::RIGHT);
 
@@ -144,10 +151,10 @@ void APlayGameMode::Spawn()
 
 	// TreasureRoom1
 	{
-		ARoomObject* Fire2 = TreasureRoom0->CreateObject<AFire>(nullptr, { -310, -190 });
-		ARoomObject* Fire3 = TreasureRoom0->CreateObject<AFire>(nullptr, { -310,  180 });
-		ARoomObject* Fire4 = TreasureRoom0->CreateObject<AFire>(nullptr, { 310, -190 });
-		ARoomObject* Fire5 = TreasureRoom0->CreateObject<AFire>(nullptr, { 310,  180 });
+		ARoomObject* Fire2 = TreasureRoom1->CreateObject<AFire>(nullptr, { -310, -190 });
+		ARoomObject* Fire3 = TreasureRoom1->CreateObject<AFire>(nullptr, { -310,  180 });
+		ARoomObject* Fire4 = TreasureRoom1->CreateObject<AFire>(nullptr, { 310, -190 });
+		ARoomObject* Fire5 = TreasureRoom1->CreateObject<AFire>(nullptr, { 310,  180 });
 		SpawnRandomItem(TreasureRoom1);
 	}
 
@@ -160,7 +167,7 @@ void APlayGameMode::Spawn()
 
 
 	// BaseRoom : 테스트용
-	BaseRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
+
 	
 	// MinionRoom0 
 	// MinionRoom1 : 플레이어 오른쪽 : 파리맵
@@ -425,6 +432,11 @@ void APlayGameMode::Tick(float _DeltaTime)
 	EngineDebug(_DeltaTime);
 	CheckInput();
 
+	if (false == Sound.IsPlaying() && false == IsPlayingBGM)
+	{
+		TimeEventer.PushEvent(0.3f, [this]() { UEngineSound::AllSoundOn(); });
+		IsPlayingBGM = true;
+	}
 }
 
 void APlayGameMode::CheckInput()
@@ -490,6 +502,8 @@ void APlayGameMode::LevelChangeStart()
 {
 	AFade::MainFade = GetWorld()->SpawnActor<AFade>();
 
+
+
 #ifdef _DEBUG
 
 #else
@@ -501,6 +515,9 @@ void APlayGameMode::LevelChangeStart()
 
 	FadeRenderer->SetActive(true);
 	LoadingRenderer->SetActive(true);
+
+	UEngineSound::AllSoundOff();
+	Sound = UEngineSound::Play("title_screen_jingle_v1_01.ogg");
 
 	TimeEventer.PushEvent(3.0f, std::bind(&APlayGameMode::FadeOut, this));
 #endif // DEBUG

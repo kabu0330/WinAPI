@@ -65,6 +65,9 @@ void AKey::DropSucessAnimation()
 	{
 		return;
 	}
+
+	Sound = UEngineSound::Play("key_pickup_guantlet_4.wav");
+
 	DropRenderer->ChangeAnimation("DropEffect");
 	TimeEventer.PushEvent(0.4f, [this]() {DropRenderer->SetActive(false); });
 }

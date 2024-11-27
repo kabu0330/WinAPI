@@ -97,7 +97,7 @@ void ATheDukeOfFlies::BeginPlay()
 	BloodEffectRenderer->SetComponentScale({ 512, 512 });
 
 	// 스킬을 쓰지 않아도 쿨타임을 먼저 적용시켜버림
-	CooldownElapsed = 4.0f;
+	CooldownElapsed = 2.0f;
 }
 
 void ATheDukeOfFlies::Tick(float _DeltaTime)
@@ -130,6 +130,7 @@ void ATheDukeOfFlies::Tick(float _DeltaTime)
 	SummonFlies();
 	BlowAway();
 	SummonBigFlies();
+
 }
 
 void ATheDukeOfFlies::DisplayBossIntro()
@@ -150,7 +151,7 @@ void ATheDukeOfFlies::DisplayBossIntro()
 	ABossIntroScene* BossIntro = GetWorld()->SpawnActor<ABossIntroScene>();
 	BossIntro->ShowScene();
 
-	BossIntro->Destroy(6.5f);
+	BossIntro->Destroy(BossIntro->GetPlayTime() + 0.5f);
 }
 
 void ATheDukeOfFlies::SpawnAnimation()
@@ -197,13 +198,18 @@ void ATheDukeOfFlies::Death(float _DeltaTime)
 	if (nullptr != BodyCollision)
 	{
 		CollisionDestroy();
+
+		UEngineSound::AllSoundStop();
+		DeathSound = UEngineSound::Play("boss_fight jingle_outro_v2_12.ogg");
+		TimeEventer.PushEvent(15.0f, []() {
+			APlayGameMode::GetPlayGameModeBGM() = UEngineSound::Play("diptera_sonata_basement.ogg"); });
 	}
 
 	// 3. 액터 지우고
 	if (nullptr == BodyRenderer)
 	{
 		ParentRoom->RemoveMonster(this);
-		Destroy();
+		Destroy(7.5f);
 		return;
 	}
 
@@ -214,6 +220,8 @@ void ATheDukeOfFlies::Death(float _DeltaTime)
 
 	if (true == BloodEffectRenderer->IsCurAnimationEnd())
 	{
+		Sound = UEngineSound::Play("death_burst_large_0.wav");
+
 		BodyRenderer->Destroy();
 		BodyRenderer = nullptr;
 
@@ -386,12 +394,12 @@ void ATheDukeOfFlies::BeginSummonFliesLogic()
 	FVector2D SetFliesPos = this->GetActorLocation() - ParentRoom->GetActorLocation() + FVector2D(0, 100);
 
 	float OrbitRadius = 150.0f;
-	const int Count = 4;
+	const int Count = 3;
 	float Angles[Count] = { // 스폰 위치를 각도로 지정
 	static_cast<float>(50.0f * std::numbers::pi / 180.0f), 
 	static_cast<float>(90.0f * std::numbers::pi / 180.0f), 
 	static_cast<float>(130.0f * std::numbers::pi / 180.0f), 
-	static_cast<float>(170.0f * std::numbers::pi / 180.0f) 
+	//static_cast<float>(170.0f * std::numbers::pi / 180.0f) 
 	};
 
 	AAttackFly* ChildFly[Count] = { nullptr, };
@@ -427,6 +435,8 @@ void ATheDukeOfFlies::BeginSummonFliesLogic()
 
 void ATheDukeOfFlies::BeginSummonFliesAnimaition()
 {
+	Sound = UEngineSound::Play("fly_cough_2.wav");
+
 	BlackDustEffectRenderer->SetActive(true);	
 	BlackDustEffectRenderer->ChangeAnimation("Black_Dust");
 	TimeEventer.PushEvent(SkillPostActionTime, std::bind(&ATheDukeOfFlies::EndSummonFliesAnimaition, this));
@@ -536,6 +546,8 @@ void ATheDukeOfFlies::BeginBlowAwayLogic()
 
 void ATheDukeOfFlies::BeginBlowAwayAnimaition()
 {
+	Sound = UEngineSound::Play("fly_cough.wav");
+
 	DustEffectRenderer->SetActive(true);
 	DustEffectRenderer->ChangeAnimation("Dust");
 

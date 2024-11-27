@@ -29,12 +29,21 @@ void ATitleGameMode::BeginPlay()
 	GetWorld()->SetCameraToMainPawn(false);
 
 	SetupScene();
+	BGM = UEngineSound::Play("title_screen.ogg");
+	UEngineSound::AllSoundOff();
+
+	IntroSound = UEngineSound::Play("title_screen_intro.ogg");
+
 }
 
 void ATitleGameMode::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
-
+	if (false == IntroSound.IsPlaying() && false == IsPlayingBGM)
+	{
+		UEngineSound::AllSoundOn();
+		IsPlayingBGM = true;
+	}
 }
 
 void ATitleGameMode::SetupScene()

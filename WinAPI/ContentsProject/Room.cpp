@@ -606,33 +606,48 @@ void ARoom::Sounds()
 	{
 		return;
 	}
+	if (false == IsTreasureRoomEnterance)
+	{
+		if (ERoomType::TREASURE == this->GetRoomType())
+		{
+			UEngineSound::AllSoundStop();
+			Sound = UEngineSound::Play("treasure_room_discovera.ogg");
+
+			TimeEventer.PushEvent(4.0f, []() {APlayGameMode::GetPlayGameModeBGM() = UEngineSound::Play("diptera_sonata_basement.ogg"); });
+			
+			IsTreasureRoomEnterance = true;
+			return;
+		}
+	}
 	if (true == IsFirstEnterance)
 	{
 		return;
 	}
 
-
 	// Close
 	if (0 != GetAliveMonsterCount()) 
 	{
-		if (false == CloseDoorSoundPlay)
+		if (true == CloseDoorSoundPlay)
 		{
-			Sound = UEngineSound::Play("door_heavy_close.wav");
-			//Sound = UEngineSound::Play("summonsound.wav");
-			CloseDoorSoundPlay = true;
 			return;
 		}
+		Sound = UEngineSound::Play("door_heavy_close.wav");
+		//Sound = UEngineSound::Play("summonsound.wav");
+		CloseDoorSoundPlay = true;
+		return;
 	}
 	// Open
 	else if (0 == GetAliveMonsterCount())
 	{
-		if (false == OpenDoorSoundPlay)
+		if (true == OpenDoorSoundPlay)
 		{
-			Sound = UEngineSound::Play("door_heavy_open.wav");
-			OpenDoorSoundPlay = true;
-			IsFirstEnterance = true;
 			return;
 		}
+
+		Sound = UEngineSound::Play("door_heavy_open.wav");
+		OpenDoorSoundPlay = true;
+		IsFirstEnterance = true;
+		return;
 	}
 
 }

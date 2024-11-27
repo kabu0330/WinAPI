@@ -250,7 +250,7 @@ void ARoomObject::SpawnItem()
 {
 	UEngineRandom Random;
 	Random.SetSeed(time(NULL));
-	int Result = Random.RandomInt(0, 12);
+	int Result = Random.RandomInt(0, 8);
 	FVector2D Offset = FVector2D(0, -5);
 	if (4 > Result)
 	{

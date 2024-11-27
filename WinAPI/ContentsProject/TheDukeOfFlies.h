@@ -90,9 +90,11 @@ private:
 	float SummonBigFlyCooldownDuration = 7.0f;
 	
 	
-
 	// UI
 	class ABossHpBar* BossHpBor = nullptr;
 	bool ReadyToBossIntro = false;
+
+	USoundPlayer DeathSound;
+	bool IsPlayingDeathSound = false;
 };
 

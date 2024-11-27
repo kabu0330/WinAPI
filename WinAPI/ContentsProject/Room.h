@@ -260,5 +260,6 @@ private:
 	bool OpenDoorSoundPlay  = false;
 	bool CloseDoorSoundPlay = false;
 	bool IsInitMonsterExist = false;
+	bool IsTreasureRoomEnterance = false;
 };
 

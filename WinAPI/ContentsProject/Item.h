@@ -45,7 +45,7 @@ public:
 	// 드랍, 드랍실패
 	void Drop(AActor* _Player);
 	void DropSuccess();
-	void FailToPickup(class APlayer* _Player);
+	void FailToPickup(class AActor* _Player);
 	void ReverseForce(float _DeltaTime);
 	void SetLocation();
 

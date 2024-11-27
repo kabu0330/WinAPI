@@ -144,7 +144,7 @@ void AItem::DropSuccess()
 	IsDrop = true;
 }
 
-void AItem::FailToPickup(APlayer* _Player)
+void AItem::FailToPickup(AActor* _Player)
 {
  	FVector2D Dir = GetActorLocation() - _Player->GetActorLocation();
 	Dir.Normalize(); // πÊ«‚∫§≈Õ
@@ -255,7 +255,9 @@ void AItem::Knockback(AActor* _Actor)
 
 	FVector2D Dir = GetActorLocation() - Tear->GetActorLocation();
 	Dir.Normalize(); // πÊ«‚∫§≈Õ
-	Force = Dir * 100.0f;
+	Force = Dir * 150.0f;
+
+	int a = 0;
 }
 
 void AItem::ClampPositionToRoom()

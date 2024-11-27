@@ -11,7 +11,7 @@ ABomb::ABomb()
 {
 	SetName("Bomb");
 	BodyRendererScale = {192, 192};
-	BodyCollisionScale = { 32, 32 };
+	BodyCollisionScale = { 48, 48 };
 	ItemCount = 1;
 	Att = 30; // 몬스터에게 가할 피해
 	FVector2D UnversalScale = { 150, 150 };
@@ -63,7 +63,7 @@ ABomb::ABomb()
 	ImpactCollision->SetComponentLocation({ 0, 0 });
 	ImpactCollision->SetComponentScale(BodyCollisionScale);
 	ImpactCollision->SetCollisionGroup(ECollisionGroup::Item_Impact);
-	ImpactCollision->SetCollisionType(ECollisionType::Circle);
+	ImpactCollision->SetCollisionType(ECollisionType::Rect);
 	ImpactCollision->SetActive(false);
 
 	UniversalCollision = CreateDefaultSubObject<U2DCollision>();
@@ -116,16 +116,18 @@ void ABomb::UseItem(APlayer* _Player)
 		BodyRenderer->SetComponentScale(BodyRendererScale * 0.25);
 		BobmSparkEffectRenderer->SetComponentLocation({ -12, -14 }); });
 
-	TimeEventer.PushEvent(2.5f, [this]() {
+	TimeEventer.PushEvent(2.0f, [this]() {
 		BodyRenderer->ChangeAnimation("BombTimer1.0");
 		BodyRenderer->SetComponentScale(BodyRendererScale * 0.25); });
 
-	TimeEventer.PushEvent(4.0f, std::bind(&ABomb::Explosion, this));
+	TimeEventer.PushEvent(3.0f, std::bind(&ABomb::Explosion, this));
 }
 
 void ABomb::Explosion()
 {
 	Sound = UEngineSound::Play("explosion_weak1.wav");
+
+	ImpactCollision->SetActive(false);
 
 	UniversalCollision->SetActive(true);
 	UniversalCollision->Destroy(0.1f);

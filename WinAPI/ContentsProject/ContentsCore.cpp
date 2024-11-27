@@ -54,8 +54,12 @@ void ContentsCore::LevelSetting()
 	//UEngineAPICore::GetCore()->CreateLevel("End");
 
 	// 최초 실행될 레벨을 결정한다.
-	UEngineAPICore::GetCore()->OpenLevel("Title");
+#ifdef _DEBUG
 	UEngineAPICore::GetCore()->OpenLevel("Play");
+#else
+	UEngineAPICore::GetCore()->OpenLevel("Title");
+#endif // _DEBUG
+
 }
 
 void ContentsCore::SpriteSetting()
