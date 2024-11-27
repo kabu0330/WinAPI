@@ -388,7 +388,7 @@ void APlayer::ShowDeathReport()
 	
 	if (UEngineInput::GetInst().IsDown(VK_SPACE))
 	{
-
+		Sound = UEngineSound::Play("button_press.wav");
 		ADeathReportScene::DeathReport->CloseDeathReport();
 
 		// Static이면 리셋 설정 해줘야 한다.

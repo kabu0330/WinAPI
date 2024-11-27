@@ -89,8 +89,15 @@ void APlayGameMode::Spawn()
 	TreasureRoom0->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom1->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom2->SetRoomType(ERoomType::TREASURE);
+
+	// Debug
 	BossRoom->SetRoomType(ERoomType::BOSS);
 	BaseRoom->CreateItem<AInnerEye>(nullptr, { 100, 0 });
+	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
+	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
+	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
+	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
+	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
 
 
 	BaseRoom->SetName("BaseRoom");
@@ -165,9 +172,6 @@ void APlayGameMode::Spawn()
 		SpawnRandomItem(TreasureRoom2);
 	}
 
-
-	// BaseRoom : 테스트용
-
 	
 	// MinionRoom0 
 	// MinionRoom1 : 플레이어 오른쪽 : 파리맵
@@ -228,7 +232,6 @@ void APlayGameMode::Spawn()
 		BaseRoom->CreateItem<ABomb>(nullptr, { 310, 180 });
 		BaseRoom->CreateItem<ABomb>(nullptr, { 260, 180 });
 		BaseRoom->CreateItem<ABomb>(nullptr, { 310, 135 });
-		BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
 
 		// 중앙
 		ARoomObject* Object0 = BaseRoom->CreateObject<AMetalBlock>(nullptr, { 0, 0 });
@@ -417,6 +420,7 @@ void APlayGameMode::CollisionGroupLinkSetting()
 	// Item
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item     , ECollisionGroup::Player_Body);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item     , ECollisionGroup::Room_Wall);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_Impact, ECollisionGroup::Object);
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Player_Body);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Monster_Body);
@@ -452,6 +456,8 @@ void APlayGameMode::CheckInput()
 
 	if (UEngineInput::GetInst().IsDown(VK_ESCAPE))
 	{
+		Sound = UEngineSound::Play("button_press.wav");
+
 		if (false == IsShowMenu)
 		{
 			AMenuScene::Menu->ShowMenu();

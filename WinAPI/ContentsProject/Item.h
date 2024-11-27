@@ -71,6 +71,7 @@ public:
 	virtual void TearFire(APlayer* _Player, FVector2D _TearPos, FVector2D _TearDir, float _PlayerSpeed) {}; // 자식클래스에서 재정의
 
 	void ClampPositionToRoom(); // 방 안으로 이동범위 고정
+	void CollideObject(AActor* _Object);
 	FVector2D Reflect(FVector2D _Dir);
 	void ChangeAnimation(std::string_view _Name)
 	{

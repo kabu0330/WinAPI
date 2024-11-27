@@ -91,7 +91,10 @@ void AItem::CollisionSetting()
 	{
 		UniversalCollision->SetCollisionEnter(std::bind(&AItem::AreaWideAttack, this, std::placeholders::_1));
 	}
-
+	if (nullptr != ImpactCollision)
+	{
+		ImpactCollision->SetCollisionStay(std::bind(&AItem::CollideObject, this, std::placeholders::_1));
+	}
 }
 
 void AItem::Move(float _DeltaTIme)
@@ -191,7 +194,8 @@ void AItem::ReverseForce(float _DeltaTime)
 
 		IsAtBoundary = false;
 	}
-
+	
+	FVector2D Result = Force;
 	AddActorLocation(Force * _DeltaTime);
 }
 
@@ -255,9 +259,7 @@ void AItem::Knockback(AActor* _Actor)
 
 	FVector2D Dir = GetActorLocation() - Tear->GetActorLocation();
 	Dir.Normalize(); // πÊ«‚∫§≈Õ
-	Force = Dir * 150.0f;
-
-	int a = 0;
+	Force = Dir * 200.0f;
 }
 
 void AItem::ClampPositionToRoom()
@@ -301,6 +303,16 @@ void AItem::ClampPositionToRoom()
 		SetActorLocation(Pos + FVector2D{ 0, -1 });
 		IsAtBoundary = true;
 	}
+}
+
+void AItem::CollideObject(AActor* _Object)
+{
+	ARoomObject* Object = dynamic_cast<ARoomObject*>(_Object);
+	if (nullptr == Object)
+	{
+		return;
+	}
+	Force = FVector2D::ZERO;
 }
 
 FVector2D AItem::Reflect(FVector2D _Dir)

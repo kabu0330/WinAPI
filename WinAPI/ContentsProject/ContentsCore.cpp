@@ -48,12 +48,9 @@ void ContentsCore::BeginPlay()
 
 void ContentsCore::LevelSetting()
 {
-	// 레벨을 생성한다.
 	UEngineAPICore::GetCore()->CreateLevel<ATitleGameMode, AActor>("Title");
 	UEngineAPICore::GetCore()->CreateLevel<APlayGameMode, APlayer>("Play");
-	//UEngineAPICore::GetCore()->CreateLevel("End");
 
-	// 최초 실행될 레벨을 결정한다.
 #ifdef _DEBUG
 	UEngineAPICore::GetCore()->OpenLevel("Play");
 #else

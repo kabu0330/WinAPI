@@ -75,5 +75,7 @@ private:
 	float AdjustScale = 0.0f;
 
 
+	//USoundPlayer FlyingSound;
+
 };
 
