@@ -111,8 +111,6 @@ void ATear::Fire(APlayer* _Player, AItem* _Item, FVector2D _StartPos, FVector2D 
 
 	TearCollision->SetComponentScale(CollisionScale);
 	TearEffectRenderer->SetComponentScale(RendererScale); 
-
-	int a = 0;
 }
 
 void ATear::UpdateTearPosion(float _DeltaTime)
@@ -159,6 +157,8 @@ void ATear::Explosion()
 {
 	if (nullptr != TearCollision)
 	{
+		Sound = UEngineSound::Play("tear_block.wav");
+
 		TearCollision->Destroy();
 		TearCollision = nullptr;
 		Dir = FVector2D::ZERO;

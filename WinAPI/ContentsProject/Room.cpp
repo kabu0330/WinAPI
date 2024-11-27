@@ -78,6 +78,11 @@ void ARoom::Tick(float _DeltaTime)
 	
 	OpenTheDoor();
 	CloseTheDoor();
+	
+	HasInitMonster();
+
+
+	Sounds();
 }
 
 void ARoom::WarpCollisionCheck(float _DeltaTime)
@@ -595,6 +600,56 @@ void ARoom::CollisionSetting()
 	}
 }
 
+void ARoom::Sounds()
+{
+	if (this != CurRoom)
+	{
+		return;
+	}
+	if (true == IsFirstEnterance)
+	{
+		return;
+	}
+
+
+	// Close
+	if (0 != GetAliveMonsterCount()) 
+	{
+		if (false == CloseDoorSoundPlay)
+		{
+			Sound = UEngineSound::Play("door_heavy_close.wav");
+			Sound = UEngineSound::Play("summonsound.wav");
+			CloseDoorSoundPlay = true;
+			return;
+		}
+	}
+	// Open
+	else if (0 == GetAliveMonsterCount())
+	{
+		if (false == OpenDoorSoundPlay)
+		{
+			Sound = UEngineSound::Play("door_heavy_open.wav");
+			OpenDoorSoundPlay = true;
+			IsFirstEnterance = true;
+			return;
+		}
+	}
+
+}
+
+void ARoom::HasInitMonster()
+{
+	if (0 == GetAliveMonsterCount() && false == IsInitMonsterExist)
+	{
+		OpenDoorSoundPlay = true;
+		IsInitMonsterExist = true;
+	}
+	else
+	{
+		IsInitMonsterExist = true;
+	}
+}
+
 void ARoom::DoorSpriteSetting()
 {
 	USpriteRenderer* Door = nullptr;
@@ -614,7 +669,7 @@ void ARoom::DoorSpriteSetting()
 		DoorRenderers[i]->SetActive(false); // 세팅해두고 일단 렌더를 끈다. AddDoor 함수에서 호출되는 RoomDir 방향의 문만 렌더한다.
 	}
 
-	float AnimationSpeed = 0.07f;
+	float AnimationSpeed = 0.12f;
 
 	// Normal Door
 	DoorRenderers[static_cast<int>(RoomDir::LEFT) - 1]->CreateAnimation("Door_Left_Open"    , "NormalRoomDoor.png", 0, 0, 0.1f, false);
@@ -693,6 +748,11 @@ void ARoom::DoorSpriteSetting()
 
 int ARoom::GetAliveMonsterCount()
 {
+	if (CurRoom != this)
+	{
+		return 0;
+	}
+	
 	int Count = 0;
 
 	std::list<AMonster*>::iterator StartIter = Monsters.begin();
@@ -705,6 +765,7 @@ int ARoom::GetAliveMonsterCount()
 			++Count;
 		}
 	}
+
 	return Count;
 }
 

@@ -341,7 +341,7 @@ protected:
 	__int64 RandomSeed = 0;
 	UEngineRandom MonsterRandom;
 
-	// Boss
+	USoundPlayer Sound;
 
 private:
 

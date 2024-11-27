@@ -188,13 +188,13 @@ void APlayGameMode::Spawn()
 		//ARoomObject* Poop10 = MinionRoom1->CreateObject<APoop>(nullptr, { 100, 0 });
 		//Poop10->SetSprite("CORNY_POOP");
 
-		//MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
-		//MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });
-		//MinionRoom1->CreateMonster<AAttackFly>({ 0, 70 });
-		//MinionRoom1->CreateMonster<AAttackFly>({ 0, 0 });
-		//MinionRoom1->CreateMonster<AFly>({ -50, -50 });
-		//MinionRoom1->CreateMonster<AFly>({ -100, -10 });
-		//MinionRoom1->CreateMonster<AFly>({ -50, 40 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, 70 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, 0 });
+		MinionRoom1->CreateMonster<AFly>({ -50, -50 });
+		MinionRoom1->CreateMonster<AFly>({ -100, -10 });
+		MinionRoom1->CreateMonster<AFly>({ -50, 40 });
 
 	}
 

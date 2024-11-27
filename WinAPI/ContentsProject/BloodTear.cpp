@@ -34,6 +34,8 @@ ABloodTear::ABloodTear()
 
 void ABloodTear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed,  int _Att)
 {
+	Sound = UEngineSound::Play("blood_fire.wav");
+
 	TearEffectRenderer->SetActive(true);
 	SetActorLocation(_StartPos);
 	Dir = _Dir; // Dir는 터질 때 영벡터로 만들어야 하므로
@@ -73,6 +75,8 @@ void ABloodTear::Explosion()
 		return;
 	}
 
+	Sound = UEngineSound::Play("tear_block.wav");
+
 	TearCollision->Destroy();
 	TearCollision = nullptr;
 	Dir = FVector2D::ZERO;
@@ -83,11 +87,6 @@ void ABloodTear::Explosion()
 	{
 		Destroy(0.4f);
 	}
-}
-
-void ABloodTear::CheckForExplosion(float _DeltaTime)
-{
-
 }
 
 void ABloodTear::CollisionSetting()

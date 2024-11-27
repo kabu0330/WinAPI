@@ -2,7 +2,6 @@
 #include <EngineCore/Actor.h>
 #include <EngineCore/2DCollision.h>
 #include <EngineCore/SpriteRenderer.h>
-#include <EnginePlatform/EngineSound.h>
 #include "Tear.h"
 #include "Global.h"
 #include "Item.h"
@@ -416,8 +415,7 @@ private:
 	FVector2D StartCameraPos = FVector2D::ZERO;
 	FVector2D EndCameraPos   = FVector2D::ZERO;
 
-	//BGM
-	USoundPlayer BGM;
+	USoundPlayer Sound;
 
 };
 // 입력 방법 2 : 이벤트 방식으로 처리

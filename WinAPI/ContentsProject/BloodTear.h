@@ -20,8 +20,6 @@ public:
 
 	void UpdateTearPosion(float _DeltaTime);
 
-	void CheckForExplosion(float _DeltaTime);
-
 	void CollisionSetting();
 	void Explode(AActor* _Other);
 
@@ -51,5 +49,7 @@ private:
 	class U2DCollision* TearCollision = nullptr;
 
 	AActor* CollisionActor = nullptr;
+
+	USoundPlayer Sound;
 };
 

@@ -461,6 +461,10 @@ void AMonster::Death(float _DeltaTime)
 	// 1. Ãæµ¹Ã¼(¹Ùµð + Å½»ö) ²ô°í
 	if (nullptr != BodyCollision)
 	{
+		Sound = UEngineSound::Play("death_burst_small.wav");
+		Sound = UEngineSound::Play("meat_impact.wav");
+
+		CreateGib();
 		CollisionDestroy();
 		TimeEventer.PushEvent(15.0f, std::bind(&AMonster::FadeOut, this));
 	}
@@ -484,7 +488,6 @@ void AMonster::Death(float _DeltaTime)
 	if (true == BloodEffectRenderer->IsCurAnimationEnd())
 	{
 		BodyRenderer->Destroy();
-		CreateGib();
 		BodyRenderer = nullptr;
 		return;
 	}

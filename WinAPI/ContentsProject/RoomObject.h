@@ -105,6 +105,8 @@ protected:
 	int Hp = 9999; // 플레이어 눈물 공격으로 파괴될 수 있다면 Hp를 가져야 한다.
 
 	class ARoom* ParentRoom = nullptr;
+
+	USoundPlayer Sound;
 private:
 
 };

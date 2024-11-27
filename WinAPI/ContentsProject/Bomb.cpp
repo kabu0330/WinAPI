@@ -103,6 +103,8 @@ bool ABomb::EatFunction(APlayer* _Player)
 
 void ABomb::UseItem(APlayer* _Player)
 {
+	Sound = UEngineSound::Play("pop_impact_09.wav");
+
 	FVector2D Pos = _Player->GetActorLocation();
 	SetActorLocation({ Pos.X, Pos.Y - 5.0f });
 	BodyRenderer->SetActive(true);
@@ -123,6 +125,8 @@ void ABomb::UseItem(APlayer* _Player)
 
 void ABomb::Explosion()
 {
+	Sound = UEngineSound::Play("explosion_weak1.wav");
+
 	UniversalCollision->SetActive(true);
 	UniversalCollision->Destroy(0.1f);
 

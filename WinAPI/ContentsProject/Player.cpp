@@ -54,7 +54,6 @@ void APlayer::BeginPlay()
 	UISetting();
 	CollisionFuctionSetting();
 
-	//BGM = UEngineSound::Play("doorOpen.wav");
 }
 
 void APlayer::Tick(float _DeltaTime)
@@ -158,7 +157,9 @@ int APlayer::ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir)
 	if (true == Player->IsDeath())
 	{
 		return 0;
-	}
+	}	
+	
+	Sound = UEngineSound::Play("hurt_grunt_2.wav");
 
 	Player->ShowHitAnimation(_Player);
 	Player->BeginBlinkEffect();
@@ -332,6 +333,8 @@ void APlayer::DeathAnimation()
 {
 	if (false == IsResetReady)
 	{
+		Sound = UEngineSound::Play("isaac_dies_1.wav");
+
 		FullRenderer->SetComponentScale({ 120, 120 });
 		FullRenderer->ChangeAnimation("Death");
 		BodyRenderer->SetActive(false);
@@ -885,6 +888,8 @@ void APlayer::Attack(float _DeltaTime)
 {
 	TearFire = true; // true일 때, Cooldown시간 동안 Attack 함수가 호출될 수 없다.
 
+	Sound = UEngineSound::Play("tear_fire_5.wav");
+
 	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() + Global::PlayerHeadOffset.iY() + 10};
 	TearDir = FVector2D::ZERO;
 
@@ -896,11 +901,13 @@ void APlayer::Attack(float _DeltaTime)
 
 		if (true == LeftFire)
 		{
+			Sound = UEngineSound::Play("tear_fire_4.wav");
 			TearPos = TearPos + FVector2D{ -15, -3 };
 			LeftFire = false;
 		}
 		else if (false == LeftFire)
 		{
+			Sound = UEngineSound::Play("tear_fire_5.wav");
 			TearPos = TearPos + FVector2D{ -15, 3 };
 			LeftFire = true;
 		}
@@ -912,11 +919,13 @@ void APlayer::Attack(float _DeltaTime)
 
 		if (true == LeftFire)
 		{
+			Sound = UEngineSound::Play("tear_fire_4.wav");
 			TearPos = TearPos + FVector2D{ +15, -3 };
 			LeftFire = false;
 		}
 		else if (false == LeftFire)
 		{
+			Sound = UEngineSound::Play("tear_fire_5.wav");
 			TearPos = TearPos + FVector2D{ +15, 3 };
 			LeftFire = true;
 		}
@@ -928,11 +937,13 @@ void APlayer::Attack(float _DeltaTime)
 
 		if (true == LeftFire)
 		{
+			Sound = UEngineSound::Play("tear_fire_4.wav");
 			TearPos = TearPos + FVector2D{ -7, -15 };
 			LeftFire = false;
 		}
 		else if (false == LeftFire)
 		{
+			Sound = UEngineSound::Play("tear_fire_5.wav");
 			TearPos = TearPos + FVector2D{ +7, -15 };
 			LeftFire = true;
 		}
@@ -944,11 +955,13 @@ void APlayer::Attack(float _DeltaTime)
 
 		if (true == LeftFire)
 		{
+			Sound = UEngineSound::Play("tear_fire_4.wav");
 			TearPos = TearPos + FVector2D{ -7, 0 };
 			LeftFire = false;
 		}
 		else if (false == LeftFire)
 		{
+			Sound = UEngineSound::Play("tear_fire_5.wav");
 			TearPos = TearPos + FVector2D{ +7, 0 };
 			LeftFire = true;
 		}

@@ -165,6 +165,7 @@ protected:
 	bool IsMove = false; // 맵에 등장했을 때 위 아래로 움직일거냐
 	bool IsOwnedByPlayer = false; // 위치 플레이어한테 부착
 
+	USoundPlayer Sound;
 private:
 
 };

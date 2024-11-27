@@ -1,4 +1,5 @@
 #pragma once
+#include <EnginePlatform/EngineSound.h>
 #include <EngineBase/EngineMath.h>
 #include <EngineBase/Object.h>
 #include <EngineBase/TimeEvent.h>

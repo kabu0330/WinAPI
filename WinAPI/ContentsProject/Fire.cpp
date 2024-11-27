@@ -98,6 +98,7 @@ void AFire::SwitchAnimation()
 	{
 		if (nullptr != FlameBaseRenderer)
 		{
+			Sound = UEngineSound::Play("firedeath hiss.wav");
 			FlameBaseRenderer->SetActive(false);
 			FlameBaseRenderer->Destroy();
 		}
@@ -106,8 +107,6 @@ void AFire::SwitchAnimation()
 			BodyCollision->Destroy();
 		}
 		BodyRenderer->ChangeAnimation("FireBottom_Burned");
-
-
 	}
 		break;
 	default:

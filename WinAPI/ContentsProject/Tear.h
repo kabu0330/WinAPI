@@ -81,5 +81,6 @@ protected:
 	AActor* CollisionActor = nullptr;
 private:
 	
+	USoundPlayer Sound;
 };
 

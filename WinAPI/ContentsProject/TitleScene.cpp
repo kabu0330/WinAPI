@@ -11,7 +11,6 @@
 
 ATitleScene* ATitleScene::FirstScene  = nullptr;
 ATitleScene* ATitleScene::CurrentScene  = nullptr;
-USpriteRenderer* ATitleScene::ArrowRenderer = nullptr;
 
 ATitleScene::ATitleScene()
 {
@@ -22,15 +21,9 @@ ATitleScene::ATitleScene()
 	TitleRenderer->SetComponentScale(Global::WindowSize);
 	TitleRenderer->CreateAnimation("MainTitleScene", "MainTitle", 0, 7, 0.2f);
 	TitleRenderer->CreateAnimation("SaveFileScene", "SaveFile", 0, 1, 0.2f);
-	//TitleRenderer->CreateAnimation("SelectScene", "SelectScene.png", 0, 0, 0.2f, false);
 	TitleRenderer->CreateAnimation("SelectScene", "InGameSelectScene.png", 0, 0, 0.2f, false);
 	TitleRenderer->CreateAnimation("CharacterSelectScene", "InGameCharacterSelectScene.png", 0, 0, 0.2f, false);
 
-	//ArrowRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	//ArrowRenderer->SetComponentScale({ 80, 80 });
-	//ArrowRenderer->SetComponentLocation({830, 430}); // {830, 430}, {850, 580}, {860, 740} 
-	//ArrowRenderer->SetOrder(ERenderOrder::SceneTool);
-	//ArrowRenderer->SetSprite("arrow.png");
 
 	TitleRenderer->ChangeAnimation("MainTitleScene");
 }
@@ -65,7 +58,6 @@ void ATitleScene::Tick(float _DeltaTime)
 	Super::Tick(_DeltaTime);
 
 	CheckInput();
-	//CheckInputArrow();
 	MoveToCamera(_DeltaTime);
 }
 
@@ -220,10 +212,12 @@ void ATitleScene::CheckInput()
 
 		if (true == MoveToScene(TitleSceneDir::RIGHT))
 		{
+			Sound = UEngineSound::Play("book_page_turn.wav");
 			return;
 		}
 		else if (true == MoveToScene(TitleSceneDir::DOWN))
 		{
+			Sound = UEngineSound::Play("book_page_turn.wav");
 			return;
 		}
 		
@@ -248,80 +242,14 @@ void ATitleScene::CheckInput()
 
 		if (true == MoveToScene(TitleSceneDir::LEFT))
 		{
+			Sound = UEngineSound::Play("book_page_turn.wav");
 			return;
 		}
 		else if (true == MoveToScene(TitleSceneDir::UP))
 		{
+			Sound = UEngineSound::Play("book_page_turn.wav");
 			return;
 		}
-	}
-}
-
-void ATitleScene::CheckInputArrow()
-{
-	if (this != CurrentScene)
-	{
-		return;
-	}
-	if (true == IsCameraMove)
-	{
-		return;
-	}
-
-	std::string ThisName = GetName();
-	if ("SelectScene" != ThisName)
-	{
-		return;
-	}
-	
-	if (UEngineInput::GetInst().IsDown(VK_DOWN))
-	{
-		SwitchArrowPos(true);
-	}
-	if (UEngineInput::GetInst().IsDown(VK_UP))
-	{
-		SwitchArrowPos(false);
-	}
-}
-
-void ATitleScene::SwitchArrowPos(bool _UpDown)
-{
-	int Value = static_cast<bool>(_UpDown);
-	if (0 == Value)
-	{
-		Value = -1;
-	}
-	else if (1 == Value)
-	{
-		Value = 1;
-	}
-
-	int IntCurArrowPos = static_cast<int>(CurArrowPos);
-	IntCurArrowPos += Value;
-	CurArrowPos = static_cast<ArrowPos>(IntCurArrowPos);
-
-	if (ArrowPos::NONE == CurArrowPos)
-	{
-		CurArrowPos = ArrowPos::BOT;
-	}
-	if (ArrowPos::MAX == CurArrowPos)
-	{
-		CurArrowPos = ArrowPos::TOP;
-	}
-
-	switch (CurArrowPos)
-	{
-	case ArrowPos::TOP:
-		ArrowRenderer->SetComponentLocation({ 830, 430 });
-		break;
-	case ArrowPos::MID:
-		ArrowRenderer->SetComponentLocation({ 850, 580 });
-		break;
-	case ArrowPos::BOT:
-		ArrowRenderer->SetComponentLocation({ 860, 740 });
-		break;
-	default:
-		break;
 	}
 }
 

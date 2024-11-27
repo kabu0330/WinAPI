@@ -66,6 +66,8 @@ void ARock::DestroyRenderer()
 		return;
 	}
 	
+	Sound = UEngineSound::Play("explosion_debris1.wav");
+
 	Hp = 0;
 
 	BodyRenderer->Destroy();

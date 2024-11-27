@@ -69,6 +69,9 @@ public:
 	void SpriteSetting();
 	void CollisionSetting();
 
+	void Sounds();
+	void HasInitMonster();
+
 	void WarpCollisionCheck(float _DeltaTime);
 	void WarpPlayerSetting();
 	void Warp(float _DeltaTime);
@@ -251,5 +254,11 @@ private:
 	FVector2D StartCameraPos = FVector2D::ZERO;
 	FVector2D EndCameraPos = FVector2D::ZERO;
 	RoomDir MoveDir = RoomDir::NONE;
+
+	USoundPlayer Sound;
+	bool IsFirstEnterance = false;
+	bool OpenDoorSoundPlay  = false;
+	bool CloseDoorSoundPlay = false;
+	bool IsInitMonsterExist = false;
 };
 

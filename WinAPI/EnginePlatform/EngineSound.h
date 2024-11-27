@@ -41,9 +41,17 @@ public:
 		Control->setLoopCount(Count);
 	}
 
+	unsigned int LengthMs()
+	{
+		unsigned int ResultLength = 0;
+		SoundHandle->getLength(&ResultLength, FMOD_TIMEUNIT_MS);
+		return ResultLength;
+	}
+
 private:
 	// 채널 == 사운드 재생과 관련된 권한을 가진 클래스
 	FMOD::Channel* Control = nullptr;
+	FMOD::Sound* SoundHandle = nullptr;
 };
 
 // 설명 : 사운드 출력
