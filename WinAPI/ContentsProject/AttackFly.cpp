@@ -136,8 +136,6 @@ void AAttackFly::ChaseMove(float _DeltaTime)
 		return;
 	}
 
-	//FlyingSound = UEngineSound::Play("insect_swarm.wav");
-
 	Direction = GetDirectionToPlayer();
 	FVector2D MovePos = Direction * Speed * _DeltaTime;
 	AddActorLocation(MovePos);

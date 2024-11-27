@@ -26,5 +26,7 @@ private:
 	USpriteRenderer* FlameBaseRenderer = nullptr;
 	FVector2D BodyCollisionScale = FVector2D::ZERO;
 	FVector2D BodyCollisionLocation = FVector2D::ZERO;
+
+	bool IsFireDeath = false;
 };
 

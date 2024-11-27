@@ -39,7 +39,6 @@ AFire::AFire()
 	BodyCollision->SetComponentScale(BodyCollisionScale);
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Object);
 	BodyCollision->SetCollisionType(ECollisionType::Rect);
-
 }
 
 AFire::~AFire()
@@ -94,6 +93,12 @@ void AFire::SwitchAnimation()
 		break;
 	case 0: // 충돌체가 파괴되고 남은 잔해물
 	{
+		if (false == IsFireDeath)
+		{
+			Sound = UEngineSound::Play("firedeath hiss.wav");
+			Sound.SetVolume(0.5f);
+			IsFireDeath = true;
+		}
 		if (nullptr != FlameBaseRenderer)
 		{
 			FlameBaseRenderer->SetActive(false);
@@ -101,7 +106,6 @@ void AFire::SwitchAnimation()
 		}
 		if (nullptr != BodyCollision)
 		{
-			Sound = UEngineSound::Play("firedeath hiss.wav");
 			BodyCollision->Destroy();
 		}
 		BodyRenderer->ChangeAnimation("FireBottom_Burned");

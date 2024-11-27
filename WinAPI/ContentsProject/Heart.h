@@ -27,6 +27,8 @@ public:
 			return false;
 		}
 
+		Sound = UEngineSound::Play("large_chew.wav");
+
 		IsPushback = false;
 		_Player->AddHp(ItemCount);
 		
