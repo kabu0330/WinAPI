@@ -14,6 +14,7 @@
 #include "PlayGameMode.h"
 #include "BossHpBar.h"
 #include "BossIntroScene.h"
+#include "DecalObject.h"
 
 ATheDukeOfFlies::ATheDukeOfFlies()
 {
@@ -25,7 +26,6 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
 	/* 탐색범위 : */ SetDetectRange({ 200 , 200 });
 	/* 발사속도 : */ SetShootingSpeed(300.0f);
-	/* 쿨타임   : */ SetCooldown(5.0f);
 	CanKnockback = false;
 	float SkillprepareTime0 = 1.0f;
 	float SkillprepareTime1 = 1.0f;
@@ -33,11 +33,12 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 
 	SkillPostActionTime = 1.5f;
 
-	BodyScale = { 100 , 100 };
+	BodyCollisionScale = { 100 , 100 };
+	BodyRendererScale = { 160, 128 };
 
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
-	BodyCollision->SetComponentScale(BodyScale);
+	BodyCollision->SetComponentScale(BodyCollisionScale);
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_FlyingBody);
 	BodyCollision->SetCollisionType(ECollisionType::Circle);
 
@@ -45,7 +46,7 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	BodyRenderer->CreateAnimation("Idle", "duke.png", 2, 2, 0.1f, false);
 	BodyRenderer->CreateAnimation("Attack", "duke.png", {1, 3, 0}, { SkillprepareTime0, SkillprepareTime1, SkillPostActionTime}, false);
 	BodyRenderer->SetComponentLocation({ 0, 0 });
-	BodyRenderer->SetComponentScale({ 160, 128 }); // 80, 64
+	BodyRenderer->SetComponentScale(BodyRendererScale); // 80, 64
 	BodyRenderer->ChangeAnimation("Idle");
 	BodyRenderer->SetOrder(ERenderOrder::Monster);
 
@@ -75,6 +76,20 @@ ATheDukeOfFlies::ATheDukeOfFlies()
 	DetectCollision->SetCollisionType(ECollisionType::Circle);
 	DetectCollision->SetActive(true);
 
+	for (int i = 0; i < 4; i++)
+	{
+		DamagedEffectRenderers[i] = CreateDefaultSubObject<USpriteRenderer>();
+		DamagedEffectRenderers[i]->CreateAnimation("DamagedEffect", "effect_bloodpoof.png", 0, 11, 0.07f, false);
+		DamagedEffectRenderers[i]->SetComponentScale({ 64, 64 });
+		DamagedEffectRenderers[i]->ChangeAnimation("DamagedEffect");
+		DamagedEffectRenderers[i]->SetOrder(ERenderOrder::MonsterEffect);
+		DamagedEffectRenderers[i]->SetActive(false);
+	}
+	DamagedEffectRenderers[0]->SetComponentLocation({-20, -30});
+	DamagedEffectRenderers[1]->SetComponentLocation({ 20, -30});
+	DamagedEffectRenderers[2]->SetComponentLocation({-20,  30});
+	DamagedEffectRenderers[3]->SetComponentLocation({ 20,  30});
+
 	// 맵에 존재할 수 있는 파리 숫자는 최대 12마리임, 11마리까지는 파리 소환 패턴을 쓸 수 있음
 	MaxFlyCount = 15; // 원작은 12마리
 }
@@ -97,7 +112,7 @@ void ATheDukeOfFlies::BeginPlay()
 	BloodEffectRenderer->SetComponentScale({ 512, 512 });
 
 	// 스킬을 쓰지 않아도 쿨타임을 먼저 적용시켜버림
-	CooldownElapsed = 2.0f;
+	CooldownElapsed = 3.0f;
 }
 
 void ATheDukeOfFlies::Tick(float _DeltaTime)
@@ -203,6 +218,16 @@ void ATheDukeOfFlies::Death(float _DeltaTime)
 		DeathSound = UEngineSound::Play("boss_fight jingle_outro_v2_12.ogg");
 		TimeEventer.PushEvent(15.0f, []() {
 			APlayGameMode::GetPlayGameModeBGM() = UEngineSound::Play("diptera_sonata_basement.ogg"); });
+		
+		for (int i = 0; i < 4; i++)
+		{
+			TimeEventer.PushEvent(1.0f + ( - 0.2 * i), [this, i]() {
+				DamagedEffectRenderers[i]->SetActive(true); });
+		}
+
+		TimeEventer.PushEvent(4.0f, [this]() {
+			BloodEffectRenderer->SetActive(true);
+			BloodEffectRenderer->ChangeAnimation("DeathEffect"); });
 	}
 
 	// 3. 액터 지우고
@@ -215,20 +240,118 @@ void ATheDukeOfFlies::Death(float _DeltaTime)
 
 	RemoveFlies();
 	SetMoveSpeed(0);
-	BloodEffectRenderer->SetActive(true);
-	BloodEffectRenderer->ChangeAnimation("DeathEffect");
+	SummonCooldownDuration = 0.0f;
+	BlowAwayCooldownDuration = 0.0f;
+	SummonBigFlyCooldownDuration = 0.0f;
+
+	BodyRenderer->ChangeAnimation("Idle");
+	Oscillation(_DeltaTime);
+
+	if (nullptr == BloodEffectRenderer)
+	{
+		return;
+	}
+
+	if (false == BloodEffectRenderer->IsActive())
+	{
+		return;
+	}
+	if (true == BloodEffectRenderer->IsActive())
+	{
+		BodyRenderer->SetActive(false);
+	}
 
 	if (true == BloodEffectRenderer->IsCurAnimationEnd())
 	{
 		Sound = UEngineSound::Play("death_burst_large_0.wav");
-
+		CreateGib();
 		BodyRenderer->Destroy();
 		BodyRenderer = nullptr;
-
+		BloodEffectRenderer->Destroy(0.1f);
+		BloodEffectRenderer = nullptr;
 		return;
 	}
 
-	BodyRenderer->SetActive(false);
+}
+
+void ATheDukeOfFlies::CreateGib()
+{
+	int Index = MonsterRandom.RandomInt(0, 13);
+
+	const int Count = 8;
+	ARoomObject* Gib[Count];
+	ADecalObject* Decal[Count];
+	USpriteRenderer* GibRenderer[Count];
+
+	for (int i = 0; i < Count; i++)
+	{
+		Gib[i] = ParentRoom->CreateObject<ADecalObject>(this);
+		Decal[i] = dynamic_cast<ADecalObject*>(Gib[i]);
+
+		GibRenderer[i] = Gib[i]->GetBodyRenderer();
+		//GibRenderer[i]->CreateAnimation("Gib", "effect_030_bloodgibs.png", 0, 0, 0.1f, false);
+		GibRenderer[i]->SetComponentScale({ 64, 64 });
+		GibRenderer[i]->SetActive(true);
+		GibRenderer[i]->SetOrder(ERenderOrder::MonsterDeathDebris);
+	}
+
+	Decal[0]->SetMove(this, FVector2D(0, 0));
+	Decal[1]->SetMove(this, FVector2D(-20, -30));
+	Decal[2]->SetMove(this, FVector2D(-60, -60));
+	Decal[3]->SetMove(this, FVector2D(30, 30));
+	Decal[4]->SetMove(this, FVector2D(80, 60));
+	Decal[5]->SetMove(this, FVector2D(0, -50));
+	Decal[6]->SetMove(this, FVector2D(-20, 0));
+	Decal[7]->SetMove(this, FVector2D(0, -20));
+
+	GibRenderer[0]->CreateAnimation("Gib", "effect_030_bloodgibs.png", 0, 0, 0.1f, false);
+	GibRenderer[1]->CreateAnimation("Gib", "effect_030_bloodgibs.png", 13, 13, 0.1f, false);
+	GibRenderer[2]->CreateAnimation("Gib", "effect_030_bloodgibs.png", 2, 2, 0.1f, false);
+	GibRenderer[3]->CreateAnimation("Gib", "effect_030_bloodgibs.png", 6, 6, 0.1f, false);
+	GibRenderer[4]->CreateAnimation("Gib", "effect_030_bloodgibs.png", 10, 10, 0.1f, false);
+	GibRenderer[5]->CreateAnimation("Gib", "effect_030_bloodgibs.png", 12, 12, 0.1f, false);
+	GibRenderer[6]->CreateAnimation("Gib", "effect_030_bloodgibs.png", 7, 7, 0.1f, false);
+	GibRenderer[7]->CreateAnimation("Gib", "effect_030_bloodgibs.png", 9, 9, 0.1f, false);
+
+	for (int i = 0; i < Count; i++)
+	{
+		GibRenderer[i]->ChangeAnimation("Gib");
+	}
+
+
+	ARoomObject* BloodPool = ParentRoom->CreateObject<ADecalObject>(this);
+	ADecalObject* BloodPoolDecal = dynamic_cast<ADecalObject*>(BloodPool);
+	if (nullptr == BloodPoolDecal)
+	{
+		return;
+	}
+
+	USpriteRenderer* BloodPoolRenderer = BloodPool->GetBodyRenderer();
+	BloodPoolRenderer->CreateAnimation("BloodPool", "effect_bloodpool.png", 21, 21, 0.1f, false);
+	BloodPoolRenderer->SetComponentScale({ 384, 384 });
+	BloodPoolRenderer->SetActive(true);
+	BloodPoolRenderer->SetAlphaFloat(0.5f);
+	BloodPoolRenderer->SetOrder(ERenderOrder::Decal);
+	BloodPoolRenderer->ChangeAnimation("BloodPool");
+}
+
+void ATheDukeOfFlies::Oscillation(float _DeltaTime)
+{
+	if (nullptr == BodyRenderer)
+	{
+		return;
+	}
+
+	// 진동 속도와 강도 설정
+	const float OscillationSpeed = 1000.0f; // 진동 속도
+	const float OscillationMagnitude = 10.0f; // 진동 크기
+
+	// 사인 함수를 이용해 진동 계산
+	float Oscillation = std::sin(_DeltaTime * OscillationSpeed) * OscillationMagnitude;
+
+	// 위치 업데이트
+	FVector2D NewScale = { BodyRendererScale.X + Oscillation, BodyRendererScale.Y + Oscillation };
+	BodyRenderer->SetComponentScale(NewScale);
 }
 
 FVector2D ATheDukeOfFlies::GetRandomDir()
@@ -374,6 +497,11 @@ void ATheDukeOfFlies::SummonFlies()
 	{
 		return;
 	}
+	if (true == IsDeath())
+	{
+		return;
+	}
+
 	BodyRenderer->ChangeAnimation("Attack");
 	ModifySkillCooldownElapsed();
 
@@ -386,6 +514,10 @@ void ATheDukeOfFlies::BeginSummonFliesLogic()
 {
 	ARoom* ParentRoom = ARoom::GetCurRoom();
 	if (nullptr == ParentRoom)
+	{
+		return;
+	}
+	if (true == IsDeath())
 	{
 		return;
 	}
@@ -435,6 +567,11 @@ void ATheDukeOfFlies::BeginSummonFliesLogic()
 
 void ATheDukeOfFlies::BeginSummonFliesAnimaition()
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
+
 	Sound = UEngineSound::Play("fly_cough_2.wav");
 
 	BlackDustEffectRenderer->SetActive(true);	
@@ -444,6 +581,11 @@ void ATheDukeOfFlies::BeginSummonFliesAnimaition()
 
 void ATheDukeOfFlies::EndSummonFliesAnimaition()
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
+
 	BodyRenderer->ChangeAnimation("Idle");
 	BlackDustEffectRenderer->ChangeAnimation("Black_Dust_End");
 	BlackDustEffectRenderer->SetActive(false);
@@ -508,6 +650,10 @@ void ATheDukeOfFlies::BlowAway()
 	{
 		return;
 	}
+	if (true == IsDeath())
+	{
+		return;
+	}
 	
 	BodyRenderer->ChangeAnimation("Attack");
 	ModifySkillCooldownElapsed();
@@ -520,6 +666,11 @@ void ATheDukeOfFlies::BlowAway()
 
 void ATheDukeOfFlies::BeginBlowAwayLogic()
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
+
 	std::list<AMonster*>::iterator StartIter = Flies.begin();
 	std::list<AMonster*>::iterator EndIter = Flies.end();
 
@@ -546,6 +697,11 @@ void ATheDukeOfFlies::BeginBlowAwayLogic()
 
 void ATheDukeOfFlies::BeginBlowAwayAnimaition()
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
+
 	Sound = UEngineSound::Play("fly_cough.wav");
 
 	DustEffectRenderer->SetActive(true);
@@ -556,6 +712,11 @@ void ATheDukeOfFlies::BeginBlowAwayAnimaition()
 
 void ATheDukeOfFlies::EndBlowAwayAnimaition()
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
+
 	BodyRenderer->ChangeAnimation("Idle");
 
 	DustEffectRenderer->SetActive(false);
@@ -608,6 +769,10 @@ void ATheDukeOfFlies::SummonBigFlies()
 	{
 		return;
 	}
+	if (true == IsDeath())
+	{
+		return;
+	}
 	// 나를 따르는 파리가 없어? 그러면 빅파리 소환해.
 
 	BodyRenderer->ChangeAnimation("Attack");
@@ -624,7 +789,10 @@ void ATheDukeOfFlies::BeginSummonBigFliesLogic()
 	{
 		return;
 	}
-
+	if (true == IsDeath())
+	{
+		return;
+	}
 	// 스폰 위치
 	FVector2D SetFliesPos = this->GetActorLocation() - ParentRoom->GetActorLocation() + FVector2D(0, 100);
 

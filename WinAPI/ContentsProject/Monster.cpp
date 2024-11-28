@@ -33,10 +33,10 @@ AMonster::AMonster()
 	SpawnEffectRenderer->SetActive(false);
 
 	BloodEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BloodEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.2f }, false);
+	BloodEffectRenderer->CreateAnimation("DeathEffect", "LargeBloodExplosion.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, { 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.05f }, false);
 	BloodEffectRenderer->SetComponentLocation({0, -30});
 	BloodEffectRenderer->SetComponentScale({256, 256});
-	BloodEffectRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);
+	BloodEffectRenderer->SetOrder(ERenderOrder::Decal);
 	BloodEffectRenderer->ChangeAnimation("DeathEffect");
 	BloodEffectRenderer->SetActive(false);
 
@@ -466,7 +466,7 @@ void AMonster::Death(float _DeltaTime)
 
 		CreateGib();
 		CollisionDestroy();
-		TimeEventer.PushEvent(15.0f, std::bind(&AMonster::FadeOut, this));
+		//TimeEventer.PushEvent(15.0f, std::bind(&AMonster::FadeOut, this));
 	}
 
 	// 3. 액터 지우고
@@ -489,6 +489,7 @@ void AMonster::Death(float _DeltaTime)
 	{
 		BodyRenderer->Destroy();
 		BodyRenderer = nullptr;
+		BloodEffectRenderer->Destroy(0.1f);
 		return;
 	}
 
@@ -512,6 +513,22 @@ void AMonster::CreateGib()
 	GibRenderer->SetActive(true);
 	GibRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);
 	GibRenderer->ChangeAnimation("Gib");
+
+	int BloodPoolIndex = MonsterRandom.RandomInt(0, 23);
+	ARoomObject* BloodPool = ParentRoom->CreateObject<ADecalObject>(this);
+	ADecalObject* BloodPoolDecal = dynamic_cast<ADecalObject*>(BloodPool);
+	if (nullptr == BloodPoolDecal)
+	{
+		return;
+	}
+
+	USpriteRenderer* BloodPoolRenderer = BloodPool->GetBodyRenderer();
+	BloodPoolRenderer->CreateAnimation("BloodPool", "effect_bloodpool.png", BloodPoolIndex, BloodPoolIndex, 0.1f, false);
+	BloodPoolRenderer->SetComponentScale({ 256, 256 });
+	BloodPoolRenderer->SetActive(true);
+	BloodPoolRenderer->SetAlphaFloat(0.5f);
+	BloodPoolRenderer->SetOrder(ERenderOrder::Decal);
+	BloodPoolRenderer->ChangeAnimation("BloodPool");
 }
 
 int AMonster::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)

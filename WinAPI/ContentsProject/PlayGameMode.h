@@ -30,7 +30,6 @@ public:
 	void LevelChangeStart() override;
 
 	void FadeOut();
-	void FadeActiveFalse();
 	void CheckInput();
 
 	void SwitchIsShowDeathReport()
@@ -49,6 +48,7 @@ public:
 
 	static USoundPlayer& GetPlayGameModeBGM()
 	{
+		PlayGameModeBGM.Loop(999);
 		return PlayGameModeBGM;
 	}
 

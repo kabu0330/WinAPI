@@ -100,7 +100,6 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("costume_106_polyphemus.png", 5, 2);
 	UImageManager::GetInst().CuttingSprite("costume_037_maxshead.png", 8, 1);
 	UImageManager::GetInst().CuttingSprite("TheInnerEye.png", 8, 1);
-	UImageManager::GetInst().CuttingSprite("collectibles_003_spoonbender.png", 8, 1);
 	UImageManager::GetInst().CuttingSprite("SpoonBenderHead.png", 8, 1);
 	UImageManager::GetInst().CuttingSprite("SpeedBall_Head.png", 8, 1);
 	UImageManager::GetInst().CuttingSprite("NumberOne_Head.png", 8, 1);
@@ -123,6 +122,7 @@ void ContentsCore::SpriteSetting()
 
 	// Background
 	UImageManager::GetInst().CuttingSprite("NormalRoomDoor.png", 4, 2);
+	UImageManager::GetInst().CuttingSprite("controls_buttons.png", 16, 16);
 
 	// UI
 	UImageManager::GetInst().CuttingSprite("pickup.png", 10, 1); // (10, 12)

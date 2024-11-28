@@ -28,6 +28,7 @@ public:
 
 	void Move(float _DeltaTime);
 	void SetMove(AActor* _Actor = nullptr);
+	void SetMove(AActor* _Actor, FVector2D _Pos);
 
 protected:
 

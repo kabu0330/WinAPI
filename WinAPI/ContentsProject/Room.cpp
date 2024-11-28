@@ -42,13 +42,32 @@ void ARoom::BeginPlay()
 	switch (RoomType)
 	{
 	case ERoomType::BASE:
+	{
 		RoomRenderer->SetSprite("Room_01.png");
 		ControlsRenderer = CreateDefaultSubObject<USpriteRenderer>();
 		ControlsRenderer->SetSprite("controls.png");
-		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowHalfScale.iX(), GetActorLocation().iY() - Global::WindowHalfScale.iY() - 20 });
+		ControlsRenderer->SetComponentLocation({ GetActorLocation().iX() - Global::WindowHalfScale.iX(), GetActorLocation().iY() - Global::WindowHalfScale.iY() - 60 });
 		ControlsRenderer->SetComponentScale({ 655, 145 }); // 385, 85
 		ControlsRenderer->SetOrder(ERenderOrder::Controls);
+
+		FVector2D ControlsPos = ControlsRenderer->GetComponentLocation();
+		ButtonsRenderer[0]->SetComponentLocation({ ControlsPos.X - 293.0f, ControlsPos.Y + 75.0f });
+		FVector2D ButtonPos = ButtonsRenderer[0]->GetComponentLocation();
+		float Gap = 30.0f;
+
+		for (int i = 1; i < 4; i++)
+		{
+			ButtonsRenderer[i]->SetComponentLocation({ButtonPos.X + (Gap * static_cast<float>(i)), ControlsPos.Y + 75.0f });
+		}
+
+		for (int i = 4; i < 8; i++)
+		{
+			ButtonsRenderer[i]->SetComponentLocation({ ControlsPos.X - 124.0f + (Gap * static_cast<float>(i - 4)), ControlsPos.Y + 75.0f });
+		}
+
+		ButtonsRenderer[8]->SetComponentLocation({ ControlsPos.X + 90.0f, ControlsPos.Y + 75.0f });
 		break;
+	}
 	case ERoomType::TREASURE:
 		RoomRenderer->SetSprite("Room_01.png");
 		break;
@@ -566,6 +585,24 @@ void ARoom::SpriteSetting()
 	RoomRenderer->SetSprite("Room_01.png");
 	RoomRenderer->SetComponentScale(RoomScale);
 	RoomRenderer->SetOrder(ERenderOrder::Background);
+
+	for (int i = 0; i < 9; i++)
+	{
+		ButtonsRenderer[i] = CreateDefaultSubObject<USpriteRenderer>();
+		ButtonsRenderer[i]->SetComponentScale(ButtonScale);
+		ButtonsRenderer[i]->SetOrder(ERenderOrder::Controls);
+	}
+
+	ButtonsRenderer[0]->SetSprite("controls_buttons.png", 22); // W
+	ButtonsRenderer[1]->SetSprite("controls_buttons.png", 0); // A
+	ButtonsRenderer[2]->SetSprite("controls_buttons.png", 18); // S
+	ButtonsRenderer[3]->SetSprite("controls_buttons.png", 3); // D
+	ButtonsRenderer[4]->SetSprite("controls_buttons.png", 69); // ÁÂ
+	ButtonsRenderer[5]->SetSprite("controls_buttons.png", 70); // ¿ì
+	ButtonsRenderer[6]->SetSprite("controls_buttons.png", 71); // ¾Æ·¡
+	ButtonsRenderer[7]->SetSprite("controls_buttons.png", 72); // À§
+	ButtonsRenderer[8]->SetSprite("controls_buttons.png", 4); // E
+
 }
 
 void ARoom::CollisionSetting()

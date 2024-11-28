@@ -110,6 +110,21 @@ void ADecalObject::SetMove(AActor* _Actor)
 	Force = Dir * 200.0f;
 }
 
+void ADecalObject::SetMove(AActor* _Actor, FVector2D _Pos)
+{
+	IsMove = true;
+
+	int ResultX = _Pos.iX();
+	int ResultY = _Pos.iY();
+
+	FVector2D StartPos = _Actor->GetActorLocation();
+	TargetPos = FVector2D(StartPos.X + ResultX, StartPos.Y - ResultY);
+	FVector2D Dir = TargetPos - StartPos;
+	Dir.Normalize();
+
+	Force = Dir * 150.0f;
+}
+
 ADecalObject::~ADecalObject()
 {
 }

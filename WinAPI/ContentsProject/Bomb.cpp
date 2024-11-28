@@ -94,7 +94,7 @@ bool ABomb::EatFunction(APlayer* _Player)
 		return false; // ¸ø¸ÔÀ¸¸é Æ¨°Ü³½´Ù.
 	}
 
-	Sound = UEngineSound::Play("large_chew.wav");
+	//Sound = UEngineSound::Play("large_chew.wav");
 
 	IsDrop = true;
 	DropRenderer->ChangeAnimation("DropEffect");

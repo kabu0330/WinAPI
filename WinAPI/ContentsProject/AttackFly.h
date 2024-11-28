@@ -57,6 +57,7 @@ public:
 		CollisionScale *= _Value;
 	}
 
+	void CreateGib();
 
 protected:
 

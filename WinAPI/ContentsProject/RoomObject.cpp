@@ -250,7 +250,7 @@ void ARoomObject::SpawnItem()
 {
 	UEngineRandom Random;
 	Random.SetSeed(time(NULL));
-	int Result = Random.RandomInt(0, 8);
+	int Result = Random.RandomInt(0, 7);
 	FVector2D Offset = FVector2D(0, -5);
 	if (4 > Result)
 	{
@@ -282,6 +282,12 @@ void ARoomObject::SpawnItem()
 	case 3:
 	{
 		ParentRoom->CreateItem<AKey>(this, Offset);
+		break;
+	}
+	case 4:
+	{
+		AItem* HalfHeart = ParentRoom->CreateItem<AHeart>(this, Offset);
+		HalfHeart->SetHalfHeart();
 		break;
 	}
 	default:

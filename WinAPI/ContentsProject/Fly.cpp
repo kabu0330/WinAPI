@@ -12,7 +12,7 @@ AFly::AFly()
 	/* 이름     : */ SetName("AttackFly");
 	/* 체력     : */ SetHp(3);
 	/* 공격력   : */ SetAtt(0);
-	/* 이동속도 : */ SetMoveSpeed(10);
+	/* 이동속도 : */ SetMoveSpeed(20);
 	/* 이동시간 : */ SetMoveDuration(1.0f);
 	/* 정지시간 : */ SetMoveCooldown(2.0f);
 	/* 탐색범위 : */ SetDetectRange({ 0 , 0});

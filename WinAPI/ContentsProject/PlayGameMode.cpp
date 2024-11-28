@@ -60,7 +60,8 @@ void APlayGameMode::BeginPlay()
 	UISetting();
 
 	UEngineSound::AllSoundStop();
-	PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
+	//PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
+	PlayGameModeBGM.Loop(999);
 }
 
 void APlayGameMode::Spawn()
@@ -89,16 +90,6 @@ void APlayGameMode::Spawn()
 	TreasureRoom0->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom1->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom2->SetRoomType(ERoomType::TREASURE);
-
-	// Debug
-	BossRoom->SetRoomType(ERoomType::BOSS);
-	BaseRoom->CreateItem<AInnerEye>(nullptr, { 100, 0 });
-	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
-	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
-	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
-	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
-	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
-
 
 	BaseRoom->SetName("BaseRoom");
 	TreasureRoom0->SetName("TreasureRoom0");
@@ -145,30 +136,42 @@ void APlayGameMode::Spawn()
 
 
 
+	// Debug
+	BossRoom->SetRoomType(ERoomType::BOSS);
+	//BaseRoom->CreateItem<AInnerEye>(nullptr, { 100, 0 });
+	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
+	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
+	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
+	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
+	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
+
+
 	// TreasureRoom0
 	{
 	 	ARoomObject* Fire0 = TreasureRoom0->CreateObject<AFire>(nullptr, {  150,    0 });
 		ARoomObject* Fire1 = TreasureRoom0->CreateObject<AFire>(nullptr, { -150,    0 });
-		ARoomObject* Fire2 = TreasureRoom0->CreateObject<AFire>(nullptr, { -310, -190 });
+		ARoomObject* Fire2 = TreasureRoom0->CreateObject<AFire>(nullptr, { -310, -180 });
 		ARoomObject* Fire3 = TreasureRoom0->CreateObject<AFire>(nullptr, { -310,  180 });
-		ARoomObject* Fire4 = TreasureRoom0->CreateObject<AFire>(nullptr, {  310, -190 });
+		ARoomObject* Fire4 = TreasureRoom0->CreateObject<AFire>(nullptr, {  310, -180 });
 		ARoomObject* Fire5 = TreasureRoom0->CreateObject<AFire>(nullptr, {  310,  180 });
 		SpawnRandomItem(TreasureRoom0);
 	}
 
 	// TreasureRoom1
 	{
-		ARoomObject* Fire2 = TreasureRoom1->CreateObject<AFire>(nullptr, { -310, -190 });
-		ARoomObject* Fire3 = TreasureRoom1->CreateObject<AFire>(nullptr, { -310,  180 });
-		ARoomObject* Fire4 = TreasureRoom1->CreateObject<AFire>(nullptr, { 310, -190 });
-		ARoomObject* Fire5 = TreasureRoom1->CreateObject<AFire>(nullptr, { 310,  180 });
+		ARoomObject* Fire0 = TreasureRoom2->CreateObject<AFire>(nullptr, { 150, 0 });
+		ARoomObject* Fire1 = TreasureRoom2->CreateObject<AFire>(nullptr, { -150, 0 });
 		SpawnRandomItem(TreasureRoom1);
 	}
 
 	// TreasureRoom2
 	{
-		ARoomObject* Fire0 = TreasureRoom2->CreateObject<AFire>(nullptr, {  150, 0 });
+		ARoomObject* Fire0 = TreasureRoom2->CreateObject<AFire>(nullptr, { 150, 0 });
 		ARoomObject* Fire1 = TreasureRoom2->CreateObject<AFire>(nullptr, { -150, 0 });
+		ARoomObject* Fire2 = TreasureRoom1->CreateObject<AFire>(nullptr, { -310, -180 });
+		ARoomObject* Fire3 = TreasureRoom1->CreateObject<AFire>(nullptr, { -310,  180 });
+		ARoomObject* Fire4 = TreasureRoom1->CreateObject<AFire>(nullptr, { 310, -180 });
+		ARoomObject* Fire5 = TreasureRoom1->CreateObject<AFire>(nullptr, { 310,  180 });
 		SpawnRandomItem(TreasureRoom2);
 	}
 
@@ -226,35 +229,35 @@ void APlayGameMode::Spawn()
 
 	// MinionRoom6
 	{
-		BaseRoom->CreateItem<ABomb>(nullptr, {-310, -180});
-		BaseRoom->CreateItem<ABomb>(nullptr, {-260, -180});
-		BaseRoom->CreateItem<ABomb>(nullptr, {-310, -135});
-		BaseRoom->CreateItem<ABomb>(nullptr, { 310, 180 });
-		BaseRoom->CreateItem<ABomb>(nullptr, { 260, 180 });
-		BaseRoom->CreateItem<ABomb>(nullptr, { 310, 135 });
+		MinionRoom6->CreateItem<ABomb>(nullptr, {-310, -180});
+		MinionRoom6->CreateItem<ABomb>(nullptr, {-260, -180});
+		MinionRoom6->CreateItem<ABomb>(nullptr, {-310, -135});
+		MinionRoom6->CreateItem<ABomb>(nullptr, { 310, 180 });
+		MinionRoom6->CreateItem<ABomb>(nullptr, { 260, 180 });
+		MinionRoom6->CreateItem<ABomb>(nullptr, { 310, 135 });
 
 		// 중앙
-		ARoomObject* Object0 = BaseRoom->CreateObject<AMetalBlock>(nullptr, { 0, 0 });
-		ARoomObject* Object1 = BaseRoom->CreateObject<ARock>(nullptr, { -50, 0 });
-		ARoomObject* Object2 = BaseRoom->CreateObject<ARock>(nullptr, { 50, 0 });
-		ARoomObject* Object3 = BaseRoom->CreateObject<ARock>(nullptr, { 0, 50 });
-		ARoomObject* Object4 = BaseRoom->CreateObject<ARock>(nullptr, { 0, -50 });
+		ARoomObject* Object0 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { 0, 0 });
+		ARoomObject* Object1 = MinionRoom6->CreateObject<ARock>(nullptr, { -50, 0 });
+		ARoomObject* Object2 = MinionRoom6->CreateObject<ARock>(nullptr, { 50, 0 });
+		ARoomObject* Object3 = MinionRoom6->CreateObject<ARock>(nullptr, { 0, 50 });
+		ARoomObject* Object4 = MinionRoom6->CreateObject<ARock>(nullptr, { 0, -50 });
 
 		// 좌상단
-		ARoomObject* Object11 = BaseRoom->CreateObject<ARock>(nullptr, { -310, -80 });
-		ARoomObject* Object12 = BaseRoom->CreateObject<ARock>(nullptr, { -260, -80 });
-		ARoomObject* Object13 = BaseRoom->CreateObject<AMetalBlock>(nullptr, { -210, -80 });
-		ARoomObject* Object14 = BaseRoom->CreateObject<ARock>(nullptr, { -210, -130 });
-		ARoomObject* Object15 = BaseRoom->CreateObject<ARock>(nullptr, { -260, -130 });
-		ARoomObject* Object16 = BaseRoom->CreateObject<ARock>(nullptr, { -210, -180 });
+		ARoomObject* Object11 = MinionRoom6->CreateObject<ARock>(nullptr, { -310, -80 });
+		ARoomObject* Object12 = MinionRoom6->CreateObject<ARock>(nullptr, { -260, -80 });
+		ARoomObject* Object13 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { -210, -80 });
+		ARoomObject* Object14 = MinionRoom6->CreateObject<ARock>(nullptr, { -210, -130 });
+		ARoomObject* Object15 = MinionRoom6->CreateObject<ARock>(nullptr, { -260, -130 });
+		ARoomObject* Object16 = MinionRoom6->CreateObject<ARock>(nullptr, { -210, -180 });
 
 		// 우하단
-		ARoomObject* Object21 = BaseRoom->CreateObject<ARock>(nullptr, { 310, 80 });
-		ARoomObject* Object22 = BaseRoom->CreateObject<ARock>(nullptr, { 260, 80 });
-		ARoomObject* Object23 = BaseRoom->CreateObject<AMetalBlock>(nullptr, { 210, 80 });
-		ARoomObject* Object24 = BaseRoom->CreateObject<ARock>(nullptr, { 210, 130 });
-		ARoomObject* Object25 = BaseRoom->CreateObject<ARock>(nullptr, { 260, 130 });
-		ARoomObject* Object26 = BaseRoom->CreateObject<ARock>(nullptr, { 210, 180 });
+		ARoomObject* Object21 = MinionRoom6->CreateObject<ARock>(nullptr, { 310, 80 });
+		ARoomObject* Object22 = MinionRoom6->CreateObject<ARock>(nullptr, { 260, 80 });
+		ARoomObject* Object23 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { 210, 80 });
+		ARoomObject* Object24 = MinionRoom6->CreateObject<ARock>(nullptr, { 210, 130 });
+		ARoomObject* Object25 = MinionRoom6->CreateObject<ARock>(nullptr, { 260, 130 });
+		ARoomObject* Object26 = MinionRoom6->CreateObject<ARock>(nullptr, { 210, 180 });
 		Object1->SetSprite("TINTEDROCKS2");
 		Object11->SetSprite("TINTEDROCKS2");
 		Object12->SetSprite("TINTEDROCKS1");
@@ -283,26 +286,56 @@ void APlayGameMode::Spawn()
 		MinionRoom2->CreateMonster<ADip>({ 0, -50 });
 		MinionRoom2->CreateMonster<ADip>({ 0, 50 });
 	}
+	
+	// BossRoom
+	{
+		// 좌상단
+		ARoomObject* Object01 = BossRoom->CreateObject<ARock>(nullptr, { -310, -180 });
+		ARoomObject* Object02 = BossRoom->CreateObject<ARock>(nullptr, { -260, -180 });
+		ARoomObject* Object03 = BossRoom->CreateObject<ARock>(nullptr, { -310, -130 });
+		ARoomObject* Object04 = BossRoom->CreateObject<ARock>(nullptr, { -210, -180 });
+		ARoomObject* Object05 = BossRoom->CreateObject<ARock>(nullptr, { -310, -80 });
+		ARoomObject* Object06 = BossRoom->CreateObject<ARock>(nullptr, { -210, -80 });
 
-	//BaseRoom->CreateItem<ABomb>(); // Test
-//ARoomObject* Object00 = BaseRoom->CreateObject<ARock>(nullptr, { -310, -120 });
-//ARoomObject* Object01 = BaseRoom->CreateObject<ARock>(nullptr, { -260, -120 });
+		// 좌하단
+		ARoomObject* Object11 = BossRoom->CreateObject<ARock>(nullptr, { -310, 180 });
+		ARoomObject* Object12 = BossRoom->CreateObject<ARock>(nullptr, { -260, 180 });
+		ARoomObject* Object13 = BossRoom->CreateObject<ARock>(nullptr, { -310, 130 });
+		ARoomObject* Object14 = BossRoom->CreateObject<ARock>(nullptr, { -210, 180 });
+		ARoomObject* Object15 = BossRoom->CreateObject<ARock>(nullptr, { -310, 80 });
+		ARoomObject* Object16 = BossRoom->CreateObject<ARock>(nullptr, { -210, 80 });
 
-//ARoomObject* Object02 = BaseRoom->CreateObject<ARock>(nullptr, { -310, -20 });
-//ARoomObject* Object03 = BaseRoom->CreateObject<ARock>(nullptr, { -260, -20 });
-//ARoomObject* Object04 = BaseRoom->CreateObject<ARock>(nullptr, { -210, -20 });
-//ARoomObject* Object05 = BaseRoom->CreateObject<ARock>(nullptr, { -160, -20 });
+		// 우하단
+		ARoomObject* Object21 = BossRoom->CreateObject<ARock>(nullptr, { 310, 180 });
+		ARoomObject* Object22 = BossRoom->CreateObject<ARock>(nullptr, { 260, 180 });
+		ARoomObject* Object23 = BossRoom->CreateObject<ARock>(nullptr, { 310, 130 });
+		ARoomObject* Object24 = BossRoom->CreateObject<ARock>(nullptr, { 210, 180 });
+		ARoomObject* Object25 = BossRoom->CreateObject<ARock>(nullptr, { 310, 80 });
+		ARoomObject* Object26 = BossRoom->CreateObject<ARock>(nullptr, { 210, 80 });
 
-//ARoomObject* Object06 = BaseRoom->CreateObject<ARock>(nullptr, { -310, 80 });
-//ARoomObject* Object07 = BaseRoom->CreateObject<ARock>(nullptr, { -260, 80 });
-//ARoomObject* Object08 = BaseRoom->CreateObject<ARock>(nullptr, { -210, 80 });
-//ARoomObject* Object09 = BaseRoom->CreateObject<ARock>(nullptr, { -210, 80 });
-//ARoomObject* Object10 = BaseRoom->CreateObject<ARock>(nullptr, { -160, 80 });
-//ARoomObject* Object11 = BaseRoom->CreateObject<ARock>(nullptr, { -110, 80 });
-//ARoomObject* Object12 = BaseRoom->CreateObject<ARock>(nullptr, { -60, 80 });
+		// 우상단
+		ARoomObject* Object31 = BossRoom->CreateObject<ARock>(nullptr, { 310, -180 });
+		ARoomObject* Object32 = BossRoom->CreateObject<ARock>(nullptr, { 260, -180 });
+		ARoomObject* Object33 = BossRoom->CreateObject<ARock>(nullptr, { 310, -130 });
+		ARoomObject* Object34 = BossRoom->CreateObject<ARock>(nullptr, { 210, -180 });
+		ARoomObject* Object35 = BossRoom->CreateObject<ARock>(nullptr, { 310, -80 });
+		ARoomObject* Object36 = BossRoom->CreateObject<ARock>(nullptr, { 210, -80 });
 
-//ARoomObject* Object = BaseRoom->CreateObject<ARock>(nullptr, { -310, 180 });
-//aObject1->SetSprite("TINTEDROCKS1");
+		Object06->SetSprite("TINTEDROCKS5");
+		Object16->SetSprite("TINTEDROCKS0");
+		Object26->SetSprite("TINTEDROCKS1");
+		Object36->SetSprite("TINTEDROCKS0");
+
+		Object02->SetSprite("TINTEDROCKS2");
+		Object12->SetSprite("TINTEDROCKS2");
+		Object22->SetSprite("TINTEDROCKS2");
+		Object32->SetSprite("TINTEDROCKS2");
+
+		Object03->SetSprite("TINTEDROCKS1");
+		Object13->SetSprite("TINTEDROCKS1");
+		Object23->SetSprite("TINTEDROCKS1");
+		Object33->SetSprite("TINTEDROCKS1");
+	}
 	
 }
 
@@ -537,21 +570,10 @@ void APlayGameMode::FadeOut()
 	AFade::MainFade->FadeOut();
 	LoadingImage->FadeOut();
 
-	TimeEventer.PushEvent(5.0f, std::bind(&APlayGameMode::FadeActiveFalse, this));
 	LoadingImage->Destroy(5.0f);
 	GamePaused = false; // 여기서 플레이어가 이동 가능
 #endif // _DEBUG
 
-}
-
-void APlayGameMode::FadeActiveFalse()
-{
-	// Fade가 화면에 렌더될 때 굉장히 많은 부하를 일으켜서 사용을 다 하고 나면 반드시 Active를 비활성화 해야한다.
-#ifdef _DEBUG
-
-#else
-	//AFade::MainFade->SetActive(false);
-#endif // _DEBUG
 }
 
 APlayGameMode::APlayGameMode()

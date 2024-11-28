@@ -61,6 +61,7 @@ void ATitleGameMode::SetupScene()
 void ATitleGameMode::LevelChangeStart()
 {
 	BGM = UEngineSound::Play("title_screen.ogg");
+	BGM.Loop(999);
 	UEngineSound::AllSoundOff();
 
 	IsPlayingBGM = false;

@@ -24,6 +24,8 @@ public:
 
 	}
 	void Death(float _DeltaTime) override;
+	void CreateGib() override;
+	void Oscillation(float _DeltaTime);
 
 	FVector2D GetRandomDir() override;
 	void ClampPositionToRoom() override;
@@ -70,10 +72,14 @@ private:
 	USpriteRenderer* BlackDustEffectRenderer = nullptr;
 	USpriteRenderer* DustEffectRenderer = nullptr;
 
+	USpriteRenderer* DamagedEffectRenderers[4] = { nullptr, };
+
+
 	bool IsAttacking = false;
 	float SkillCastDelay = 0.0f;
 	float SkillPostActionTime = 0.0f;
-	FVector2D BodyScale = FVector2D::ZERO;
+	FVector2D BodyCollisionScale = FVector2D::ZERO;
+	FVector2D BodyRendererScale = FVector2D::ZERO;
 
 	// 패턴 1 : SummonFlies
 	std::list<AMonster*> Flies; // 내가 소환한 파리들

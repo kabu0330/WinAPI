@@ -55,7 +55,7 @@ public:
 	virtual void ChangeAnimIdle();
 	virtual void HandleCollisionDamage();
 	virtual void Death(float _DeltaTime);
-	void CreateGib();
+	virtual void CreateGib();
 
 	int ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir); // ÇÇ°Ý
 	void KnockbackTick();

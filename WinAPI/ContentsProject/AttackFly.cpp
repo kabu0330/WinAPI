@@ -11,6 +11,7 @@
 #include "Global.h"
 #include "ContentsEnum.h"
 #include "TheDukeOfFlies.h"
+#include "DecalObject.h"
 
 AAttackFly::AAttackFly()
 {
@@ -152,6 +153,46 @@ void AAttackFly::RemoveFly()
 		}
 
 		Duke->GetFliesList().remove(this);
+	}
+}
+
+void AAttackFly::CreateGib()
+{
+	int Index = MonsterRandom.RandomInt(0, 26);
+	if (Index < 14)
+	{
+		ARoomObject* Gib = ParentRoom->CreateObject<ADecalObject>(this);
+		ADecalObject* Decal = dynamic_cast<ADecalObject*>(Gib);
+		if (nullptr != Decal)
+		{
+			Decal->SetMove(this);
+		}
+
+		USpriteRenderer* GibRenderer = Gib->GetBodyRenderer();
+		GibRenderer->CreateAnimation("Gib", "effect_030_bloodgibs.png", Index, Index, 0.1f, false);
+		GibRenderer->SetComponentScale({ 64, 64 });
+		GibRenderer->SetActive(true);
+		GibRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);
+		GibRenderer->ChangeAnimation("Gib");
+	}
+
+	int BloodPoolIndex = MonsterRandom.RandomInt(0, 69);
+	if (BloodPoolIndex < 24)
+	{
+		ARoomObject* BloodPool = ParentRoom->CreateObject<ADecalObject>(this);
+		ADecalObject* BloodPoolDecal = dynamic_cast<ADecalObject*>(BloodPool);
+		if (nullptr == BloodPoolDecal)
+		{
+			return;
+		}
+
+		USpriteRenderer* BloodPoolRenderer = BloodPool->GetBodyRenderer();
+		BloodPoolRenderer->CreateAnimation("BloodPool", "effect_bloodpool.png", BloodPoolIndex, BloodPoolIndex, 0.1f, false);
+		BloodPoolRenderer->SetComponentScale({ 256, 256 });
+		BloodPoolRenderer->SetActive(true);
+		BloodPoolRenderer->SetAlphaFloat(0.5f);
+		BloodPoolRenderer->SetOrder(ERenderOrder::Decal);
+		BloodPoolRenderer->ChangeAnimation("BloodPool");
 	}
 }
 
