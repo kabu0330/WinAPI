@@ -550,7 +550,7 @@ void APlayGameMode::FadeActiveFalse()
 #ifdef _DEBUG
 
 #else
-	AFade::MainFade->SetActive(false);
+	//AFade::MainFade->SetActive(false);
 #endif // _DEBUG
 }
 

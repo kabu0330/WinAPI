@@ -226,6 +226,7 @@ void ATitleScene::CheckInput()
 			bool Result = IsLastScene();
 			// Space를 눌러 이동한 씬이 마지막 씬인데 여기서 또 스페이스를 눌렀다면
 			// PlayGameMode로 레벨 체인지
+			UEngineSound::AllSoundStop();
 			UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
 			UEngineAPICore::GetCore()->OpenLevel("Play");
 		}

@@ -14,7 +14,6 @@
 
 ATitleGameMode::ATitleGameMode()
 {
-
 }
 
 ATitleGameMode::~ATitleGameMode()
@@ -29,10 +28,6 @@ void ATitleGameMode::BeginPlay()
 	GetWorld()->SetCameraToMainPawn(false);
 
 	SetupScene();
-	BGM = UEngineSound::Play("title_screen.ogg");
-	UEngineSound::AllSoundOff();
-
-	IntroSound = UEngineSound::Play("title_screen_intro.ogg");
 
 }
 
@@ -61,6 +56,15 @@ void ATitleGameMode::SetupScene()
 	MainTitleScene->InterLinkScene(SaveFileScene, TitleSceneDir::DOWN);
 	SaveFileScene->InterLinkScene(SelectScene, TitleSceneDir::DOWN);
 	SelectScene->InterLinkScene(CharacterSelectScene, TitleSceneDir::RIGHT);
+}
+
+void ATitleGameMode::LevelChangeStart()
+{
+	BGM = UEngineSound::Play("title_screen.ogg");
+	UEngineSound::AllSoundOff();
+
+	IsPlayingBGM = false;
+	IntroSound = UEngineSound::Play("title_screen_intro.ogg");
 }
 
 

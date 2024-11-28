@@ -54,6 +54,10 @@ void ATear::Tick(float _DeltaTime)
 		return;
 	}
 
+	if (nullptr == TearEffectRenderer)
+	{
+		return;
+	}
 	if (false == TearEffectRenderer->IsActive())
 	{
 		return;
