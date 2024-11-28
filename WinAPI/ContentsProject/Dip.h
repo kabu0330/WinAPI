@@ -20,6 +20,7 @@ public:
 
 	void Move(float _DeltaTime) override;
 	void ChangeIdle();
+	void CreateGib() override;
 
 	void Attack(float _DeltaTime) override
 	{

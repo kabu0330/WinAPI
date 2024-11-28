@@ -1,5 +1,8 @@
 #include "PreCompile.h"
 #include "Poop.h"
+#include <EngineBase/EngineRandom.h>
+#include "DecalObject.h"
+#include "Room.h"
 
 APoop::APoop()
 {
@@ -57,6 +60,26 @@ void APoop::Tick(float _DeltaTime)
 {
 	Super::Tick(_DeltaTime);
 	ARoomObject::Tick(_DeltaTime);
+}
+
+void APoop::CreateGib()
+{
+	UEngineRandom Random;
+	int Index = Random.RandomInt(0, 7);
+
+	ARoomObject* Gib = ParentRoom->CreateObject<ADecalObject>(this);
+	ADecalObject* Decal = dynamic_cast<ADecalObject*>(Gib);
+	if (nullptr != Decal)
+	{
+		Decal->SetMove(this);
+	}
+
+	USpriteRenderer* GibRenderer = Gib->GetBodyRenderer();
+	GibRenderer->CreateAnimation("Gib", "effect_poopgibs.png", Index, Index, 0.1f, false);
+	GibRenderer->SetComponentScale({ 32, 32 });
+	GibRenderer->SetActive(true);
+	GibRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);
+	GibRenderer->ChangeAnimation("Gib");
 }
 
 APoop::~APoop()

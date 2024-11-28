@@ -136,6 +136,7 @@ int ARoomObject::ApplyDamaged(AActor* _Actor)
 	if (true == IsTearDamageable)
 	{
 		Hp -= 1;
+		IsCreateGib = true;
 
 		if (Hp <= 0)
 		{
@@ -177,13 +178,31 @@ void ARoomObject::SwitchAnimation()
 		break;
 	case 2:
 		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(1));
+
+		if (true == IsCreateGib)
+		{
+			CreateGib();
+			IsCreateGib = false;
+		}
 		break;
 	case 1:
 		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(2));
+
+		if (true == IsCreateGib)
+		{
+			CreateGib();
+			IsCreateGib = false;
+		}
 		break;
 	case 0: // 충돌체가 파괴되고 남은 잔해물
 		BodyRenderer->ChangeAnimation(ObjectName + std::to_string(3));
 		BodyRenderer->SetOrder(ERenderOrder::Object_PlayerBack);
+
+		if (true == IsCreateGib)
+		{
+			CreateGib();
+			IsCreateGib = false;
+		}
 		break;
 	default:
 		break;

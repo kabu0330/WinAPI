@@ -464,6 +464,7 @@ void AMonster::Death(float _DeltaTime)
 		Sound = UEngineSound::Play("death_burst_small.wav");
 		Sound = UEngineSound::Play("meat_impact.wav");
 
+		BloodEffectRenderer->SetActive(true);
 		CreateGib();
 		CollisionDestroy();
 		//TimeEventer.PushEvent(15.0f, std::bind(&AMonster::FadeOut, this));
@@ -481,7 +482,7 @@ void AMonster::Death(float _DeltaTime)
 	// RendererDestroy();
 
 	SetMoveSpeed(0);
-	BloodEffectRenderer->SetActive(true);
+
 	BloodEffectRenderer->ChangeAnimation("DeathEffect");
 
 

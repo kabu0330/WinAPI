@@ -86,6 +86,7 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("fire_bottom.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("effect_bloodpool.png", 4, 6);
 	UImageManager::GetInst().CuttingSprite("effect_030_bloodgibs.png", 4, 4);
+	UImageManager::GetInst().CuttingSprite("effect_poopgibs.png", 4, 2);
 
 	// Item
 	UImageManager::GetInst().CuttingSprite("bomb.png", 5, 6);

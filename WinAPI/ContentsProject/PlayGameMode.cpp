@@ -159,8 +159,8 @@ void APlayGameMode::Spawn()
 
 	// TreasureRoom1
 	{
-		ARoomObject* Fire0 = TreasureRoom2->CreateObject<AFire>(nullptr, { 150, 0 });
-		ARoomObject* Fire1 = TreasureRoom2->CreateObject<AFire>(nullptr, { -150, 0 });
+		ARoomObject* Fire0 = TreasureRoom1->CreateObject<AFire>(nullptr, { 150, 0 });
+		ARoomObject* Fire1 = TreasureRoom1->CreateObject<AFire>(nullptr, { -150, 0 });
 		SpawnRandomItem(TreasureRoom1);
 	}
 
@@ -168,10 +168,10 @@ void APlayGameMode::Spawn()
 	{
 		ARoomObject* Fire0 = TreasureRoom2->CreateObject<AFire>(nullptr, { 150, 0 });
 		ARoomObject* Fire1 = TreasureRoom2->CreateObject<AFire>(nullptr, { -150, 0 });
-		ARoomObject* Fire2 = TreasureRoom1->CreateObject<AFire>(nullptr, { -310, -180 });
-		ARoomObject* Fire3 = TreasureRoom1->CreateObject<AFire>(nullptr, { -310,  180 });
-		ARoomObject* Fire4 = TreasureRoom1->CreateObject<AFire>(nullptr, { 310, -180 });
-		ARoomObject* Fire5 = TreasureRoom1->CreateObject<AFire>(nullptr, { 310,  180 });
+		ARoomObject* Fire2 = TreasureRoom2->CreateObject<AFire>(nullptr, { -310, -180 });
+		ARoomObject* Fire3 = TreasureRoom2->CreateObject<AFire>(nullptr, { -310,  180 });
+		ARoomObject* Fire4 = TreasureRoom2->CreateObject<AFire>(nullptr, { 310, -180 });
+		ARoomObject* Fire5 = TreasureRoom2->CreateObject<AFire>(nullptr, { 310,  180 });
 		SpawnRandomItem(TreasureRoom2);
 	}
 

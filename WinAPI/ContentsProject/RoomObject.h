@@ -46,6 +46,7 @@ public:
 	virtual void DestroyCollision();
 	virtual void DestroyRenderer() {}; // Rock에서 재정의
 	virtual void SwitchAnimation();
+	virtual void CreateGib() {};
 	
 
 	// Fire
@@ -105,6 +106,7 @@ protected:
 	int Hp = 9999; // 플레이어 눈물 공격으로 파괴될 수 있다면 Hp를 가져야 한다.
 
 	class ARoom* ParentRoom = nullptr;
+	bool IsCreateGib = false;
 
 	USoundPlayer Sound;
 private:

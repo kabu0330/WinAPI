@@ -55,6 +55,11 @@ void ARoom::BeginPlay()
 		FVector2D ButtonPos = ButtonsRenderer[0]->GetComponentLocation();
 		float Gap = 30.0f;
 
+		for (int i = 0; i < 9; i++)
+		{
+			ButtonsRenderer[i]->SetActive(true);
+		}
+
 		for (int i = 1; i < 4; i++)
 		{
 			ButtonsRenderer[i]->SetComponentLocation({ButtonPos.X + (Gap * static_cast<float>(i)), ControlsPos.Y + 75.0f });
@@ -591,6 +596,7 @@ void ARoom::SpriteSetting()
 		ButtonsRenderer[i] = CreateDefaultSubObject<USpriteRenderer>();
 		ButtonsRenderer[i]->SetComponentScale(ButtonScale);
 		ButtonsRenderer[i]->SetOrder(ERenderOrder::Controls);
+		ButtonsRenderer[i]->SetActive(false);
 	}
 
 	ButtonsRenderer[0]->SetSprite("controls_buttons.png", 22); // W

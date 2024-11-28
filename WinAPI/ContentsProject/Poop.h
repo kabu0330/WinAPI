@@ -17,7 +17,7 @@ public:
 
 	void BeginPlay();
 	void Tick(float _DeltaTime);
-
+	void CreateGib();
 protected:
 
 private:

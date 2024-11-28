@@ -6,7 +6,8 @@
 #include <EngineCore/2DCollision.h>
 #include "ContentsEnum.h"
 #include "Global.h"
-
+#include "Room.h"
+#include "DecalObject.h"
 
 ADip::ADip()
 {
@@ -80,5 +81,25 @@ void ADip::Move(float _DeltaTime)
 
 	FVector2D MovePos = Direction * Speed * _DeltaTime;
 	AddActorLocation(MovePos);
+}
+
+void ADip::CreateGib()
+{
+	UEngineRandom Random;
+	int Index = Random.RandomInt(0, 7);
+
+	ARoomObject* Gib = ParentRoom->CreateObject<ADecalObject>(this);
+	ADecalObject* Decal = dynamic_cast<ADecalObject*>(Gib);
+	if (nullptr != Decal)
+	{
+		Decal->SetMove(this);
+	}
+
+	USpriteRenderer* GibRenderer = Gib->GetBodyRenderer();
+	GibRenderer->CreateAnimation("Gib", "effect_poopgibs.png", Index, Index, 0.1f, false);
+	GibRenderer->SetComponentScale({ 32, 32 });
+	GibRenderer->SetActive(true);
+	GibRenderer->SetOrder(ERenderOrder::MonsterDeathDebris);
+	GibRenderer->ChangeAnimation("Gib");
 }
 
