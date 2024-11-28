@@ -434,8 +434,7 @@ void ARoom::OpenTheDoor()
 		}
 
 		std::string DirString = SwitchEnumToString(Dir);
-		std::string MyName = GetName();
-		std::string FindRoomName = "BossRoom";
+
 		ERoomType Type = ERoomType::BOSS;
 		if (true == IsNextRoom(Type, Dir) || Type == GetRoomType())
 		{
@@ -445,7 +444,6 @@ void ARoom::OpenTheDoor()
 			continue;
 		}
 
-		FindRoomName = "TreasureRoom";
 		Type = ERoomType::TREASURE;
 		if (true == IsNextRoom(Type, Dir) || Type == GetRoomType())
 		{
@@ -496,8 +494,7 @@ void ARoom::CloseTheDoor()
 		}
 
 		std::string DirString = SwitchEnumToString(Dir);
-		std::string MyName = GetName();
-		std::string FindRoomName = "BossRoom";
+
 		ERoomType Type = ERoomType::BOSS;
 		BossDoorOpenEffect->SetComponentScale({ 0, 0});
 		if (true == IsNextRoom(Type, Dir) || Type == GetRoomType())
@@ -507,7 +504,6 @@ void ARoom::CloseTheDoor()
 			continue;
 		}
 
-		FindRoomName = "TreasureRoom";
 		Type = ERoomType::TREASURE;
 		if (true == IsNextRoom(Type, Dir) || Type == GetRoomType())
 		{
@@ -675,7 +671,6 @@ void ARoom::Sounds()
 			return;
 		}
 		Sound = UEngineSound::Play("door_heavy_close.wav");
-		//Sound = UEngineSound::Play("summonsound.wav");
 		CloseDoorSoundPlay = true;
 		return;
 	}

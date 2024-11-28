@@ -72,6 +72,9 @@ void APlayGameMode::Spawn()
 	ARoom* TreasureRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* TreasureRoom1 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* TreasureRoom2 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* TreasureRoom3 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* TreasureRoom4 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* TreasureRoom5 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
@@ -90,11 +93,17 @@ void APlayGameMode::Spawn()
 	TreasureRoom0->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom1->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom2->SetRoomType(ERoomType::TREASURE);
+	TreasureRoom3->SetRoomType(ERoomType::TREASURE);
+	TreasureRoom4->SetRoomType(ERoomType::TREASURE);
+	TreasureRoom5->SetRoomType(ERoomType::TREASURE);
 
 	BaseRoom->SetName("BaseRoom");
 	TreasureRoom0->SetName("TreasureRoom0");
 	TreasureRoom1->SetName("TreasureRoom1");
 	TreasureRoom2->SetName("TreasureRoom2");
+	TreasureRoom3->SetName("TreasureRoom3");
+	TreasureRoom4->SetName("TreasureRoom4");
+	TreasureRoom5->SetName("TreasureRoom5");
 	MinionRoom0->SetName("MinionRoom0");
 	MinionRoom1->SetName("MinionRoom1");
 	MinionRoom2->SetName("MinionRoom2");
@@ -123,15 +132,21 @@ void APlayGameMode::Spawn()
 	MinionRoom6->InterLinkRoom(MinionRoom7, RoomDir::RIGHT);
 	MinionRoom6->InterLinkRoom(MinionRoom9, RoomDir::DOWN);
 
-	//MinionRoom9->InterLinkRoom(BossRoom, RoomDir::LEFT);
 
 	MinionRoom7->InterLinkRoom(MinionRoom8, RoomDir::RIGHT);
+	MinionRoom7->InterLinkRoom(TreasureRoom3, RoomDir::DOWN);
+	MinionRoom7->InterLinkRoom(BossRoom, RoomDir::UP);
+
+	MinionRoom9->InterLinkRoom(TreasureRoom4, RoomDir::LEFT);
 
 	// Right Root
 	MinionRoom2->InterLinkRoom(MinionRoom4, RoomDir::DOWN);
 
 	MinionRoom4->InterLinkRoom(MinionRoom5, RoomDir::RIGHT);
 	MinionRoom4->InterLinkRoom(MinionRoom8, RoomDir::DOWN); // Left Root Link
+
+	MinionRoom5->InterLinkRoom(TreasureRoom5, RoomDir::UP);
+
 	MinionRoom8->InterLinkRoom(TreasureRoom2, RoomDir::RIGHT);
 
 
@@ -139,12 +154,10 @@ void APlayGameMode::Spawn()
 	// Debug
 	BossRoom->SetRoomType(ERoomType::BOSS);
 	//BaseRoom->CreateItem<AInnerEye>(nullptr, { 100, 0 });
-	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
-	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
-	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
-	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
-	BaseRoom->CreateItem<ABomb>(nullptr, { 0, -135 });
-
+	for (int i = 0; i < 5; i++)
+	{
+		BaseRoom->CreateItem<ABomb>(nullptr, { 110, -30 });
+	}
 
 	// TreasureRoom0
 	{
@@ -175,6 +188,31 @@ void APlayGameMode::Spawn()
 		SpawnRandomItem(TreasureRoom2);
 	}
 
+	// TreasureRoom3
+	{
+		ARoomObject* Fire0 = TreasureRoom3->CreateObject<AFire>(nullptr, { 150, 0 });
+		ARoomObject* Fire1 = TreasureRoom3->CreateObject<AFire>(nullptr, { -150, 0 });
+		ARoomObject* Fire2 = TreasureRoom3->CreateObject<AFire>(nullptr, { -310, -180 });
+		ARoomObject* Fire3 = TreasureRoom3->CreateObject<AFire>(nullptr, { -310,  180 });
+		ARoomObject* Fire4 = TreasureRoom3->CreateObject<AFire>(nullptr, { 310, -180 });
+		ARoomObject* Fire5 = TreasureRoom3->CreateObject<AFire>(nullptr, { 310,  180 });
+		SpawnRandomItem(TreasureRoom3);
+	}
+
+	// TreasureRoom4
+	{
+		ARoomObject* Fire0 = TreasureRoom4->CreateObject<AFire>(nullptr, { 150, 0 });
+		ARoomObject* Fire1 = TreasureRoom4->CreateObject<AFire>(nullptr, { -150, 0 });
+		SpawnRandomItem(TreasureRoom4);
+	}
+
+	// TreasureRoom5
+	{
+		ARoomObject* Fire0 = TreasureRoom5->CreateObject<AFire>(nullptr, { 150, 0 });
+		ARoomObject* Fire1 = TreasureRoom5->CreateObject<AFire>(nullptr, { -150, 0 });
+		SpawnRandomItem(TreasureRoom5);
+	}
+
 	
 	// MinionRoom0 
 	// MinionRoom1 : 플레이어 오른쪽 : 파리맵
@@ -202,13 +240,13 @@ void APlayGameMode::Spawn()
 		//ARoomObject* Poop10 = MinionRoom1->CreateObject<APoop>(nullptr, { 100, 0 });
 		//Poop10->SetSprite("CORNY_POOP");
 
-		MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
-		MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });
-		MinionRoom1->CreateMonster<AAttackFly>({ 0, 70 });
-		MinionRoom1->CreateMonster<AAttackFly>({ 0, 0 });
-		MinionRoom1->CreateMonster<AFly>({ -50, -50 });
-		MinionRoom1->CreateMonster<AFly>({ -100, -10 });
-		MinionRoom1->CreateMonster<AFly>({ -50, 40 });
+		//MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
+		//MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });
+		//MinionRoom1->CreateMonster<AAttackFly>({ 0, 70 });
+		//MinionRoom1->CreateMonster<AAttackFly>({ 0, 0 });
+		//MinionRoom1->CreateMonster<AFly>({ -50, -50 });
+		//MinionRoom1->CreateMonster<AFly>({ -100, -10 });
+		//MinionRoom1->CreateMonster<AFly>({ -50, 40 });
 
 	}
 
@@ -404,7 +442,7 @@ void APlayGameMode::RandomIndex()
 			ItemCreate[Left] = ItemCreate[Right];
 			ItemCreate[Right] = Swap;
 		}
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			RandomValues[i] = ItemCreate[i];
 		}
@@ -468,6 +506,7 @@ void APlayGameMode::Tick(float _DeltaTime)
 
 	EngineDebug(_DeltaTime);
 	CheckInput();
+
 
 	if (false == Sound.IsPlaying() && false == IsPlayingBGM)
 	{

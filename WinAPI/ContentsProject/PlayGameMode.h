@@ -64,7 +64,7 @@ private:
 	UEngineRandom Random;
 	int Index = 0;
 	bool IsSwap = false;
-	int RandomValues[3] = { 0, };
+	int RandomValues[7] = { 0, };
 
 	static USoundPlayer PlayGameModeBGM;
 	USoundPlayer Sound;

@@ -221,7 +221,7 @@ void ATheDukeOfFlies::Death(float _DeltaTime)
 		
 		for (int i = 0; i < 4; i++)
 		{
-			TimeEventer.PushEvent(1.0f + ( - 0.2 * i), [this, i]() {
+			TimeEventer.PushEvent(1.0f + ( - 0.2f * i), [this, i]() {
 				DamagedEffectRenderers[i]->SetActive(true); });
 		}
 

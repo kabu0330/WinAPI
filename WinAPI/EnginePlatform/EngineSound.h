@@ -13,16 +13,28 @@ public:
 
 	void On()
 	{
+		if (nullptr == Control)
+		{
+			return;
+		}
 		Control->setPaused(false);
 	}
 
 	void Off()
 	{
+		if (nullptr == Control)
+		{
+			return;
+		}
 		Control->setPaused(true);
 	}
 
 	void OnOffSwtich()
 	{
+		if (nullptr == Control)
+		{
+			return;
+		}
 		bool Check = false;
 		Control->getPaused(&Check);
 
@@ -38,12 +50,20 @@ public:
 
 	void Stop()
 	{
+		if (nullptr == Control)
+		{
+			return;
+		}
 		Control->stop();
 		Control = nullptr;
 	}
 
 	void SetVolume(float _Volume)
 	{
+		if (nullptr == Control)
+		{
+			return;
+		}
 		_Volume = UEngineMath::Clamp(_Volume, 0.0f, 1.0f);
 
 		Control->setVolume(_Volume);
@@ -51,6 +71,10 @@ public:
 
 	bool IsPlaying()
 	{
+		if (nullptr == Control)
+		{
+			return true;
+		}
 		bool Check = true;
 		Control->isPlaying(&Check);
 		return Check;
@@ -58,11 +82,19 @@ public:
 
 	void Loop(int Count = -1)
 	{
+		if (nullptr == Control)
+		{
+			return;
+		}
 		Control->setLoopCount(Count);
 	}
 
 	unsigned int LengthMs()
 	{
+		if (nullptr == SoundHandle)
+		{
+			return 0;
+		}
 		unsigned int ResultLength = 0;
 		SoundHandle->getLength(&ResultLength, FMOD_TIMEUNIT_MS);
 		return ResultLength;
@@ -70,6 +102,10 @@ public:
 
 	void SetPosition(unsigned int _Value)
 	{
+		if (nullptr == Control)
+		{
+			return;
+		}
 		Control->setPosition(_Value, FMOD_TIMEUNIT_MS);
 	}
 
