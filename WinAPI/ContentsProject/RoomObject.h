@@ -36,7 +36,7 @@ public:
 
 	void CollisionSetting();
 	void Blocker(AActor* _Actor);
-	void BlockPlayerCollision(class APlayer* _Player, FVector2D _Pos);
+	virtual void BlockPlayerCollision(class APlayer* _Player, FVector2D _Pos);
 	void BlockMonsterCollision(class AMonster* _Monster, FVector2D _Pos);
 	
 	// 파괴형 오브젝트

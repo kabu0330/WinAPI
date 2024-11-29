@@ -70,7 +70,7 @@ ABossIntroScene::ABossIntroScene()
 	float AnimationTime = 0.023f;
 	float SlowAnimTime = 0.3f;
 	VsRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	VsRenderer->CreateAnimation("Vs", "Vs", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 }, { AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, SlowAnimTime, SlowAnimTime, SlowAnimTime, SlowAnimTime, SlowAnimTime }, false);
+	VsRenderer->CreateAnimation("Vs", "Vs", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 }, { SlowAnimTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, AnimationTime, SlowAnimTime, SlowAnimTime, SlowAnimTime, SlowAnimTime, SlowAnimTime }, false);
 	VsRenderer->SetOrder(ERenderOrder::Loading);
 	VsRenderer->SetComponentScale(VsScale);
 	VsRenderer->SetComponentLocation({ Global::WindowHalfScale.X , Global::WindowSize.Y * 0.20f });

@@ -23,7 +23,7 @@ ADeathReportScene::ADeathReportScene()
 	ExitRenderer->SetOrder(ERenderOrder::Menu);
 	ExitRenderer->SetSprite("Exit.bmp");
 	ExitRenderer->SetSpriteScale(2.0f);
-	ExitRenderer->SetComponentLocation({ 95, 485 });
+	ExitRenderer->SetComponentLocation({ 95, 485 + 60});
 	ExitRenderer->SetActive(false);
 	ExitRenderer->SetCameraEffect(false);
 
@@ -31,7 +31,7 @@ ADeathReportScene::ADeathReportScene()
 	RestartRenderer->SetOrder(ERenderOrder::Menu);
 	RestartRenderer->SetSprite("Restart.bmp");
 	RestartRenderer->SetSpriteScale(2.0f);
-	RestartRenderer->SetComponentLocation({ 880, 480 });
+	RestartRenderer->SetComponentLocation({ 880, 480 + 60 });
 	RestartRenderer->SetActive(false);
 	RestartRenderer->SetCameraEffect(false);
 }

@@ -45,6 +45,7 @@
 #include "SpoonBender.h"
 #include "SpeedBall.h"
 #include "NumberOne.h"
+#include "ItemAlter.h"
 
 bool APlayGameMode::GamePaused = false;
 USoundPlayer APlayGameMode::PlayGameModeBGM;
@@ -154,10 +155,8 @@ void APlayGameMode::Spawn()
 	// Debug
 	BossRoom->SetRoomType(ERoomType::BOSS);
 	//BaseRoom->CreateItem<AInnerEye>(nullptr, { 100, 0 });
-	for (int i = 0; i < 5; i++)
-	{
-		BaseRoom->CreateItem<ABomb>(nullptr, { 110, -30 });
-	}
+
+
 
 	// TreasureRoom0
 	{
@@ -167,6 +166,7 @@ void APlayGameMode::Spawn()
 		ARoomObject* Fire3 = TreasureRoom0->CreateObject<AFire>(nullptr, { -310,  180 });
 		ARoomObject* Fire4 = TreasureRoom0->CreateObject<AFire>(nullptr, {  310, -180 });
 		ARoomObject* Fire5 = TreasureRoom0->CreateObject<AFire>(nullptr, {  310,  180 });
+		TreasureRoom0->CreateObject<AItemAlter>(nullptr, {0, 0});
 		SpawnRandomItem(TreasureRoom0);
 	}
 
@@ -174,6 +174,7 @@ void APlayGameMode::Spawn()
 	{
 		ARoomObject* Fire0 = TreasureRoom1->CreateObject<AFire>(nullptr, { 150, 0 });
 		ARoomObject* Fire1 = TreasureRoom1->CreateObject<AFire>(nullptr, { -150, 0 });
+		TreasureRoom1->CreateObject<AItemAlter>(nullptr, { 0, 0 });
 		SpawnRandomItem(TreasureRoom1);
 	}
 
@@ -185,6 +186,7 @@ void APlayGameMode::Spawn()
 		ARoomObject* Fire3 = TreasureRoom2->CreateObject<AFire>(nullptr, { -310,  180 });
 		ARoomObject* Fire4 = TreasureRoom2->CreateObject<AFire>(nullptr, { 310, -180 });
 		ARoomObject* Fire5 = TreasureRoom2->CreateObject<AFire>(nullptr, { 310,  180 });
+		TreasureRoom2->CreateObject<AItemAlter>(nullptr, { 0, 0 });
 		SpawnRandomItem(TreasureRoom2);
 	}
 
@@ -196,6 +198,7 @@ void APlayGameMode::Spawn()
 		ARoomObject* Fire3 = TreasureRoom3->CreateObject<AFire>(nullptr, { -310,  180 });
 		ARoomObject* Fire4 = TreasureRoom3->CreateObject<AFire>(nullptr, { 310, -180 });
 		ARoomObject* Fire5 = TreasureRoom3->CreateObject<AFire>(nullptr, { 310,  180 });
+		TreasureRoom3->CreateObject<AItemAlter>(nullptr, { 0, 0 });
 		SpawnRandomItem(TreasureRoom3);
 	}
 
@@ -203,6 +206,7 @@ void APlayGameMode::Spawn()
 	{
 		ARoomObject* Fire0 = TreasureRoom4->CreateObject<AFire>(nullptr, { 150, 0 });
 		ARoomObject* Fire1 = TreasureRoom4->CreateObject<AFire>(nullptr, { -150, 0 });
+		TreasureRoom4->CreateObject<AItemAlter>(nullptr, { 0, 0 });
 		SpawnRandomItem(TreasureRoom4);
 	}
 
@@ -210,6 +214,7 @@ void APlayGameMode::Spawn()
 	{
 		ARoomObject* Fire0 = TreasureRoom5->CreateObject<AFire>(nullptr, { 150, 0 });
 		ARoomObject* Fire1 = TreasureRoom5->CreateObject<AFire>(nullptr, { -150, 0 });
+		TreasureRoom5->CreateObject<AItemAlter>(nullptr, { 0, 0 });
 		SpawnRandomItem(TreasureRoom5);
 	}
 
@@ -217,28 +222,29 @@ void APlayGameMode::Spawn()
 	// MinionRoom0 
 	// MinionRoom1 : 플레이어 오른쪽 : 파리맵
 	{
-		//ARoomObject* Poop0 = MinionRoom1->CreateObject<APoop>(nullptr, { -310, 180 });
-		//Poop0->SetSprite("CORNY_POOP");
-		//ARoomObject* Poop1 = MinionRoom1->CreateObject<APoop>(nullptr, { -310, -190 });
-		//Poop1->SetSprite("CORNY_POOP");
-		//ARoomObject* Poop2 = MinionRoom1->CreateObject<APoop>(nullptr, { 310, 180 });
-		//Poop2->SetSprite("CORNY_POOP");
-		//ARoomObject* Poop3 = MinionRoom1->CreateObject<APoop>(nullptr, { 310, -190 });
-		//Poop3->SetSprite("CORNY_POOP");
-		//ARoomObject* Poop4 = MinionRoom1->CreateObject<APoop>(nullptr, { 0, 0 });
-		//Poop4->SetSprite("CORNY_POOP");
-		//ARoomObject* Poop5 = MinionRoom1->CreateObject<APoop>(nullptr, { -50, 50 });
-		//Poop5->SetSprite("GOLDEN_POOP");
-		//ARoomObject* Poop6 = MinionRoom1->CreateObject<APoop>(nullptr, { -50, -50 });
-		//Poop6->SetSprite("CORNY_POOP");
-		//ARoomObject* Poop7 = MinionRoom1->CreateObject<APoop>(nullptr, { -100, 0 });
-		//Poop7->SetSprite("CORNY_POOP");
-		//ARoomObject* Poop8 = MinionRoom1->CreateObject<APoop>(nullptr, { 50, -50 });
-		//Poop8->SetSprite("CORNY_POOP");
-		//ARoomObject* Poop9 = MinionRoom1->CreateObject<APoop>(nullptr, { 50, 50 });
-		//Poop9->SetSprite("CORNY_POOP");
-		//ARoomObject* Poop10 = MinionRoom1->CreateObject<APoop>(nullptr, { 100, 0 });
-		//Poop10->SetSprite("CORNY_POOP");
+		ARoomObject* Poop0 = MinionRoom1->CreateObject<APoop>(nullptr, { -310, 180 });
+		ARoomObject* Poop1 = MinionRoom1->CreateObject<APoop>(nullptr, { -310, -190 });
+		ARoomObject* Poop2 = MinionRoom1->CreateObject<APoop>(nullptr, { 310, 180 });
+		ARoomObject* Poop3 = MinionRoom1->CreateObject<APoop>(nullptr, { 310, -190 });
+		ARoomObject* Poop4 = MinionRoom1->CreateObject<APoop>(nullptr, { 0, 0 });
+		ARoomObject* Poop5 = MinionRoom1->CreateObject<APoop>(nullptr, { -50, 50 });
+		ARoomObject* Poop6 = MinionRoom1->CreateObject<APoop>(nullptr, { -50, -50 });
+		ARoomObject* Poop7 = MinionRoom1->CreateObject<APoop>(nullptr, { -100, 0 });
+		ARoomObject* Poop8 = MinionRoom1->CreateObject<APoop>(nullptr, { 50, -50 });
+		ARoomObject* Poop9 = MinionRoom1->CreateObject<APoop>(nullptr, { 50, 50 });
+		ARoomObject* Poop10 = MinionRoom1->CreateObject<APoop>(nullptr, { 100, 0 });
+
+		Poop0->SetSprite("CORNY_POOP");
+		Poop1->SetSprite("CORNY_POOP");
+		Poop2->SetSprite("CORNY_POOP");
+		Poop3->SetSprite("CORNY_POOP");
+		Poop4->SetSprite("CORNY_POOP");
+		Poop5->SetSprite("GOLDEN_POOP");
+		Poop6->SetSprite("CORNY_POOP");
+		Poop7->SetSprite("CORNY_POOP");
+		Poop8->SetSprite("CORNY_POOP");
+		Poop9->SetSprite("CORNY_POOP");
+		Poop10->SetSprite("CORNY_POOP");
 
 		//MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
 		//MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });

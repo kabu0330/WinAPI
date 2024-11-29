@@ -142,6 +142,9 @@
     <ClInclude Include="MetalBlock.h">
       <Filter>04_Play\MapObject</Filter>
     </ClInclude>
+    <ClInclude Include="ItemAlter.h">
+      <Filter>04_Play\MapObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -283,6 +286,9 @@
       <Filter>04_Play\Item\Passive</Filter>
     </ClCompile>
     <ClCompile Include="MetalBlock.cpp">
+      <Filter>04_Play\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemAlter.cpp">
       <Filter>04_Play\MapObject</Filter>
     </ClCompile>
   </ItemGroup>

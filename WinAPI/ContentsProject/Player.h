@@ -362,6 +362,10 @@ private:
 	std::list<class AItem*> Items;
 	//std::map<EItemType, std::list<class AItem*>> Items;
 
+	bool IsBombCheat = false;
+	float BombCooldown = 0.0f;
+	float BombDuration = 2.0f;
+
 	// 아이템으로 눈물 효과 변경을 위해서
 	AItem* PassiveItem = nullptr;
 	float TearSpeed = 0.0f;

@@ -236,6 +236,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="ItemAlter.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Key.h">
       <SubType>
       </SubType>
@@ -417,6 +421,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="Item.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="ItemAlter.cpp">
       <SubType>
       </SubType>
     </ClCompile>

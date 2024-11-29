@@ -22,11 +22,11 @@ AMetalBlock::AMetalBlock()
 	BodyRenderer->ChangeAnimation("METALBLOCKS");
 	BodyRenderer->SetActive(true);
 
-	BodyCollision = CreateDefaultSubObject<U2DCollision>();
-	BodyCollision->SetComponentLocation({ 0, 0 });
-	BodyCollision->SetComponentScale(BodyCollisionScale);
-	BodyCollision->SetCollisionGroup(ECollisionGroup::Object);
-	BodyCollision->SetCollisionType(ECollisionType::Rect);
+	//BodyCollision = CreateDefaultSubObject<U2DCollision>();
+	//BodyCollision->SetComponentLocation({ 0, 0 });
+	//BodyCollision->SetComponentScale(BodyCollisionScale);
+	//BodyCollision->SetCollisionGroup(ECollisionGroup::Object);
+	//BodyCollision->SetCollisionType(ECollisionType::Rect);
 
 	BlockingPathCollision = CreateDefaultSubObject<U2DCollision>();
 	BlockingPathCollision->SetComponentLocation(BlockingPathCollisionPivot);

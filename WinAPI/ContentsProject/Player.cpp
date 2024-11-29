@@ -54,6 +54,10 @@ void APlayer::BeginPlay()
 	UISetting();
 	CollisionFuctionSetting();
 
+	AItem* InitBomb = ARoom::GetCurRoom()->CreateItem<ABomb>(this);
+	Drop(InitBomb, 1);
+	
+	BombCooldown = 2.0f;
 }
 
 void APlayer::Tick(float _DeltaTime)
@@ -93,6 +97,8 @@ void APlayer::Tick(float _DeltaTime)
 	InputItem();
 	UpdateItemPos();
 	ChangeDetectCollisionDirection();
+
+	BombCooldown += _DeltaTime;
 }
 
 void APlayer::CollisionFuctionSetting()
@@ -121,19 +127,19 @@ void APlayer::ClampPositionToRoom()
 
 	if (LeftEdge > FootPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{1, 0});
+		SetActorLocation(Pos + FVector2D{3, 0});
 	}
 	if (RightEdge < FootPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{ -1, 0 });
+		SetActorLocation(Pos + FVector2D{ -3, 0 });
 	}
 	if (TopEdge > FootPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, 1 });
+		SetActorLocation(Pos + FVector2D{ 0, 3 });
 	}
 	if (BotEdge < FootPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, -1 });
+		SetActorLocation(Pos + FVector2D{ 0, -3 });
 	}
 }
 
@@ -333,7 +339,7 @@ void APlayer::DeathAnimation()
 {
 	if (false == IsResetReady)
 	{
-		APlayGameMode::GetPlayGameModeBGM().Stop();
+		UEngineSound::AllSoundStop();
 		Sound = UEngineSound::Play("isaac died_02.ogg");
 		Sound = UEngineSound::Play("isaac_dies_1.wav");
 
@@ -452,6 +458,11 @@ void APlayer::InputItem()
 	AItem* Item = nullptr;
 	if (UEngineInput::GetInst().IsDown('E'))
 	{
+		if (BombCooldown < BombDuration)
+		{
+			return;
+		}
+
 		Item = ReturnItem("Bomb");
 		if (nullptr != Item)
 		{
@@ -459,6 +470,8 @@ void APlayer::InputItem()
 
 			Items.remove(Item);
 		}
+
+		BombCooldown = 0.0f;
 	}
 }
 
@@ -1262,7 +1275,7 @@ void APlayer::ResetDebug()
 		SwitchInvincibility();
 	}
 
-	if (UEngineInput::GetInst().IsDown(VK_F3))
+	if (UEngineInput::GetInst().IsDown(VK_F5))
 	{
 		Reset();
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
@@ -1287,17 +1300,25 @@ void APlayer::UIDebug(float _DeltaTime)
 	{
 		Heart = 0;
 	}
-	if (UEngineInput::GetInst().IsDown('M'))
+	if (UEngineInput::GetInst().IsDown(VK_F2))
 	{
 		Heart = HeartMax;
 	}
-	if (UEngineInput::GetInst().IsDown('O'))
+	if (UEngineInput::GetInst().IsDown(VK_F3))
 	{
-	
+		Heart -= 1;
 	}
-	if (UEngineInput::GetInst().IsDown('P'))
+	if (UEngineInput::GetInst().IsDown('T'))
 	{
-
+		if (false == IsBombCheat) // µü 1¹ø¸¸ Àû¿ë
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				AItem* InitBomb = ARoom::GetCurRoom()->CreateItem<ABomb>(this);
+				Drop(InitBomb, 1);
+			}
+			IsBombCheat = true;
+		}
 	}
 	if (UEngineInput::GetInst().IsDown('L'))
 	{

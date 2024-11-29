@@ -13,7 +13,6 @@
 
 ARoomObject::ARoomObject()
 {
-
 	DebugOn();
 }
 
