@@ -13,7 +13,7 @@
 
 ARoomObject::ARoomObject()
 {
-	//DebugOn();
+	DebugOn();
 }
 
 void ARoomObject::BeginPlay()
@@ -24,10 +24,7 @@ void ARoomObject::BeginPlay()
 
 void ARoomObject::Tick(float _DeltaTime)
 {
-	if (true == IsDeath())
-	{
-		return;
-	}
+
 	// 플레이어와 다른 맵이면 리턴
 	ARoom* PlayerCurRoom = ARoom::GetCurRoom();
 	if (PlayerCurRoom != ParentRoom) 
@@ -42,13 +39,17 @@ void ARoomObject::Tick(float _DeltaTime)
 
 	Super::Tick(_DeltaTime);
 
-	DestroyCollision(); // 충돌체를 파괴해야하는 경우
 	SwitchAnimation(); // 눈물, 폭탄 등과 상호작용해서 이미지가 바뀌어야 하는 경우
 	ChangeRenderOrder(); // 렌더 이미지 크기와 충돌 범위가 차이가 날 경우, 차이나는 상단의 렌더 순서를 변경하여 플레이가 뒤에 그려지도록 변경
 }
 
 void ARoomObject::ChangeRenderOrder()
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
+
 	if (nullptr == BodyRenderer)
 	{
 		return;
@@ -144,6 +145,7 @@ int ARoomObject::ApplyDamaged(AActor* _Actor)
 		if (Hp <= 0)
 		{
 			Hp = 0;
+			DestroyCollision();
 		}
 		return Hp;
 	}
@@ -165,11 +167,12 @@ int ARoomObject::ApplyDamaged(AActor* _Actor)
 
 void ARoomObject::SwitchAnimation()
 {
+	this;
 	if (false == IsTearDamageable)
 	{
 		return;
 	}
-	if ("true" == ObjectName)
+	if ("" == ObjectName)
 	{
 		return;
 	}
@@ -214,10 +217,6 @@ void ARoomObject::SwitchAnimation()
 
 void ARoomObject::DestroyCollision()
 {
-	if (false == IsDeath())
-	{
-		return;
-	}
 	if (nullptr == BodyCollision)
 	{
 		return;
@@ -238,6 +237,7 @@ void ARoomObject::DestroyCollision()
 
 bool ARoomObject::IsDeath()
 {
+	this;
 	if (0 >= Hp)
 	{
 		IsDead = true;
