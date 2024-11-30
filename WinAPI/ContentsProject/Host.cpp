@@ -70,6 +70,10 @@ void AHost::Tick(float _DeltaTime)
 	
 	if (false == IsAttacking()) // 공격 중이 아니면 바디는 숨겨줘
 	{
+		if (nullptr == BodyCollision)
+		{
+			return;
+		}
 		BodyCollision->SetActive(false);
 	}
 	if (true == IsDeath())

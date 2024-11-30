@@ -12,8 +12,8 @@ APooter::APooter()
 	/* 이름     : */ SetName("Pooter");
 	/* 체력     : */ SetHp(14);
 	/* 공격력   : */ SetAtt(1);
-	/* 이동속도 : */ SetMoveSpeed(5);
-	/* 이동시간 : */ SetMoveDuration(0.0f);
+	/* 이동속도 : */ SetMoveSpeed(10);
+	/* 이동시간 : */ SetMoveDuration(1.0f);
 	/* 정지시간 : */ SetMoveCooldown(1.0f);
 	/* 탐색범위 : */ SetDetectRange({ 600 , 600 });
 	/* 발사속도 : */ SetShootingSpeed(350.0f);

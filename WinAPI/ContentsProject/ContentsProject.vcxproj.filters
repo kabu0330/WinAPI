@@ -145,6 +145,12 @@
     <ClInclude Include="ItemAlter.h">
       <Filter>04_Play\MapObject</Filter>
     </ClInclude>
+    <ClInclude Include="GridPit.h">
+      <Filter>04_Play\MapObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Muligan.h">
+      <Filter>04_Play\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -290,6 +296,12 @@
     </ClCompile>
     <ClCompile Include="ItemAlter.cpp">
       <Filter>04_Play\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GridPit.cpp">
+      <Filter>04_Play\MapObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Muligan.cpp">
+      <Filter>04_Play\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

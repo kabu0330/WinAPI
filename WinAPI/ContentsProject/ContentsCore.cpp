@@ -71,6 +71,8 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("Pooter_Left.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("Pooter_Right.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("duke.png", 2, 2);
+	UImageManager::GetInst().CuttingSprite("monster_054_mulligan_left.png", 6, 2);
+	UImageManager::GetInst().CuttingSprite("monster_054_mulligan_right.png", 6, 2);
 
 	// MonsterEffect
 	UImageManager::GetInst().CuttingSprite("effect_bloodpoof.png", 4, 4);
@@ -87,6 +89,7 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("effect_bloodpool.png", 4, 6);
 	UImageManager::GetInst().CuttingSprite("effect_030_bloodgibs.png", 4, 4);
 	UImageManager::GetInst().CuttingSprite("effect_poopgibs.png", 4, 2);
+	UImageManager::GetInst().CuttingSprite("grid_pit.png", 4, 9);
 
 	// Item
 	UImageManager::GetInst().CuttingSprite("bomb.png", 5, 6);

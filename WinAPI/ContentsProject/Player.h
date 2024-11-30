@@ -53,19 +53,19 @@ public:
 	void CollisionSetting();
 	void CollisionFuctionSetting();
 	void SpriteSetting();
-	void CurStateAnimation(float _DeltaTime);
+	void CurStateAnimation(const float& _DeltaTime);
 	void UISetting();
-	void UITick(float _DeltaTime);
+	void UITick(const float& _DeltaTime);
 	void ResetDebug();
 	void PlayerLimit();
 
 	// Debug
-	void PlayerDebugSetting(float _DeltaTime);
-	void UIDebug(float _DeltaTime);
+	void PlayerDebugSetting(const float& _DeltaTime);
+	void CheatKey(const float& _DeltaTime);
 
 
 	// 이동관련
-	void Move(float _DeltaTime);
+	void Move(const float& _DeltaTime);
 	bool ProcessMovementInput();
 	void UpdateHeadState();
 	bool HasMovementInput();
@@ -81,7 +81,7 @@ public:
 
 	void ClampPositionToRoom();
 	void IsCameraMove();
-	void CameraPosMove(float _DeltaTime);
+	void CameraPosMove(const float& _DeltaTime);
 	U2DCollision* GetWarpCollision()
 	{
 		return WarpCollision;
@@ -89,8 +89,8 @@ public:
 
 
 	// 공격 및 피격
-	void InputAttack(float _DeltaTime); // 입력 함수
-	void Attack(float _DeltaTime); // 실제 공격정보를 Tear로 넘기는 함수
+	void InputAttack(const float& _DeltaTime); // 입력 함수
+	void Attack(const float& _DeltaTime); // 실제 공격정보를 Tear로 넘기는 함수
 
 	bool IsAttack() const
 	{
@@ -100,15 +100,15 @@ public:
 	{
 		return CurAttackHeadDir;
 	}
-	void SetAttackDir(UpperState _HeadState);
+	void SetAttackDir(const UpperState& _HeadState);
 
-	int ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir);
+	int ApplyDamaged(AActor* _Player, const int& _Att, const FVector2D& _Dir);
 	void ShowHitAnimation(AActor* _Other);
 	void RestoreDefaultMotion();
 	void BeginBlinkEffect();
 	void StayBlinkEffect();
 
-	void SetInvincible(bool _OnOff)
+	void SetInvincible(const bool& _OnOff)
 	{
 		Invincibility = _OnOff;
 	}
@@ -127,7 +127,7 @@ public:
 	}
 
 	template<typename EnumType>
-	void SetRendererDir(EnumType _Dir)
+	void SetRendererDir(const EnumType& _Dir)
 	{
 		int Direction = static_cast<int>(_Dir);
 		HeadState = static_cast<UpperState>(Direction);
@@ -137,7 +137,7 @@ public:
 
 	// 사망, 일시정지, 재시작 관련
 	bool IsDeath();
-	void Death(float _DeltaTime);
+	void Death(const float& _DeltaTime);
 	void DeathAnimation();
 	void SpiritAnimation();
 	void ShowDeathReport();
@@ -150,7 +150,7 @@ public:
 	{
 		return HeartMax;
 	}
-	static void AddHpMax(int _Value)
+	static void AddHpMax(const int& _Value)
 	{
 		HeartMax += _Value;
 	}
@@ -160,7 +160,7 @@ public:
 		return Att;
 	}
 
-	int AddAtt(int _Value)
+	int AddAtt(const int& _Value)
 	{
 		return Att += _Value;
 	}
@@ -169,7 +169,7 @@ public:
 	{
 		return Heart;
 	}
-	void AddHp(int _Value)
+	void AddHp(const int& _Value)
 	{
 		if (Heart >= HeartMax)
 		{
@@ -182,11 +182,11 @@ public:
 	{
 		return MaxSpeed;
 	}
-	void AddMaxSpeed(float _Value)
+	void AddMaxSpeed(const float& _Value)
 	{
 		MaxSpeed += _Value;
 	}
-	void SetDir(FVector2D _Dir)
+	void SetDir(const FVector2D& _Dir)
 	{
 		Direction = _Dir;
 	}
@@ -201,16 +201,16 @@ public:
 		return Force;
 	}
 
-	void SetForce(FVector2D _Force)
+	void SetForce(const FVector2D& _Force)
 	{
 		Force = _Force;
 	}
 
-	void ReverseForce(float _DeltaTime);
+	void ReverseForce(const float& _DeltaTime);
 
 
 	// 아이템
-	bool Drop(class AItem* _Item, int _Count);
+	bool Drop(class AItem* _Item, const int& _Count);
 	int CheckPickupItemCount(std::string_view _ItemName);
 	AItem* ReturnItem(std::string_view _ItemName);
 
@@ -267,7 +267,7 @@ public:
 	{
 		return TearSpeed;
 	}
-	void AddTearSpeed(float _TearSpeed)
+	void AddTearSpeed(const float& _TearSpeed)
 	{
 		TearSpeed += _TearSpeed;
 	}
@@ -275,7 +275,7 @@ public:
 	{
 		return TearDuration;
 	}
-	void AddTearDuration(float _TearDuration)
+	void AddTearDuration(const float& _TearDuration)
 	{
 		TearDuration += _TearDuration;
 	}
@@ -284,7 +284,7 @@ public:
 	{
 		return TearScale;
 	}
-	void AddTearScale(FVector2D _Scale)
+	void AddTearScale(const FVector2D& _Scale)
 	{
 		TearScale = _Scale;
 	}
@@ -293,7 +293,7 @@ public:
 	{
 		return TearCooldown;
 	}
-	void AddTearCooldown(float _TearCooldown)
+	void AddTearCooldown(const float& _TearCooldown)
 	{
 		TearCooldown -= _TearCooldown;
 	}

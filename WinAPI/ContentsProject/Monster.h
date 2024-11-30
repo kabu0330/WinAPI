@@ -18,6 +18,11 @@ enum class MonsterState
 	ATTCK_RIGHT,
 	ATTCK_UP,
 	ATTCK_DOWN,
+	RUNAWAY_NONE, // +-5 하면 방향이 맞다.
+	RUNAWAY_LEFT,
+	RUNAWAY_RIGHT,
+	RUNAWAY_UP,
+	RUNAWAY_DOWN,
 	MAX
 };
 
@@ -57,7 +62,7 @@ public:
 	virtual void Death(float _DeltaTime);
 	virtual void CreateGib();
 
-	int ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir); // 피격
+	virtual int ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir); // 피격
 	void KnockbackTick();
 
 	virtual void SpawnAnimation();

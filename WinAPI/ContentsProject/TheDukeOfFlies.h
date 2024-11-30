@@ -31,6 +31,8 @@ public:
 	void ClampPositionToRoom() override;
 	void BeginBlinkEffect() override;
 
+	int ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir) override;
+
 	// 인트로
 	void DisplayBossIntro();
 	void SpawnAnimation() override;
@@ -84,7 +86,7 @@ private:
 	// 패턴 1 : SummonFlies
 	std::list<AMonster*> Flies; // 내가 소환한 파리들
 	int MaxFlyCount = 0;
-	float SummonCooldownDuration = 4.0f;
+	float SummonCooldownDuration = 4.5f;
 
 	// 패턴 2 : BlowAway
 	int BlowAwayTriggerValue = 0; // 스킬 발동 조건을 지정할 변수

@@ -25,6 +25,7 @@
 #include "Host.h"
 #include "Dip.h"
 #include "Pooter.h"
+#include "Muligan.h"
 #include "TheDukeOfFlies.h"
 
 #include "RoomObject.h"
@@ -46,6 +47,7 @@
 #include "SpeedBall.h"
 #include "NumberOne.h"
 #include "ItemAlter.h"
+#include "GridPit.h"
 
 bool APlayGameMode::GamePaused = false;
 USoundPlayer APlayGameMode::PlayGameModeBGM;
@@ -90,13 +92,14 @@ void APlayGameMode::Spawn()
 	// 현재 맵 초기 세팅
 	ARoom::SetCurRoom(BaseRoom);
 
-	BaseRoom->SetRoomType(ERoomType::BASE);
+	     BaseRoom->SetRoomType(ERoomType::BASE);
 	TreasureRoom0->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom1->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom2->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom3->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom4->SetRoomType(ERoomType::TREASURE);
 	TreasureRoom5->SetRoomType(ERoomType::TREASURE);
+	     BossRoom->SetRoomType(ERoomType::BOSS);
 
 	BaseRoom->SetName("BaseRoom");
 	TreasureRoom0->SetName("TreasureRoom0");
@@ -121,7 +124,6 @@ void APlayGameMode::Spawn()
 	BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::LEFT);
 	BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::RIGHT);
 	BaseRoom->InterLinkRoom(BossRoom, RoomDir::DOWN);
-	BossRoom->CreateMonster<ATheDukeOfFlies>({ -150, 0 });
 
 	// Left Root
 	MinionRoom1->InterLinkRoom(MinionRoom0, RoomDir::UP);
@@ -138,7 +140,7 @@ void APlayGameMode::Spawn()
 	MinionRoom7->InterLinkRoom(TreasureRoom3, RoomDir::DOWN);
 	MinionRoom7->InterLinkRoom(BossRoom, RoomDir::UP);
 
-	MinionRoom9->InterLinkRoom(TreasureRoom4, RoomDir::LEFT);
+	MinionRoom9->InterLinkRoom(TreasureRoom4, RoomDir::DOWN);
 
 	// Right Root
 	MinionRoom2->InterLinkRoom(MinionRoom4, RoomDir::DOWN);
@@ -153,9 +155,35 @@ void APlayGameMode::Spawn()
 
 
 	// Debug
-	BossRoom->SetRoomType(ERoomType::BOSS);
-	//BaseRoom->CreateItem<AInnerEye>(nullptr, { 100, 0 });
+	//BaseRoom->CreateObject<AGridPit>(nullptr, { 100, 100 });
+	BaseRoom->CreateMonster<AMuligan>({ 100, 100 });
 
+	// 중앙
+	ARoomObject* Object0 = BaseRoom->CreateObject<ARock>(nullptr, { -50, -50 });
+	ARoomObject* Object1 = BaseRoom->CreateObject<ARock>(nullptr, { -50, 0 });
+	ARoomObject* Object2 = BaseRoom->CreateObject<ARock>(nullptr, { -50, 50 });
+	ARoomObject* Object3 = BaseRoom->CreateObject<ARock>(nullptr, { 0, -50 });
+	ARoomObject* Object4 = BaseRoom->CreateObject<ARock>(nullptr, { 0, 50 });
+	ARoomObject* Object5 = BaseRoom->CreateObject<ARock>(nullptr, { 50, -50 });
+	ARoomObject* Object6 = BaseRoom->CreateObject<ARock>(nullptr, { 50, 0 });
+	ARoomObject* Object7 = BaseRoom->CreateObject<ARock>(nullptr, { 50, 50 });
+	ARoomObject* Object8 = BaseRoom->CreateObject<ARock>(nullptr, {  -150, -120 });
+	ARoomObject* Object9 = BaseRoom->CreateObject<ARock>(nullptr, {   150, 120 });
+	ARoomObject* Object10 = BaseRoom->CreateObject<ARock>(nullptr, {  150, -120 });
+	ARoomObject* Object11 = BaseRoom->CreateObject<ARock>(nullptr, { -150, 120 });
+	ARoomObject* Object12 = BaseRoom->CreateObject<ARock>(nullptr, { -200, 10 });
+	ARoomObject* Object13 = BaseRoom->CreateObject<ARock>(nullptr, {  200, 10 });
+	ARoomObject* Object14 = BaseRoom->CreateObject<ARock>(nullptr, {  -310, -180 });
+	ARoomObject* Object15 = BaseRoom->CreateObject<ARock>(nullptr, {  -310, 180 });
+	ARoomObject* Object16 = BaseRoom->CreateObject<ARock>(nullptr, {  310, -180 });
+	ARoomObject* Object17 = BaseRoom->CreateObject<ARock>(nullptr, {  310, 180 });
+	Object1->SetSprite("TINTEDROCKS1");
+	Object7->SetSprite("TINTEDROCKS1");
+	Object8->SetSprite("TINTEDROCKS2");
+	Object9->SetSprite("TINTEDROCKS5");
+	Object14->SetSprite("TINTEDROCKS1");
+	Object15->SetSprite("TINTEDROCKS2");
+	Object16->SetSprite("TINTEDROCKS4");
 
 
 	// TreasureRoom0
@@ -246,29 +274,30 @@ void APlayGameMode::Spawn()
 		Poop9->SetSprite("CORNY_POOP");
 		Poop10->SetSprite("CORNY_POOP");
 
-		//MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
-		//MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });
-		//MinionRoom1->CreateMonster<AAttackFly>({ 0, 70 });
-		//MinionRoom1->CreateMonster<AAttackFly>({ 0, 0 });
-		//MinionRoom1->CreateMonster<AFly>({ -50, -50 });
-		//MinionRoom1->CreateMonster<AFly>({ -100, -10 });
-		//MinionRoom1->CreateMonster<AFly>({ -50, 40 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, 70 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, 0 });
+		MinionRoom1->CreateMonster<AFly>({ -50, -50 });
+		MinionRoom1->CreateMonster<AFly>({ -100, -10 });
+		MinionRoom1->CreateMonster<AFly>({ -50, 40 });
 
 	}
 
 	// MinionRoom3 : 플레이어 위쪽
 	{
-		//ARoomObject* Object0 = MinionRoom3->CreateObject<ARock>(nullptr, { -180, 100 });
-		//Object0->SetSprite("TINTEDROCKS1");
-		//ARoomObject* Object1 = MinionRoom3->CreateObject<ARock>(nullptr, { 180, 100 });
-		//Object1->SetSprite("TINTEDROCKS2");
-		//ARoomObject* Object2 = MinionRoom3->CreateObject<ARock>(nullptr, { -180, -100 });
-		//ARoomObject* Object3 = MinionRoom3->CreateObject<ARock>(nullptr, { 180, -100 });
-		//MinionRoom3->CreateMonster<AHost>({ 220, 50 });
-		//MinionRoom3->CreateMonster<AHost>({ 0, 150 });
-		//MinionRoom3->CreateMonster<AHost>({ -220, 50 });
-		//MinionRoom3->CreateMonster<AAttackFly>({ -150, 80 });
-		//MinionRoom3->CreateMonster<AAttackFly>({ 150, 80 });		
+		ARoomObject* Object0 = MinionRoom3->CreateObject<ARock>(nullptr, { -180, 100 });
+		ARoomObject* Object1 = MinionRoom3->CreateObject<ARock>(nullptr, { 180, 100 });
+		ARoomObject* Object2 = MinionRoom3->CreateObject<ARock>(nullptr, { -180, -100 });
+		ARoomObject* Object3 = MinionRoom3->CreateObject<ARock>(nullptr, { 180, -100 });
+		Object0->SetSprite("TINTEDROCKS1");
+		Object1->SetSprite("TINTEDROCKS2");
+
+		MinionRoom3->CreateMonster<AHost>({ 220, 50 });
+		MinionRoom3->CreateMonster<AHost>({ 0, 150 });
+		MinionRoom3->CreateMonster<AHost>({ -220, 50 });
+		MinionRoom3->CreateMonster<AAttackFly>({ -150, 80 });
+		MinionRoom3->CreateMonster<AAttackFly>({ 150, 80 });		
 	}
 
 	// MinionRoom6
@@ -379,6 +408,8 @@ void APlayGameMode::Spawn()
 		Object13->SetSprite("TINTEDROCKS1");
 		Object23->SetSprite("TINTEDROCKS1");
 		Object33->SetSprite("TINTEDROCKS1");
+
+		BossRoom->CreateMonster<ATheDukeOfFlies>({ -100, 0 });
 	}
 	
 }

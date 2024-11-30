@@ -463,6 +463,39 @@ void ATheDukeOfFlies::BeginBlinkEffect()
 	TimeEventer.PushEvent(0.5f, std::bind_front(&AMonster::OffDamagedEffect, this));
 }
 
+int ATheDukeOfFlies::ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir)
+{
+	AMonster* Monster = dynamic_cast<AMonster*>(_Monster);
+	if (nullptr == Monster)
+	{
+		return 0;
+	}
+	else if (true == Monster->IsInvincible()) // 무적이면 리턴
+	{
+		return Hp;
+	}
+
+	if (true == Monster->IsDeath())
+	{
+		return 0;
+	}
+
+	DamagedEffectRenderer->SetActive(true);
+	DamagedEffectRenderer->ChangeAnimation("DamagedEffect");
+	BeginBlinkEffect();
+
+	IsHit = true;
+
+	TimeEventer.PushEvent(KnockbackDuration, std::bind(&AMonster::SwitchIsHit, this));
+
+	Hp -= _PlayerAtt;
+	if (Hp < 0)
+	{
+		Hp = 0;
+	}
+	return Hp;
+}
+
 void ATheDukeOfFlies::RemoveFlies()
 {
 	std::list<AMonster*>::iterator StartIter = Flies.begin();

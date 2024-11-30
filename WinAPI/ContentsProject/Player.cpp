@@ -26,6 +26,7 @@
 #include "Heart.h"
 #include "Bomb.h"
 #include "Key.h"
+#include "InnerEye.h"
 
 int APlayer::Heart = 6;
 int APlayer::HeartMax = 8;	
@@ -118,7 +119,7 @@ void APlayer::ClampPositionToRoom()
 	FVector2D RoomPos = CurRoom->GetActorLocation();
 	FVector2D RoomScale = CurRoom->GetActorScale().Half();
 	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2.0f;
-	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 2.0f;
+	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 1.95f;
 
 	float LeftEdge = RoomPos.X - RoomScale.X - RoomSizeOffsetX;
 	float RightEdge = RoomPos.X + RoomScale.X + RoomSizeOffsetX;
@@ -127,24 +128,24 @@ void APlayer::ClampPositionToRoom()
 
 	if (LeftEdge > FootPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{3, 0});
+		SetActorLocation(Pos + FVector2D{2, 0});
 	}
 	if (RightEdge < FootPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{ -3, 0 });
+		SetActorLocation(Pos + FVector2D{ -2, 0 });
 	}
 	if (TopEdge > FootPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, 3 });
+		SetActorLocation(Pos + FVector2D{ 0, 2 });
 	}
 	if (BotEdge < FootPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, -3 });
+		SetActorLocation(Pos + FVector2D{ 0, -2 });
 	}
 }
 
 // 데미지 처리, 무적 및 애니메이션 출력 함수
-int APlayer::ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir)
+int APlayer::ApplyDamaged(AActor* _Player, const int& _Att, const FVector2D& _Dir)
 {
 	if (true == IsHit)
 	{
@@ -189,7 +190,7 @@ int APlayer::ApplyDamaged(AActor* _Player, int _Att, FVector2D _Dir)
 	return Heart;
 }
 
-void APlayer::ReverseForce(float _DeltaTime)
+void APlayer::ReverseForce(const float& _DeltaTime)
 {
 	FVector2D Reverse = -Force;
 	Reverse.Normalize();
@@ -276,7 +277,7 @@ void APlayer::StayBlinkEffect()
 	TimeEventer.PushEvent(0.1f, std::bind(&APlayer::BeginBlinkEffect, this));
 }
 
-void APlayer::UITick(float _DeltaTime)
+void APlayer::UITick(const float& _DeltaTime)
 {
 	  PlayerHpToHeart->SetPlayerHp(Heart);
 	PennyPickupNumber->SetValue(CheckPickupItemCount("Penny"));
@@ -319,7 +320,7 @@ bool APlayer::IsDeath()
 	return false;
 }
 
-void APlayer::Death(float _DeltaTime)
+void APlayer::Death(const float& _DeltaTime)
 {
 	if (false == IsDeath())
 	{
@@ -422,7 +423,7 @@ void APlayer::Reset()
 	Direction = FVector2D::ZERO;
 }
 
-bool APlayer::Drop(AItem* _Item, int _Count)
+bool APlayer::Drop(AItem* _Item, const int& _Count)
 {
 	// 아이템 먹었는데 플레이어와 상호작용을 할 수 없는 상황이면 false 반환
 	if (false == _Item->EatFunction(this))
@@ -616,7 +617,7 @@ AItem* APlayer::ReturnItem(std::string_view _ItemName)
 	return nullptr;
 }
 
-void APlayer::Move(float _DeltaTime)
+void APlayer::Move(const float& _DeltaTime)
 {
 	if (true == IsMovementStopped) // 방 이동을 중에 캐릭터는 움직일 수 없다.
 	{
@@ -800,7 +801,7 @@ bool APlayer::HasMovementInput()
 		   UEngineInput::GetInst().IsPress('S');
 }
 
-void APlayer::CameraPosMove(float _DeltaTime)
+void APlayer::CameraPosMove(const float& _DeltaTime)
 {
 	if (UEngineInput::GetInst().IsPress('H') ||
 		UEngineInput::GetInst().IsPress('K') ||
@@ -864,7 +865,7 @@ void APlayer::IsCameraMove()
 	}
 }
 
-void APlayer::InputAttack(float _DeltaTime)
+void APlayer::InputAttack(const float& _DeltaTime)
 {
 	// 공격 입력이 처음 들어왔을 때 동작
 	if (false == TearFire &&
@@ -899,7 +900,7 @@ void APlayer::InputAttack(float _DeltaTime)
 	}
 }
 
-void APlayer::Attack(float _DeltaTime)
+void APlayer::Attack(const float& _DeltaTime)
 {
 	TearFire = true; // true일 때, Cooldown시간 동안 Attack 함수가 호출될 수 없다.
 
@@ -909,6 +910,7 @@ void APlayer::Attack(float _DeltaTime)
 	TearDir = FVector2D::ZERO;
 
 	// 눈물이 좌/우로 번갈아 발사되는 디테일을 위해 Pos를 한번 더 조정한다.
+	int LRPos = 20;
 	if (UEngineInput::GetInst().IsPress(VK_LEFT))
 	{
 		TearDir = FVector2D::LEFT;
@@ -917,13 +919,13 @@ void APlayer::Attack(float _DeltaTime)
 		if (true == LeftFire)
 		{
 			Sound = UEngineSound::Play("tear_fire_4.wav");
-			TearPos = TearPos + FVector2D{ -15, -3 };
+			TearPos = TearPos + FVector2D{ -LRPos, -3 };
 			LeftFire = false;
 		}
 		else if (false == LeftFire)
 		{
 			Sound = UEngineSound::Play("tear_fire_5.wav");
-			TearPos = TearPos + FVector2D{ -15, 3 };
+			TearPos = TearPos + FVector2D{ -LRPos, 3 };
 			LeftFire = true;
 		}
 	}
@@ -935,13 +937,13 @@ void APlayer::Attack(float _DeltaTime)
 		if (true == LeftFire)
 		{
 			Sound = UEngineSound::Play("tear_fire_4.wav");
-			TearPos = TearPos + FVector2D{ +15, -3 };
+			TearPos = TearPos + FVector2D{ +LRPos, -3 };
 			LeftFire = false;
 		}
 		else if (false == LeftFire)
 		{
 			Sound = UEngineSound::Play("tear_fire_5.wav");
-			TearPos = TearPos + FVector2D{ +15, 3 };
+			TearPos = TearPos + FVector2D{ +LRPos, 3 };
 			LeftFire = true;
 		}
 	}
@@ -953,13 +955,13 @@ void APlayer::Attack(float _DeltaTime)
 		if (true == LeftFire)
 		{
 			Sound = UEngineSound::Play("tear_fire_4.wav");
-			TearPos = TearPos + FVector2D{ -7, -15 };
+			TearPos = TearPos + FVector2D{ -7, -LRPos };
 			LeftFire = false;
 		}
 		else if (false == LeftFire)
 		{
 			Sound = UEngineSound::Play("tear_fire_5.wav");
-			TearPos = TearPos + FVector2D{ +7, -15 };
+			TearPos = TearPos + FVector2D{ +7, -LRPos };
 			LeftFire = true;
 		}
 	}
@@ -1019,7 +1021,7 @@ void APlayer::Attack(float _DeltaTime)
 	SetAttackDir(HeadState);
 }
 
-void APlayer::SetAttackDir(UpperState _HeadState)
+void APlayer::SetAttackDir(const UpperState& _HeadState)
 {
 	// 공격 중이 아니라면 Head의 State를 수정할 이유가 없다.
 	if (false == TearFire)
@@ -1175,7 +1177,7 @@ void APlayer::SpiritFadeOut()
 	TimeEventer.PushEvent(3.0f, std::bind(&APlayer::FadeChange, this), true, false);
 }
 
-void APlayer::CurStateAnimation(float _DeltaTime)
+void APlayer::CurStateAnimation(const float& _DeltaTime)
 {
 	if (true == IsDead) // 죽었으면 리턴
 	{
@@ -1256,10 +1258,10 @@ void APlayer::CurStateAnimation(float _DeltaTime)
 	}
 }
 
-void APlayer::PlayerDebugSetting(float _DeltaTime)
+void APlayer::PlayerDebugSetting(const float& _DeltaTime)
 {
 	//CameraPosMove(_DeltaTime);
-	UIDebug(_DeltaTime);
+	CheatKey(_DeltaTime);
 	ResetDebug();
 
 	UEngineDebug::CoreOutPutString("FinalSpeed : " + FinalSpeed.ToString());
@@ -1290,7 +1292,7 @@ void APlayer::PlayerLimit()
 	}
 }
 
-void APlayer::UIDebug(float _DeltaTime)
+void APlayer::CheatKey(const float& _DeltaTime)
 {
 	if (true == IsDeath())
 	{
@@ -1320,8 +1322,8 @@ void APlayer::UIDebug(float _DeltaTime)
 			IsBombCheat = true;
 		}
 	}
-	if (UEngineInput::GetInst().IsDown('L'))
+	if (UEngineInput::GetInst().IsDown(VK_F7))
 	{
-
+		ARoom::GetCurRoom()->CreateItem<AInnerEye>(this, {50, -20});
 	}
 }

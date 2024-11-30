@@ -327,8 +327,8 @@ void AMonster::ClampPositionToRoom()
 	ARoom* CurRoom = ParentRoom;
 	FVector2D RoomPos = CurRoom->GetActorLocation();
 	FVector2D RoomScale = CurRoom->GetActorScale().Half();
-	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2;
-	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 2;
+	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 1.95f;
+	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 1.8f;
 
 	float LeftEdge = RoomPos.X - RoomScale.X - RoomSizeOffsetX;
 	float RightEdge = RoomPos.X + RoomScale.X + RoomSizeOffsetX;
@@ -663,9 +663,13 @@ void AMonster::SpawnFadeOut()
 // 디버깅용 치트키
 void AMonster::MonsterInputDebug()
 {
-	if (UEngineInput::GetInst().IsDown('F'))
+	if (UEngineInput::GetInst().IsDown('H'))
 	{
-		Hp = 0;
+		if (ParentRoom == ARoom::GetCurRoom())
+		{
+			Hp = 0;
+		}
+		
 	}
 }
 
