@@ -221,7 +221,8 @@ void ATheDukeOfFlies::Death(float _DeltaTime)
 		UEngineSound::AllSoundStop();
 		DeathSound = UEngineSound::Play("boss_fight jingle_outro_v2_12.ogg");
 		TimeEventer.PushEvent(15.0f, []() {
-			APlayGameMode::GetPlayGameModeBGM() = UEngineSound::Play("diptera_sonata_basement.ogg"); });
+			APlayGameMode::GetPlayGameModeBGM() = UEngineSound::Play("diptera_sonata_basement.ogg"); 
+			APlayGameMode::GetPlayGameModeBGM().Loop(999); });
 		
 		for (int i = 0; i < 4; i++)
 		{

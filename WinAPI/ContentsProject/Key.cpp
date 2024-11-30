@@ -33,6 +33,8 @@ void AKey::BeginPlay()
 {
 	Super::BeginPlay();
 	AItem::BeginPlay();
+
+	Sound = UEngineSound::Play("keyDrop.wav");
 }
 
 void AKey::Tick(float _DeltaTime)

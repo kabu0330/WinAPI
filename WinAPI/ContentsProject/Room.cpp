@@ -654,7 +654,8 @@ void ARoom::Sounds()
 
 			TimeEventer.PushEvent(4.5f, []() {
 			APlayGameMode::GetPlayGameModeBGM().Stop();
-			APlayGameMode::GetPlayGameModeBGM() = UEngineSound::Play("diptera_sonata_basement.ogg"); });
+			APlayGameMode::GetPlayGameModeBGM() = UEngineSound::Play("diptera_sonata_basement.ogg"); 
+			APlayGameMode::GetPlayGameModeBGM().Loop(999); });
 			
 			IsTreasureRoomEnterance = true;
 			return;

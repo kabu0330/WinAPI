@@ -11,7 +11,7 @@ APenny::APenny()
 	ItemType = EItemType::USE;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	DropRenderer->CreateAnimation("Appearance", "penny.png", 7, 13, 0.2f, false);
+	DropRenderer->CreateAnimation("Appearance", "penny.png", 7, 13, 0.1f, false);
 	DropRenderer->CreateAnimation("Drop", "penny.png", 0, 5, 0.3f);
 	DropRenderer->CreateAnimation("DropEffect", "penny.png", 14, 23, 0.1f, false);
 	DropRenderer->SetComponentLocation({ 0, 0 });
@@ -36,6 +36,7 @@ void APenny::BeginPlay()
     Super::BeginPlay();
     AItem::BeginPlay();
 	TimeEventer.PushEvent(1.0f, [this]() {DropRenderer->ChangeAnimation("Drop"); });
+	Sound = UEngineSound::Play("coinDrop.wav");
 }
 
 void APenny::Tick(float _DeltaTime)
@@ -68,7 +69,7 @@ void APenny::DropSucessAnimation()
 		return;
 	}
 
-	Sound = UEngineSound::Play("dime_pick_up.wav");
+	Sound = UEngineSound::Play("coinPickup.wav");
 
 	DropRenderer->ChangeAnimation("DropEffect");
 }

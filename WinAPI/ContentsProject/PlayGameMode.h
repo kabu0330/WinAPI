@@ -48,7 +48,6 @@ public:
 
 	static USoundPlayer& GetPlayGameModeBGM()
 	{
-		PlayGameModeBGM.Loop(999);
 		return PlayGameModeBGM;
 	}
 

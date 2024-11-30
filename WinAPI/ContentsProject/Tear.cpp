@@ -58,10 +58,10 @@ void ATear::Tick(float _DeltaTime)
 	{
 		return;
 	}
-	if (false == TearEffectRenderer->IsActive())
-	{
-		return;
-	}
+	//if (false == TearEffectRenderer->IsActive())
+	//{
+	//	return;
+	//}
 
 	TimeElapesd += _DeltaTime;
 

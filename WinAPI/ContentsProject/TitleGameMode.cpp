@@ -44,6 +44,9 @@ void ATitleGameMode::Tick(float _DeltaTime)
 	{
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
 		UEngineAPICore::GetCore()->OpenLevel("Play");
+
+		UEngineSound::AllSoundStop();
+		IntroSound = UEngineSound::Play("title_screen_jingle_v1_01.ogg");
 	}
 }
 

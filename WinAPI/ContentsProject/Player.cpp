@@ -54,9 +54,6 @@ void APlayer::BeginPlay()
 
 	UISetting();
 	CollisionFuctionSetting();
-
-	AItem* InitBomb = ARoom::GetCurRoom()->CreateItem<ABomb>(this);
-	Drop(InitBomb, 1);
 	
 	BombCooldown = 2.0f;
 }

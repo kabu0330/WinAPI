@@ -90,6 +90,7 @@ void ABossIntroScene::BeginPlay()
 	BossDir = FVector2D::RIGHT;
 	UEngineSound::AllSoundStop();  
 	Sound = UEngineSound::Play("boss_fight_intro_jingle_01.ogg");
+	Sound = UEngineSound::Play("bossIntro.wav");
 }
 
 void ABossIntroScene::Tick(float _DeltaTime)
@@ -252,4 +253,5 @@ ABossIntroScene::~ABossIntroScene()
 {
 	UEngineSound::AllSoundStop();
 	BossFightBGM = UEngineSound::Play("basic_boss_fight.ogg");
+	BossFightBGM.Loop(999);
 }

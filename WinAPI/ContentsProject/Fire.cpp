@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "Fire.h"
+#include "Room.h"
 
 AFire::AFire()
 {
@@ -49,6 +50,8 @@ void AFire::BeginPlay()
 {
 	Super::BeginPlay();
 	ARoomObject::BeginPlay();
+
+	
 }
 
 void AFire::Tick(float _DeltaTime)
@@ -70,6 +73,7 @@ void AFire::SwitchAnimation()
 	case 3:
 		break;
 	case 2:
+	
 		FlameBaseRenderer->SetComponentLocation({ 0, 0 });
 		FlameBaseRenderer->SetComponentScale(BodyRendererScale * 3.0f);
 
@@ -81,6 +85,7 @@ void AFire::SwitchAnimation()
 		break;
 	case 1:
 	{
+
 		FlameBaseRenderer->SetComponentLocation({ 0, 0 });
 		FlameBaseRenderer->SetComponentScale(BodyRendererScale * 1.5f);
 

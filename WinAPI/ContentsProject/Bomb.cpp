@@ -94,7 +94,8 @@ bool ABomb::EatFunction(APlayer* _Player)
 		return false; // ¸ø¸ÔÀ¸¸é Æ¨°Ü³½´Ù.
 	}
 
-	//Sound = UEngineSound::Play("kiss_lips.wav");
+	Sound = UEngineSound::Play("lift.wav");
+	Sound.SetVolume(0.5f);
 
 	IsDrop = true;
 	DropRenderer->ChangeAnimation("DropEffect");

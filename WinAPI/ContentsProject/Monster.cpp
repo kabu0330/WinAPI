@@ -469,6 +469,10 @@ void AMonster::BodyRender()
 	{
 		return;
 	}
+
+	Sound = UEngineSound::Play("summon.wav");
+	Sound.SetVolume(0.5f);
+
 	TimeEventer.PushEvent(1.0f, [this]() {
 		SpawEvent = false;
 		SpawnEffectRenderer->Destroy();

@@ -64,9 +64,6 @@ void APlayGameMode::BeginPlay()
 	CollisionGroupLinkSetting();
 	UISetting();
 
-	UEngineSound::AllSoundStop();
-	//PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
-	PlayGameModeBGM.Loop(999);
 }
 
 void APlayGameMode::Spawn()
@@ -158,6 +155,12 @@ void APlayGameMode::Spawn()
 
 	// Debug
 	//BaseRoom->CreateObject<AGridPit>(nullptr, { 100, 100 });
+
+	for (int i = 0; i < 5; i++)
+	{
+		AItem* InitBomb = BaseRoom->CreateItem<ABomb>(nullptr, { 108, -22 });
+	}
+
 	BaseRoom->CreateMonster<AHorf>({ 0, 0 });
 
 
@@ -560,7 +563,8 @@ void APlayGameMode::Tick(float _DeltaTime)
 
 	if (false == Sound.IsPlaying() && false == IsPlayingBGM)
 	{
-		TimeEventer.PushEvent(0.3f, [this]() { UEngineSound::AllSoundOn(); });
+		PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
+		PlayGameModeBGM.Loop(999);
 		IsPlayingBGM = true;
 	}
 }
@@ -633,6 +637,8 @@ void APlayGameMode::LevelChangeStart()
 
 
 #ifdef _DEBUG
+	TimeEventer.PushEvent(8.0f, [this]() {	UEngineSound::AllSoundStop();
+	Sound = UEngineSound::Play("basementIntro.ogg"); });
 
 #else
 	GamePaused = true;
@@ -644,10 +650,11 @@ void APlayGameMode::LevelChangeStart()
 	FadeRenderer->SetActive(true);
 	LoadingRenderer->SetActive(true);
 
-	UEngineSound::AllSoundOff();
-	Sound = UEngineSound::Play("title_screen_jingle_v1_01.ogg");
+	TimeEventer.PushEvent(5.0f, [this]() {	UEngineSound::AllSoundStop();
+	Sound = UEngineSound::Play("basementIntro.ogg"); 
+	}); // 여기서 플레이어가 이동 가능
 
-	TimeEventer.PushEvent(3.0f, std::bind(&APlayGameMode::FadeOut, this));
+	TimeEventer.PushEvent(5.0f, std::bind(&APlayGameMode::FadeOut, this));
 #endif // DEBUG
 }
 
@@ -660,7 +667,7 @@ void APlayGameMode::FadeOut()
 	LoadingImage->FadeOut();
 
 	LoadingImage->Destroy(5.0f);
-	GamePaused = false; // 여기서 플레이어가 이동 가능
+	GamePaused = false;
 #endif // _DEBUG
 
 }
