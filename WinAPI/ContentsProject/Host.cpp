@@ -113,7 +113,7 @@ void AHost::Attack(float _DeltaTime)
 	FireTripleShotForward();
 
 	CooldownElapsed = 0.0f;
-	TimeEventer.PushEvent(2.5f, std::bind(&AHost::ChangeIdle, this));
+	TimeEventer.PushEvent(3.0f, std::bind(&AHost::ChangeIdle, this));
 }
 
 void AHost::FireTripleShotForward()

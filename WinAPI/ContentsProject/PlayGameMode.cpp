@@ -157,7 +157,6 @@ void APlayGameMode::Spawn()
 
 	// Debug
 	//BaseRoom->CreateObject<AGridPit>(nullptr, { 100, 100 });
-	BaseRoom->CreateMonster<AMulligoon>({ 100, 100 });
 
 
 	// TreasureRoom0
@@ -341,6 +340,7 @@ void APlayGameMode::Spawn()
 		MinionRoom4->CreateMonster<AFly>({ 0, 0 });
 		MinionRoom4->CreateMonster<AAttackFly>({ 150, 120 });
 		MinionRoom4->CreateMonster<AAttackFly>({ -150, 120 });
+		MinionRoom4->CreateMonster<AMulligoon>({ 0, 180 });
 
 		// Áß¾Ó
 		ARoomObject* Object0 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, -50 });

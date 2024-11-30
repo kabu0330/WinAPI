@@ -334,8 +334,8 @@ void ARoom::AddDoor(RoomDir _Dir, ARoom* _ConnectedRoom)
 	FVector2D DoorOffestY = FVector2D(0, RoomScale.Half().iY());
 	FVector2D OffestX = { 110, 0 };
 	FVector2D OffestY = { 0, 64};
-	DoorCollisionScale = FVector2D(60, 60);
 
+	DoorCollisionScale = FVector2D(60, 70);
 	float DoorEffectOffest = 85.0f;
 
 	switch (_Dir)
@@ -659,6 +659,10 @@ void ARoom::Sounds()
 		}
 	}
 	if (true == IsFirstEnterance)
+	{
+		return;
+	}
+	if (ERoomType::BASE == RoomType)
 	{
 		return;
 	}

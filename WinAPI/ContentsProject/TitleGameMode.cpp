@@ -39,6 +39,12 @@ void ATitleGameMode::Tick(float _DeltaTime)
 		UEngineSound::AllSoundOn();
 		IsPlayingBGM = true;
 	}
+
+	if (UEngineInput::GetInst().IsDown(VK_F4))
+	{
+		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
+		UEngineAPICore::GetCore()->OpenLevel("Play");
+	}
 }
 
 void ATitleGameMode::SetupScene()

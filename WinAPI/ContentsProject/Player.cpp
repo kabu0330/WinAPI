@@ -113,34 +113,37 @@ void APlayer::CollisionFuctionSetting()
 void APlayer::ClampPositionToRoom()
 {
 	FVector2D Pos = GetActorLocation();
+	FVector2D HalfScale = WarpCollision->GetComponentScale();
 	FVector2D FootPos = Pos + WarpCollision->GetComponentLocation();
 
 	ARoom* CurRoom = ARoom::GetCurRoom();
 	FVector2D RoomPos = CurRoom->GetActorLocation();
 	FVector2D RoomScale = CurRoom->GetActorScale().Half();
 	float RoomSizeOffsetX = CurRoom->GetRoomSizeOffsetX() / 2.0f;
-	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 1.95f;
+	float RoomSizeOffsetY = CurRoom->GetRoomSizeOffsetY() / 1.9f;
 
 	float LeftEdge = RoomPos.X - RoomScale.X - RoomSizeOffsetX;
 	float RightEdge = RoomPos.X + RoomScale.X + RoomSizeOffsetX;
 	float TopEdge = RoomPos.Y - RoomScale.Y - RoomSizeOffsetY;
 	float BotEdge = RoomPos.Y + RoomScale.Y + RoomSizeOffsetY;
 
+	FVector2D ClampedPos = FVector2D(FVector2D::Clamp(FootPos.X, LeftEdge, RightEdge), FVector2D::Clamp(FootPos.Y, TopEdge, BotEdge));
+
 	if (LeftEdge > FootPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{2, 0});
+		SetActorLocation(ClampedPos - (FootPos - Pos));
 	}
 	if (RightEdge < FootPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{ -2, 0 });
+		SetActorLocation(ClampedPos - (FootPos - Pos));
 	}
 	if (TopEdge > FootPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, 2 });
+		SetActorLocation(ClampedPos - (FootPos - Pos));
 	}
 	if (BotEdge < FootPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, -2 });
+		SetActorLocation(ClampedPos - (FootPos - Pos));
 	}
 }
 
@@ -1277,7 +1280,7 @@ void APlayer::ResetDebug()
 		SwitchInvincibility();
 	}
 
-	if (UEngineInput::GetInst().IsDown(VK_F5))
+	if (UEngineInput::GetInst().IsDown(VK_F4))
 	{
 		Reset();
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
@@ -1310,7 +1313,7 @@ void APlayer::CheatKey(const float& _DeltaTime)
 	{
 		Heart -= 1;
 	}
-	if (UEngineInput::GetInst().IsDown('T'))
+	if (UEngineInput::GetInst().IsDown('J'))
 	{
 		if (false == IsBombCheat) // µü 1¹ø¸¸ Àû¿ë
 		{

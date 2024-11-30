@@ -18,8 +18,8 @@ AMulligoon::AMulligoon()
 	/* 이동속도 : */ SetMoveSpeed(90);
 	/* 이동시간 : */ SetMoveDuration(2.0f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
-	/* 탐색범위 : */ SetDetectRange({ 450 , 350 });
-	/* 발사속도 : */ SetShootingSpeed(0.0f);
+	/* 탐색범위 : */ SetDetectRange({ 550 , 400 });
+	/* 발사속도 : */ SetShootingSpeed(450.0f);
 	/* 쿨타임   : */ SetCooldown(0.0f);
 
 	State = MonsterState::NONE;
@@ -182,6 +182,10 @@ void AMulligoon::Attack(float _DeltaTime)
 	{
 		return;
 	}
+	if (nullptr == BodyRenderer)
+	{
+		return;
+	}
 
 	Invincibility = true; // 무적
 	IsAttack = true;
@@ -195,8 +199,23 @@ void AMulligoon::Attack(float _DeltaTime)
 	TimeEventer.PushEvent(1.2f, [this, _DeltaTime]() {
 		SummonBombLogic();
 		SummonBombRender();
+		TearFire();
 		Hp = 0; });
 
+}
+
+void AMulligoon::TearFire()
+{
+	FVector2D TearPos = FVector2D::ZERO;
+	TearDir = GetDirectionToPlayer();
+	FVector2D OffsetPos = TearDir * 30.0f;
+	for (int i = 0; i < 11; i++)
+	{
+		FVector2D TearPos = { GetActorLocation().iX() + OffsetPos.iX(),  GetActorLocation().iY() + OffsetPos.iY()};
+		TearDir = UEngineMath::AngleToRadian<FVector2D>(TearDir, 30.0f * i);
+		Tear = GetWorld()->SpawnActor<ABloodTear>();
+		Tear->Fire(TearPos, TearDir, ShootingSpeed, Att);
+	}
 }
 
 void AMulligoon::SummonBombLogic()

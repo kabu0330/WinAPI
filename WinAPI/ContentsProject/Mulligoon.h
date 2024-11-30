@@ -27,6 +27,7 @@ public:
 	void CheckDirection();
 
 	void Attack(float _DeltaTime) override;
+	void TearFire();
 	void SummonBombLogic();
 	void SummonBombRender();
 

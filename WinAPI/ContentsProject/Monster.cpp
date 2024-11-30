@@ -322,7 +322,13 @@ void AMonster::ClampPositionToRoom()
 	}
 
 	FVector2D Pos = GetActorLocation();
-	FVector2D OffsetPos = Pos + BodyCollision->GetComponentLocation();
+	FVector2D HalfScale = BodyCollision->GetComponentScale().Half();
+	FVector2D OffsetPos = { Pos + BodyCollision->GetComponentLocation() + HalfScale } ;
+
+	FVector2D FootLeftPos = { OffsetPos.X - HalfScale.X, OffsetPos.Y};
+	FVector2D FootRightPos = { OffsetPos.X + HalfScale.X, OffsetPos.Y};
+	FVector2D FootTopPos = { OffsetPos.X , OffsetPos.Y - HalfScale.Y};
+	FVector2D FootBotPos = { OffsetPos.X , OffsetPos.Y + HalfScale.Y};
 
 	ARoom* CurRoom = ParentRoom;
 	FVector2D RoomPos = CurRoom->GetActorLocation();
@@ -335,21 +341,23 @@ void AMonster::ClampPositionToRoom()
 	float TopEdge = RoomPos.Y - RoomScale.Y - RoomSizeOffsetY;
 	float BotEdge = RoomPos.Y + RoomScale.Y + RoomSizeOffsetY;
 
-	if (LeftEdge > OffsetPos.X)
+	FVector2D ClampedPos = FVector2D(FVector2D::Clamp(OffsetPos.X, LeftEdge, RightEdge), FVector2D::Clamp(OffsetPos.Y, TopEdge, BotEdge));
+
+	if (LeftEdge > FootLeftPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{ 1, 0 });
+		SetActorLocation(ClampedPos - (OffsetPos - Pos));
 	}
-	if (RightEdge < OffsetPos.X)
+	if (RightEdge < FootRightPos.X)
 	{
-		SetActorLocation(Pos + FVector2D{ -1, 0 });
+		SetActorLocation(ClampedPos - (OffsetPos - Pos));
 	}
 	if (TopEdge > OffsetPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, 1 });
+		SetActorLocation(ClampedPos - (OffsetPos - Pos));
 	}
-	if (BotEdge < OffsetPos.Y)
+	if (BotEdge < FootBotPos.Y)
 	{
-		SetActorLocation(Pos + FVector2D{ 0, -1 });
+		SetActorLocation(ClampedPos - (OffsetPos - Pos));
 	}
 }
 
