@@ -53,10 +53,10 @@ void AItem::Tick(float _DeltaTime)
 
 	Move(_DeltaTime);
 	ClampPositionToRoom();
-	SetLocation();
+	//SetLocation();
 
-	RemoveRoomData();
-	ItemDestroy();
+	//RemoveRoomData();
+	//ItemDestroy();
 
 }
 
@@ -157,6 +157,11 @@ void AItem::FailToPickup(AActor* _Player)
 
 void AItem::ReverseForce(float _DeltaTime)
 {
+	if (FVector2D::ZERO == Force)
+	{
+		return;
+	}
+
 	FVector2D ReverseForce = -Force;
 	ReverseForce.Normalize();
 

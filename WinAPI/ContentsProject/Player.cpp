@@ -464,6 +464,7 @@ bool APlayer::Drop(AItem* _Item, const int& _Count)
 	// 아이템과 상호작용에 성공하면 아이템 데이터를 저장
 	_Item->DropEffect();
 	_Item->DropSuccess(); // 맵에서 아이템 정보 삭제
+	_Item->RemoveRoomData();
 
 	if (false == _Item->IsPushBackItems()) // 아이템 효과만 적용하고 즉시 소멸할거라면
 	{

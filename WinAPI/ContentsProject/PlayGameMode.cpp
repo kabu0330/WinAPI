@@ -159,268 +159,269 @@ void APlayGameMode::Spawn()
 	//BaseRoom->CreateObject<AGridPit>(nullptr, { 100, 100 });
 
 
-	//// TreasureRoom0
-	//{
-	// 	ARoomObject* Fire0 = TreasureRoom0->CreateObject<AFire>(nullptr, {  150,    0 });
-	//	ARoomObject* Fire1 = TreasureRoom0->CreateObject<AFire>(nullptr, { -150,    0 });
-	//	ARoomObject* Fire2 = TreasureRoom0->CreateObject<AFire>(nullptr, { -310, -180 });
-	//	ARoomObject* Fire3 = TreasureRoom0->CreateObject<AFire>(nullptr, { -310,  180 });
-	//	ARoomObject* Fire4 = TreasureRoom0->CreateObject<AFire>(nullptr, {  310, -180 });
-	//	ARoomObject* Fire5 = TreasureRoom0->CreateObject<AFire>(nullptr, {  310,  180 });
-	//	TreasureRoom0->CreateObject<AItemAlter>(nullptr, {0, 0});
-	//	SpawnRandomItem(TreasureRoom0);
-	//}
-
-	//// TreasureRoom1
-	//{
-	//	ARoomObject* Fire0 = TreasureRoom1->CreateObject<AFire>(nullptr, { 150, 0 });
-	//	ARoomObject* Fire1 = TreasureRoom1->CreateObject<AFire>(nullptr, { -150, 0 });
-	//	TreasureRoom1->CreateObject<AItemAlter>(nullptr, { 0, 0 });
-	//	SpawnRandomItem(TreasureRoom1);
-	//}
-
-	//// TreasureRoom2
-	//{
-	//	ARoomObject* Fire0 = TreasureRoom2->CreateObject<AFire>(nullptr, { 150, 0 });
-	//	ARoomObject* Fire1 = TreasureRoom2->CreateObject<AFire>(nullptr, { -150, 0 });
-	//	ARoomObject* Fire2 = TreasureRoom2->CreateObject<AFire>(nullptr, { -310, -180 });
-	//	ARoomObject* Fire3 = TreasureRoom2->CreateObject<AFire>(nullptr, { -310,  180 });
-	//	ARoomObject* Fire4 = TreasureRoom2->CreateObject<AFire>(nullptr, { 310, -180 });
-	//	ARoomObject* Fire5 = TreasureRoom2->CreateObject<AFire>(nullptr, { 310,  180 });
-	//	TreasureRoom2->CreateObject<AItemAlter>(nullptr, { 0, 0 });
-	//	SpawnRandomItem(TreasureRoom2);
-	//}
-
-	//// TreasureRoom3
-	//{
-	//	ARoomObject* Fire0 = TreasureRoom3->CreateObject<AFire>(nullptr, { 150, 0 });
-	//	ARoomObject* Fire1 = TreasureRoom3->CreateObject<AFire>(nullptr, { -150, 0 });
-	//	ARoomObject* Fire2 = TreasureRoom3->CreateObject<AFire>(nullptr, { -310, -180 });
-	//	ARoomObject* Fire3 = TreasureRoom3->CreateObject<AFire>(nullptr, { -310,  180 });
-	//	ARoomObject* Fire4 = TreasureRoom3->CreateObject<AFire>(nullptr, { 310, -180 });
-	//	ARoomObject* Fire5 = TreasureRoom3->CreateObject<AFire>(nullptr, { 310,  180 });
-	//	TreasureRoom3->CreateObject<AItemAlter>(nullptr, { 0, 0 });
-	//	SpawnRandomItem(TreasureRoom3);
-	//}
-
-	//// TreasureRoom4
-	//{
-	//	ARoomObject* Fire0 = TreasureRoom4->CreateObject<AFire>(nullptr, { 150, 0 });
-	//	ARoomObject* Fire1 = TreasureRoom4->CreateObject<AFire>(nullptr, { -150, 0 });
-	//	TreasureRoom4->CreateObject<AItemAlter>(nullptr, { 0, 0 });
-	//	SpawnRandomItem(TreasureRoom4);
-	//}
-
-	//// TreasureRoom5
-	//{
-	//	ARoomObject* Fire0 = TreasureRoom5->CreateObject<AFire>(nullptr, { 150, 0 });
-	//	ARoomObject* Fire1 = TreasureRoom5->CreateObject<AFire>(nullptr, { -150, 0 });
-	//	TreasureRoom5->CreateObject<AItemAlter>(nullptr, { 0, 0 });
-	//	SpawnRandomItem(TreasureRoom5);
-	//}
-
-	
-	// MinionRoom0 
-	// MinionRoom1 : 플레이어 오른쪽 : 파리맵
-	//{
-	//	ARoomObject* Poop0 = MinionRoom1->CreateObject<APoop>(nullptr, { -310, 180 });
-	//	ARoomObject* Poop1 = MinionRoom1->CreateObject<APoop>(nullptr, { -310, -190 });
-	//	ARoomObject* Poop2 = MinionRoom1->CreateObject<APoop>(nullptr, { 310, 180 });
-	//	ARoomObject* Poop3 = MinionRoom1->CreateObject<APoop>(nullptr, { 310, -190 });
-	//	ARoomObject* Poop4 = MinionRoom1->CreateObject<APoop>(nullptr, { 0, 0 });
-	//	ARoomObject* Poop5 = MinionRoom1->CreateObject<APoop>(nullptr, { -50, 50 });
-	//	ARoomObject* Poop6 = MinionRoom1->CreateObject<APoop>(nullptr, { -50, -50 });
-	//	ARoomObject* Poop7 = MinionRoom1->CreateObject<APoop>(nullptr, { -100, 0 });
-	//	ARoomObject* Poop8 = MinionRoom1->CreateObject<APoop>(nullptr, { 50, -50 });
-	//	ARoomObject* Poop9 = MinionRoom1->CreateObject<APoop>(nullptr, { 50, 50 });
-	//	ARoomObject* Poop10 = MinionRoom1->CreateObject<APoop>(nullptr, { 100, 0 });
-
-	//	Poop0->SetSprite("CORNY_POOP");
-	//	Poop1->SetSprite("CORNY_POOP");
-	//	Poop2->SetSprite("CORNY_POOP");
-	//	Poop3->SetSprite("CORNY_POOP");
-	//	Poop4->SetSprite("CORNY_POOP");
-	//	Poop5->SetSprite("GOLDEN_POOP");
-	//	Poop6->SetSprite("CORNY_POOP");
-	//	Poop7->SetSprite("CORNY_POOP");
-	//	Poop8->SetSprite("CORNY_POOP");
-	//	Poop9->SetSprite("CORNY_POOP");
-	//	Poop10->SetSprite("CORNY_POOP");
-
-	//	MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
-	//	MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });
-	//	MinionRoom1->CreateMonster<AAttackFly>({ 0, 70 });
-	//	MinionRoom1->CreateMonster<AAttackFly>({ 0, 0 });
-	//	MinionRoom1->CreateMonster<AFly>({ -50, -50 });
-	//	MinionRoom1->CreateMonster<AFly>({ -100, -10 });
-	//	MinionRoom1->CreateMonster<AFly>({ -50, 40 });
-
-	//}
-
-	//// MinionRoom3 : 플레이어 위쪽
-	//{
-	//	ARoomObject* Object0 = MinionRoom3->CreateObject<ARock>(nullptr, { -180, 100 });
-	//	ARoomObject* Object1 = MinionRoom3->CreateObject<ARock>(nullptr, { 180, 100 });
-	//	ARoomObject* Object2 = MinionRoom3->CreateObject<ARock>(nullptr, { -180, -100 });
-	//	ARoomObject* Object3 = MinionRoom3->CreateObject<ARock>(nullptr, { 180, -100 });
-	//	Object0->SetSprite("TINTEDROCKS1");
-	//	Object1->SetSprite("TINTEDROCKS2");
-
-	//	MinionRoom3->CreateMonster<AHost>({ 220, 50 });
-	//	MinionRoom3->CreateMonster<AHost>({ 0, 150 });
-	//	MinionRoom3->CreateMonster<AHost>({ -220, 50 });
-	//	MinionRoom3->CreateMonster<AAttackFly>({ -150, 80 });
-	//	MinionRoom3->CreateMonster<AAttackFly>({ 150, 80 });		
-	//}
-
-	//// MinionRoom6
-	//{
-	//	MinionRoom6->CreateItem<ABomb>(nullptr, {-310, -180});
-	//	MinionRoom6->CreateItem<ABomb>(nullptr, {-260, -180});
-	//	MinionRoom6->CreateItem<ABomb>(nullptr, {-310, -135});
-	//	MinionRoom6->CreateItem<ABomb>(nullptr, { 310, 180 });
-	//	MinionRoom6->CreateItem<ABomb>(nullptr, { 260, 180 });
-	//	MinionRoom6->CreateItem<ABomb>(nullptr, { 310, 135 });
-
-	//	// 중앙
-	//	ARoomObject* Object0 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { 0, 0 });
-	//	ARoomObject* Object1 = MinionRoom6->CreateObject<ARock>(nullptr, { -50, 0 });
-	//	ARoomObject* Object2 = MinionRoom6->CreateObject<ARock>(nullptr, { 50, 0 });
-	//	ARoomObject* Object3 = MinionRoom6->CreateObject<ARock>(nullptr, { 0, 50 });
-	//	ARoomObject* Object4 = MinionRoom6->CreateObject<ARock>(nullptr, { 0, -50 });
-
-	//	// 좌상단
-	//	ARoomObject* Object11 = MinionRoom6->CreateObject<ARock>(nullptr, { -310, -80 });
-	//	ARoomObject* Object12 = MinionRoom6->CreateObject<ARock>(nullptr, { -260, -80 });
-	//	ARoomObject* Object13 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { -210, -80 });
-	//	ARoomObject* Object14 = MinionRoom6->CreateObject<ARock>(nullptr, { -210, -130 });
-	//	ARoomObject* Object15 = MinionRoom6->CreateObject<ARock>(nullptr, { -260, -130 });
-	//	ARoomObject* Object16 = MinionRoom6->CreateObject<ARock>(nullptr, { -210, -180 });
-
-	//	// 우하단
-	//	ARoomObject* Object21 = MinionRoom6->CreateObject<ARock>(nullptr, { 310, 80 });
-	//	ARoomObject* Object22 = MinionRoom6->CreateObject<ARock>(nullptr, { 260, 80 });
-	//	ARoomObject* Object23 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { 210, 80 });
-	//	ARoomObject* Object24 = MinionRoom6->CreateObject<ARock>(nullptr, { 210, 130 });
-	//	ARoomObject* Object25 = MinionRoom6->CreateObject<ARock>(nullptr, { 260, 130 });
-	//	ARoomObject* Object26 = MinionRoom6->CreateObject<ARock>(nullptr, { 210, 180 });
-	//	Object1->SetSprite("TINTEDROCKS2");
-	//	Object11->SetSprite("TINTEDROCKS2");
-	//	Object12->SetSprite("TINTEDROCKS1");
-	//	Object14->SetSprite("TINTEDROCKS1");
-	//	Object21->SetSprite("TINTEDROCKS2");
-	//	Object22->SetSprite("TINTEDROCKS1");
-	//	Object24->SetSprite("TINTEDROCKS1");
-	//}
-
-
-	// MinionRoom2 : 플레이어 왼쪽
+	// TreasureRoom0
 	{
-		ARoomObject* Poop0 = MinionRoom2->CreateObject<APoop>(nullptr, { 0, 0 });
-		//ARoomObject* Poop1 = MinionRoom2->CreateObject<APoop>(nullptr, { -50, -50 });
-		//ARoomObject* Poop2 = MinionRoom2->CreateObject<APoop>(nullptr, { 50, 50 });
-		//ARoomObject* Poop3 = MinionRoom2->CreateObject<APoop>(nullptr, { -50, 50 });
-		//ARoomObject* Poop4 = MinionRoom2->CreateObject<APoop>(nullptr, { 50, -50 });
-		Poop0->SetSprite("CORNY_POOP");
-		//Poop1->SetSprite("CORNY_POOP");
-		//Poop2->SetSprite("CORNY_POOP");
-		//Poop3->SetSprite("CORNY_POOP");
-		//Poop4->SetSprite("CORNY_POOP");
-
-		//MinionRoom2->CreateMonster<ADip>({ 50, 0 });
-		//MinionRoom2->CreateMonster<ADip>({ -50, 0 });
-		//MinionRoom2->CreateMonster<ADip>({ 0, -50 });
-		//MinionRoom2->CreateMonster<ADip>({ 0, 50 });
+	 	ARoomObject* Fire0 = TreasureRoom0->CreateObject<AFire>(nullptr, {  150,    0 });
+		ARoomObject* Fire1 = TreasureRoom0->CreateObject<AFire>(nullptr, { -150,    0 });
+		ARoomObject* Fire2 = TreasureRoom0->CreateObject<AFire>(nullptr, { -310, -180 });
+		ARoomObject* Fire3 = TreasureRoom0->CreateObject<AFire>(nullptr, { -310,  180 });
+		ARoomObject* Fire4 = TreasureRoom0->CreateObject<AFire>(nullptr, {  310, -180 });
+		ARoomObject* Fire5 = TreasureRoom0->CreateObject<AFire>(nullptr, {  310,  180 });
+		TreasureRoom0->CreateObject<AItemAlter>(nullptr, {0, 0});
+		SpawnRandomItem(TreasureRoom0);
 	}
 
-	//// MinionRoom4 : 플레이어 위쪽
-	//{
-	//	MinionRoom4->CreateMonster<AMulligan>({ 150, 80 });
-	//	MinionRoom4->CreateMonster<AMulligan>({ -200, 120 });
-	//	MinionRoom4->CreateMonster<AFly>({ 0, 0 });
-	//	MinionRoom4->CreateMonster<AAttackFly>({ 150, 120 });
-	//	MinionRoom4->CreateMonster<AAttackFly>({ -150, 120 });
-	//	MinionRoom4->CreateMonster<AMulligoon>({ 0, 180 });
+	// TreasureRoom1
+	{
+		ARoomObject* Fire0 = TreasureRoom1->CreateObject<AFire>(nullptr, { 150, 0 });
+		ARoomObject* Fire1 = TreasureRoom1->CreateObject<AFire>(nullptr, { -150, 0 });
+		TreasureRoom1->CreateObject<AItemAlter>(nullptr, { 0, 0 });
+		SpawnRandomItem(TreasureRoom1);
+	}
 
-	//	// 중앙
-	//	ARoomObject* Object0 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, -50 });
-	//	ARoomObject* Object1 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, 0 });
-	//	ARoomObject* Object2 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, 50 });
-	//	ARoomObject* Object3 = MinionRoom4->CreateObject<ARock>(nullptr, { 0, -50 });
-	//	ARoomObject* Object4 = MinionRoom4->CreateObject<ARock>(nullptr, { 0, 50 });
-	//	ARoomObject* Object5 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, -50 });
-	//	ARoomObject* Object6 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, 0 });
-	//	ARoomObject* Object7 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, 50 });
-	//	ARoomObject* Object8 = MinionRoom4->CreateObject<ARock>(nullptr, { -150, -120 });
-	//	ARoomObject* Object9 = MinionRoom4->CreateObject<ARock>(nullptr, { 150, 120 });
-	//	ARoomObject* Object10 = MinionRoom4->CreateObject<ARock>(nullptr, { 150, -120 });
-	//	ARoomObject* Object11 = MinionRoom4->CreateObject<ARock>(nullptr, { -150, 120 });
-	//	ARoomObject* Object12 = MinionRoom4->CreateObject<ARock>(nullptr, { -200, 10 });
-	//	ARoomObject* Object13 = MinionRoom4->CreateObject<ARock>(nullptr, { 200, 10 });
-	//	ARoomObject* Object14 = MinionRoom4->CreateObject<ARock>(nullptr, { -310, -180 });
-	//	ARoomObject* Object15 = MinionRoom4->CreateObject<ARock>(nullptr, { -310, 180 });
-	//	ARoomObject* Object16 = MinionRoom4->CreateObject<ARock>(nullptr, { 310, -180 });
-	//	ARoomObject* Object17 = MinionRoom4->CreateObject<ARock>(nullptr, { 310, 180 });
-	//	Object1->SetSprite("TINTEDROCKS1");
-	//	Object7->SetSprite("TINTEDROCKS1");
-	//	Object8->SetSprite("TINTEDROCKS2");
-	//	Object9->SetSprite("TINTEDROCKS5");
-	//	Object14->SetSprite("TINTEDROCKS1");
-	//	Object15->SetSprite("TINTEDROCKS2");
-	//	Object16->SetSprite("TINTEDROCKS4");
-	//}
-	//
-	//// BossRoom
-	//{
-	//	// 좌상단
-	//	ARoomObject* Object01 = BossRoom->CreateObject<ARock>(nullptr, { -310, -180 });
-	//	ARoomObject* Object02 = BossRoom->CreateObject<ARock>(nullptr, { -260, -180 });
-	//	ARoomObject* Object03 = BossRoom->CreateObject<ARock>(nullptr, { -310, -130 });
-	//	ARoomObject* Object04 = BossRoom->CreateObject<ARock>(nullptr, { -210, -180 });
-	//	ARoomObject* Object05 = BossRoom->CreateObject<ARock>(nullptr, { -310, -80 });
-	//	ARoomObject* Object06 = BossRoom->CreateObject<ARock>(nullptr, { -210, -80 });
+	// TreasureRoom2
+	{
+		ARoomObject* Fire0 = TreasureRoom2->CreateObject<AFire>(nullptr, { 150, 0 });
+		ARoomObject* Fire1 = TreasureRoom2->CreateObject<AFire>(nullptr, { -150, 0 });
+		ARoomObject* Fire2 = TreasureRoom2->CreateObject<AFire>(nullptr, { -310, -180 });
+		ARoomObject* Fire3 = TreasureRoom2->CreateObject<AFire>(nullptr, { -310,  180 });
+		ARoomObject* Fire4 = TreasureRoom2->CreateObject<AFire>(nullptr, { 310, -180 });
+		ARoomObject* Fire5 = TreasureRoom2->CreateObject<AFire>(nullptr, { 310,  180 });
+		TreasureRoom2->CreateObject<AItemAlter>(nullptr, { 0, 0 });
+		SpawnRandomItem(TreasureRoom2);
+	}
 
-	//	// 좌하단
-	//	ARoomObject* Object11 = BossRoom->CreateObject<ARock>(nullptr, { -310, 180 });
-	//	ARoomObject* Object12 = BossRoom->CreateObject<ARock>(nullptr, { -260, 180 });
-	//	ARoomObject* Object13 = BossRoom->CreateObject<ARock>(nullptr, { -310, 130 });
-	//	ARoomObject* Object14 = BossRoom->CreateObject<ARock>(nullptr, { -210, 180 });
-	//	ARoomObject* Object15 = BossRoom->CreateObject<ARock>(nullptr, { -310, 80 });
-	//	ARoomObject* Object16 = BossRoom->CreateObject<ARock>(nullptr, { -210, 80 });
+	// TreasureRoom3
+	{
+		ARoomObject* Fire0 = TreasureRoom3->CreateObject<AFire>(nullptr, { 150, 0 });
+		ARoomObject* Fire1 = TreasureRoom3->CreateObject<AFire>(nullptr, { -150, 0 });
+		ARoomObject* Fire2 = TreasureRoom3->CreateObject<AFire>(nullptr, { -310, -180 });
+		ARoomObject* Fire3 = TreasureRoom3->CreateObject<AFire>(nullptr, { -310,  180 });
+		ARoomObject* Fire4 = TreasureRoom3->CreateObject<AFire>(nullptr, { 310, -180 });
+		ARoomObject* Fire5 = TreasureRoom3->CreateObject<AFire>(nullptr, { 310,  180 });
+		TreasureRoom3->CreateObject<AItemAlter>(nullptr, { 0, 0 });
+		SpawnRandomItem(TreasureRoom3);
+	}
 
-	//	// 우하단
-	//	ARoomObject* Object21 = BossRoom->CreateObject<ARock>(nullptr, { 310, 180 });
-	//	ARoomObject* Object22 = BossRoom->CreateObject<ARock>(nullptr, { 260, 180 });
-	//	ARoomObject* Object23 = BossRoom->CreateObject<ARock>(nullptr, { 310, 130 });
-	//	ARoomObject* Object24 = BossRoom->CreateObject<ARock>(nullptr, { 210, 180 });
-	//	ARoomObject* Object25 = BossRoom->CreateObject<ARock>(nullptr, { 310, 80 });
-	//	ARoomObject* Object26 = BossRoom->CreateObject<ARock>(nullptr, { 210, 80 });
+	// TreasureRoom4
+	{
+		ARoomObject* Fire0 = TreasureRoom4->CreateObject<AFire>(nullptr, { 150, 0 });
+		ARoomObject* Fire1 = TreasureRoom4->CreateObject<AFire>(nullptr, { -150, 0 });
+		TreasureRoom4->CreateObject<AItemAlter>(nullptr, { 0, 0 });
+		SpawnRandomItem(TreasureRoom4);
+	}
 
-	//	// 우상단
-	//	ARoomObject* Object31 = BossRoom->CreateObject<ARock>(nullptr, { 310, -180 });
-	//	ARoomObject* Object32 = BossRoom->CreateObject<ARock>(nullptr, { 260, -180 });
-	//	ARoomObject* Object33 = BossRoom->CreateObject<ARock>(nullptr, { 310, -130 });
-	//	ARoomObject* Object34 = BossRoom->CreateObject<ARock>(nullptr, { 210, -180 });
-	//	ARoomObject* Object35 = BossRoom->CreateObject<ARock>(nullptr, { 310, -80 });
-	//	ARoomObject* Object36 = BossRoom->CreateObject<ARock>(nullptr, { 210, -80 });
+	// TreasureRoom5
+	{
+		ARoomObject* Fire0 = TreasureRoom5->CreateObject<AFire>(nullptr, { 150, 0 });
+		ARoomObject* Fire1 = TreasureRoom5->CreateObject<AFire>(nullptr, { -150, 0 });
+		TreasureRoom5->CreateObject<AItemAlter>(nullptr, { 0, 0 });
+		SpawnRandomItem(TreasureRoom5);
+	}
 
-	//	Object06->SetSprite("TINTEDROCKS5");
-	//	Object16->SetSprite("TINTEDROCKS0");
-	//	Object26->SetSprite("TINTEDROCKS1");
-	//	Object36->SetSprite("TINTEDROCKS0");
+	
+	 //MinionRoom0 
+	 
+	 //MinionRoom1 : 플레이어 오른쪽 : 파리맵
+	{
+		ARoomObject* Poop0 = MinionRoom1->CreateObject<APoop>(nullptr, { -310, 180 });
+		ARoomObject* Poop1 = MinionRoom1->CreateObject<APoop>(nullptr, { -310, -190 });
+		ARoomObject* Poop2 = MinionRoom1->CreateObject<APoop>(nullptr, { 310, 180 });
+		ARoomObject* Poop3 = MinionRoom1->CreateObject<APoop>(nullptr, { 310, -190 });
+		ARoomObject* Poop4 = MinionRoom1->CreateObject<APoop>(nullptr, { 0, 0 });
+		ARoomObject* Poop5 = MinionRoom1->CreateObject<APoop>(nullptr, { -50, 50 });
+		ARoomObject* Poop6 = MinionRoom1->CreateObject<APoop>(nullptr, { -50, -50 });
+		ARoomObject* Poop7 = MinionRoom1->CreateObject<APoop>(nullptr, { -100, 0 });
+		ARoomObject* Poop8 = MinionRoom1->CreateObject<APoop>(nullptr, { 50, -50 });
+		ARoomObject* Poop9 = MinionRoom1->CreateObject<APoop>(nullptr, { 50, 50 });
+		ARoomObject* Poop10 = MinionRoom1->CreateObject<APoop>(nullptr, { 100, 0 });
 
-	//	Object02->SetSprite("TINTEDROCKS2");
-	//	Object12->SetSprite("TINTEDROCKS2");
-	//	Object22->SetSprite("TINTEDROCKS2");
-	//	Object32->SetSprite("TINTEDROCKS2");
+		Poop0->SetSprite("CORNY_POOP");
+		Poop1->SetSprite("CORNY_POOP");
+		Poop2->SetSprite("CORNY_POOP");
+		Poop3->SetSprite("CORNY_POOP");
+		Poop4->SetSprite("CORNY_POOP");
+		Poop5->SetSprite("GOLDEN_POOP");
+		Poop6->SetSprite("CORNY_POOP");
+		Poop7->SetSprite("CORNY_POOP");
+		Poop8->SetSprite("CORNY_POOP");
+		Poop9->SetSprite("CORNY_POOP");
+		Poop10->SetSprite("CORNY_POOP");
 
-	//	Object03->SetSprite("TINTEDROCKS1");
-	//	Object13->SetSprite("TINTEDROCKS1");
-	//	Object23->SetSprite("TINTEDROCKS1");
-	//	Object33->SetSprite("TINTEDROCKS1");
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, 70 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, 0 });
+		MinionRoom1->CreateMonster<AFly>({ -50, -50 });
+		MinionRoom1->CreateMonster<AFly>({ -100, -10 });
+		MinionRoom1->CreateMonster<AFly>({ -50, 40 });
 
-	//	BossRoom->CreateMonster<ATheDukeOfFlies>({ -100, 0 });
-	//}
+	}
+
+	// MinionRoom3 : 플레이어 위쪽
+	{
+		ARoomObject* Object0 = MinionRoom3->CreateObject<ARock>(nullptr, { -180, 100 });
+		ARoomObject* Object1 = MinionRoom3->CreateObject<ARock>(nullptr, { 180, 100 });
+		ARoomObject* Object2 = MinionRoom3->CreateObject<ARock>(nullptr, { -180, -100 });
+		ARoomObject* Object3 = MinionRoom3->CreateObject<ARock>(nullptr, { 180, -100 });
+		Object0->SetSprite("TINTEDROCKS1");
+		Object1->SetSprite("TINTEDROCKS2");
+
+		MinionRoom3->CreateMonster<AHost>({ 220, 50 });
+		MinionRoom3->CreateMonster<AHost>({ 0, 150 });
+		MinionRoom3->CreateMonster<AHost>({ -220, 50 });
+		MinionRoom3->CreateMonster<AAttackFly>({ -150, 80 });
+		MinionRoom3->CreateMonster<AAttackFly>({ 150, 80 });		
+	}
+
+	// MinionRoom6
+	{
+		MinionRoom6->CreateItem<ABomb>(nullptr, {-310, -180});
+		MinionRoom6->CreateItem<ABomb>(nullptr, {-260, -180});
+		MinionRoom6->CreateItem<ABomb>(nullptr, {-310, -135});
+		MinionRoom6->CreateItem<ABomb>(nullptr, { 310, 180 });
+		MinionRoom6->CreateItem<ABomb>(nullptr, { 260, 180 });
+		MinionRoom6->CreateItem<ABomb>(nullptr, { 310, 135 });
+
+		// 중앙
+		ARoomObject* Object0 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { 0, 0 });
+		ARoomObject* Object1 = MinionRoom6->CreateObject<ARock>(nullptr, { -50, 0 });
+		ARoomObject* Object2 = MinionRoom6->CreateObject<ARock>(nullptr, { 50, 0 });
+		ARoomObject* Object3 = MinionRoom6->CreateObject<ARock>(nullptr, { 0, 50 });
+		ARoomObject* Object4 = MinionRoom6->CreateObject<ARock>(nullptr, { 0, -50 });
+
+		// 좌상단
+		ARoomObject* Object11 = MinionRoom6->CreateObject<ARock>(nullptr, { -310, -80 });
+		ARoomObject* Object12 = MinionRoom6->CreateObject<ARock>(nullptr, { -260, -80 });
+		ARoomObject* Object13 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { -210, -80 });
+		ARoomObject* Object14 = MinionRoom6->CreateObject<ARock>(nullptr, { -210, -130 });
+		ARoomObject* Object15 = MinionRoom6->CreateObject<ARock>(nullptr, { -260, -130 });
+		ARoomObject* Object16 = MinionRoom6->CreateObject<ARock>(nullptr, { -210, -180 });
+
+		// 우하단
+		ARoomObject* Object21 = MinionRoom6->CreateObject<ARock>(nullptr, { 310, 80 });
+		ARoomObject* Object22 = MinionRoom6->CreateObject<ARock>(nullptr, { 260, 80 });
+		ARoomObject* Object23 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { 210, 80 });
+		ARoomObject* Object24 = MinionRoom6->CreateObject<ARock>(nullptr, { 210, 130 });
+		ARoomObject* Object25 = MinionRoom6->CreateObject<ARock>(nullptr, { 260, 130 });
+		ARoomObject* Object26 = MinionRoom6->CreateObject<ARock>(nullptr, { 210, 180 });
+		Object1->SetSprite("TINTEDROCKS2");
+		Object11->SetSprite("TINTEDROCKS2");
+		Object12->SetSprite("TINTEDROCKS1");
+		Object14->SetSprite("TINTEDROCKS1");
+		Object21->SetSprite("TINTEDROCKS2");
+		Object22->SetSprite("TINTEDROCKS1");
+		Object24->SetSprite("TINTEDROCKS1");
+	}
+
+
+	 //MinionRoom2 : 플레이어 왼쪽
+	{
+		ARoomObject* Poop0 = MinionRoom2->CreateObject<APoop>(nullptr, { 0, 0 });
+		ARoomObject* Poop1 = MinionRoom2->CreateObject<APoop>(nullptr, { -50, -50 });
+		ARoomObject* Poop2 = MinionRoom2->CreateObject<APoop>(nullptr, { 50, 50 });
+		ARoomObject* Poop3 = MinionRoom2->CreateObject<APoop>(nullptr, { -50, 50 });
+		ARoomObject* Poop4 = MinionRoom2->CreateObject<APoop>(nullptr, { 50, -50 });
+		Poop0->SetSprite("CORNY_POOP");
+		Poop1->SetSprite("CORNY_POOP");
+		Poop2->SetSprite("CORNY_POOP");
+		Poop3->SetSprite("CORNY_POOP");
+		Poop4->SetSprite("CORNY_POOP");
+
+		MinionRoom2->CreateMonster<ADip>({ 50, 0 });
+		MinionRoom2->CreateMonster<ADip>({ -50, 0 });
+		MinionRoom2->CreateMonster<ADip>({ 0, -50 });
+		MinionRoom2->CreateMonster<ADip>({ 0, 50 });
+	}
+
+	// MinionRoom4 : 플레이어 위쪽
+	{
+		MinionRoom4->CreateMonster<AMulligan>({ 150, 80 });
+		MinionRoom4->CreateMonster<AMulligan>({ -200, 120 });
+		MinionRoom4->CreateMonster<AFly>({ 0, 0 });
+		MinionRoom4->CreateMonster<AAttackFly>({ 150, 120 });
+		MinionRoom4->CreateMonster<AAttackFly>({ -150, 120 });
+		MinionRoom4->CreateMonster<AMulligoon>({ 0, 180 });
+
+		// 중앙
+		ARoomObject* Object0 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, -50 });
+		ARoomObject* Object1 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, 0 });
+		ARoomObject* Object2 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, 50 });
+		ARoomObject* Object3 = MinionRoom4->CreateObject<ARock>(nullptr, { 0, -50 });
+		ARoomObject* Object4 = MinionRoom4->CreateObject<ARock>(nullptr, { 0, 50 });
+		ARoomObject* Object5 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, -50 });
+		ARoomObject* Object6 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, 0 });
+		ARoomObject* Object7 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, 50 });
+		ARoomObject* Object8 = MinionRoom4->CreateObject<ARock>(nullptr, { -150, -120 });
+		ARoomObject* Object9 = MinionRoom4->CreateObject<ARock>(nullptr, { 150, 120 });
+		ARoomObject* Object10 = MinionRoom4->CreateObject<ARock>(nullptr, { 150, -120 });
+		ARoomObject* Object11 = MinionRoom4->CreateObject<ARock>(nullptr, { -150, 120 });
+		ARoomObject* Object12 = MinionRoom4->CreateObject<ARock>(nullptr, { -200, 10 });
+		ARoomObject* Object13 = MinionRoom4->CreateObject<ARock>(nullptr, { 200, 10 });
+		ARoomObject* Object14 = MinionRoom4->CreateObject<ARock>(nullptr, { -310, -180 });
+		ARoomObject* Object15 = MinionRoom4->CreateObject<ARock>(nullptr, { -310, 180 });
+		ARoomObject* Object16 = MinionRoom4->CreateObject<ARock>(nullptr, { 310, -180 });
+		ARoomObject* Object17 = MinionRoom4->CreateObject<ARock>(nullptr, { 310, 180 });
+		Object1->SetSprite("TINTEDROCKS1");
+		Object7->SetSprite("TINTEDROCKS1");
+		Object8->SetSprite("TINTEDROCKS2");
+		Object9->SetSprite("TINTEDROCKS5");
+		Object14->SetSprite("TINTEDROCKS1");
+		Object15->SetSprite("TINTEDROCKS2");
+		Object16->SetSprite("TINTEDROCKS4");
+	}
+	
+	// BossRoom
+	{
+		// 좌상단
+		ARoomObject* Object01 = BossRoom->CreateObject<ARock>(nullptr, { -310, -180 });
+		ARoomObject* Object02 = BossRoom->CreateObject<ARock>(nullptr, { -260, -180 });
+		ARoomObject* Object03 = BossRoom->CreateObject<ARock>(nullptr, { -310, -130 });
+		ARoomObject* Object04 = BossRoom->CreateObject<ARock>(nullptr, { -210, -180 });
+		ARoomObject* Object05 = BossRoom->CreateObject<ARock>(nullptr, { -310, -80 });
+		ARoomObject* Object06 = BossRoom->CreateObject<ARock>(nullptr, { -210, -80 });
+
+		// 좌하단
+		ARoomObject* Object11 = BossRoom->CreateObject<ARock>(nullptr, { -310, 180 });
+		ARoomObject* Object12 = BossRoom->CreateObject<ARock>(nullptr, { -260, 180 });
+		ARoomObject* Object13 = BossRoom->CreateObject<ARock>(nullptr, { -310, 130 });
+		ARoomObject* Object14 = BossRoom->CreateObject<ARock>(nullptr, { -210, 180 });
+		ARoomObject* Object15 = BossRoom->CreateObject<ARock>(nullptr, { -310, 80 });
+		ARoomObject* Object16 = BossRoom->CreateObject<ARock>(nullptr, { -210, 80 });
+
+		// 우하단
+		ARoomObject* Object21 = BossRoom->CreateObject<ARock>(nullptr, { 310, 180 });
+		ARoomObject* Object22 = BossRoom->CreateObject<ARock>(nullptr, { 260, 180 });
+		ARoomObject* Object23 = BossRoom->CreateObject<ARock>(nullptr, { 310, 130 });
+		ARoomObject* Object24 = BossRoom->CreateObject<ARock>(nullptr, { 210, 180 });
+		ARoomObject* Object25 = BossRoom->CreateObject<ARock>(nullptr, { 310, 80 });
+		ARoomObject* Object26 = BossRoom->CreateObject<ARock>(nullptr, { 210, 80 });
+
+		// 우상단
+		ARoomObject* Object31 = BossRoom->CreateObject<ARock>(nullptr, { 310, -180 });
+		ARoomObject* Object32 = BossRoom->CreateObject<ARock>(nullptr, { 260, -180 });
+		ARoomObject* Object33 = BossRoom->CreateObject<ARock>(nullptr, { 310, -130 });
+		ARoomObject* Object34 = BossRoom->CreateObject<ARock>(nullptr, { 210, -180 });
+		ARoomObject* Object35 = BossRoom->CreateObject<ARock>(nullptr, { 310, -80 });
+		ARoomObject* Object36 = BossRoom->CreateObject<ARock>(nullptr, { 210, -80 });
+
+		Object06->SetSprite("TINTEDROCKS5");
+		Object16->SetSprite("TINTEDROCKS0");
+		Object26->SetSprite("TINTEDROCKS1");
+		Object36->SetSprite("TINTEDROCKS0");
+
+		Object02->SetSprite("TINTEDROCKS2");
+		Object12->SetSprite("TINTEDROCKS2");
+		Object22->SetSprite("TINTEDROCKS2");
+		Object32->SetSprite("TINTEDROCKS2");
+
+		Object03->SetSprite("TINTEDROCKS1");
+		Object13->SetSprite("TINTEDROCKS1");
+		Object23->SetSprite("TINTEDROCKS1");
+		Object33->SetSprite("TINTEDROCKS1");
+
+		BossRoom->CreateMonster<ATheDukeOfFlies>({ -100, 0 });
+	}
 	
 }
 

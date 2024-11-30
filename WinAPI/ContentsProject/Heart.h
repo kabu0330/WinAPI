@@ -34,6 +34,7 @@ public:
 		
 
 		IsUseEnd = true;
+		Destroy();
 
 		return true;
 	}

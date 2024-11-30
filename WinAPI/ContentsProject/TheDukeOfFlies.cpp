@@ -166,7 +166,7 @@ void ATheDukeOfFlies::DisplayBossIntro()
 	ABossIntroScene* BossIntro = GetWorld()->SpawnActor<ABossIntroScene>();
 	BossIntro->ShowScene();
 
-	BossIntro->Destroy(BossIntro->GetPlayTime() + 0.5f);
+	BossIntro->Destroy(BossIntro->GetPlayTime() + 1.5f);
 }
 
 void ATheDukeOfFlies::SpawnAnimation()
