@@ -118,6 +118,20 @@ public:
 		BodyRenderer = nullptr;
 	}
 
+	void AreaWideAttack(AActor* _Actor);
+
+	// 다이나믹 캐스트로 액터가 플레이어, 몬스터, 오브젝트 중 무엇인지 판별
+	template<typename ActorType>
+	ActorType* CastActorToType(AActor* _Actor)
+	{
+		ActorType* Actor = dynamic_cast<ActorType*>(_Actor);
+		if (nullptr != Actor)
+		{
+			return Actor;
+		}
+		return nullptr;
+	}
+	
 	class U2DCollision* GetBodyCollision()
 	{
 		return BodyCollision;
@@ -275,6 +289,8 @@ protected:
 
 	U2DCollision* HeadCollision = nullptr;
 	FVector2D HeadCollisionScale = FVector2D::ZERO;
+
+	U2DCollision* UniversalCollision = nullptr;
 
 	MonsterState State = MonsterState::LEFT;
 	class USpriteRenderer* DamagedEffectRenderer = nullptr;

@@ -24,6 +24,10 @@ void ARoomObject::BeginPlay()
 
 void ARoomObject::Tick(float _DeltaTime)
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
 	// 플레이어와 다른 맵이면 리턴
 	ARoom* PlayerCurRoom = ARoom::GetCurRoom();
 	if (PlayerCurRoom != ParentRoom) 

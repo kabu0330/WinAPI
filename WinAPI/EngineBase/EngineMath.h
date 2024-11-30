@@ -167,7 +167,7 @@ public:
 		return UEngineMath::Sqrt(X * X + Y * Y);
 	}
 	
-	static float Distance(FVector2D _Vector0, FVector2D _Vector1)
+	static float Distance(const FVector2D& _Vector0, const FVector2D& _Vector1)
 	{
 		float PowX = ::powf(_Vector0.X - _Vector1.X, 2);
 		float PowY = ::powf(_Vector0.Y - _Vector1.Y, 2);

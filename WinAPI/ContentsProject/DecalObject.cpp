@@ -56,11 +56,15 @@ void ADecalObject::BeginPlay()
 {
 	Super::BeginPlay();
 	ARoomObject::BeginPlay();
-
 }
 
 void ADecalObject::Tick(float _DeltaTime)
 {
+	if (true == IsDeath())
+	{
+		return;
+	}
+
 	Super::Tick(_DeltaTime);
 	ARoomObject::Tick(_DeltaTime);
 

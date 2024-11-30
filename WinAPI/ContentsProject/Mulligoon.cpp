@@ -8,7 +8,7 @@
 #include "ContentsEnum.h"
 #include "Global.h"
 #include "Room.h"
-#include "Bomb.h"
+#include "DecalObject.h"
 
 AMulligoon::AMulligoon()
 {
@@ -63,6 +63,14 @@ AMulligoon::AMulligoon()
 	DetectCollision->SetCollisionGroup(ECollisionGroup::Monster_DetectInRange);
 	DetectCollision->SetCollisionType(ECollisionType::Rect);
 	DetectCollision->SetActive(true);
+
+	UniversalCollision = CreateDefaultSubObject<U2DCollision>();
+	UniversalCollision->SetComponentLocation({ 0, 0 });
+	UniversalCollision->SetComponentScale({ 250, 250 });
+	UniversalCollision->SetCollisionGroup(ECollisionGroup::Item_UniversalHit);
+	UniversalCollision->SetCollisionType(ECollisionType::Rect);
+	UniversalCollision->SetActive(false);
+
 }
 
 AMulligoon::~AMulligoon()
@@ -164,7 +172,7 @@ void AMulligoon::RunAwaySound(float _DeltaTime)
 		return;
 	}
 
-	Sound = UEngineSound::Play("scared_whimper_2.wav");
+	Sound = UEngineSound::Play("scared_whimper.wav");
 	IsPlaySound = false;
 }
 
@@ -185,18 +193,37 @@ void AMulligoon::Attack(float _DeltaTime)
 
 	RunAwayTimeElapsed = 0.0f;
 	TimeEventer.PushEvent(1.2f, [this, _DeltaTime]() {
-		//SummonFliesLogic();
-		//SummonFliesRender();
+		SummonBombLogic();
+		SummonBombRender();
 		Hp = 0; });
 
+}
+
+void AMulligoon::SummonBombLogic()
+{
+	UniversalCollision->SetActive(true);
+	UniversalCollision->Destroy(0.1f);
+}
+
+void AMulligoon::SummonBombRender()
+{
+	Sound = UEngineSound::Play("explosion_weak1.wav");
+
+	FVector2D UniversalScale = { 150, 150 };
+	USpriteRenderer* ExplosionEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	ExplosionEffectRenderer->CreateAnimation("Explosion", "Explosion.png", 0, 11, 0.1f, false);
+	ExplosionEffectRenderer->SetComponentLocation({ 0, 50 });
+	ExplosionEffectRenderer->SetComponentScale(UniversalScale * 5.5f);
+	ExplosionEffectRenderer->SetOrder(ERenderOrder::ItemEffect);
+	ExplosionEffectRenderer->ChangeAnimation("Explosion");
 }
 
 void AMulligoon::Death(float _DeltaTime)
 {
 	if (false == IsAttack)
 	{
-		//SummonFliesLogic();
-		//SummonFliesRender();
+		SummonBombLogic();
+		SummonBombRender();
 		IsAttack = true;
 	}
 

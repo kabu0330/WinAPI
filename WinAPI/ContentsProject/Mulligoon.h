@@ -27,8 +27,8 @@ public:
 	void CheckDirection();
 
 	void Attack(float _DeltaTime) override;
-	void SummonFliesLogic();
-	void SummonFliesRender();
+	void SummonBombLogic();
+	void SummonBombRender();
 
 	void Death(float _DeltaTime) override;
 
@@ -40,6 +40,7 @@ protected:
 
 private:
 	USpriteRenderer* HeadRenderer = nullptr;
+
 	float RunAwayTimeElapsed = 0.0f;
 	float RunAwayDuration = 6.0f;
 

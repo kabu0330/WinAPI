@@ -234,7 +234,7 @@ void AItem::AreaWideAttack(AActor* _Actor)
 	AMonster* Monster = CastActorToType<AMonster>(_Actor);
 	if (nullptr != Monster)
 	{
-		Monster->ApplyDamaged(Monster, Att, Dir); // 폭탄은 몬스터에게 60의 피해를 입힌다.
+		Monster->ApplyDamaged(Monster, Att, Dir); // 폭탄은 몬스터에게 피해를 입힌다.
 	}
 
 	ARoomObject* Object = CastActorToType<ARoomObject>(_Actor);

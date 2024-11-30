@@ -617,6 +617,36 @@ void AMonster::StayBlinkEffect()
 	TimeEventer.PushEvent(0.1f, std::bind(&AMonster::BeginBlinkEffect, this));
 }
 
+void AMonster::AreaWideAttack(AActor* _Actor)
+{
+	ARoom* Room = CastActorToType<ARoom>(_Actor);
+	if (nullptr != Room)
+	{
+		return;
+	}
+
+	FVector2D Dir = _Actor->GetActorLocation() - GetActorLocation();
+	Dir.Normalize(); // 방향벡터
+
+	APlayer* Player = CastActorToType<APlayer>(_Actor);
+	if (nullptr != Player)
+	{
+		Player->ApplyDamaged(Player, 2, Dir); // 폭탄은 플레이어에게 하트 한칸의 피해를 준다.
+	}
+
+	AMonster* Monster = CastActorToType<AMonster>(_Actor);
+	if (nullptr != Monster)
+	{
+		Monster->ApplyDamaged(Monster, Att, Dir); // 폭탄은 몬스터에게 피해를 입힌다.
+	}
+
+	ARoomObject* Object = CastActorToType<ARoomObject>(_Actor);
+	if (nullptr != Object)
+	{
+		Object->ApplyDamaged(this);
+	}
+}
+
 void AMonster::FadeChange()
 {
 	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
@@ -676,6 +706,11 @@ void AMonster::MonsterInputDebug()
 void AMonster::CollisionFuctionSetting()
 {
 	BodyCollision->SetCollisionEnter(std::bind(&AMonster::HandleCollisionDamage, this));
+
+	if (nullptr != UniversalCollision)
+	{
+		UniversalCollision->SetCollisionEnter(std::bind(&AMonster::AreaWideAttack, this, std::placeholders::_1));
+	}
 }
 
 void AMonster::ChangeAnimIdle()

@@ -14,7 +14,7 @@ ABomb::ABomb()
 	BodyCollisionScale = { 48, 48 };
 	ItemCount = 1;
 	Att = 30; // 몬스터에게 가할 피해
-	FVector2D UnversalScale = { 150, 150 };
+	FVector2D UniversalScale = { 150, 150 };
 	ItemType = EItemType::USE;
 
 	DropRenderer = CreateDefaultSubObject<USpriteRenderer>();
@@ -47,7 +47,7 @@ ABomb::ABomb()
 	ExplosionEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	ExplosionEffectRenderer->CreateAnimation("Explosion", "Explosion.png", 0, 11, 0.12f, false);
 	ExplosionEffectRenderer->SetComponentLocation({ 0, 50 });
-	ExplosionEffectRenderer->SetComponentScale(UnversalScale * 4);
+	ExplosionEffectRenderer->SetComponentScale(UniversalScale * 4);
 	ExplosionEffectRenderer->SetOrder(ERenderOrder::ItemEffect);
 	ExplosionEffectRenderer->ChangeAnimation("Explosion");
 	ExplosionEffectRenderer->SetActive(false);
@@ -68,7 +68,7 @@ ABomb::ABomb()
 
 	UniversalCollision = CreateDefaultSubObject<U2DCollision>();
 	UniversalCollision->SetComponentLocation({ 0, 0 });
-	UniversalCollision->SetComponentScale(UnversalScale);
+	UniversalCollision->SetComponentScale(UniversalScale);
 	UniversalCollision->SetCollisionGroup(ECollisionGroup::Item_UniversalHit);
 	UniversalCollision->SetCollisionType(ECollisionType::Rect);
 	UniversalCollision->SetActive(false);
@@ -107,8 +107,12 @@ void ABomb::UseItem(APlayer* _Player)
 {
 	Sound = UEngineSound::Play("pop_impact_09.wav");
 
-	FVector2D Pos = _Player->GetActorLocation();
-	SetActorLocation({ Pos.X, Pos.Y - 5.0f });
+	if (nullptr !=_Player)
+	{
+		FVector2D Pos = _Player->GetActorLocation();
+		SetActorLocation({ Pos.X, Pos.Y - 5.0f });
+	}
+
 	BodyRenderer->SetActive(true);
 	BobmSparkEffectRenderer->SetActive(true); // 폭탄에 불붙는 애니메이션 출력
 	ImpactCollision->SetActive(true); // 눈물 공격으로 밀어내는 상호작용 출력
