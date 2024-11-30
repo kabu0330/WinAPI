@@ -163,7 +163,7 @@ void ARoom::Warp(float _DeltaTime)
 	// 플레이어 위치 이동
 	WarpPlayerSetting(); 
 
-	float CameraLerpTime = 0.1f;
+	float CameraLerpTime = 0.08f;
 	LerpAlpha += _DeltaTime / CameraLerpTime;
 	LerpAlpha = FVector2D::Clamp(CameraMoveTime / CameraLerpTime, 0.0f, 1.0f);
 

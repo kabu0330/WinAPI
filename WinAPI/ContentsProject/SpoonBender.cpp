@@ -84,8 +84,8 @@ bool ASpoonBender::EatFunction(APlayer* _Player)
 	Player->ChangeHeadRenderer(HeadRenderer); // ¾ó±¼ º¯°æ
 
 	Player->InitTear();
+	Player->AddAtt(1);
 	Player->SetDetectCollision();
-
 
 	return true;
 }

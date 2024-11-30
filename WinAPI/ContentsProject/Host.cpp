@@ -110,6 +110,8 @@ void AHost::Attack(float _DeltaTime)
 		return;
 	}
 
+	Sound = UEngineSound::Play("blood_fire.wav");
+
 	FireTripleShotForward();
 
 	CooldownElapsed = 0.0f;

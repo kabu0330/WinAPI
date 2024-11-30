@@ -23,7 +23,7 @@ AMonster::AMonster()
 	DamagedEffectRenderer->SetActive(false);
 
 	SpawnEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	SpawnEffectRenderer->CreateAnimation("SpawnEffect", "SpawnEffect_Large.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}, { 0.2f, 0.1f, 0.15f, 0.13f, 0.12f, 0.12f, 0.08f, 0.07f, 0.07f, 0.06f, 0.06f, 0.05f, 0.05f, 0.05f, 0.05f }, false);
+	SpawnEffectRenderer->CreateAnimation("SpawnEffect", "SpawnEffect_Large.png", { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}, { 0.2f, 0.1f, 0.12f, 0.1f, 0.1f, 0.1f, 0.05f, 0.05f, 0.05f, 0.05f, 0.05f, 0.04f, 0.03f, 0.02f, 0.02f }, false);
 
 	SpawnEffectRenderer->SetComponentLocation({ 0, -40 });
 	SpawnEffectScale = { 128, 128 };
@@ -88,10 +88,13 @@ void AMonster::Tick(float _DeltaTime)
 
 	ReverseForce(_DeltaTime);
 
-	AddActorLocation(Force * _DeltaTime);
+	if (FVector2D::ZERO != Force)
+	{
+		AddActorLocation(Force * _DeltaTime);
+
+	}
 
 	SpawnAnimation(); // 최초 1회만 재생
-	SpawnFadeOut();
 
 	if (ParentRoom != ARoom::GetCurRoom()) // 너가 생성된 맵 바깥으로 나갈 수 없어.
 	{
@@ -112,6 +115,11 @@ void AMonster::Tick(float _DeltaTime)
 
 void AMonster::ReverseForce(float _DeltaTime)
 {
+	if (FVector2D::ZERO == Force)
+	{
+		return;
+	}
+
 	FVector2D Reverse = -Force;
 	Reverse.Normalize();
 
@@ -144,6 +152,8 @@ void AMonster::ChasePlayer(float _DeltaTime)
 	{
 		return;
 	}
+
+	ChangeAggressiveAnimation();
 
 	Attack(_DeltaTime);
 	ChaseMove(_DeltaTime);
@@ -418,18 +428,22 @@ void AMonster::SpawnAnimation()
 	{
 		return;
 	}
+	if (true == SpawEvent)
+	{
+		return;
+	}
 
 	// 플레이어와 같은 방에 있으면
 	if (nullptr != SpawnEffectRenderer)
 	{
 		SpawEvent = true; // FadeOut Trigger
 		SpawnEffectRenderer->SetActive(true);
-		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
-		
+		SpawnFadeOut();
+		TimeEventer.PushEvent(0.4f, std::bind(&AMonster::BodyRender, this));		
 	}
 	else
 	{
-		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
+		TimeEventer.PushEvent(0.4f, std::bind(&AMonster::BodyRender, this));
 	}
 
 }
@@ -455,13 +469,12 @@ void AMonster::BodyRender()
 	{
 		return;
 	}
-	if (false == SpawnEffectRenderer->IsCurAnimationEnd())
-	{
-		return;
-	}
-	SpawEvent = false;
-	SpawnEffectRenderer->Destroy();
-	SpawnEffectRenderer = nullptr;
+	TimeEventer.PushEvent(1.0f, [this]() {
+		SpawEvent = false;
+		SpawnEffectRenderer->Destroy();
+		SpawnEffectRenderer = nullptr; 
+		 });
+
 }
 
 void AMonster::Death(float _DeltaTime)
@@ -678,18 +691,18 @@ void AMonster::FadeOut()
 
 void AMonster::SpawnFadeChange()
 {
-	if (false == SpawEvent)
+	if (nullptr == SpawnEffectRenderer)
 	{
 		return;
 	}
 	float DeltaTime = UEngineAPICore::GetCore()->GetDeltaTime();
-	FadeValue += DeltaTime * 0.2f * FadeDir;
+	FadeValue += DeltaTime * 0.4f * FadeDir;
 	SpawnEffectRenderer->SetAlphaFloat(FadeValue);
 }
 
 void AMonster::SpawnFadeOut()
 {
-	if (false == SpawEvent)
+	if (nullptr == SpawnEffectRenderer)
 	{
 		return;
 	}

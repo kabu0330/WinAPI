@@ -154,6 +154,9 @@
     <ClInclude Include="Mulligoon.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="Horf.h">
+      <Filter>04_Play\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -307,6 +310,9 @@
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
     <ClCompile Include="Mulligoon.cpp">
+      <Filter>04_Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Horf.cpp">
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
   </ItemGroup>

@@ -86,7 +86,7 @@ private:
 	// 패턴 1 : SummonFlies
 	std::list<AMonster*> Flies; // 내가 소환한 파리들
 	int MaxFlyCount = 0;
-	float SummonCooldownDuration = 4.5f;
+	float SummonCooldownDuration = 5.0f;
 
 	// 패턴 2 : BlowAway
 	int BlowAwayTriggerValue = 0; // 스킬 발동 조건을 지정할 변수
@@ -95,7 +95,7 @@ private:
 	
 	// 패턴 3 : SummonBigFly
 	float SummonBigFlyCooldownElapsed = 0.0f;
-	float SummonBigFlyCooldownDuration = 7.0f;
+	float SummonBigFlyCooldownDuration = 8.0f;
 	
 	
 	// UI

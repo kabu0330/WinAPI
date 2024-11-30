@@ -27,6 +27,7 @@
 #include "Pooter.h"
 #include "Mulligan.h"
 #include "Mulligoon.h"
+#include "Horf.h"
 #include "TheDukeOfFlies.h"
 
 #include "RoomObject.h"
@@ -157,6 +158,7 @@ void APlayGameMode::Spawn()
 
 	// Debug
 	//BaseRoom->CreateObject<AGridPit>(nullptr, { 100, 100 });
+	BaseRoom->CreateMonster<AHorf>({ 0, 0 });
 
 
 	// TreasureRoom0

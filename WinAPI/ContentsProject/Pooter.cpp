@@ -119,6 +119,8 @@ void APooter::Attack(float _DeltaTime)
 	IsAttack = true;
 	TimeEventer.PushEvent(BodyRenderer->IsCurAnimationEnd(), std::bind(&AMonster::SwitchIsAttacking, this));
 
+	Sound = UEngineSound::Play("blood_fire.wav");
+
 	TearDir = GetDirectionToPlayer();
 	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() + 12 };
 

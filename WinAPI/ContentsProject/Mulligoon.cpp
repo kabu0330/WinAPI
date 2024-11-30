@@ -227,6 +227,7 @@ void AMulligoon::SummonBombLogic()
 void AMulligoon::SummonBombRender()
 {
 	Sound = UEngineSound::Play("explosion_weak1.wav");
+	Sound = UEngineSound::Play("blood_fire.wav");
 
 	FVector2D UniversalScale = { 150, 150 };
 	USpriteRenderer* ExplosionEffectRenderer = CreateDefaultSubObject<USpriteRenderer>();

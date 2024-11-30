@@ -34,7 +34,7 @@ ABloodTear::ABloodTear()
 
 void ABloodTear::Fire(FVector2D _StartPos, FVector2D _Dir, float _Speed,  int _Att)
 {
-	Sound = UEngineSound::Play("blood_fire.wav");
+	
 
 	TearEffectRenderer->SetActive(true);
 	SetActorLocation(_StartPos);

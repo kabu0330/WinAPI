@@ -21,7 +21,7 @@ AAttackFly::AAttackFly()
 	/* 이동속도 : */ SetMoveSpeed(70); 
 	/* 이동시간 : */ SetMoveDuration(1.5f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
-	/* 탐색범위 : */ SetDetectRange({ 480, 480 });
+	/* 탐색범위 : */ SetDetectRange({ 400, 400 });
 
 	Hp = 5;
 	RendererScale = { 256, 256 };

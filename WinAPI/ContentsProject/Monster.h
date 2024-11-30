@@ -51,6 +51,7 @@ public:
 	virtual void Move(float _DeltaTime);
 	virtual void ChaseMove(float _DeltaTime);
 	virtual void ChasePlayer(float _DeltaTime);
+	virtual void ChangeAggressiveAnimation() {};
 
 	virtual void Attack(float _DeltaTime);
 
@@ -325,7 +326,7 @@ protected:
 	int   Hp    = 1;
 	int   Att   = 1;
 	int CollisionAtt = 1;
-	float Speed = 50;
+	float Speed = 50; 
 	FVector2D Direction = FVector2D::ZERO;
 	int PrevDir = -1;
 

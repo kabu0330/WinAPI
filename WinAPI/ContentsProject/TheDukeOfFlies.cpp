@@ -179,18 +179,22 @@ void ATheDukeOfFlies::SpawnAnimation()
 	{
 		return;
 	}
+	if (true == SpawEvent)
+	{
+		return;
+	}
 
 	// 플레이어와 같은 방에 있으면
 	if (nullptr != SpawnEffectRenderer)
 	{
 		SpawEvent = true; // FadeOut Trigger
 		SpawnEffectRenderer->SetActive(true);
-		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
-
+		SpawnFadeOut();
+		TimeEventer.PushEvent(0.4f, std::bind(&AMonster::BodyRender, this));
 	}
 	else
 	{
-		TimeEventer.PushEvent(0.3f, std::bind(&AMonster::BodyRender, this));
+		TimeEventer.PushEvent(0.4f, std::bind(&AMonster::BodyRender, this));
 	}
 }
 
