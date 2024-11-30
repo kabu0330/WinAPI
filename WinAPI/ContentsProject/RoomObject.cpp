@@ -13,7 +13,7 @@
 
 ARoomObject::ARoomObject()
 {
-	DebugOn();
+	//DebugOn();
 }
 
 void ARoomObject::BeginPlay()
@@ -323,8 +323,19 @@ void ARoomObject::BlockPlayerCollision(APlayer* _Player, FVector2D _Pos)
 	{
 		return;
 	}
+	if (nullptr == _Player)
+	{
+		return;
+	}
+	if (nullptr == _Player->GetWarpCollision())
+	{
+		return;
+	}
 
 	FVector2D ActorPos = _Pos;
+	FVector2D FootPos = ActorPos + _Player->GetWarpCollision()->GetComponentLocation();
+	FVector2D Velocity = _Player->GetFinalSpeed();
+
 	float ActorLeftPos = _Pos.X - _Player->GetWarpCollision()->GetComponentScale().Half().X;
 	float ActorRightPos = _Pos.X + _Player->GetWarpCollision()->GetComponentScale().Half().X;
 	float ActorTopPos = _Pos.Y - _Player->GetWarpCollision()->GetComponentScale().Half().Y;
@@ -337,32 +348,69 @@ void ARoomObject::BlockPlayerCollision(APlayer* _Player, FVector2D _Pos)
 	float RightEdge = ThisPos.X + ThisScale.X;
 	float TopEdge = ThisPos.Y - ThisScale.Y;
 	float BotEdge = ThisPos.Y + ThisScale.Y;
-		
-	if (LeftEdge > ActorLeftPos)
+
+	bool IsCollidedX = (ActorLeftPos < RightEdge && ActorRightPos > LeftEdge);
+	bool IsCollidedY = (ActorTopPos < BotEdge && ActorBotPos > TopEdge);
+
+	if (IsCollidedX && IsCollidedY)
 	{
-		_Player->SetActorLocation(_Player->GetActorLocation() + FVector2D{ -1, 0 });
-	}
-	if (RightEdge < ActorRightPos)
-	{
-		_Player->SetActorLocation(_Player->GetActorLocation() + FVector2D{ 1, 0 });
-	}
-	if (TopEdge > ActorTopPos)
-	{
-		_Player->SetActorLocation(_Player->GetActorLocation() + FVector2D{ 0, -1 });
-	}
-	if (BotEdge < ActorBotPos)
-	{
-		_Player->SetActorLocation(_Player->GetActorLocation() + FVector2D{ 0, 1 });
+		// 충돌 방향 계산
+		FVector2D CollisionNormal(0.0f, 0.0f);
+
+		if (ActorLeftPos < LeftEdge)  // 왼쪽 충돌
+		{
+			CollisionNormal.X = -1.0f;
+		}
+		else if (ActorRightPos > RightEdge)  // 오른쪽 충돌
+		{
+			CollisionNormal.X = 1.0f;
+		}
+
+		if (ActorTopPos < TopEdge)  // 위쪽 충돌
+		{
+			CollisionNormal.Y = -1.0f;
+		}
+		else if (ActorBotPos > BotEdge)  // 아래쪽 충돌
+		{
+			CollisionNormal.Y = 1.0f;
+		}
+
+		// 이동 속도 감소
+		float NewSpeed = UEngineMath::Max(Velocity.Length() * 0.5f, 100.0f); // 최소 속도 100
+		FVector2D NewVelocity = Velocity.GetNormal() * NewSpeed;
+
+		// 충돌 반대 방향으로 밀어내기
+		FVector2D Offset = CollisionNormal * 2.0f; // 밀어내는 정도
+		FVector2D NewPosition = ActorPos + Offset;
+
+		// 플레이어 위치와 속도 설정
+		_Player->SetActorLocation(NewPosition);
+		_Player->SetFinalSpeed(NewVelocity);
 	}
 }
 
 void ARoomObject::BlockMonsterCollision(AMonster* _Monster, FVector2D _Pos)
 {
+	if (false == IsBlockingPath)
+	{
+		return;
+	}
+	if (nullptr == _Monster)
+	{
+		return;
+	}
+	if (nullptr == _Monster->GetBodyCollision())
+	{
+		return;
+	}
+
 	FVector2D ActorPos = _Pos;
 	float ActorLeftPos = _Pos.X - _Monster->GetBodyCollision()->GetComponentScale().Half().X;
 	float ActorRightPos = _Pos.X + _Monster->GetBodyCollision()->GetComponentScale().Half().X;
 	float ActorTopPos = _Pos.Y - _Monster->GetBodyCollision()->GetComponentScale().Half().Y;
 	float ActorBotPos = _Pos.Y + _Monster->GetBodyCollision()->GetComponentScale().Half().Y;
+
+	FVector2D Velocity = _Monster->GetDirection();
 
 	FVector2D ThisPos = GetActorLocation();
 	FVector2D ThisScale = BodyCollision->GetComponentScale().Half();
@@ -372,21 +420,39 @@ void ARoomObject::BlockMonsterCollision(AMonster* _Monster, FVector2D _Pos)
 	float TopEdge = ThisPos.Y - ThisScale.Y;
 	float BotEdge = ThisPos.Y + ThisScale.Y;
 
-	if (LeftEdge > ActorLeftPos)
+	bool IsCollidedX = (ActorLeftPos < RightEdge && ActorRightPos > LeftEdge);
+	bool IsCollidedY = (ActorTopPos < BotEdge && ActorBotPos > TopEdge);
+
+	if (IsCollidedX && IsCollidedY)
 	{
-		_Monster->SetActorLocation(_Monster->GetActorLocation() + FVector2D{ -1, 0 });
-	}
-	if (RightEdge < ActorRightPos)
-	{
-		_Monster->SetActorLocation(_Monster->GetActorLocation() + FVector2D{ 1, 0 });
-	}
-	if (TopEdge > ActorTopPos)
-	{
-		_Monster->SetActorLocation(_Monster->GetActorLocation() + FVector2D{ 0, -1 });
-	}
-	if (BotEdge < ActorBotPos)
-	{
-		_Monster->SetActorLocation(_Monster->GetActorLocation() + FVector2D{ 0, 1 });
+		// 충돌 방향 계산
+		FVector2D CollisionNormal(0.0f, 0.0f);
+
+		if (ActorLeftPos < LeftEdge)  // 왼쪽 충돌
+		{
+			CollisionNormal.X = -1.0f;
+		}
+		else if (ActorRightPos > RightEdge)  // 오른쪽 충돌
+		{
+			CollisionNormal.X = 1.0f;
+		}
+
+		if (ActorTopPos < TopEdge)  // 위쪽 충돌
+		{
+			CollisionNormal.Y = -1.0f;
+		}
+		else if (ActorBotPos > BotEdge)  // 아래쪽 충돌
+		{
+			CollisionNormal.Y = 1.0f;
+		}
+
+		// 충돌 반대 방향으로 밀어내기
+		FVector2D Offset = CollisionNormal * 2.0f; // 밀어내는 정도
+		FVector2D NewPosition = ActorPos + Offset;
+
+		// 몬스터 위치와 속도 설정
+		_Monster->SetActorLocation(NewPosition);
+		_Monster->SetDirection(Velocity);
 	}
 }
 

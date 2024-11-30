@@ -44,7 +44,7 @@ APlayer::APlayer()
 	SpriteSetting(); 
 	CollisionSetting(); 
 
-	DebugOn();
+	//DebugOn();
 	//SwitchInvincibility(); // 디버깅용 무적
 }
 
@@ -115,6 +115,11 @@ void APlayer::ClampPositionToRoom()
 	FVector2D Pos = GetActorLocation();
 	FVector2D HalfScale = WarpCollision->GetComponentScale();
 	FVector2D FootPos = Pos + WarpCollision->GetComponentLocation();
+
+	float FootLeft  = FootPos.X - HalfScale.X;
+	float FootRight = FootPos.X + HalfScale.X;
+	float FootUp    = FootPos.Y - HalfScale.Y;
+	float FootDown  = FootPos.Y + HalfScale.Y;
 
 	ARoom* CurRoom = ARoom::GetCurRoom();
 	FVector2D RoomPos = CurRoom->GetActorLocation();
@@ -282,10 +287,32 @@ void APlayer::StayBlinkEffect()
 
 void APlayer::UITick(const float& _DeltaTime)
 {
+	static int LastPennyCount = -1;
+	static int LastBombCount = -1;
+	static int LastKeyCount = -1;
+
 	  PlayerHpToHeart->SetPlayerHp(Heart);
-	PennyPickupNumber->SetValue(CheckPickupItemCount("Penny"));
- 	 BombPickupNumber->SetValue(CheckPickupItemCount("Bomb"));
-	  KeyPickupNumber->SetValue(CheckPickupItemCount("Key"));
+	  int CurrentPennyCount = CheckPickupItemCount("Penny");
+	  int CurrentBombCount = CheckPickupItemCount("Bomb");
+	  int CurrentKeyCount = CheckPickupItemCount("Key");
+
+	  if (LastPennyCount != CurrentPennyCount)
+	  {
+		  PennyPickupNumber->SetValue(CurrentPennyCount);
+		  LastPennyCount = CurrentPennyCount;
+	  }
+
+	  if (LastBombCount != CurrentBombCount)
+	  {
+		  BombPickupNumber->SetValue(CurrentBombCount);
+		  LastBombCount = CurrentBombCount;
+	  }
+
+	  if (LastKeyCount != CurrentKeyCount)
+	  {
+		  KeyPickupNumber->SetValue(CurrentKeyCount);
+		  LastKeyCount = CurrentKeyCount;
+	  }
 }
 
 void APlayer::CollisionSetting()
@@ -448,10 +475,12 @@ bool APlayer::Drop(AItem* _Item, const int& _Count)
 		PassiveItem = nullptr; // 기존 자료를 지우고
 		PassiveItem = _Item; // 새로운 아이템 정보를 넣는다.
 	}
-
+	
+	std::string ItemName = _Item->GetName();
 	for (int i = 0; i < _Count; i++)
 	{
 		Items.push_back(_Item);
+		ItemCounts[ItemName]++;
 	}
 
 	return true;
@@ -472,13 +501,35 @@ void APlayer::InputItem()
 		{
 			Item->UseItem(this);
 
-			Items.remove(Item);
+			RemveItem(Item);
 		}
 
 		BombCooldown = 0.0f;
 	}
 }
 
+void APlayer::RemveItem(AItem* _Item)
+{
+	if (true == Items.empty())
+	{
+		return;
+	}
+	auto Iterator = std::find(Items.begin(), Items.end(), _Item);
+	if (Iterator != Items.end())
+	{
+		Items.remove(_Item); // 리스트에서 아이템 제거
+	}
+
+	std::string ItemName = _Item->GetName();
+	if (0 < ItemCounts[ItemName])
+	{
+		ItemCounts[ItemName]--;
+	}
+	else if (0 == ItemCounts[ItemName])
+	{
+		ItemCounts.erase(ItemName);
+	}
+}
 
 void APlayer::UpdateItemPos()
 {
@@ -578,28 +629,6 @@ void APlayer::RemovePassiveItem()
 		PassiveItem = nullptr;
 		return;
 	}
-}
-
-int APlayer::CheckPickupItemCount(std::string_view _ItemName)
-{
-	std::string FindItemName = _ItemName.data();
-	int Count = 0;
-
-	std::list<AItem*>::iterator StartIter = Items.begin();
-	std::list<AItem*>::iterator EndIter = Items.end();
-
-	for (; StartIter != EndIter; ++StartIter)
-	{
-		AItem* Item = *StartIter;
-		std::string ItemName = Item->GetName();
-
-		if (FindItemName == ItemName)
-		{
-			++Count;
-		}
-	}
-
-	return Count;
 }
 
 AItem* APlayer::ReturnItem(std::string_view _ItemName)

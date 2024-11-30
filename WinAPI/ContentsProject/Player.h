@@ -186,6 +186,15 @@ public:
 	{
 		MaxSpeed += _Value;
 	}
+	FVector2D GetFinalSpeed() const
+	{
+		return FinalSpeed;
+	}
+	void SetFinalSpeed(FVector2D _FinalSpeed)
+	{
+		FinalSpeed = _FinalSpeed;
+	}
+
 	void SetDir(const FVector2D& _Dir)
 	{
 		Direction = _Dir;
@@ -211,16 +220,44 @@ public:
 
 	// 아이템
 	bool Drop(class AItem* _Item, const int& _Count);
-	int CheckPickupItemCount(std::string_view _ItemName);
+	int CheckPickupItemCount(std::string_view _ItemName)
+	{
+		return ItemCounts[_ItemName.data()];
+
+		//std::string FindItemName = _ItemName.data();
+		//int Count = 0;
+
+		//std::list<AItem*>::iterator StartIter = Items.begin();
+		//std::list<AItem*>::iterator EndIter = Items.end();
+
+		//for (; StartIter != EndIter; ++StartIter)
+		//{
+		//	AItem* Item = *StartIter;
+		//	std::string ItemName = Item->GetName();
+
+		//	if (FindItemName == ItemName)
+		//	{
+		//		++Count;
+		//	}
+		//}
+
+		//return Count;
+	}
 	AItem* ReturnItem(std::string_view _ItemName);
 
 	void InputItem();
 
 	// 아이템 습득
+	void RemveItem(AItem* _Item);
+
 	int GetItemCount(std::string_view _GetName)
 	{
 		return CheckPickupItemCount(_GetName);
 	}
+
+	void RemovePassiveItem();
+
+
 	void ChangePlayerAnimation(float _Time, std::string_view _Name)
 	{
 		FullRenderer->ChangeAnimation(_Name);
@@ -309,7 +346,6 @@ public:
 	void ChaseDirection(AActor* _Monster);
 	void ChangeDetectCollisionDirection();
 
-	void RemovePassiveItem();
 protected:
 
 private:
@@ -360,7 +396,7 @@ private:
 
 	// Item
 	std::list<class AItem*> Items;
-	//std::map<EItemType, std::list<class AItem*>> Items;
+	std::map<std::string, int> ItemCounts;
 
 	bool IsBombCheat = false;
 	float BombCooldown = 0.0f;

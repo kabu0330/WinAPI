@@ -56,16 +56,27 @@ AActor::~AActor()
 
 void AActor::Tick(float _DeltaTime)
 {
+	//auto StartTime = std::chrono::high_resolution_clock::now();
+
 	if (true == IsDebug())
 	{
-		FVector2D Pos = GetActorLocation();
-		FVector2D CameraPos = GetWorld()->GetCameraPos();
+		static float DebugInterval = 0.1f; // 디버그 렌더링 주기 (0.1초)
+		static float AccumulatedTime = 0.0f;
 
-		FTransform Trans;
-		Trans.Location = Pos - CameraPos;
-		Trans.Scale = { 6, 6 };
+		AccumulatedTime += _DeltaTime;
+		if (AccumulatedTime >= DebugInterval)
+		{
+			FVector2D Pos = GetActorLocation();
+			FVector2D CameraPos = GetWorld()->GetCameraPos();
 
-		UEngineDebug::CoreDebugRender(Trans, UEngineDebug::EDebugPosType::Circle);
+			FTransform Trans;
+			Trans.Location = Pos - CameraPos;
+			Trans.Scale = { 6, 6 };
+
+			UEngineDebug::CoreDebugRender(Trans, UEngineDebug::EDebugPosType::Circle);
+
+			AccumulatedTime = 0.0f; // 시간 초기화
+		}
 	}
 
 	TimeEventer.Update(_DeltaTime);
@@ -79,8 +90,21 @@ void AActor::Tick(float _DeltaTime)
 		{
 			continue;
 		}
+	
+
+		// Component Tick 시간 측정
+		//auto ComponentStartTime = std::chrono::high_resolution_clock::now();
+
 		(*StartIter)->ComponentTick(_DeltaTime);
+
+		//auto ComponentEndTime = std::chrono::high_resolution_clock::now();
+
+		//auto ComponentDuration = std::chrono::duration_cast<std::chrono::microseconds>(ComponentEndTime - ComponentStartTime).count();
+		//UEngineDebug::OutPutString((*StartIter)->GetName() + " Tick took :" + std::to_string(ComponentDuration) + " microseconds");
 	}
+
+	//auto EndTime = std::chrono::high_resolution_clock::now(); // 종료 시간 측정
+	//auto Duration = std::chrono::duration_cast<std::chrono::microseconds>(EndTime - StartTime).count(); // 실행 시간 계산
 }
 
 void AActor::ReleaseTimeCheck(float _DeltaTime)

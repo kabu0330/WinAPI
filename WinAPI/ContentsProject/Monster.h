@@ -191,6 +191,14 @@ public:
 	{
 		MoveDuration = _MoveDuration;
 	}
+	FVector2D GetDirection() const
+	{
+		return Direction;
+	}
+	void SetDirection(FVector2D _Direction)
+	{
+		Direction = _Direction;
+	}
 
 	FVector2D GetDetectRange() const 
 	{

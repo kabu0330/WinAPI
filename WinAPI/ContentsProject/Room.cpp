@@ -29,7 +29,7 @@ ARoom::ARoom()
 
 	CollisionSetting();
 
-	 DebugOn();
+	// DebugOn();
 }
 
 void ARoom::BeginPlay()
@@ -652,7 +652,9 @@ void ARoom::Sounds()
 			UEngineSound::AllSoundStop();
 			Sound = UEngineSound::Play("treasure_room_discovera.ogg");
 
-			TimeEventer.PushEvent(4.0f, []() {APlayGameMode::GetPlayGameModeBGM() = UEngineSound::Play("diptera_sonata_basement.ogg"); });
+			TimeEventer.PushEvent(4.5f, []() {
+			APlayGameMode::GetPlayGameModeBGM().Stop();
+			APlayGameMode::GetPlayGameModeBGM() = UEngineSound::Play("diptera_sonata_basement.ogg"); });
 			
 			IsTreasureRoomEnterance = true;
 			return;

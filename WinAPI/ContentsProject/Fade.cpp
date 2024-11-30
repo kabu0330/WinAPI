@@ -15,6 +15,7 @@ AFade::AFade()
 	Renderer->SetComponentLocation(MapScale.Half());
 	Renderer->SetActive(false);
 	Renderer->SetCameraEffect(false);
+	Renderer->SetActive(false);
 }
 
 AFade::~AFade()

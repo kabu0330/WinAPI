@@ -129,6 +129,8 @@ void ULevel::Tick(float _DeltaTime)
 {
 	BeginPlayCheck();
 
+	//auto StartTime = std::chrono::high_resolution_clock::now();
+
 	{
 		std::list<AActor*>::iterator StartIter = AllActors.begin();
 		std::list<AActor*>::iterator EndIter = AllActors.end();
@@ -143,10 +145,20 @@ void ULevel::Tick(float _DeltaTime)
 				continue;
 			}
 
+			// Actor Tick 시간 측정
+			//auto ActorStartTime = std::chrono::high_resolution_clock::now();
+
 			CurActor->Tick(_DeltaTime);
+
+			//auto ActorEndTime = std::chrono::high_resolution_clock::now();
+
+			//auto ActorDuration = std::chrono::duration_cast<std::chrono::microseconds>(ActorEndTime - ActorStartTime).count();
+			//UEngineDebug::OutPutString(CurActor->GetName() + " Tick took :" + std::to_string(ActorDuration) +" microseconds");
 		}
 	}
-	int a = 0;
+	//auto EndTime = std::chrono::high_resolution_clock::now();
+	//auto Duration = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime).count();
+	//UEngineDebug::OutPutString("ULevel Tick took :" + std::to_string(Duration) + " milliseconds");
 }
 
 // 여기서 모든 Actor들을 렌더한다.

@@ -250,5 +250,6 @@ void ABossIntroScene::VsRendererFadeChange()
 
 ABossIntroScene::~ABossIntroScene()
 {
+	UEngineSound::AllSoundStop();
 	BossFightBGM = UEngineSound::Play("basic_boss_fight.ogg");
 }
