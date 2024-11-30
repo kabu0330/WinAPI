@@ -663,7 +663,7 @@ void AMonster::SpawnFadeOut()
 // 디버깅용 치트키
 void AMonster::MonsterInputDebug()
 {
-	if (UEngineInput::GetInst().IsDown('H'))
+	if (UEngineInput::GetInst().IsDown('G'))
 	{
 		if (ParentRoom == ARoom::GetCurRoom())
 		{

@@ -25,7 +25,8 @@
 #include "Host.h"
 #include "Dip.h"
 #include "Pooter.h"
-#include "Muligan.h"
+#include "Mulligan.h"
+#include "Mulligoon.h"
 #include "TheDukeOfFlies.h"
 
 #include "RoomObject.h"
@@ -156,34 +157,7 @@ void APlayGameMode::Spawn()
 
 	// Debug
 	//BaseRoom->CreateObject<AGridPit>(nullptr, { 100, 100 });
-	BaseRoom->CreateMonster<AMuligan>({ 100, 100 });
-
-	// Áß¾Ó
-	ARoomObject* Object0 = BaseRoom->CreateObject<ARock>(nullptr, { -50, -50 });
-	ARoomObject* Object1 = BaseRoom->CreateObject<ARock>(nullptr, { -50, 0 });
-	ARoomObject* Object2 = BaseRoom->CreateObject<ARock>(nullptr, { -50, 50 });
-	ARoomObject* Object3 = BaseRoom->CreateObject<ARock>(nullptr, { 0, -50 });
-	ARoomObject* Object4 = BaseRoom->CreateObject<ARock>(nullptr, { 0, 50 });
-	ARoomObject* Object5 = BaseRoom->CreateObject<ARock>(nullptr, { 50, -50 });
-	ARoomObject* Object6 = BaseRoom->CreateObject<ARock>(nullptr, { 50, 0 });
-	ARoomObject* Object7 = BaseRoom->CreateObject<ARock>(nullptr, { 50, 50 });
-	ARoomObject* Object8 = BaseRoom->CreateObject<ARock>(nullptr, {  -150, -120 });
-	ARoomObject* Object9 = BaseRoom->CreateObject<ARock>(nullptr, {   150, 120 });
-	ARoomObject* Object10 = BaseRoom->CreateObject<ARock>(nullptr, {  150, -120 });
-	ARoomObject* Object11 = BaseRoom->CreateObject<ARock>(nullptr, { -150, 120 });
-	ARoomObject* Object12 = BaseRoom->CreateObject<ARock>(nullptr, { -200, 10 });
-	ARoomObject* Object13 = BaseRoom->CreateObject<ARock>(nullptr, {  200, 10 });
-	ARoomObject* Object14 = BaseRoom->CreateObject<ARock>(nullptr, {  -310, -180 });
-	ARoomObject* Object15 = BaseRoom->CreateObject<ARock>(nullptr, {  -310, 180 });
-	ARoomObject* Object16 = BaseRoom->CreateObject<ARock>(nullptr, {  310, -180 });
-	ARoomObject* Object17 = BaseRoom->CreateObject<ARock>(nullptr, {  310, 180 });
-	Object1->SetSprite("TINTEDROCKS1");
-	Object7->SetSprite("TINTEDROCKS1");
-	Object8->SetSprite("TINTEDROCKS2");
-	Object9->SetSprite("TINTEDROCKS5");
-	Object14->SetSprite("TINTEDROCKS1");
-	Object15->SetSprite("TINTEDROCKS2");
-	Object16->SetSprite("TINTEDROCKS4");
+	BaseRoom->CreateMonster<AMulligoon>({ 100, 100 });
 
 
 	// TreasureRoom0
@@ -358,6 +332,42 @@ void APlayGameMode::Spawn()
 		MinionRoom2->CreateMonster<ADip>({ -50, 0 });
 		MinionRoom2->CreateMonster<ADip>({ 0, -50 });
 		MinionRoom2->CreateMonster<ADip>({ 0, 50 });
+	}
+
+	// MinionRoom4 : ÇÃ·¹ÀÌ¾î À§ÂÊ
+	{
+		MinionRoom4->CreateMonster<AMulligan>({ 150, 80 });
+		MinionRoom4->CreateMonster<AMulligan>({ -200, 120 });
+		MinionRoom4->CreateMonster<AFly>({ 0, 0 });
+		MinionRoom4->CreateMonster<AAttackFly>({ 150, 120 });
+		MinionRoom4->CreateMonster<AAttackFly>({ -150, 120 });
+
+		// Áß¾Ó
+		ARoomObject* Object0 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, -50 });
+		ARoomObject* Object1 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, 0 });
+		ARoomObject* Object2 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, 50 });
+		ARoomObject* Object3 = MinionRoom4->CreateObject<ARock>(nullptr, { 0, -50 });
+		ARoomObject* Object4 = MinionRoom4->CreateObject<ARock>(nullptr, { 0, 50 });
+		ARoomObject* Object5 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, -50 });
+		ARoomObject* Object6 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, 0 });
+		ARoomObject* Object7 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, 50 });
+		ARoomObject* Object8 = MinionRoom4->CreateObject<ARock>(nullptr, { -150, -120 });
+		ARoomObject* Object9 = MinionRoom4->CreateObject<ARock>(nullptr, { 150, 120 });
+		ARoomObject* Object10 = MinionRoom4->CreateObject<ARock>(nullptr, { 150, -120 });
+		ARoomObject* Object11 = MinionRoom4->CreateObject<ARock>(nullptr, { -150, 120 });
+		ARoomObject* Object12 = MinionRoom4->CreateObject<ARock>(nullptr, { -200, 10 });
+		ARoomObject* Object13 = MinionRoom4->CreateObject<ARock>(nullptr, { 200, 10 });
+		ARoomObject* Object14 = MinionRoom4->CreateObject<ARock>(nullptr, { -310, -180 });
+		ARoomObject* Object15 = MinionRoom4->CreateObject<ARock>(nullptr, { -310, 180 });
+		ARoomObject* Object16 = MinionRoom4->CreateObject<ARock>(nullptr, { 310, -180 });
+		ARoomObject* Object17 = MinionRoom4->CreateObject<ARock>(nullptr, { 310, 180 });
+		Object1->SetSprite("TINTEDROCKS1");
+		Object7->SetSprite("TINTEDROCKS1");
+		Object8->SetSprite("TINTEDROCKS2");
+		Object9->SetSprite("TINTEDROCKS5");
+		Object14->SetSprite("TINTEDROCKS1");
+		Object15->SetSprite("TINTEDROCKS2");
+		Object16->SetSprite("TINTEDROCKS4");
 	}
 	
 	// BossRoom

@@ -2,18 +2,18 @@
 #include "Monster.h"
 
 // Ό³Έν :
-class AMuligan : public AMonster
+class AMulligan : public AMonster
 {
 public:
 	// constrcuter destructer
-	AMuligan();
-	~AMuligan();
+	AMulligan();
+	~AMulligan();
 
 	// delete Function
-	AMuligan(const AMuligan& _Other) = delete;
-	AMuligan(AMuligan&& _Other) noexcept = delete;
-	AMuligan& operator=(const AMuligan& _Other) = delete;
-	AMuligan& operator=(AMuligan&& _Other) noexcept = delete;
+	AMulligan(const AMulligan& _Other) = delete;
+	AMulligan(AMulligan&& _Other) noexcept = delete;
+	AMulligan& operator=(const AMulligan& _Other) = delete;
+	AMulligan& operator=(AMulligan&& _Other) noexcept = delete;
 
 
 	void BeginPlay() override;

@@ -73,6 +73,10 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("duke.png", 2, 2);
 	UImageManager::GetInst().CuttingSprite("monster_054_mulligan_left.png", 6, 2);
 	UImageManager::GetInst().CuttingSprite("monster_054_mulligan_right.png", 6, 2);
+	UImageManager::GetInst().CuttingSprite("monster_059_muligoon_left.png", 6, 2);
+	UImageManager::GetInst().CuttingSprite("monster_059_muligoon_right.png", 6, 2);
+	UImageManager::GetInst().CuttingSprite("MulligoonBody.png", 5, 12);
+	UImageManager::GetInst().CuttingSprite("MulligoonBody_Left.png", 5, 12);
 
 	// MonsterEffect
 	UImageManager::GetInst().CuttingSprite("effect_bloodpoof.png", 4, 4);

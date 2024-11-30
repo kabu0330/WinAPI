@@ -148,7 +148,10 @@
     <ClInclude Include="GridPit.h">
       <Filter>04_Play\MapObject</Filter>
     </ClInclude>
-    <ClInclude Include="Muligan.h">
+    <ClInclude Include="Mulligan.h">
+      <Filter>04_Play\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Mulligoon.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
   </ItemGroup>
@@ -300,7 +303,10 @@
     <ClCompile Include="GridPit.cpp">
       <Filter>04_Play\MapObject</Filter>
     </ClCompile>
-    <ClCompile Include="Muligan.cpp">
+    <ClCompile Include="Mulligan.cpp">
+      <Filter>04_Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Mulligoon.cpp">
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
   </ItemGroup>

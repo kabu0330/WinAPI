@@ -256,7 +256,11 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Muligan.h">
+    <ClInclude Include="Mulligan.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Mulligoon.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -452,7 +456,11 @@
       <SubType>
       </SubType>
     </ClCompile>
-    <ClCompile Include="Muligan.cpp">
+    <ClCompile Include="Mulligan.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Mulligoon.cpp">
       <SubType>
       </SubType>
     </ClCompile>
