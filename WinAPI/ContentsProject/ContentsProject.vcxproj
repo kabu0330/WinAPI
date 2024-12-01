@@ -208,6 +208,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Gaper.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Global.h">
       <SubType>
       </SubType>
@@ -273,6 +277,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="NumberOne.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="Pacer.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -416,6 +424,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="Gaper.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Global.cpp">
       <SubType>
       </SubType>
@@ -481,6 +493,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="NumberOne.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="Pacer.cpp">
       <SubType>
       </SubType>
     </ClCompile>

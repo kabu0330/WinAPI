@@ -74,6 +74,8 @@ void APoop::CreateGib()
 		Decal->SetMove(this);
 	}
 
+	Sound = UEngineSound::Play("plop.wav");
+
 	USpriteRenderer* GibRenderer = Gib->GetBodyRenderer();
 	GibRenderer->CreateAnimation("Gib", "effect_poopgibs.png", Index, Index, 0.1f, false);
 	GibRenderer->SetComponentScale({ 32, 32 });

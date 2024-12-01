@@ -90,7 +90,7 @@ void AHorf::Attack(float _DeltaTime)
 
 	IsOscillate = true;
 
-	Sound = UEngineSound::Play("monster_grunt_4b.wav");
+	Sound = UEngineSound::Play("shakey kid roar.wav");
 
 	TimeEventer.PushEvent(0.5f, std::bind(&AMonster::SwitchIsAttacking, this));
 	TimeEventer.PushEvent(0.65f, [this]() {BodyRenderer->ChangeAnimation("Aggressive"); });

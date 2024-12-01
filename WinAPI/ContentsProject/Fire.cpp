@@ -90,7 +90,7 @@ void AFire::SwitchAnimation()
 		FlameBaseRenderer->SetComponentScale(BodyRendererScale * 1.5f);
 
 		BodyCollisionLocation = { 0, -5 };
-		BodyCollisionScale = { 20, 20 };
+		BodyCollisionScale = { 25, 25 };
 		BodyCollision->SetComponentLocation(BodyCollisionLocation);
 		BodyCollision->SetComponentScale(BodyCollisionScale);
 

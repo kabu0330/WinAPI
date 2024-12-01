@@ -160,6 +160,12 @@
     <ClInclude Include="BlindCreep.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="Pacer.h">
+      <Filter>04_Play\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Gaper.h">
+      <Filter>04_Play\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -319,6 +325,12 @@
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
     <ClCompile Include="BlindCreep.cpp">
+      <Filter>04_Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Pacer.cpp">
+      <Filter>04_Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Gaper.cpp">
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
   </ItemGroup>

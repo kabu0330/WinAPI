@@ -62,6 +62,7 @@ public:
 	virtual void HandleCollisionDamage();
 	virtual void Death(float _DeltaTime);
 	virtual void CreateGib();
+	virtual void DeathSound() {};
 
 	virtual int ApplyDamaged(AActor* _Monster, int _PlayerAtt, FVector2D _Dir); // ÇÇ°Ý
 	void KnockbackTick();
@@ -155,6 +156,16 @@ public:
 	void SwitchDamagedEffectRenderer()
 	{
 		DamagedEffectRenderer->SetActive(false);
+	}
+
+	void SetDestroySpawnEffect()
+	{
+		if (nullptr == SpawnEffectRenderer)
+		{
+			return;
+		}
+		SpawnEffectRenderer->Destroy();
+		SpawnEffectRenderer = nullptr;
 	}
 
 	int GetAtt() const

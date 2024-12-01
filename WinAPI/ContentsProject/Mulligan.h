@@ -42,7 +42,7 @@ protected:
 private:
 	USpriteRenderer* HeadRenderer = nullptr;
 	float RunAwayTimeElapsed = 0.0f;
-	float RunAwayDuration = 6.0f;
+	float RunAwayDuration = 7.0f;
 
 	float SoundTimeElapsed = 0.0f;
 	float SoundDuration = 4.0f;

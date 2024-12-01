@@ -29,6 +29,8 @@
 #include "Mulligoon.h"
 #include "Horf.h"
 #include "BlindCreep.h"
+#include "Pacer.h"
+#include "Gaper.h"
 #include "TheDukeOfFlies.h"
 
 #include "RoomObject.h"
@@ -300,6 +302,33 @@ void APlayGameMode::Spawn()
 		MinionRoom3->CreateObject<AFire>(nullptr, { 160, -170 });
 		MinionRoom3->CreateObject<AFire>(nullptr, { -160, 180 });
 		MinionRoom3->CreateObject<AFire>(nullptr, { 160, 180 });
+	}
+
+	// MinionRoom6 : 플레이어 위 // 게이퍼, 페이서, 멀리건, 멀리군
+	{
+		MinionRoom6->CreateMonster<AMulligan>({ -150, -100 });
+		MinionRoom6->CreateMonster<AMulligan>({ -150, 100 });
+		MinionRoom6->CreateMonster<AMulligoon>({ 150, -100 });
+		MinionRoom6->CreateMonster<AMulligoon>({ -150, 100 });
+		MinionRoom6->CreateMonster<AGaper>({ -50, 0 });
+		MinionRoom6->CreateMonster<AGaper>({ -100, 150 });
+
+		// 중앙
+		ARoomObject* Object0 = MinionRoom6->CreateObject<ARock>(nullptr, { -100,   0 });
+		ARoomObject* Object1 = MinionRoom6->CreateObject<ARock>(nullptr, { -50, -50 });
+		ARoomObject* Object2 = MinionRoom6->CreateObject<ARock>(nullptr, { -50,  50 });
+		ARoomObject* Object3 = MinionRoom6->CreateObject<ARock>(nullptr, { -100,  50 });
+		ARoomObject* Object4 = MinionRoom6->CreateObject<ARock>(nullptr, { 0,  50 });
+		ARoomObject* Object5 = MinionRoom6->CreateObject<ARock>(nullptr, { -100,  -50 });
+		ARoomObject* Object6 = MinionRoom6->CreateObject<ARock>(nullptr, { 0,  -50 });
+		ARoomObject* Poop0 = MinionRoom6->CreateObject<APoop>(nullptr, { 0,   0 });
+		Poop0->SetSprite("CORNY_POOP");
+
+
+		MinionRoom6->CreateObject<ARock>(nullptr, { -220, -100 });
+		MinionRoom6->CreateObject<ARock>(nullptr, { -220, 100 });
+		MinionRoom6->CreateObject<ARock>(nullptr, { 160, -100 });
+		MinionRoom6->CreateObject<ARock>(nullptr, { 160, 100 });
 	}
 
 	// MinionRoom7 : 플레이어 좌, 우 // 푸터, 호퍼

@@ -32,6 +32,11 @@ public:
 
 	}
 
+	void DeathSound() override
+	{
+		Sound = UEngineSound::Play("plop.wav");
+	}
+
 protected:
 
 private:

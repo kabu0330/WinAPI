@@ -475,6 +475,10 @@ void AMonster::BodyRender()
 
 	TimeEventer.PushEvent(1.0f, [this]() {
 		SpawEvent = false;
+		if (nullptr == SpawnEffectRenderer)
+		{
+			return;
+		}
 		SpawnEffectRenderer->Destroy();
 		SpawnEffectRenderer = nullptr; 
 		 });
@@ -492,7 +496,7 @@ void AMonster::Death(float _DeltaTime)
 		BloodEffectRenderer->SetActive(true);
 		CreateGib();
 		CollisionDestroy();
-		//TimeEventer.PushEvent(15.0f, std::bind(&AMonster::FadeOut, this));
+		DeathSound();
 	}
 
 	// 3. 액터 지우고
