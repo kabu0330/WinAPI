@@ -1314,6 +1314,8 @@ void APlayer::ResetDebug()
 	if (UEngineInput::GetInst().IsDown(VK_F4))
 	{
 		Reset();
+		UEngineSound::AllSoundStop();
+		Sound = UEngineSound::Play("title_screen_jingle_v1_01.ogg");
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
 	}
 }

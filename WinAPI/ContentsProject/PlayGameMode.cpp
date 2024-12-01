@@ -79,7 +79,7 @@ void APlayGameMode::Tick(float _DeltaTime)
 
 	if (false == Sound.IsPlaying() && false == IsPlayingBGM)
 	{
-		//PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
+		PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
 		PlayGameModeBGM.Loop(999);
 		IsPlayingBGM = true;
 	}
@@ -96,7 +96,7 @@ void APlayGameMode::Spawn()
 	ARoom* TreasureRoom3 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* TreasureRoom4 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* TreasureRoom5 = GetWorld()->SpawnActor<ARoom>();
-	//ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
+	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
@@ -126,7 +126,7 @@ void APlayGameMode::Spawn()
 	TreasureRoom3->SetName("TreasureRoom3");
 	TreasureRoom4->SetName("TreasureRoom4");
 	TreasureRoom5->SetName("TreasureRoom5");
-	//MinionRoom0->SetName("MinionRoom0");
+	MinionRoom0->SetName("MinionRoom0");
 	MinionRoom1->SetName("MinionRoom1");
 	MinionRoom2->SetName("MinionRoom2");
 	MinionRoom3->SetName("MinionRoom3");
@@ -144,7 +144,7 @@ void APlayGameMode::Spawn()
 	BaseRoom->InterLinkRoom(BossRoom, RoomDir::DOWN);
 
 	// Left Root
-	//MinionRoom1->InterLinkRoom(MinionRoom0, RoomDir::UP);
+	MinionRoom1->InterLinkRoom(MinionRoom0, RoomDir::UP);
 	MinionRoom1->InterLinkRoom(MinionRoom3, RoomDir::DOWN);
 
 	MinionRoom3->InterLinkRoom(MinionRoom6, RoomDir::DOWN);
@@ -177,7 +177,6 @@ void APlayGameMode::Spawn()
 		AItem* InitBomb = BaseRoom->CreateItem<ABomb>(nullptr, { 108, -22 });
 	}
 
-	BaseRoom->CreateItem<APenny>();
 
 	// TreasureRoom0
 	{
@@ -241,6 +240,28 @@ void APlayGameMode::Spawn()
 
 
 	// Left Root
+	
+	// MinionRoom0 : 플레이어 아래쪽 // 만든 모든 몬스터들
+	{
+		MinionRoom0->CreateMonster<APacer>({-260, -150});
+		MinionRoom0->CreateMonster<AHopper>({-230, -150});
+		MinionRoom0->CreateMonster<AAttackFly>({-180, -150});
+		MinionRoom0->CreateMonster<AFly>({-130, -150});
+		MinionRoom0->CreateMonster<ABlindCreep>({-80, -150});
+		MinionRoom0->CreateMonster<ADip>({-30, -150});
+		MinionRoom0->CreateMonster<AGaper>({20, -150});
+		MinionRoom0->CreateMonster<AHorf>({120, -150});
+		MinionRoom0->CreateMonster<AHost>({170, -150});
+		MinionRoom0->CreateMonster<APooter>({220, -150});
+		MinionRoom0->CreateMonster<AMulligan>({-260, -100});
+		MinionRoom0->CreateMonster<AMulligoon>({260, -100});
+
+		for (int i = 0; i < 13; i++)
+		{
+			MinionRoom0->CreateObject<AGridPit>(nullptr, { -310 + (51 * i), -60});
+		}
+	}
+	
 	//MinionRoom1 : 플레이어 오른쪽 : 파리맵
 	{
 		MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
@@ -742,7 +763,7 @@ void APlayGameMode::LevelChangeStart()
 
 
 #ifdef _DEBUG
-	TimeEventer.PushEvent(8.0f, [this]() {	UEngineSound::AllSoundStop();
+	TimeEventer.PushEvent(7.0f, [this]() {	UEngineSound::AllSoundStop();
 	Sound = UEngineSound::Play("basementIntro.ogg"); });
 
 #else
@@ -755,8 +776,9 @@ void APlayGameMode::LevelChangeStart()
 	FadeRenderer->SetActive(true);
 	LoadingRenderer->SetActive(true);
 
-	TimeEventer.PushEvent(5.0f, [this]() {	UEngineSound::AllSoundStop();
-	Sound = UEngineSound::Play("basementIntro.ogg"); 
+	TimeEventer.PushEvent(7.0f, [this]() {	
+		UEngineSound::AllSoundStop();
+		Sound = UEngineSound::Play("basementIntro.ogg"); 
 	}); // 여기서 플레이어가 이동 가능
 
 	TimeEventer.PushEvent(5.0f, std::bind(&APlayGameMode::FadeOut, this));
