@@ -177,6 +177,8 @@ void APlayGameMode::Spawn()
 		AItem* InitBomb = BaseRoom->CreateItem<ABomb>(nullptr, { 108, -22 });
 	}
 
+	BaseRoom->CreateItem<APenny>();
+
 	// TreasureRoom0
 	{
 	 	ARoomObject* Fire0 = TreasureRoom0->CreateObject<AFire>(nullptr, {  150,    0 });

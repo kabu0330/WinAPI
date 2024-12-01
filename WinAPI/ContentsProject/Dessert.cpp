@@ -95,6 +95,7 @@ void ADessert::DropSucessAnimation(APlayer* _Player)
 
 	//TimeEventer.PushEvent(DropAnimationDuration / 2.0f, [this]() { Force = Gravity; });
 	TimeEventer.PushEvent(DropAnimationDuration, [this]() {
+		DropRenderer->SetActive(false);
 		DropEffectRenderer->SetActive(false);
 		IsOwnedByPlayer = false;
 		IsUseEnd = true;

@@ -208,6 +208,10 @@ public:
 	{
 		Items.remove(_Item);
 	}
+	void ShowTrapDoor()
+	{
+		TrapRenderer->SetActive(true);
+	}
 
 protected:
 
@@ -233,6 +237,8 @@ private:
 	USpriteRenderer* ControlsRenderer   = nullptr; // BaseRoom 컨트롤러 이미지
 	USpriteRenderer* ButtonsRenderer[9] = { nullptr, }; // BaseRoom 컨트롤러 이미지
 	FVector2D ButtonScale = FVector2D(32, 32);
+
+	USpriteRenderer* TrapRenderer = nullptr; // 다음 맵 이동
 
 	USpriteRenderer* BossDoorOpenEffect = nullptr; 
 

@@ -162,11 +162,14 @@ void ATear::Explosion()
 	if (nullptr != TearCollision)
 	{
 		Sound = UEngineSound::Play("tear_block.wav");
-
+		
+		if (nullptr != TearEffectRenderer)
+		{
+			TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
+		}
 		TearCollision->Destroy();
 		TearCollision = nullptr;
 		Dir = FVector2D::ZERO;
-		TearEffectRenderer->ChangeAnimation("Player_Tear_Attack");
 		SetActorLocation(GetActorLocation());
 
 		if (nullptr != TearEffectRenderer)

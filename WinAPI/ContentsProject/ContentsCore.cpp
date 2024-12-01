@@ -135,6 +135,7 @@ void ContentsCore::SpriteSetting()
 	// Background
 	UImageManager::GetInst().CuttingSprite("NormalRoomDoor.png", 4, 2);
 	UImageManager::GetInst().CuttingSprite("controls_buttons.png", 16, 16);
+	UImageManager::GetInst().CuttingSprite("trap_door.png", 3, 2);
 
 	// UI
 	UImageManager::GetInst().CuttingSprite("pickup.png", 10, 1); // (10, 12)

@@ -238,6 +238,7 @@ void ATheDukeOfFlies::Death(float _DeltaTime)
 	// 3. 액터 지우고
 	if (nullptr == BodyRenderer)
 	{
+		ParentRoom->ShowTrapDoor();
 		ParentRoom->RemoveMonster(this);
 		Destroy(7.5f);
 		return;

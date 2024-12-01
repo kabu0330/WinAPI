@@ -587,6 +587,7 @@ void ARoom::SpriteSetting()
 	RoomRenderer->SetComponentScale(RoomScale);
 	RoomRenderer->SetOrder(ERenderOrder::Background);
 
+
 	for (int i = 0; i < 9; i++)
 	{
 		ButtonsRenderer[i] = CreateDefaultSubObject<USpriteRenderer>();
@@ -605,6 +606,12 @@ void ARoom::SpriteSetting()
 	ButtonsRenderer[7]->SetSprite("controls_buttons.png", 72); // À§
 	ButtonsRenderer[8]->SetSprite("controls_buttons.png", 4); // E
 
+	TrapRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	TrapRenderer->SetSprite("trap_door.png", 3);
+	TrapRenderer->SetComponentScale({128, 128});
+	TrapRenderer->SetComponentLocation({0, -80});
+	TrapRenderer->SetOrder(ERenderOrder::Door);
+	TrapRenderer->SetActive(false);
 }
 
 void ARoom::CollisionSetting()
