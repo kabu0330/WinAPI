@@ -21,7 +21,7 @@ AHopper::AHopper()
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale({ 30, 30 });
-	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_Body);
+	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_FlyingBody);
 	BodyCollision->SetCollisionType(ECollisionType::Rect);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();

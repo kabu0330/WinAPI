@@ -16,23 +16,23 @@ AHorf::AHorf()
 	/* 이동속도 : */ SetMoveSpeed(0);
 	/* 이동시간 : */ SetMoveDuration(0.0f);
 	/* 정지시간 : */ SetMoveCooldown(0.0f);
-	/* 탐색범위 : */ SetDetectRange({ 500 , 300 });
+	/* 탐색범위 : */ SetDetectRange({ 600 , 300 });
 	/* 발사속도 : */ SetShootingSpeed(350.0f);
 	/* 쿨타임   : */ SetCooldown(4.0f);
 
-	BodyScale = { 112, 112 };
+	BodyScale = { 108, 108 };
 
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
-	BodyCollision->SetComponentScale({ 45, 45 });
+	BodyCollision->SetComponentScale({ 48, 48 });
 	BodyCollision->SetCollisionGroup(ECollisionGroup::Monster_Body);
 	BodyCollision->SetCollisionType(ECollisionType::Circle);
 
 	BodyRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BodyRenderer->CreateAnimation("Idle", "monster_029_horf.png", { 1, 1 }, 0.15f, false);
 	BodyRenderer->CreateAnimation("Attack", "monster_029_horf.png", { 0, 2, 3 }, 0.2f, false);
-	BodyRenderer->CreateAnimation("Aggressive", "monster_029_horf.png", { 0, 0 }, 0.2f, false);
-	BodyRenderer->SetComponentLocation({ 0, -10 });
+	BodyRenderer->CreateAnimation("Aggressive", "monster_029_horf.png", { 0, 0 }, 1.0f, false);
+	BodyRenderer->SetComponentLocation({ 0, 15 });
 	BodyRenderer->SetComponentScale(BodyScale);
 	BodyRenderer->ChangeAnimation("Idle");
 	BodyRenderer->SetOrder(ERenderOrder::Monster);
@@ -54,6 +54,7 @@ void AHorf::BeginPlay()
 	AMonster::BeginPlay();
 
 	CurPos = GetActorLocation();
+	
 
 }
 
@@ -89,11 +90,21 @@ void AHorf::Attack(float _DeltaTime)
 
 	IsOscillate = true;
 
+	Sound = UEngineSound::Play("monster_grunt_4b.wav");
+
 	TimeEventer.PushEvent(0.5f, std::bind(&AMonster::SwitchIsAttacking, this));
 	TimeEventer.PushEvent(0.65f, [this]() {BodyRenderer->ChangeAnimation("Aggressive"); });
 
 	TearDir = GetDirectionToPlayer();
 	FVector2D TearPos = { GetActorLocation().iX(),  GetActorLocation().iY() };
+	if (MonsterState::LEFT == State)
+	{
+		TearPos += FVector2D(-30, 0);
+	}
+	else
+	{
+		TearPos += FVector2D(30, 0);
+	}
 
 	Tear = GetWorld()->SpawnActor<ABloodTear>();
 	Tear->Fire(TearPos, TearDir, ShootingSpeed, Att);
@@ -121,17 +132,15 @@ void AHorf::Oscillation(float _DeltaTime)
 		return;
 	}
 
-	// 진동 속도와 크기 설정
-	const float OscillationSpeed = 5.0f;       // 진동 속도
-	const float OscillationMagnitude = 2.0f;  // 진동 크기 (최대 이동 거리)
+	// 진동 속도와 강도 설정
+	const float OscillationSpeed = 1500.0f; // 진동 속도
+	const float OscillationMagnitude = 4.0f; // 진동 크기
 
-	float OffsetX = std::sin(_DeltaTime * OscillationSpeed) * OscillationMagnitude;
-	float OffsetY = std::cos(_DeltaTime * OscillationSpeed) * OscillationMagnitude;
+	// 사인 함수를 이용해 진동 계산
+	float Oscillation = std::sin(_DeltaTime * OscillationSpeed) * OscillationMagnitude;
 
-	// 기존 위치를 중심으로 새로운 위치 계산
-	FVector2D OriginalPosition = CurPos - ParentRoom->GetActorLocation(); // 기본 위치
-	FVector2D NewPosition = { OriginalPosition.X + OffsetX, OriginalPosition.Y + OffsetY };
-
-	BodyRenderer->SetComponentLocation(NewPosition);
+	// 위치 업데이트
+	FVector2D NewScale = { BodyScale.X + Oscillation,  BodyScale.Y + Oscillation };
+	BodyRenderer->SetComponentScale(NewScale);
 }
 

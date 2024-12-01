@@ -25,13 +25,13 @@ AGridPit::AGridPit()
 	BodyCollision = CreateDefaultSubObject<U2DCollision>();
 	BodyCollision->SetComponentLocation({ 0, 0 });
 	BodyCollision->SetComponentScale(BodyRendererScale);
-	BodyCollision->SetCollisionGroup(ECollisionGroup::Object);
+	BodyCollision->SetCollisionGroup(ECollisionGroup::Object_Bottom);
 	BodyCollision->SetCollisionType(ECollisionType::Rect);
 
 	BlockingPathCollision = CreateDefaultSubObject<U2DCollision>();
 	BlockingPathCollision->SetComponentLocation(BlockingPathCollisionPivot);
 	BlockingPathCollision->SetComponentScale(BodyRendererScale);
-	BlockingPathCollision->SetCollisionGroup(ECollisionGroup::Object);
+	BlockingPathCollision->SetCollisionGroup(ECollisionGroup::Object_Bottom);
 	BlockingPathCollision->SetCollisionType(ECollisionType::Rect);
 }
 

@@ -28,6 +28,7 @@
 #include "Mulligan.h"
 #include "Mulligoon.h"
 #include "Horf.h"
+#include "BlindCreep.h"
 #include "TheDukeOfFlies.h"
 
 #include "RoomObject.h"
@@ -66,6 +67,22 @@ void APlayGameMode::BeginPlay()
 
 }
 
+void APlayGameMode::Tick(float _DeltaTime)
+{
+	Super::Tick(_DeltaTime);
+
+	EngineDebug(_DeltaTime);
+	CheckInput();
+
+
+	if (false == Sound.IsPlaying() && false == IsPlayingBGM)
+	{
+		//PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
+		PlayGameModeBGM.Loop(999);
+		IsPlayingBGM = true;
+	}
+}
+
 void APlayGameMode::Spawn()
 {
 	// Room
@@ -77,7 +94,7 @@ void APlayGameMode::Spawn()
 	ARoom* TreasureRoom3 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* TreasureRoom4 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* TreasureRoom5 = GetWorld()->SpawnActor<ARoom>();
-	ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
+	//ARoom* MinionRoom0 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom1 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom2 = GetWorld()->SpawnActor<ARoom>();
 	ARoom* MinionRoom3 = GetWorld()->SpawnActor<ARoom>();
@@ -107,7 +124,7 @@ void APlayGameMode::Spawn()
 	TreasureRoom3->SetName("TreasureRoom3");
 	TreasureRoom4->SetName("TreasureRoom4");
 	TreasureRoom5->SetName("TreasureRoom5");
-	MinionRoom0->SetName("MinionRoom0");
+	//MinionRoom0->SetName("MinionRoom0");
 	MinionRoom1->SetName("MinionRoom1");
 	MinionRoom2->SetName("MinionRoom2");
 	MinionRoom3->SetName("MinionRoom3");
@@ -125,14 +142,14 @@ void APlayGameMode::Spawn()
 	BaseRoom->InterLinkRoom(BossRoom, RoomDir::DOWN);
 
 	// Left Root
-	MinionRoom1->InterLinkRoom(MinionRoom0, RoomDir::UP);
+	//MinionRoom1->InterLinkRoom(MinionRoom0, RoomDir::UP);
 	MinionRoom1->InterLinkRoom(MinionRoom3, RoomDir::DOWN);
 
-	MinionRoom3->InterLinkRoom(TreasureRoom1, RoomDir::LEFT);
 	MinionRoom3->InterLinkRoom(MinionRoom6, RoomDir::DOWN);
 
-	MinionRoom6->InterLinkRoom(MinionRoom7, RoomDir::RIGHT);
 	MinionRoom6->InterLinkRoom(MinionRoom9, RoomDir::DOWN);
+	MinionRoom6->InterLinkRoom(TreasureRoom1, RoomDir::LEFT);
+	MinionRoom6->InterLinkRoom(MinionRoom7, RoomDir::RIGHT);
 
 
 	MinionRoom7->InterLinkRoom(MinionRoom8, RoomDir::RIGHT);
@@ -143,8 +160,8 @@ void APlayGameMode::Spawn()
 
 	// Right Root
 	MinionRoom2->InterLinkRoom(MinionRoom4, RoomDir::DOWN);
+	MinionRoom2->InterLinkRoom(MinionRoom5, RoomDir::RIGHT);
 
-	MinionRoom4->InterLinkRoom(MinionRoom5, RoomDir::RIGHT);
 	MinionRoom4->InterLinkRoom(MinionRoom8, RoomDir::DOWN); // Left Root Link
 
 	MinionRoom5->InterLinkRoom(TreasureRoom5, RoomDir::UP);
@@ -152,17 +169,11 @@ void APlayGameMode::Spawn()
 	MinionRoom8->InterLinkRoom(TreasureRoom2, RoomDir::RIGHT);
 
 
-
-	// Debug
-	//BaseRoom->CreateObject<AGridPit>(nullptr, { 100, 100 });
-
+	// BaseRoom
 	for (int i = 0; i < 5; i++)
 	{
 		AItem* InitBomb = BaseRoom->CreateItem<ABomb>(nullptr, { 108, -22 });
 	}
-
-	BaseRoom->CreateMonster<AHorf>({ 0, 0 });
-
 
 	// TreasureRoom0
 	{
@@ -224,11 +235,18 @@ void APlayGameMode::Spawn()
 		SpawnRandomItem(TreasureRoom5);
 	}
 
-	
-	 //MinionRoom0 
-	 
-	 //MinionRoom1 : 플레이어 오른쪽 : 파리맵
+
+	// Left Root
+	//MinionRoom1 : 플레이어 오른쪽 : 파리맵
 	{
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, 70 });
+		MinionRoom1->CreateMonster<AAttackFly>({ 0, 0 });
+		MinionRoom1->CreateMonster<AFly>({ -50, -50 });
+		MinionRoom1->CreateMonster<AFly>({ -100, -10 });
+		MinionRoom1->CreateMonster<AFly>({ -50, 40 });
+
 		ARoomObject* Poop0 = MinionRoom1->CreateObject<APoop>(nullptr, { -310, 180 });
 		ARoomObject* Poop1 = MinionRoom1->CreateObject<APoop>(nullptr, { -310, -190 });
 		ARoomObject* Poop2 = MinionRoom1->CreateObject<APoop>(nullptr, { 310, 180 });
@@ -252,64 +270,118 @@ void APlayGameMode::Spawn()
 		Poop8->SetSprite("CORNY_POOP");
 		Poop9->SetSprite("CORNY_POOP");
 		Poop10->SetSprite("CORNY_POOP");
-
-		MinionRoom1->CreateMonster<AAttackFly>({ 0, -80 });
-		MinionRoom1->CreateMonster<AAttackFly>({ 50, -10 });
-		MinionRoom1->CreateMonster<AAttackFly>({ 0, 70 });
-		MinionRoom1->CreateMonster<AAttackFly>({ 0, 0 });
-		MinionRoom1->CreateMonster<AFly>({ -50, -50 });
-		MinionRoom1->CreateMonster<AFly>({ -100, -10 });
-		MinionRoom1->CreateMonster<AFly>({ -50, 40 });
-
 	}
 
-	// MinionRoom3 : 플레이어 위쪽
+	// MinionRoom3 : 플레이어 위쪽 // 눈 먼 크리프
 	{
-		ARoomObject* Object0 = MinionRoom3->CreateObject<ARock>(nullptr, { -180, 100 });
-		ARoomObject* Object1 = MinionRoom3->CreateObject<ARock>(nullptr, { 180, 100 });
-		ARoomObject* Object2 = MinionRoom3->CreateObject<ARock>(nullptr, { -180, -100 });
-		ARoomObject* Object3 = MinionRoom3->CreateObject<ARock>(nullptr, { 180, -100 });
+		MinionRoom3->CreateMonster<ABlindCreep>({ -280,100 });
+		MinionRoom3->CreateMonster<ABlindCreep>({ -280,0 });
+		MinionRoom3->CreateMonster<ABlindCreep>({ -280,-100 });
+		ARoomObject* GridPit00 = MinionRoom3->CreateObject<AGridPit>(nullptr, { -220, -170 });
+		ARoomObject* GridPit01 = MinionRoom3->CreateObject<AGridPit>(nullptr, { -220, -120 });
+		ARoomObject* GridPit02 = MinionRoom3->CreateObject<AGridPit>(nullptr, { -220, -70 });
+		ARoomObject* GridPit03 = MinionRoom3->CreateObject<AGridPit>(nullptr, { -220, -20 });
+		ARoomObject* GridPit04 = MinionRoom3->CreateObject<AGridPit>(nullptr, { -220, 30 });
+		ARoomObject* GridPit05 = MinionRoom3->CreateObject<AGridPit>(nullptr, { -220, 80 });
+		ARoomObject* GridPit06 = MinionRoom3->CreateObject<AGridPit>(nullptr, { -220, 130 });
+		ARoomObject* GridPit07 = MinionRoom3->CreateObject<AGridPit>(nullptr, { -220, 180 });
+
+		ARoomObject* GridPit10 = MinionRoom3->CreateObject<AGridPit>(nullptr, { 220, -170 });
+		ARoomObject* GridPit11 = MinionRoom3->CreateObject<AGridPit>(nullptr, { 220, -120 });
+		ARoomObject* GridPit12 = MinionRoom3->CreateObject<AGridPit>(nullptr, { 220, -70 });
+		ARoomObject* GridPit13 = MinionRoom3->CreateObject<AGridPit>(nullptr, { 220, -20 });
+		ARoomObject* GridPit14 = MinionRoom3->CreateObject<AGridPit>(nullptr, { 220, 30 });
+		ARoomObject* GridPit15 = MinionRoom3->CreateObject<AGridPit>(nullptr, { 220, 80 });
+		ARoomObject* GridPit16 = MinionRoom3->CreateObject<AGridPit>(nullptr, { 220, 130 });
+		ARoomObject* GridPit17 = MinionRoom3->CreateObject<AGridPit>(nullptr, { 220, 180 });
+
+		MinionRoom3->CreateObject<AFire>(nullptr, { 0, 0 });
+		MinionRoom3->CreateObject<AFire>(nullptr, { -160,  -170 });
+		MinionRoom3->CreateObject<AFire>(nullptr, { 160, -170 });
+		MinionRoom3->CreateObject<AFire>(nullptr, { -160, 180 });
+		MinionRoom3->CreateObject<AFire>(nullptr, { 160, 180 });
+	}
+
+	// MinionRoom7 : 플레이어 좌, 우 // 푸터, 호퍼
+	{
+		MinionRoom7->CreateMonster<APooter>({ 80, -10 });
+		MinionRoom7->CreateMonster<APooter>({ -80, -10 });
+		MinionRoom7->CreateMonster<AHopper>({ 0, -80 });
+		MinionRoom7->CreateMonster<AHopper>({ 0, 80 });
+
+		ARoomObject* Object0 = MinionRoom7->CreateObject<ARock>(nullptr, { -150, -120 });
+		ARoomObject* Object1 = MinionRoom7->CreateObject<ARock>(nullptr, { 150, 120 });
+		ARoomObject* Object2 = MinionRoom7->CreateObject<ARock>(nullptr, { -150, 120 });
+		ARoomObject* Object3 = MinionRoom7->CreateObject<ARock>(nullptr, { 150, -120 });
+		Object1->SetSprite("TINTEDROCKS1");
+	}
+
+	// MinionRoom9 : 플레이어 위쪽 // 호스트 
+	{
+		MinionRoom9->CreateMonster<AHost>({ 220, 50 });
+		MinionRoom9->CreateMonster<AHost>({ -220, 50 });
+
+		ARoomObject* Object0 = MinionRoom9->CreateObject<ARock>(nullptr, { -180, 100 });
+		ARoomObject* Object1 = MinionRoom9->CreateObject<ARock>(nullptr, { 180, 100 });
+		ARoomObject* Object2 = MinionRoom9->CreateObject<ARock>(nullptr, { -180, -100 });
+		ARoomObject* Object3 = MinionRoom9->CreateObject<ARock>(nullptr, { 180, -100 });
 		Object0->SetSprite("TINTEDROCKS1");
 		Object1->SetSprite("TINTEDROCKS2");
-
-		MinionRoom3->CreateMonster<AHost>({ 220, 50 });
-		MinionRoom3->CreateMonster<AHost>({ 0, 150 });
-		MinionRoom3->CreateMonster<AHost>({ -220, 50 });
-		MinionRoom3->CreateMonster<AAttackFly>({ -150, 80 });
-		MinionRoom3->CreateMonster<AAttackFly>({ 150, 80 });		
 	}
 
-	// MinionRoom6
+
+	// Right Root
+	//
+	//MinionRoom2 : 플레이어 왼쪽 // 딥
 	{
-		MinionRoom6->CreateItem<ABomb>(nullptr, {-310, -180});
-		MinionRoom6->CreateItem<ABomb>(nullptr, {-260, -180});
-		MinionRoom6->CreateItem<ABomb>(nullptr, {-310, -135});
-		MinionRoom6->CreateItem<ABomb>(nullptr, { 310, 180 });
-		MinionRoom6->CreateItem<ABomb>(nullptr, { 260, 180 });
-		MinionRoom6->CreateItem<ABomb>(nullptr, { 310, 135 });
+		MinionRoom2->CreateMonster<ADip>({ 50, 0 });
+		MinionRoom2->CreateMonster<ADip>({ -50, 0 });
+		MinionRoom2->CreateMonster<ADip>({ 0, -50 });
+		MinionRoom2->CreateMonster<ADip>({ 0, 50 });
+
+		ARoomObject* Poop0 = MinionRoom2->CreateObject<APoop>(nullptr, { 0, 0 });
+		ARoomObject* Poop1 = MinionRoom2->CreateObject<APoop>(nullptr, { -50, -50 });
+		ARoomObject* Poop2 = MinionRoom2->CreateObject<APoop>(nullptr, { 50, 50 });
+		ARoomObject* Poop3 = MinionRoom2->CreateObject<APoop>(nullptr, { -50, 50 });
+		ARoomObject* Poop4 = MinionRoom2->CreateObject<APoop>(nullptr, { 50, -50 });
+		Poop0->SetSprite("GOLDEN_POOP");
+		Poop1->SetSprite("CORNY_POOP");
+		Poop2->SetSprite("CORNY_POOP");
+		Poop3->SetSprite("CORNY_POOP");
+		Poop4->SetSprite("CORNY_POOP");
+	}
+
+	// MinionRoom5 : 플레이어 왼쪽 // 폭탄
+	{
+		MinionRoom5->CreateItem<ABomb>(nullptr, { -310, -180 });
+		MinionRoom5->CreateItem<ABomb>(nullptr, { -260, -180 });
+		MinionRoom5->CreateItem<ABomb>(nullptr, { -310, -135 });
+		MinionRoom5->CreateItem<ABomb>(nullptr, { 310, 180 });
+		MinionRoom5->CreateItem<ABomb>(nullptr, { 260, 180 });
+		MinionRoom5->CreateItem<ABomb>(nullptr, { 310, 135 });
 
 		// 중앙
-		ARoomObject* Object0 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { 0, 0 });
-		ARoomObject* Object1 = MinionRoom6->CreateObject<ARock>(nullptr, { -50, 0 });
-		ARoomObject* Object2 = MinionRoom6->CreateObject<ARock>(nullptr, { 50, 0 });
-		ARoomObject* Object3 = MinionRoom6->CreateObject<ARock>(nullptr, { 0, 50 });
-		ARoomObject* Object4 = MinionRoom6->CreateObject<ARock>(nullptr, { 0, -50 });
+		ARoomObject* Object0 = MinionRoom5->CreateObject<AMetalBlock>(nullptr, { 0, 0 });
+		ARoomObject* Object1 = MinionRoom5->CreateObject<ARock>(nullptr, { -50, 0 });
+		ARoomObject* Object2 = MinionRoom5->CreateObject<ARock>(nullptr, { 50, 0 });
+		ARoomObject* Object3 = MinionRoom5->CreateObject<ARock>(nullptr, { 0, 50 });
+		ARoomObject* Object4 = MinionRoom5->CreateObject<ARock>(nullptr, { 0, -50 });
 
 		// 좌상단
-		ARoomObject* Object11 = MinionRoom6->CreateObject<ARock>(nullptr, { -310, -80 });
-		ARoomObject* Object12 = MinionRoom6->CreateObject<ARock>(nullptr, { -260, -80 });
-		ARoomObject* Object13 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { -210, -80 });
-		ARoomObject* Object14 = MinionRoom6->CreateObject<ARock>(nullptr, { -210, -130 });
-		ARoomObject* Object15 = MinionRoom6->CreateObject<ARock>(nullptr, { -260, -130 });
-		ARoomObject* Object16 = MinionRoom6->CreateObject<ARock>(nullptr, { -210, -180 });
+		ARoomObject* Object11 = MinionRoom5->CreateObject<ARock>(nullptr, { -310, -80 });
+		ARoomObject* Object12 = MinionRoom5->CreateObject<ARock>(nullptr, { -260, -80 });
+		ARoomObject* Object13 = MinionRoom5->CreateObject<AMetalBlock>(nullptr, { -210, -80 });
+		ARoomObject* Object14 = MinionRoom5->CreateObject<ARock>(nullptr, { -210, -130 });
+		ARoomObject* Object15 = MinionRoom5->CreateObject<ARock>(nullptr, { -260, -130 });
+		ARoomObject* Object16 = MinionRoom5->CreateObject<ARock>(nullptr, { -210, -180 });
 
 		// 우하단
-		ARoomObject* Object21 = MinionRoom6->CreateObject<ARock>(nullptr, { 310, 80 });
-		ARoomObject* Object22 = MinionRoom6->CreateObject<ARock>(nullptr, { 260, 80 });
-		ARoomObject* Object23 = MinionRoom6->CreateObject<AMetalBlock>(nullptr, { 210, 80 });
-		ARoomObject* Object24 = MinionRoom6->CreateObject<ARock>(nullptr, { 210, 130 });
-		ARoomObject* Object25 = MinionRoom6->CreateObject<ARock>(nullptr, { 260, 130 });
-		ARoomObject* Object26 = MinionRoom6->CreateObject<ARock>(nullptr, { 210, 180 });
+		ARoomObject* Object21 = MinionRoom5->CreateObject<ARock>(nullptr, { 310, 80 });
+		ARoomObject* Object22 = MinionRoom5->CreateObject<ARock>(nullptr, { 260, 80 });
+		ARoomObject* Object23 = MinionRoom5->CreateObject<AMetalBlock>(nullptr, { 210, 80 });
+		ARoomObject* Object24 = MinionRoom5->CreateObject<ARock>(nullptr, { 210, 130 });
+		ARoomObject* Object25 = MinionRoom5->CreateObject<ARock>(nullptr, { 260, 130 });
+		ARoomObject* Object26 = MinionRoom5->CreateObject<ARock>(nullptr, { 210, 180 });
 		Object1->SetSprite("TINTEDROCKS2");
 		Object11->SetSprite("TINTEDROCKS2");
 		Object12->SetSprite("TINTEDROCKS1");
@@ -319,54 +391,70 @@ void APlayGameMode::Spawn()
 		Object24->SetSprite("TINTEDROCKS1");
 	}
 
-
-	 //MinionRoom2 : 플레이어 왼쪽
+	// MinionRoom4 : 플레이어 위쪽 // 호프
 	{
-		ARoomObject* Poop0 = MinionRoom2->CreateObject<APoop>(nullptr, { 0, 0 });
-		ARoomObject* Poop1 = MinionRoom2->CreateObject<APoop>(nullptr, { -50, -50 });
-		ARoomObject* Poop2 = MinionRoom2->CreateObject<APoop>(nullptr, { 50, 50 });
-		ARoomObject* Poop3 = MinionRoom2->CreateObject<APoop>(nullptr, { -50, 50 });
-		ARoomObject* Poop4 = MinionRoom2->CreateObject<APoop>(nullptr, { 50, -50 });
-		Poop0->SetSprite("CORNY_POOP");
-		Poop1->SetSprite("CORNY_POOP");
-		Poop2->SetSprite("CORNY_POOP");
-		Poop3->SetSprite("CORNY_POOP");
-		Poop4->SetSprite("CORNY_POOP");
-
-		MinionRoom2->CreateMonster<ADip>({ 50, 0 });
-		MinionRoom2->CreateMonster<ADip>({ -50, 0 });
-		MinionRoom2->CreateMonster<ADip>({ 0, -50 });
-		MinionRoom2->CreateMonster<ADip>({ 0, 50 });
-	}
-
-	// MinionRoom4 : 플레이어 위쪽
-	{
-		MinionRoom4->CreateMonster<AMulligan>({ 150, 80 });
-		MinionRoom4->CreateMonster<AMulligan>({ -200, 120 });
-		MinionRoom4->CreateMonster<AFly>({ 0, 0 });
-		MinionRoom4->CreateMonster<AAttackFly>({ 150, 120 });
-		MinionRoom4->CreateMonster<AAttackFly>({ -150, 120 });
-		MinionRoom4->CreateMonster<AMulligoon>({ 0, 180 });
+		AMonster* Horf0 = MinionRoom4->CreateMonster<AHorf>({ 50, -54 });
+		AMonster* Horf2 = MinionRoom4->CreateMonster<AHorf>({ -50, -54 });
+		AMonster* Horf1 = MinionRoom4->CreateMonster<AHorf>({ 50,  46 });
+		AMonster* Horf3 = MinionRoom4->CreateMonster<AHorf>({ -50,  46 });
 
 		// 중앙
-		ARoomObject* Object0 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, -50 });
-		ARoomObject* Object1 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, 0 });
-		ARoomObject* Object2 = MinionRoom4->CreateObject<ARock>(nullptr, { -50, 50 });
-		ARoomObject* Object3 = MinionRoom4->CreateObject<ARock>(nullptr, { 0, -50 });
-		ARoomObject* Object4 = MinionRoom4->CreateObject<ARock>(nullptr, { 0, 50 });
-		ARoomObject* Object5 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, -50 });
-		ARoomObject* Object6 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, 0 });
-		ARoomObject* Object7 = MinionRoom4->CreateObject<ARock>(nullptr, { 50, 50 });
-		ARoomObject* Object8 = MinionRoom4->CreateObject<ARock>(nullptr, { -150, -120 });
-		ARoomObject* Object9 = MinionRoom4->CreateObject<ARock>(nullptr, { 150, 120 });
-		ARoomObject* Object10 = MinionRoom4->CreateObject<ARock>(nullptr, { 150, -120 });
-		ARoomObject* Object11 = MinionRoom4->CreateObject<ARock>(nullptr, { -150, 120 });
-		ARoomObject* Object12 = MinionRoom4->CreateObject<ARock>(nullptr, { -200, 10 });
-		ARoomObject* Object13 = MinionRoom4->CreateObject<ARock>(nullptr, { 200, 10 });
-		ARoomObject* Object14 = MinionRoom4->CreateObject<ARock>(nullptr, { -310, -180 });
-		ARoomObject* Object15 = MinionRoom4->CreateObject<ARock>(nullptr, { -310, 180 });
-		ARoomObject* Object16 = MinionRoom4->CreateObject<ARock>(nullptr, { 310, -180 });
-		ARoomObject* Object17 = MinionRoom4->CreateObject<ARock>(nullptr, { 310, 180 });
+		MinionRoom4->CreateObject<AMetalBlock>(nullptr, { 0, -100 });
+		MinionRoom4->CreateObject<AMetalBlock>(nullptr, { 0, -50 });
+		MinionRoom4->CreateObject<AMetalBlock>(nullptr, { 0, 0 });
+		MinionRoom4->CreateObject<AMetalBlock>(nullptr, { 0, 50 });
+		MinionRoom4->CreateObject<AMetalBlock>(nullptr, { 0, 100 });
+
+		MinionRoom4->CreateObject<ARock>(nullptr, { -50, -100 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { -50, 0 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { -50, 100 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { 50, -100 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { 50, 0 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { 50, 100 });
+
+		// 좌측
+		MinionRoom4->CreateObject<ARock>(nullptr, { -160, -100 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { -160, -50 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { -160, 0 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { -160, 50 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { -160, 100 });
+
+		// 우측
+		MinionRoom4->CreateObject<ARock>(nullptr, { 160, -100 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { 160, -50 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { 160, 0 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { 160, 50 });
+		MinionRoom4->CreateObject<ARock>(nullptr, { 160, 100 });
+	}
+
+	// MinionRoom8 : 플레이어 위쪽 // 멀리건, 멀리군
+	{
+		MinionRoom8->CreateMonster<AMulligan>({ 150, 80 });
+		MinionRoom8->CreateMonster<AMulligan>({ -200, 120 });
+		MinionRoom8->CreateMonster<AMulligoon>({ 0, 180 });
+		MinionRoom8->CreateMonster<AFly>({ 0, 0 });
+		MinionRoom8->CreateMonster<AAttackFly>({ 150, 120 });
+		MinionRoom8->CreateMonster<AAttackFly>({ -150, 120 });
+
+		// 중앙
+		ARoomObject* Object0 = MinionRoom8->CreateObject<ARock>(nullptr, { -50, -50 });
+		ARoomObject* Object1 = MinionRoom8->CreateObject<ARock>(nullptr, { -50, 0 });
+		ARoomObject* Object2 = MinionRoom8->CreateObject<ARock>(nullptr, { -50, 50 });
+		ARoomObject* Object3 = MinionRoom8->CreateObject<ARock>(nullptr, { 0, -50 });
+		ARoomObject* Object4 = MinionRoom8->CreateObject<ARock>(nullptr, { 0, 50 });
+		ARoomObject* Object5 = MinionRoom8->CreateObject<ARock>(nullptr, { 50, -50 });
+		ARoomObject* Object6 = MinionRoom8->CreateObject<ARock>(nullptr, { 50, 0 });
+		ARoomObject* Object7 = MinionRoom8->CreateObject<ARock>(nullptr, { 50, 50 });
+		ARoomObject* Object8 = MinionRoom8->CreateObject<ARock>(nullptr, { -150, -120 });
+		ARoomObject* Object9 = MinionRoom8->CreateObject<ARock>(nullptr, { 150, 120 });
+		ARoomObject* Object10 = MinionRoom8->CreateObject<ARock>(nullptr, { 150, -120 });
+		ARoomObject* Object11 = MinionRoom8->CreateObject<ARock>(nullptr, { -150, 120 });
+		ARoomObject* Object12 = MinionRoom8->CreateObject<ARock>(nullptr, { -200, 10 });
+		ARoomObject* Object13 = MinionRoom8->CreateObject<ARock>(nullptr, { 200, 10 });
+		ARoomObject* Object14 = MinionRoom8->CreateObject<ARock>(nullptr, { -310, -180 });
+		ARoomObject* Object15 = MinionRoom8->CreateObject<ARock>(nullptr, { -310, 180 });
+		ARoomObject* Object16 = MinionRoom8->CreateObject<ARock>(nullptr, { 310, -180 });
+		ARoomObject* Object17 = MinionRoom8->CreateObject<ARock>(nullptr, { 310, 180 });
 		Object1->SetSprite("TINTEDROCKS1");
 		Object7->SetSprite("TINTEDROCKS1");
 		Object8->SetSprite("TINTEDROCKS2");
@@ -476,7 +564,6 @@ void APlayGameMode::SpawnRandomItem(ARoom* _ParentRoom)
 		break;
 	}
 
-
 	++Index;
 }
 
@@ -524,6 +611,7 @@ void APlayGameMode::CollisionGroupLinkSetting()
 
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_Attack, ECollisionGroup::Room_TearBoundary); // 플레이어의 공격이 벽에 닿으면 즉시 터진다.
 
+	// 특정 아이템을 먹을 경우 몬스터 추적 기능 추가
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_DetectInRange, ECollisionGroup::Monster_Body);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_DetectInRange, ECollisionGroup::Monster_BodyNonCollision);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Player_DetectInRange, ECollisionGroup::Monster_FlyingBody);
@@ -538,8 +626,10 @@ void APlayGameMode::CollisionGroupLinkSetting()
 
 	// Object
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Player_Warp);
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Object_Bottom, ECollisionGroup::Player_Warp);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_Body); // 몬스터는 오브젝트를 통과할 수 없다. 
-	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_BodyNonCollision); // 그러나 Fly타입 몬스터는 통과한다.
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Object_Bottom, ECollisionGroup::Monster_Body); 
+	GetWorld()->CollisionGroupLink(ECollisionGroup::Object, ECollisionGroup::Monster_BodyNonCollision); 
 
 	// Item
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item     , ECollisionGroup::Player_Body);
@@ -551,22 +641,6 @@ void APlayGameMode::CollisionGroupLinkSetting()
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Monster_FlyingBody);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Monster_FlyingBodyNonCollision);
 	GetWorld()->CollisionGroupLink(ECollisionGroup::Item_UniversalHit, ECollisionGroup::Object);
-}
-
-void APlayGameMode::Tick(float _DeltaTime)
-{
-	Super::Tick(_DeltaTime);
-
-	EngineDebug(_DeltaTime);
-	CheckInput();
-
-
-	if (false == Sound.IsPlaying() && false == IsPlayingBGM)
-	{
-		PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
-		PlayGameModeBGM.Loop(999);
-		IsPlayingBGM = true;
-	}
 }
 
 void APlayGameMode::CheckInput()

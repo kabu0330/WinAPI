@@ -78,6 +78,7 @@ void ContentsCore::SpriteSetting()
 	UImageManager::GetInst().CuttingSprite("MulligoonBody.png", 5, 12);
 	UImageManager::GetInst().CuttingSprite("MulligoonBody_Left.png", 5, 12);
 	UImageManager::GetInst().CuttingSprite("monster_029_horf.png", 2, 2);
+	UImageManager::GetInst().CuttingSprite("monster_242_blindcreep_champion.png", 4, 2);
 
 	// MonsterEffect
 	UImageManager::GetInst().CuttingSprite("effect_bloodpoof.png", 4, 4);

@@ -110,7 +110,7 @@ void AHost::Attack(float _DeltaTime)
 		return;
 	}
 
-	Sound = UEngineSound::Play("blood_fire.wav");
+	Sound = UEngineSound::Play("blood_fire_3.wav");
 
 	FireTripleShotForward();
 

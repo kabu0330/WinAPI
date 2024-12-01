@@ -267,6 +267,10 @@ void ATear::MapObjectCollision(AActor* _Other)
 		return;
 	}
 	ECollisionGroup CollisionType = static_cast<ECollisionGroup>(CollisionOther->GetBodyCollision()->GetGroup());
+	if (ECollisionGroup::Object_Bottom == CollisionType)
+	{
+		return;
+	}
 
 
 	CollisionActor = TearCollision->CollisionOnce(CollisionType);

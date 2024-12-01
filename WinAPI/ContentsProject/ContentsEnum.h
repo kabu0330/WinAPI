@@ -49,6 +49,7 @@ enum class ECollisionGroup
 	Room_Wall = 3000,
 	Room_TearBoundary = 3100,
 	Object = 4000, 
+	Object_Bottom = 4500,
 	Item = 5000,
 	Item_UniversalHit = 5500, // ÆøÅº
 	Item_Impact = 5600, // ÆøÅº

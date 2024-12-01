@@ -54,6 +54,10 @@ void APlayer::BeginPlay()
 
 	UISetting();
 	CollisionFuctionSetting();
+
+	PennyPickupNumber->SetValue(0);
+	BombPickupNumber->SetValue(0);
+	KeyPickupNumber->SetValue(0);
 	
 	BombCooldown = 2.0f;
 }

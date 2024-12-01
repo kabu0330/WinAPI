@@ -447,7 +447,7 @@ void ARoomObject::BlockMonsterCollision(AMonster* _Monster, FVector2D _Pos)
 		}
 
 		// 충돌 반대 방향으로 밀어내기
-		FVector2D Offset = CollisionNormal * 2.0f; // 밀어내는 정도
+		FVector2D Offset = CollisionNormal * 3.0f; // 밀어내는 정도
 		FVector2D NewPosition = ActorPos + Offset;
 
 		// 몬스터 위치와 속도 설정

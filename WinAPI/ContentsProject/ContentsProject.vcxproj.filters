@@ -157,6 +157,9 @@
     <ClInclude Include="Horf.h">
       <Filter>04_Play\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="BlindCreep.h">
+      <Filter>04_Play\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp">
@@ -313,6 +316,9 @@
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
     <ClCompile Include="Horf.cpp">
+      <Filter>04_Play\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="BlindCreep.cpp">
       <Filter>04_Play\Monster</Filter>
     </ClCompile>
   </ItemGroup>
