@@ -901,6 +901,10 @@ void APlayer::IsCameraMove()
 
 void APlayer::InputAttack(const float& _DeltaTime)
 {
+	if (false == CanFire)
+	{
+		return;
+	}
 	// 공격 입력이 처음 들어왔을 때 동작
 	if (false == TearFire &&
 		(UEngineInput::GetInst().IsDown(VK_LEFT) ||

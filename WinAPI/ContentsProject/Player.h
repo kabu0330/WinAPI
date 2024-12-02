@@ -268,12 +268,14 @@ public:
 
 		IsMovementStopped = true;
 		FinalSpeed = FVector2D::ZERO;
+		CanFire = false;
 
 		TimeEventer.PushEvent(_Time - 1.5f, [this]() {
 			FullRenderer->SetActive(false);
 			BodyRenderer->SetActive(true);
 			HeadRenderer->SetActive(true);
 			IsMovementStopped = false;
+			CanFire = true;
 			});
 	}
 	void ChangeHeadRenderer(USpriteRenderer* _HeadRenderer)
@@ -416,6 +418,7 @@ private:
 	FVector2D ChaseTearDir = FVector2D::ZERO;
 	bool TearFire = false;
 	bool LeftFire = true;
+	bool CanFire = true;
 
 	// Collision
 	U2DCollision* BodyCollision = nullptr;
