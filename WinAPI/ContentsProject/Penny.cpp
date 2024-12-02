@@ -72,4 +72,8 @@ void APenny::DropSucessAnimation()
 	Sound = UEngineSound::Play("coinPickup.wav");
 
 	DropRenderer->ChangeAnimation("DropEffect");
+	if (true == DropRenderer->IsCurAnimationEnd())
+	{
+		DropRenderer->SetActive(false);
+	}
 }
