@@ -728,12 +728,12 @@ void APlayGameMode::CheckInput()
 void APlayGameMode::UISetting()
 {
 	// Text
-	ABannerTextUI* TextUI = GetWorld()->SpawnActor<ABannerTextUI>();
-	TextUI->SetName("TextUI");
-	TextUI->SetTextSpriteName("banner.png");
-	TextUI->SetOrder(ERenderOrder::UI);
-	TextUI->SetTextScale({ 16, 10 });
-	TextUI->SetActorLocation({ 400, 100 });
+	//ABannerTextUI* TextUI = GetWorld()->SpawnActor<ABannerTextUI>();
+	//TextUI->SetName("TextUI");
+	//TextUI->SetTextSpriteName("banner.png");
+	//TextUI->SetOrder(ERenderOrder::UI);
+	//TextUI->SetTextScale({ 16, 10 });
+	//TextUI->SetActorLocation({ 400, 100 });
 	//TextUI->SetTextOut("TheBindingOfIsaac"); // 띄어쓰기 문제 해결 어떻게?
 
 	// Death Report

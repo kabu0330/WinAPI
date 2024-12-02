@@ -44,7 +44,7 @@ APlayer::APlayer()
 	SpriteSetting(); 
 	CollisionSetting(); 
 
-	//DebugOn();
+	DebugOn();
 	//SwitchInvincibility(); // 디버깅용 무적
 }
 
