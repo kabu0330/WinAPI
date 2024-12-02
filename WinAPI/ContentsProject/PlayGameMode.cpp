@@ -138,13 +138,13 @@ void APlayGameMode::Spawn()
 	MinionRoom9->SetName("MinionRoom9");
 	BossRoom->SetName("BossRoom");
 
-	BaseRoom->InterLinkRoom(TreasureRoom0, RoomDir::UP);
 	BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::LEFT);
 	BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::RIGHT);
 	BaseRoom->InterLinkRoom(BossRoom, RoomDir::DOWN);
 
 	// Left Root
 	MinionRoom1->InterLinkRoom(MinionRoom0, RoomDir::UP);
+	MinionRoom1->InterLinkRoom(TreasureRoom0, RoomDir::LEFT);
 	MinionRoom1->InterLinkRoom(MinionRoom3, RoomDir::DOWN);
 
 	MinionRoom3->InterLinkRoom(MinionRoom6, RoomDir::DOWN);
@@ -243,18 +243,18 @@ void APlayGameMode::Spawn()
 	
 	// MinionRoom0 : 플레이어 아래쪽 // 만든 모든 몬스터들
 	{
-		MinionRoom0->CreateMonster<APacer>({-260, -150});
-		MinionRoom0->CreateMonster<AHopper>({-230, -150});
-		MinionRoom0->CreateMonster<AAttackFly>({-180, -150});
-		MinionRoom0->CreateMonster<AFly>({-130, -150});
-		MinionRoom0->CreateMonster<ABlindCreep>({-80, -150});
-		MinionRoom0->CreateMonster<ADip>({-30, -150});
-		MinionRoom0->CreateMonster<AGaper>({20, -150});
-		MinionRoom0->CreateMonster<AHorf>({120, -150});
-		MinionRoom0->CreateMonster<AHost>({170, -150});
-		MinionRoom0->CreateMonster<APooter>({220, -150});
-		MinionRoom0->CreateMonster<AMulligan>({-260, -100});
-		MinionRoom0->CreateMonster<AMulligoon>({260, -100});
+		AMonster* Monster0  = MinionRoom0->CreateMonster<APacer>({-260, -150});
+		AMonster* Monster1  = MinionRoom0->CreateMonster<AHopper>({-230, -150});
+		AMonster* Monster2  = MinionRoom0->CreateMonster<AAttackFly>({-180, -150});
+		AMonster* Monster3  = MinionRoom0->CreateMonster<AFly>({-130, -150});
+		AMonster* Monster4  = MinionRoom0->CreateMonster<ABlindCreep>({-80, -150});
+		AMonster* Monster5  = MinionRoom0->CreateMonster<ADip>({-30, -150});
+		AMonster* Monster6  = MinionRoom0->CreateMonster<AGaper>({20, -150});
+		AMonster* Monster7  = MinionRoom0->CreateMonster<AHorf>({120, -150});
+		AMonster* Monster8  = MinionRoom0->CreateMonster<AHost>({170, -150});
+		AMonster* Monster9  = MinionRoom0->CreateMonster<APooter>({220, -150});
+		AMonster* Monster10 = MinionRoom0->CreateMonster<AMulligan>({-260, -100});
+		AMonster* Monster11 = MinionRoom0->CreateMonster<AMulligoon>({260, -100});
 
 		for (int i = 0; i < 13; i++)
 		{

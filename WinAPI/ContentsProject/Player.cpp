@@ -1318,6 +1318,11 @@ void APlayer::ResetDebug()
 		Sound = UEngineSound::Play("title_screen_jingle_v1_01.ogg");
 		UEngineAPICore::GetCore()->ResetLevel<APlayGameMode, APlayer>("Play");
 	}
+
+	if (UEngineInput::GetInst().IsDown('Z'))
+	{
+		APlayGameMode::SwitchGamePause();
+	}
 }
 
 void APlayer::PlayerLimit()

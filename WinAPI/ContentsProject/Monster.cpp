@@ -45,7 +45,7 @@ AMonster::AMonster()
 	(MonsterRandom);
 	MonsterRandom.SetSeed(RandomSeed);
 
-	//DebugOn();
+	DebugOn();
 }
 
 void AMonster::BeginPlay()

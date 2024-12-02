@@ -13,7 +13,7 @@
 
 ARoomObject::ARoomObject()
 {
-	//DebugOn();
+	DebugOn();
 }
 
 void ARoomObject::BeginPlay()

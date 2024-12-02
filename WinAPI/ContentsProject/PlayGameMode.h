@@ -45,6 +45,10 @@ public:
 	{
 		GamePaused = _OnOff;
 	}
+	static void SwitchGamePause()
+	{
+		GamePaused = !GamePaused;
+	}
 
 	static USoundPlayer& GetPlayGameModeBGM()
 	{

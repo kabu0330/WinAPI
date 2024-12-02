@@ -30,7 +30,7 @@ ATear::ATear()
 	TearEffectRenderer->SetComponentScale(RendererScale); // 64, 64
 	TearEffectRenderer->SetOrder(ERenderOrder::Tear);
 
-	//DebugOn();
+	DebugOn();
 }
 
 void ATear::BeginPlay()

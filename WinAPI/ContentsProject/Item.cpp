@@ -18,7 +18,7 @@ AItem::AItem()
 	DropEffectRenderer->ChangeAnimation("StarFlash");
 
 
-	//DebugOn();
+	DebugOn();
 }
 
 void AItem::BeginPlay()
