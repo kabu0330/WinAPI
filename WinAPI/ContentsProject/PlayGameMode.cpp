@@ -634,7 +634,7 @@ void APlayGameMode::RandomIndex()
 			ItemCreate[Left] = ItemCreate[Right];
 			ItemCreate[Right] = Swap;
 		}
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < PassiveItemCount; i++)
 		{
 			RandomValues[i] = ItemCreate[i];
 		}
