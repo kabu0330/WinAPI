@@ -81,7 +81,7 @@ bool ACrecketsHead::EatFunction(APlayer* _Player)
 
 	IsMove = false;
 	IsPushback = true;
-	IsDrop = true;
+	IsPickedUp = true;
 	DropSucessAnimation(_Player);
 
 	FVector2D Pos = Player->GetActorLocation();
@@ -99,7 +99,7 @@ bool ACrecketsHead::EatFunction(APlayer* _Player)
 
 void ACrecketsHead::DropSucessAnimation(APlayer* _Player)
 {
-	if (false == IsDrop)
+	if (false == IsPickedUp)
 	{
 		return;
 	}

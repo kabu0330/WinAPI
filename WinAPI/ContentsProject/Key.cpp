@@ -52,7 +52,7 @@ bool AKey::EatFunction(APlayer* _Player)
 	}
 
 	DropSucessAnimation();
-	IsDrop = true;
+	IsPickedUp = true;
 
 	return true;
 }

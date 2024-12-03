@@ -682,6 +682,10 @@ void ATheDukeOfFlies::BlowAway()
 	if (true == IsAttacking)
 	{
 		return;
+	}	
+	if (true == IsDeath())
+	{
+		return;
 	}
 
 	// 나를 따르는 파리가 4마리 미만이면 스킬 쓰지마.
@@ -689,14 +693,9 @@ void ATheDukeOfFlies::BlowAway()
 	{
 		return;
 	}
-	if (true == IsDeath())
-	{
-		return;
-	}
 	
 	BodyRenderer->ChangeAnimation("Attack");
 	ModifySkillCooldownElapsed();
-
 
 	TimeEventer.PushEvent(SkillCastDelay, std::bind(&ATheDukeOfFlies::BeginBlowAwayLogic, this));
 	TimeEventer.PushEvent(SkillCastDelay, std::bind(&ATheDukeOfFlies::BeginBlowAwayAnimaition, this));

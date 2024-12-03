@@ -376,11 +376,11 @@ void ARoomObject::BlockPlayerCollision(APlayer* _Player, FVector2D _Pos)
 		}
 
 		// 이동 속도 감소
-		float NewSpeed = UEngineMath::Max(Velocity.Length() * 0.5f, 100.0f); // 최소 속도 100
+		float NewSpeed = UEngineMath::Min(Velocity.Length() * 0.5f, 200.0f); 
 		FVector2D NewVelocity = Velocity.GetNormal() * NewSpeed;
 
 		// 충돌 반대 방향으로 밀어내기
-		FVector2D Offset = CollisionNormal * 2.0f; // 밀어내는 정도
+		FVector2D Offset = CollisionNormal * 1.0f; // 밀어내는 정도
 		FVector2D NewPosition = ActorPos + Offset;
 
 		// 플레이어 위치와 속도 설정
@@ -447,7 +447,7 @@ void ARoomObject::BlockMonsterCollision(AMonster* _Monster, FVector2D _Pos)
 		}
 
 		// 충돌 반대 방향으로 밀어내기
-		FVector2D Offset = CollisionNormal * 3.0f; // 밀어내는 정도
+		FVector2D Offset = CollisionNormal * 1.0f; // 밀어내는 정도
 		FVector2D NewPosition = ActorPos + Offset;
 
 		// 몬스터 위치와 속도 설정

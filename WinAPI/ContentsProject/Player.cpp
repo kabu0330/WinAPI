@@ -454,7 +454,7 @@ void APlayer::Reset()
 	Direction = FVector2D::ZERO;
 }
 
-bool APlayer::Drop(AItem* _Item, const int& _Count)
+bool APlayer::TryPickupItem(AItem* _Item, const int& _Count)
 {
 	// 아이템 먹었는데 플레이어와 상호작용을 할 수 없는 상황이면 false 반환
 	if (false == _Item->EatFunction(this))
@@ -463,29 +463,34 @@ bool APlayer::Drop(AItem* _Item, const int& _Count)
 	}
 
 	// 아이템과 상호작용에 성공하면 아이템 데이터를 저장
-	_Item->DropEffect();
-	_Item->DropSuccess(); // 맵에서 아이템 정보 삭제
-	_Item->RemoveRoomData();
 
-	if (false == _Item->IsPushBackItems()) // 아이템 효과만 적용하고 즉시 소멸할거라면
+	_Item->PickupSuccess();
+
+	if (false == _Item->IsConsumable()) // 아이템 효과만 적용하고 즉시 소멸할거라면
 	{
 		return true;
 	}
+
+	AddItem(_Item, _Count);
+
+	return true;
+}
+
+void APlayer::AddItem(AItem* _Item, const int& _Count)
+{
 	EItemType ItemType = _Item->GetItemType();
 	if (EItemType::PASSIVE == ItemType)
 	{
 		PassiveItem = nullptr; // 기존 자료를 지우고
 		PassiveItem = _Item; // 새로운 아이템 정보를 넣는다.
 	}
-	
+
 	std::string ItemName = _Item->GetName();
 	for (int i = 0; i < _Count; i++)
 	{
 		Items.push_back(_Item);
 		ItemCounts[ItemName]++;
 	}
-
-	return true;
 }
 
 void APlayer::InputItem()
@@ -1362,7 +1367,7 @@ void APlayer::CheatKey(const float& _DeltaTime)
 			for (int i = 0; i < 5; i++)
 			{
 				AItem* InitBomb = ARoom::GetCurRoom()->CreateItem<ABomb>(this);
-				Drop(InitBomb, 1);
+				TryPickupItem(InitBomb, 1);
 			}
 			IsBombCheat = true;
 		}

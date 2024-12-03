@@ -63,7 +63,7 @@ void AItem::Tick(float _DeltaTime)
 // Room에 저장된 Item 정보는 삭제한다.
 void AItem::RemoveRoomData()
 {
-	if (false == IsDrop)
+	if (false == IsPickedUp)
 	{
 		return;
 	}
@@ -85,7 +85,7 @@ void AItem::CollisionSetting()
 {
 	if (nullptr != PlayerCollision)
 	{
-		PlayerCollision->SetCollisionEnter(std::bind(&AItem::Drop, this, std::placeholders::_1));
+		PlayerCollision->SetCollisionEnter(std::bind(&AItem::TryPickup, this, std::placeholders::_1));
 	}
 	if (nullptr != UniversalCollision)
 	{
@@ -104,7 +104,7 @@ void AItem::Move(float _DeltaTIme)
 		Direction = FVector2D::ZERO;
 		return;
 	}
-	if (true == IsDrop)
+	if (true == IsPickedUp)
 	{
 		Direction = FVector2D::ZERO;
 		return;
@@ -127,7 +127,7 @@ void AItem::Move(float _DeltaTIme)
 	AddActorLocation(Direction * MoveSpeed * _DeltaTIme);
 }
 
-void AItem::Drop(AActor* _Player)
+void AItem::TryPickup(AActor* _Player)
 {
 	APlayer* Player = dynamic_cast<APlayer*>(_Player);
 	if (nullptr == Player)
@@ -135,16 +135,18 @@ void AItem::Drop(AActor* _Player)
 		return;
 	}
 	
-	if (false == Player->Drop(this, ItemCount))
+	if (false == Player->TryPickupItem(this, ItemCount))
 	{
 		// 아이템을 먹지 못하고 튕겨내야 함
 		FailToPickup(Player);
 	}
 }
 
-void AItem::DropSuccess()
+void AItem::PickupSuccess()
 {
-	IsDrop = true;
+	IsPickedUp = true;
+	DropEffect();
+	RemoveRoomData();
 }
 
 void AItem::FailToPickup(AActor* _Player)
@@ -206,7 +208,7 @@ void AItem::ReverseForce(float _DeltaTime)
 
 void AItem::SetLocation()
 {
-	if (false == IsDrop)
+	if (false == IsPickedUp)
 	{
 		return;
 	}

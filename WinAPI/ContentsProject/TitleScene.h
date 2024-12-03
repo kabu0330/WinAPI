@@ -44,7 +44,7 @@ public:
 	ATitleScene* LinkScene(ATitleScene* _Scene, TitleSceneDir _Dir);
 
 	TitleSceneDir SwitchTitleSceneDir(TitleSceneDir _Dir);
-	void SetSceneLocation(ATitleScene* _Scene, TitleSceneDir _Dir);
+	void SetLocationForLink(ATitleScene* _Scene, TitleSceneDir _Dir);
 
 	void CheckInput();
 

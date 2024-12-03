@@ -97,7 +97,7 @@ bool ABomb::EatFunction(APlayer* _Player)
 	Sound = UEngineSound::Play("lift.wav");
 	Sound.SetVolume(0.5f);
 
-	IsDrop = true;
+	IsPickedUp = true;
 	DropRenderer->ChangeAnimation("DropEffect");
 	TimeEventer.PushEvent(0.8f, [this]() {DropRenderer->SetActive(false); });
 

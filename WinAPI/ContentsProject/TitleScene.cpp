@@ -88,7 +88,7 @@ bool ATitleScene::InterLinkScene(ATitleScene* _Scene, TitleSceneDir _Dir)
 
 
 	// 연결된 씬을 this를 기준으로 위치를 조정한다.
-	SetSceneLocation(_Scene, _Dir);
+	SetLocationForLink(_Scene, _Dir);
 
 	return true;
 }
@@ -161,7 +161,7 @@ TitleSceneDir ATitleScene::SwitchTitleSceneDir(TitleSceneDir _Dir)
 	return Dir;
 }
 
-void ATitleScene::SetSceneLocation(ATitleScene* _Scene, TitleSceneDir _Dir)
+void ATitleScene::SetLocationForLink(ATitleScene* _Scene, TitleSceneDir _Dir)
 {
 	ATitleScene* Scene = _Scene;
 	FVector2D Anchor = GetActorLocation();

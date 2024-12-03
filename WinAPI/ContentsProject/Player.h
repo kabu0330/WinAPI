@@ -219,29 +219,11 @@ public:
 
 
 	// 아이템
-	bool Drop(class AItem* _Item, const int& _Count);
+	bool TryPickupItem(class AItem* _Item, const int& _Count);
+	void AddItem(class AItem* _Item, const int& _Count);
 	int CheckPickupItemCount(std::string_view _ItemName)
 	{
 		return ItemCounts[_ItemName.data()];
-
-		//std::string FindItemName = _ItemName.data();
-		//int Count = 0;
-
-		//std::list<AItem*>::iterator StartIter = Items.begin();
-		//std::list<AItem*>::iterator EndIter = Items.end();
-
-		//for (; StartIter != EndIter; ++StartIter)
-		//{
-		//	AItem* Item = *StartIter;
-		//	std::string ItemName = Item->GetName();
-
-		//	if (FindItemName == ItemName)
-		//	{
-		//		++Count;
-		//	}
-		//}
-
-		//return Count;
 	}
 	AItem* ReturnItem(std::string_view _ItemName);
 
@@ -402,7 +384,7 @@ private:
 
 	bool IsBombCheat = false;
 	float BombCooldown = 0.0f;
-	float BombDuration = 2.0f;
+	float BombDuration = 1.0f;
 
 	// 아이템으로 눈물 효과 변경을 위해서
 	AItem* PassiveItem = nullptr;

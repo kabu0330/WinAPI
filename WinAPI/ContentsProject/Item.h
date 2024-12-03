@@ -43,9 +43,11 @@ public:
 	virtual void UseItem(APlayer* _Player) {}; // 아이템 사용
 	
 	// 드랍, 드랍실패
-	void Drop(AActor* _Player);
-	void DropSuccess();
+	void TryPickup(AActor* _Player);
+	void PickupSuccess();
 	void FailToPickup(class AActor* _Player);
+
+
 	void ReverseForce(float _DeltaTime);
 	void SetLocation();
 
@@ -105,7 +107,7 @@ public:
 		}				
 		return nullptr;
 	}
-	bool IsPushBackItems() const
+	bool IsConsumable() const
 	{
 		return IsPushback;
 	}
@@ -160,7 +162,7 @@ protected:
 	bool IsAtBoundary = false;  // 맵 경계면에 위치했냐 -> 반사
 
 	bool IsUseEnd = false;
-	bool IsDrop = false; // 맵에서 자신의 정보를 삭제
+	bool IsPickedUp = false; // 맵에서 자신의 정보를 삭제
 	bool IsDropEffect = false; // 플레이어 위로 번쩍 들어올리는 아이템만 해당
 	bool IsPushback = true; // 플레이어 아이템 리스트에 들어갈 것인지.
 	bool IsMove = false; // 맵에 등장했을 때 위 아래로 움직일거냐

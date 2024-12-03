@@ -77,7 +77,7 @@ bool APolyphemus::EatFunction(APlayer* _Player)
 
 	IsMove = false;
 	IsPushback = true;
-	IsDrop = true;
+	IsPickedUp = true;
 	DropSucessAnimation(_Player);
 
 	// 아이템 효과 설정
@@ -92,7 +92,7 @@ bool APolyphemus::EatFunction(APlayer* _Player)
 
 void APolyphemus::DropSucessAnimation(APlayer* _Player)
 {
-	if (false == IsDrop)
+	if (false == IsPickedUp)
 	{
 		return;
 	}
