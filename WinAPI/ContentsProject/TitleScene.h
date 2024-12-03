@@ -43,7 +43,7 @@ public:
 	bool InterLinkScene(ATitleScene* _Scene, TitleSceneDir _Dir);
 	ATitleScene* LinkScene(ATitleScene* _Scene, TitleSceneDir _Dir);
 
-	TitleSceneDir SwitchTitleSceneDir(TitleSceneDir _Dir);
+	TitleSceneDir SetDirection(TitleSceneDir _Dir);
 	void SetLocationForLink(ATitleScene* _Scene, TitleSceneDir _Dir);
 
 	void CheckInput();

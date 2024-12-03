@@ -81,7 +81,7 @@ bool ATitleScene::IsLinking(ATitleScene* _Scene)
 bool ATitleScene::InterLinkScene(ATitleScene* _Scene, TitleSceneDir _Dir)
 {
 	// 서로 연결될 방향은 반대방향
-	TitleSceneDir Dir = SwitchTitleSceneDir(_Dir);
+	TitleSceneDir Dir = SetDirection(_Dir);
 
 	  this->LinkScene(_Scene, _Dir);
 	_Scene->LinkScene(  this,  Dir);
@@ -135,7 +135,7 @@ ATitleScene* ATitleScene::LinkScene(ATitleScene* _Scene, TitleSceneDir _Dir)
 	return nullptr;
 }
 
-TitleSceneDir ATitleScene::SwitchTitleSceneDir(TitleSceneDir _Dir)
+TitleSceneDir ATitleScene::SetDirection(TitleSceneDir _Dir)
 {
 	TitleSceneDir Dir = TitleSceneDir::NONE;
 	switch (_Dir)
