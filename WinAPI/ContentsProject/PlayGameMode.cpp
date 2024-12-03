@@ -79,6 +79,7 @@ void APlayGameMode::Tick(float _DeltaTime)
 
 	if (false == Sound.IsPlaying() && false == IsPlayingBGM)
 	{
+		UEngineSound::AllSoundStop();
 		PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
 		PlayGameModeBGM.Loop(999);
 		IsPlayingBGM = true;
