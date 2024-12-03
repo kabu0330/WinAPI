@@ -137,7 +137,6 @@ void AItem::TryPickup(AActor* _Player)
 	
 	if (false == Player->TryPickupItem(this, ItemCount))
 	{
-		// 아이템을 먹지 못하고 튕겨내야 함
 		FailToPickup(Player);
 	}
 }

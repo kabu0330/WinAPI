@@ -456,17 +456,14 @@ void APlayer::Reset()
 
 bool APlayer::TryPickupItem(AItem* _Item, const int& _Count)
 {
-	// 아이템 먹었는데 플레이어와 상호작용을 할 수 없는 상황이면 false 반환
 	if (false == _Item->EatFunction(this))
 	{
 		return false;
 	}
 
-	// 아이템과 상호작용에 성공하면 아이템 데이터를 저장
-
 	_Item->PickupSuccess();
 
-	if (false == _Item->IsConsumable()) // 아이템 효과만 적용하고 즉시 소멸할거라면
+	if (false == _Item->IsStored()) 
 	{
 		return true;
 	}

@@ -39,13 +39,15 @@ public:
 	void ItemDestroy();
 	
 	virtual void RemoveRoomData(); // 아이템 습득 시 룸에서 렌더러 삭제
-	virtual bool EatFunction(APlayer* _Player) = 0; // 아이템 습득 즉시
-	virtual void UseItem(APlayer* _Player) {}; // 아이템 사용
+
 	
-	// 드랍, 드랍실패
 	void TryPickup(AActor* _Player);
 	void PickupSuccess();
 	void FailToPickup(class AActor* _Player);
+
+	virtual bool EatFunction(APlayer* _Player) = 0;  // 아이템 습득 즉시
+	virtual void UseItem(APlayer* _Player) {};       // 아이템 사용
+
 
 
 	void ReverseForce(float _DeltaTime);
@@ -107,7 +109,7 @@ public:
 		}				
 		return nullptr;
 	}
-	bool IsConsumable() const
+	bool IsStored() const
 	{
 		return IsPushback;
 	}
