@@ -186,19 +186,10 @@ void ATear::CollisionSetting()
 
 void ATear::Explode(AActor* _Other)
 {
-	// 1. 일정 시간이 지나면 터진다.
 	TimeBasedExplosion();
-
-	// 2. 맵 밖으로 벗어나면 터진다.
 	BoundaryExplosion(_Other);
-
-	// 3. 오브젝트와 충돌하면 터진다.
 	MapObjectCollision(_Other);
-
-	// 4. 액터와 충돌하면 터진다.
 	HandleMonsterCollision(_Other);
-
-	// 5. 특정 아이템과 충돌하면 터진다.
 	ItemImpackCollision(_Other);
 }
 

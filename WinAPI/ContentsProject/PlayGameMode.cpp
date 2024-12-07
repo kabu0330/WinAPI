@@ -76,14 +76,6 @@ void APlayGameMode::Tick(float _DeltaTime)
 	EngineDebug(_DeltaTime);
 	CheckInput();
 
-
-	if (false == Sound.IsPlaying() && false == IsPlayingBGM)
-	{
-		UEngineSound::AllSoundStop();
-		PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
-		PlayGameModeBGM.Loop(999);
-		IsPlayingBGM = true;
-	}
 }
 
 void APlayGameMode::Spawn()
@@ -321,38 +313,47 @@ void APlayGameMode::Spawn()
 		ARoomObject* GridPit16 = MinionRoom3->CreateObject<AGridPit>(nullptr, { 220, 130 });
 		ARoomObject* GridPit17 = MinionRoom3->CreateObject<AGridPit>(nullptr, { 220, 180 });
 
-		MinionRoom3->CreateObject<AFire>(nullptr, { 0, 0 });
-		MinionRoom3->CreateObject<AFire>(nullptr, { -160,  -170 });
-		MinionRoom3->CreateObject<AFire>(nullptr, { 160, -170 });
-		MinionRoom3->CreateObject<AFire>(nullptr, { -160, 180 });
-		MinionRoom3->CreateObject<AFire>(nullptr, { 160, 180 });
+		MinionRoom3->CreateObject<ARock>(nullptr, { 0, 0 });
+		MinionRoom3->CreateObject<ARock>(nullptr, { -160,  -170 });
+		MinionRoom3->CreateObject<ARock>(nullptr, { 160, -170 });
+		MinionRoom3->CreateObject<ARock>(nullptr, { -160, 180 });
+		MinionRoom3->CreateObject<ARock>(nullptr, { 160, 180 });
 	}
 
 	// MinionRoom6 : 플레이어 위 // 게이퍼, 페이서, 멀리건, 멀리군
 	{
-		MinionRoom6->CreateMonster<AMulligan>({ -150, -100 });
-		MinionRoom6->CreateMonster<AMulligan>({ -150, 100 });
-		MinionRoom6->CreateMonster<AMulligoon>({ 150, -100 });
-		MinionRoom6->CreateMonster<AMulligoon>({ -150, 100 });
-		MinionRoom6->CreateMonster<AGaper>({ -50, 0 });
+		MinionRoom6->CreateMonster<AMulligan>({ -100, -50 });
+		MinionRoom6->CreateMonster<AMulligoon>({ 50, 50 });
+		MinionRoom6->CreateMonster<AGaper>({ -200, 0 });
 		MinionRoom6->CreateMonster<AGaper>({ -100, 150 });
+		MinionRoom6->CreateMonster<APacer>({ 0, 150 });
 
 		// 중앙
-		ARoomObject* Object0 = MinionRoom6->CreateObject<ARock>(nullptr, { -100,   0 });
-		ARoomObject* Object1 = MinionRoom6->CreateObject<ARock>(nullptr, { -50, -50 });
-		ARoomObject* Object2 = MinionRoom6->CreateObject<ARock>(nullptr, { -50,  50 });
-		ARoomObject* Object3 = MinionRoom6->CreateObject<ARock>(nullptr, { -100,  50 });
-		ARoomObject* Object4 = MinionRoom6->CreateObject<ARock>(nullptr, { 0,  50 });
-		ARoomObject* Object5 = MinionRoom6->CreateObject<ARock>(nullptr, { -100,  -50 });
-		ARoomObject* Object6 = MinionRoom6->CreateObject<ARock>(nullptr, { 0,  -50 });
-		ARoomObject* Poop0 = MinionRoom6->CreateObject<APoop>(nullptr, { 0,   0 });
-		Poop0->SetSprite("CORNY_POOP");
-
-
-		MinionRoom6->CreateObject<ARock>(nullptr, { -220, -100 });
-		MinionRoom6->CreateObject<ARock>(nullptr, { -220, 100 });
-		MinionRoom6->CreateObject<ARock>(nullptr, { 160, -100 });
-		MinionRoom6->CreateObject<ARock>(nullptr, { 160, 100 });
+		ARoomObject* Object0 = MinionRoom6->CreateObject<ARock>(nullptr, { -50, -50 });
+		ARoomObject* Object1 = MinionRoom6->CreateObject<ARock>(nullptr, { -50, 0 });
+		ARoomObject* Object2 = MinionRoom6->CreateObject<ARock>(nullptr, { -50, 50 });
+		ARoomObject* Object3 = MinionRoom6->CreateObject<ARock>(nullptr, { 0, -50 });
+		ARoomObject* Object4 = MinionRoom6->CreateObject<ARock>(nullptr, { 0, 50 });
+		ARoomObject* Object5 = MinionRoom6->CreateObject<ARock>(nullptr, { 50, -50 });
+		ARoomObject* Object6 = MinionRoom6->CreateObject<ARock>(nullptr, { 50, 0 });
+		ARoomObject* Object7 = MinionRoom6->CreateObject<ARock>(nullptr, { 50, 50 });
+		ARoomObject* Object8 = MinionRoom6->CreateObject<ARock>(nullptr, { -150, -120 });
+		ARoomObject* Object9 = MinionRoom6->CreateObject<ARock>(nullptr, { 150, 120 });
+		ARoomObject* Object10 = MinionRoom6->CreateObject<ARock>(nullptr, { 150, -120 });
+		ARoomObject* Object11 = MinionRoom6->CreateObject<ARock>(nullptr, { -150, 120 });
+		ARoomObject* Object12 = MinionRoom6->CreateObject<ARock>(nullptr, { -200, 10 });
+		ARoomObject* Object13 = MinionRoom6->CreateObject<ARock>(nullptr, { 200, 10 });
+		ARoomObject* Object14 = MinionRoom6->CreateObject<ARock>(nullptr, { -310, -180 });
+		ARoomObject* Object15 = MinionRoom6->CreateObject<ARock>(nullptr, { -310, 180 });
+		ARoomObject* Object16 = MinionRoom6->CreateObject<ARock>(nullptr, { 310, -180 });
+		ARoomObject* Object17 = MinionRoom6->CreateObject<ARock>(nullptr, { 310, 180 });
+		Object1->SetSprite("TINTEDROCKS1");
+		Object7->SetSprite("TINTEDROCKS1");
+		Object8->SetSprite("TINTEDROCKS2");
+		Object9->SetSprite("TINTEDROCKS5");
+		Object14->SetSprite("TINTEDROCKS1");
+		Object15->SetSprite("TINTEDROCKS2");
+		Object16->SetSprite("TINTEDROCKS4");
 	}
 
 	// MinionRoom7 : 플레이어 좌, 우 // 푸터, 호퍼
@@ -777,12 +778,14 @@ void APlayGameMode::LevelChangeStart()
 	FadeRenderer->SetActive(true);
 	LoadingRenderer->SetActive(true);
 
-	TimeEventer.PushEvent(7.0f, [this]() {	
+	TimeEventer.PushEvent(6.0f, [this]() {	
 		UEngineSound::AllSoundStop();
-		Sound = UEngineSound::Play("basementIntro.ogg"); 
+		PlayGameModeBGM = UEngineSound::Play("diptera_sonata_basement.ogg");
+		PlayGameModeBGM.Loop(999);
+		IsPlayingBGM = true;
 	}); // 여기서 플레이어가 이동 가능
 
-	TimeEventer.PushEvent(5.0f, std::bind(&APlayGameMode::FadeOut, this));
+	TimeEventer.PushEvent(4.0f, std::bind(&APlayGameMode::FadeOut, this));
 #endif // DEBUG
 }
 

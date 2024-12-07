@@ -478,8 +478,7 @@ void APlayer::AddItem(AItem* _Item, const int& _Count)
 	EItemType ItemType = _Item->GetItemType();
 	if (EItemType::PASSIVE == ItemType)
 	{
-		PassiveItem = nullptr; // 기존 자료를 지우고
-		PassiveItem = _Item; // 새로운 아이템 정보를 넣는다.
+		PassiveItem = _Item;
 	}
 
 	std::string ItemName = _Item->GetName();
