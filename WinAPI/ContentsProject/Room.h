@@ -219,8 +219,8 @@ private:
 	static ARoom* CurRoom;
 	ERoomType RoomType = ERoomType::NORMAL;
 	std::map<RoomDir, ARoom*> Rooms;
-	std::map<RoomDir, U2DCollision*> DoorCollisionMap;
-	std::map<RoomDir, USpriteRenderer*> DoorRendererMap;
+	std::map<RoomDir, U2DCollision*> DoorCollisions;
+	std::map<RoomDir, USpriteRenderer*> DoorRenderers;
 	
 	RoomDir Directon = RoomDir::NONE;
 	FVector2D RoomScale = FVector2D::ZERO;
@@ -243,8 +243,8 @@ private:
 	USpriteRenderer* BossDoorOpenEffect = nullptr; 
 
 	// Door Collision And Renderer
-	std::vector<class U2DCollision*> DoorCollisions;
-	std::vector<USpriteRenderer*> DoorRenderers;
+	std::vector<class U2DCollision*> DoorCollisionVector;
+	std::vector<USpriteRenderer*> DoorRendererVector;
 
 	// Spawn
 	std::list<AMonster*> Monsters;

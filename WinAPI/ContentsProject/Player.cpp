@@ -913,7 +913,7 @@ void APlayer::InputAttack(const float& _DeltaTime)
 		UEngineInput::GetInst().IsDown(VK_UP)    ||
 		UEngineInput::GetInst().IsDown(VK_DOWN)))
 	{
-		Attack(_DeltaTime);
+		Attack();
 		return;
 	}
 
@@ -931,7 +931,7 @@ void APlayer::InputAttack(const float& _DeltaTime)
 				UEngineInput::GetInst().IsPress(VK_UP) ||
 				UEngineInput::GetInst().IsPress(VK_DOWN))
 			{
-				Attack(_DeltaTime);
+				Attack();
 				TearCoolDownElapsed = 0.0f;
 				return;
 			}
@@ -939,7 +939,7 @@ void APlayer::InputAttack(const float& _DeltaTime)
 	}
 }
 
-void APlayer::Attack(const float& _DeltaTime)
+void APlayer::Attack()
 {
 	TearFire = true; // true일 때, Cooldown시간 동안 Attack 함수가 호출될 수 없다.
 
