@@ -43,6 +43,7 @@ void APenny::Tick(float _DeltaTime)
 {
     Super::Tick(_DeltaTime);
     AItem::Tick(_DeltaTime);
+	EndPickup();
 }
 
 bool APenny::EatFunction(APlayer* _Player)
@@ -72,8 +73,18 @@ void APenny::DropSucessAnimation()
 	Sound = UEngineSound::Play("coinPickup.wav");
 
 	DropRenderer->ChangeAnimation("DropEffect");
+	IsPickup = true;
+}
+
+void APenny::EndPickup()
+{
+	if (false == IsPickup)
+	{
+		return;
+	}
 	if (true == DropRenderer->IsCurAnimationEnd())
 	{
 		DropRenderer->SetActive(false);
+		IsPickup = false;
 	}
 }

@@ -405,7 +405,7 @@ void APlayGameMode::Spawn()
 		Poop4->SetSprite("CORNY_POOP");
 	}
 
-	// MinionRoom5 : ÇÃ·¹ÀÌ¾î ¿ÞÂÊ // ÆøÅº
+	// MinionRoom5 : ÇÃ·¹ÀÌ¾î ¿ÞÂÊ // ÆøÅºdwd
 	{
 		MinionRoom5->CreateItem<ABomb>(nullptr, { -310, -180 });
 		MinionRoom5->CreateItem<ABomb>(nullptr, { -260, -180 });
