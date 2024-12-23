@@ -765,8 +765,8 @@ void APlayGameMode::LevelChangeStart()
 
 
 #ifdef _DEBUG
-	TimeEventer.PushEvent(7.0f, [this]() {	UEngineSound::AllSoundStop();
-	Sound = UEngineSound::Play("basementIntro.ogg"); });
+	UEngineSound::AllSoundStop();
+	Sound = UEngineSound::Play("basementIntro.ogg");
 
 #else
 	GamePaused = true;
