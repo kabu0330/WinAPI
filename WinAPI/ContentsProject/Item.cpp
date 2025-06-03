@@ -53,10 +53,6 @@ void AItem::Tick(float _DeltaTime)
 
 	Move(_DeltaTime);
 	ClampPositionToRoom();
-	//SetLocation();
-
-	//RemoveRoomData();
-	//ItemDestroy();
 
 }
 

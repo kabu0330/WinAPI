@@ -80,14 +80,11 @@ bool ATitleScene::IsLinking(ATitleScene* _Scene)
 
 bool ATitleScene::InterLinkScene(ATitleScene* _Scene, TitleSceneDir _Dir)
 {
-	// 서로 연결될 방향은 반대방향
 	TitleSceneDir Dir = SetDirection(_Dir);
 
 	  this->LinkScene(_Scene, _Dir);
 	_Scene->LinkScene(  this,  Dir);
 
-
-	// 연결된 씬을 this를 기준으로 위치를 조정한다.
 	SetLocationForLink(_Scene, _Dir);
 
 	return true;
@@ -304,15 +301,12 @@ void ATitleScene::MoveToCamera(float _DeltaTime)
 	// 속도
 	FVector2D WorldPos = GetWorld()->GetCameraPos() + Global::WindowHalfScale;
 	FVector2D Direction = TargetScenePos - WorldPos;
-	float Distance = Direction.Length();
 
-	float Deceleration = 1000.0f;
-	float Speed = UEngineMath::Max(Distance / Deceleration, 3.0f);
+	float Speed = 1500.0f;
 
  	Direction.Normalize();
-	CameraMoveForce = Direction * Speed;
+	CameraMoveForce = Direction * Speed * _DeltaTime;
 
-	// 이동 로직
  	GetWorld()->AddCameraPos(CameraMoveForce);
 	FVector2D CameraPos = GetWorld()->GetCameraPos() + Global::WindowHalfScale;
 	int a = 0;

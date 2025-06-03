@@ -89,7 +89,7 @@ public:
 
 	// 공격 및 피격
 	void InputAttack(const float& _DeltaTime); // 입력 함수
-	void Attack(const float& _DeltaTime); // 실제 공격정보를 Tear로 넘기는 함수
+	void Attack(); // 실제 공격정보를 Tear로 넘기는 함수
 
 	bool IsAttack() const
 	{
@@ -101,7 +101,7 @@ public:
 	}
 	void SetAttackDir(const UpperState& _HeadState);
 
-	int ApplyDamaged(AActor* _Player, const int& _Att, const FVector2D& _Dir);
+	int ApplyDamaged(AActor* _HitTarget, const int& _Att, const FVector2D& _Dir);
 	void ShowHitAnimation(AActor* _Other);
 	void RestoreDefaultMotion();
 	void BeginBlinkEffect();

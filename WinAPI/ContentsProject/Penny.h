@@ -22,10 +22,11 @@ public:
 	void UseItem(APlayer* _Player) override; // 아이템 사용
 
 	void DropSucessAnimation();
+	void EndPickup();
 
 protected:
 
 private:
-
+	bool IsPickup = false;
 };
 

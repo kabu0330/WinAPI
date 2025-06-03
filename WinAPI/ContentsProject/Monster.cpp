@@ -306,20 +306,20 @@ FVector2D AMonster::GetDirectionToPlayer()
 	AActor* Player = GetWorld()->GetPawn();
 	FVector2D PlayerPos = Player->GetActorLocation();
 	FVector2D MonsterPos = this->GetActorLocation();
-	FVector2D Distance = PlayerPos - MonsterPos;
+	FVector2D PlayerDir = PlayerPos - MonsterPos;
 
-	Distance.Normalize();
+	PlayerDir.Normalize();
 
-	if (Distance.X <= 0)
+	if (PlayerDir.X <= 0)
 	{
 		State = MonsterState::LEFT;
 	}
-	else if (Distance.X > 0)
+	else if (PlayerDir.X > 0)
 	{
 		State = MonsterState::RIGHT;
 	}
 
-	return Distance;
+	return PlayerDir;
 }
 
 // 너가 속한 맵 밖으로 나가지마.
