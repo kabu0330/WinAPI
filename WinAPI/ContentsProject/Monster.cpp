@@ -57,7 +57,6 @@ void AMonster::BeginPlay()
 	AActor* MainPawn = GetWorld()->GetPawn();
 	Player = dynamic_cast<APlayer*>(MainPawn);
 
-
 	BodyRenderer->SetActive(false);
 	BodyCollision->SetActive(false);
 

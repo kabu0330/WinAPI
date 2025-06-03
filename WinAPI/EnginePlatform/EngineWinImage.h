@@ -9,15 +9,8 @@
 class UEngineWinImage : public UObject
 {
 public:
-	// constrcuter destructer
 	UEngineWinImage();
 	~UEngineWinImage();
-
-	// delete Function
-	UEngineWinImage(const UEngineWinImage& _Other) = delete;
-	UEngineWinImage(UEngineWinImage&& _Other) noexcept = delete;
-	UEngineWinImage& operator=(const UEngineWinImage& _Other) = delete;
-	UEngineWinImage& operator=(UEngineWinImage&& _Other) noexcept = delete;
 
 	HDC GetDC()
 	{
@@ -60,5 +53,11 @@ private:
 	HBITMAP hBitMap = nullptr; // 도화지
 
 	BITMAP Info; // 이미지 정보
+
+	// delete Function
+	UEngineWinImage(const UEngineWinImage& _Other) = delete;
+	UEngineWinImage(UEngineWinImage&& _Other) noexcept = delete;
+	UEngineWinImage& operator=(const UEngineWinImage& _Other) = delete;
+	UEngineWinImage& operator=(UEngineWinImage&& _Other) noexcept = delete;
 };
 

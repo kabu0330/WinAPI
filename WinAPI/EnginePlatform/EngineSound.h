@@ -124,16 +124,8 @@ private:
 class UEngineSound : public UEngineResources
 {
 public:
-	// constrcuter destructer
 	UEngineSound();
 	~UEngineSound();
-
-	// delete Function
-	UEngineSound(const UEngineSound& _Other) = delete;
-	UEngineSound(UEngineSound&& _Other) noexcept = delete;
-	UEngineSound& operator=(const UEngineSound& _Other) = delete;
-	UEngineSound& operator=(UEngineSound&& _Other) noexcept = delete;
-
 
 	// 여러 사운드를 재생하고 특정 시점의 사운드 출력 등을 제어하기 위해서 Core단계에서 Tick 돌릴 때 업데이트를 같이 돌려줘야 한다.
 	// 델타타임의 영향을 받아야 한다.
@@ -159,5 +151,11 @@ private:
 	FMOD::Sound* SoundHandle = nullptr;
 
 	bool ResLoad(std::string_view _Path);
+
+	// delete Function
+	UEngineSound(const UEngineSound& _Other) = delete;
+	UEngineSound(UEngineSound&& _Other) noexcept = delete;
+	UEngineSound& operator=(const UEngineSound& _Other) = delete;
+	UEngineSound& operator=(UEngineSound&& _Other) noexcept = delete;
 };
 

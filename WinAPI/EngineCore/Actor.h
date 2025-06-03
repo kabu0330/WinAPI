@@ -14,15 +14,8 @@ public:
 
 	friend class ULevel;
 
-	// constrcuter destructer
 	AActor();
 	virtual ~AActor();
-
-	// delete Function
-	AActor(const AActor& _Other) = delete;
-	AActor(AActor&& _Other) noexcept = delete;
-	AActor& operator=(const AActor& _Other) = delete;
-	AActor& operator=(AActor&& _Other) noexcept = delete;
 
 	// 객체가 레벨에서 처음 Tick을 돌리기 직전에 실행된다.
 	virtual void BeginPlay() {}
@@ -69,7 +62,6 @@ public:
 		return PrevLocation;
 	}
 
-	// 추가
 	FVector2D GetActorScale()
 	{
 		return Transform.Scale;
@@ -116,7 +108,11 @@ private:
 
 	std::list<class UActorComponent*> Components;
 
-
+	// delete Function
+	AActor(const AActor& _Other) = delete;
+	AActor(AActor&& _Other) noexcept = delete;
+	AActor& operator=(const AActor& _Other) = delete;
+	AActor& operator=(AActor&& _Other) noexcept = delete;
 };
 
 typedef AActor Super;

@@ -5,7 +5,6 @@
 class ATitleGameMode : public AGameMode
 {
 public:
-	// constrcuter destructer
 	ATitleGameMode();
 	~ATitleGameMode();
 

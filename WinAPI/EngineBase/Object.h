@@ -6,18 +6,11 @@
 class UObject
 {
 public:
-	// constrcuter destructer
 	UObject();
 
 	// 많은 곳에서 쓰일 것이기 때문에 혹여나 자식 클래스의 소멸자가 호출되지 않는 위험성을 막기 위해
 	// 가상함수로 소멸자를 선언한다.
 	virtual ~UObject();
-
-	// delete Function
-	UObject(const UObject& _Other) = delete;
-	UObject(UObject&& _Other) noexcept = delete;
-	UObject& operator=(const UObject& _Other) = delete;
-	UObject& operator=(UObject&& _Other) noexcept = delete;
 
 	std::string GetName() const
 	{
@@ -146,6 +139,12 @@ private:
 
 
 	bool TestDebugValue = false;
+
+	// delete Function
+	UObject(const UObject& _Other) = delete;
+	UObject(UObject&& _Other) noexcept = delete;
+	UObject& operator=(const UObject& _Other) = delete;
+	UObject& operator=(UObject&& _Other) noexcept = delete;
 };
 
 

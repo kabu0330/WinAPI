@@ -5,7 +5,6 @@
 class ADessert  : public AItem
 {
 public:
-	// constrcuter destructer
 	ADessert();
 	~ADessert();
 

@@ -11,20 +11,14 @@ public:
 	public:
 		// 이 이미지의
 		class UEngineWinImage* Image;
+
 		// 여기서부터 xx 크기까지
 		FTransform Transform;
 		// 잘라서 쓰겠다.
 	};
 
-	// constrcuter destructer
 	UEngineSprite();
 	~UEngineSprite();
-
-	// delete Function
-	UEngineSprite(const UEngineSprite& _Other) = delete;
-	UEngineSprite(UEngineSprite&& _Other) noexcept = delete;
-	UEngineSprite& operator=(const UEngineSprite& _Other) = delete;
-	UEngineSprite& operator=(UEngineSprite&& _Other) noexcept = delete;
 
 	void PushData(class UEngineWinImage* Image, const FTransform& _Trans);
 
@@ -44,7 +38,12 @@ public:
 	}
 
 protected:
-
 	std::vector<USpriteData> Data;
+
+	// delete Function
+	UEngineSprite(const UEngineSprite& _Other) = delete;
+	UEngineSprite(UEngineSprite&& _Other) noexcept = delete;
+	UEngineSprite& operator=(const UEngineSprite& _Other) = delete;
+	UEngineSprite& operator=(UEngineSprite&& _Other) noexcept = delete;
 };
 

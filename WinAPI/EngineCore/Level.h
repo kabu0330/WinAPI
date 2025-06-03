@@ -24,20 +24,10 @@ public:
 	friend class USpriteRenderer; // 렌더러의 모든 기능을 다 넘겨준다.
 	friend class UEngineAPICore;
 
-	// constructer destructer
 	ULevel();
 	~ULevel();
 
-	// delete Function
-	ULevel(const ULevel& _Other) = delete;
-	ULevel(ULevel&& _Other) noexcept = delete;
-	ULevel& operator=(const ULevel& _Other) = delete;
-	ULevel& operator=(ULevel&& _Other) noexcept = delete;
-
-	// 내가 CurLevel 됐을대
 	void LevelChangeStart();
-
-	// 나 이제 새로운 레벨로 바뀔거야.
 	void LevelChangeEnd();
 
 	void Tick(float _DeltaTime);
@@ -53,8 +43,6 @@ public:
 		ActorPtr->World = this;
 
 		BeginPlayList.push_back(ActorPtr);
-		// NewActor->BeginPlay();
-		// AllActors.push_back(NewActor);
 		return NewActor;
 	}
 
@@ -168,10 +156,7 @@ private:
 	template<typename GameModeType, typename MainPawnType>
 	void CreateGameMode()
 	{
-		// 게임의 관리와 규칙을 설정할 게임 모드
 		GameMode = new GameModeType();
-
-		// 플레이어
 		MainPawn = new MainPawnType();
 
 		// ULevel이 유저가 보는 '월드'임
@@ -181,11 +166,6 @@ private:
 		// 초기 세팅
 		BeginPlayList.push_back(GameMode);
 		BeginPlayList.push_back(MainPawn);
-
-		//GameMode->BeginPlay();
-		//MainPawn->BeginPlay();
-		//AllActors.push_back(GameMode);
-		//AllActors.push_back(MainPawn);
 	}
 
 	// 렌더러는 컨텐츠에서 함부로 호출하지 못하게 하기 위해서 private에 있어야 한다.
@@ -220,5 +200,11 @@ private:
 	bool IsCameraToMainPawn = true;
 	FVector2D CameraPos;
 	FVector2D CameraPivot;
+
+	// delete Function
+	ULevel(const ULevel& _Other) = delete;
+	ULevel(ULevel&& _Other) noexcept = delete;
+	ULevel& operator=(const ULevel& _Other) = delete;
+	ULevel& operator=(ULevel&& _Other) noexcept = delete;
 };
 

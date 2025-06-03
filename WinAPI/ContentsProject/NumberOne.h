@@ -5,7 +5,6 @@
 class ANumberOne : public AItem
 {
 public:
-	// constrcuter destructer
 	ANumberOne();
 	~ANumberOne();
 

@@ -5,15 +5,8 @@
 class UEngineTimer
 {
 public:
-	// constrcuter destructer
 	UEngineTimer();
 	~UEngineTimer();
-
-	// delete Function
-	UEngineTimer(const UEngineTimer& _Other) = delete;
-	UEngineTimer(UEngineTimer&& _Other) noexcept = delete;
-	UEngineTimer& operator=(const UEngineTimer& _Other) = delete;
-	UEngineTimer& operator=(UEngineTimer&& _Other) noexcept = delete;
 
 	void TimeCheck();
 
@@ -37,9 +30,8 @@ public:
 protected:
 
 private:
-
 	// LARGE_INTEGER : 64비트 정수(long long)
-	LARGE_INTEGER Count    = LARGE_INTEGER(); // QuadPart => 1 => 나는 1초에 1을 셀 수 있어요.
+	LARGE_INTEGER Count    = LARGE_INTEGER(); // QuadPart => 1 => 나는 1초에 1을 센다.
 	LARGE_INTEGER PrevTime = LARGE_INTEGER(); // LONGLONG QuadPart => 10000 / 1(Count)
 	LARGE_INTEGER CurTime  = LARGE_INTEGER(); // LONGLONG QuadPart => 10002(Cur) - 10000(Prev) = 2(Tick)
 
@@ -48,6 +40,11 @@ private:
 	double DeltaTime   = 0.0;
 	float  fDeltaTime  = 0.0f;
 
+	// delete Function
+	UEngineTimer(const UEngineTimer& _Other) = delete;
+	UEngineTimer(UEngineTimer&& _Other) noexcept = delete;
+	UEngineTimer& operator=(const UEngineTimer& _Other) = delete;
+	UEngineTimer& operator=(UEngineTimer&& _Other) noexcept = delete;
 
 };
 

@@ -80,7 +80,6 @@ void UEnginePath::MoveParent()
 
 bool UEnginePath::MoveParentToDirectory(std::string_view _Path)
 {
-	// 이런 경우에는 더미를 만드는게 좋다.
 	UEnginePath DummyPath = UEnginePath(Path);
 
 	if (false == DummyPath.IsDirectory())

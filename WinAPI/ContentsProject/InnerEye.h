@@ -5,7 +5,6 @@
 class AInnerEye : public AItem
 {
 public:
-	// constrcuter destructer
 	AInnerEye();
 	~AInnerEye();
 

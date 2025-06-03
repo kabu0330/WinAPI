@@ -132,9 +132,6 @@ bool FTransform::CirCleToCirCle(const FTransform& _Left, const FTransform& _Righ
 {
 	FVector2D Len = _Left.Location - _Right.Location;
 
-	// 트랜스폼을 원으로 봤을때 반지름은 x의 절반크기를 반지름으로 보겠습니다.
-
-	// 두원의 반지름의 합이 벡터의 길이보다 크다면 
 	if (Len.Length() < _Left.Scale.hX() + _Right.Scale.hX())
 	{
 		return true;
@@ -164,7 +161,7 @@ bool FTransform::CirCleToRect(const FTransform& _Left, const FTransform& _Right)
 		return true;
 	}
 
-	static FVector2D ArrPoint[4]; // 쓰레드에서는 static으로 하여 비용 절감 못한다.
+	static FVector2D ArrPoint[4];
 
 	ArrPoint[0] = _Right.CenterLeftTop();
 	ArrPoint[1] = _Right.CenterLeftBottom();

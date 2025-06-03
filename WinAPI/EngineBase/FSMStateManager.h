@@ -7,15 +7,8 @@
 class UFSMStateManager
 {
 public:
-	// constrcuter destructer
 	UFSMStateManager()	{	}
 	~UFSMStateManager()	{	}
-
-	// delete Function
-	UFSMStateManager(const UFSMStateManager& _Other) = delete;
-	UFSMStateManager(UFSMStateManager&& _Other) noexcept = delete;
-	UFSMStateManager& operator=(const UFSMStateManager& _Other) = delete;
-	UFSMStateManager& operator=(UFSMStateManager&& _Other) noexcept = delete;
 
 	class FSMState
 	{
@@ -76,12 +69,15 @@ public:
 	}
 
 protected:
-	// ChangeState("Idle")
-	// ChangeState(EPlayerState::Idle)
-	// Idle 스테이트로 이동해줘
 
 private:
 	FSMState* CurState = nullptr;
 	std::map<int, FSMState> States;
+
+	// delete Function
+	UFSMStateManager(const UFSMStateManager& _Other) = delete;
+	UFSMStateManager(UFSMStateManager&& _Other) noexcept = delete;
+	UFSMStateManager& operator=(const UFSMStateManager& _Other) = delete;
+	UFSMStateManager& operator=(UFSMStateManager&& _Other) noexcept = delete;
 };
 

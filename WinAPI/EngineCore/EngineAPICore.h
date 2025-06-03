@@ -22,16 +22,9 @@ public:
 class UEngineAPICore
 {
 public:
-	// constructer destructer
 	UEngineAPICore();
 	~UEngineAPICore();
 
-	// delete Function
-	UEngineAPICore(const UEngineAPICore& _Other) = delete;
-	UEngineAPICore(UEngineAPICore&& _Other) noexcept = delete;
-	UEngineAPICore& operator=(const UEngineAPICore& _Other) = delete;
-	UEngineAPICore& operator=(UEngineAPICore&& _Other) noexcept = delete;
-	//
 
 	static int EngineStart(HINSTANCE _Inst, UContentsCore* _UserCore);
 
@@ -139,6 +132,12 @@ private:
 	bool IsCurLevelReset = false;
 
 	void Tick();
+
+	// delete Function
+	UEngineAPICore(const UEngineAPICore& _Other) = delete;
+	UEngineAPICore(UEngineAPICore&& _Other) noexcept = delete;
+	UEngineAPICore& operator=(const UEngineAPICore& _Other) = delete;
+	UEngineAPICore& operator=(UEngineAPICore&& _Other) noexcept = delete;
 };
 
 // 엔진의 기능을 컨텐츠에서 쓰고 싶다면

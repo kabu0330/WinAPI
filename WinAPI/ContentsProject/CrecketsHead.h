@@ -5,7 +5,6 @@
 class ACrecketsHead : public AItem
 {
 public:
-	// constrcuter destructer
 	ACrecketsHead();
 	~ACrecketsHead();
 

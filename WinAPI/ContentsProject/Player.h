@@ -36,7 +36,6 @@ class APlayer : public AActor
 	};
 
 public:
-	// constrcuter destructer
 	APlayer();
 	~APlayer() {}
 

@@ -140,6 +140,7 @@ void APlayGameMode::Spawn()
 	BossRoom->SetName("BossRoom");
 
 	BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::LEFT);
+	//BaseRoom->InterLinkRoom(MinionRoom1, RoomDir::LEFT);
 	BaseRoom->InterLinkRoom(MinionRoom2, RoomDir::RIGHT);
 	BaseRoom->InterLinkRoom(BossRoom, RoomDir::DOWN);
 
@@ -568,7 +569,6 @@ void APlayGameMode::Spawn()
 
 		BossRoom->CreateMonster<ATheDukeOfFlies>({ -100, 0 });
 	}
-	
 }
 
 void APlayGameMode::SpawnRandomItem(ARoom* _ParentRoom)
@@ -728,15 +728,6 @@ void APlayGameMode::CheckInput()
 
 void APlayGameMode::UISetting()
 {
-	// Text
-	//ABannerTextUI* TextUI = GetWorld()->SpawnActor<ABannerTextUI>();
-	//TextUI->SetName("TextUI");
-	//TextUI->SetTextSpriteName("banner.png");
-	//TextUI->SetOrder(ERenderOrder::UI);
-	//TextUI->SetTextScale({ 16, 10 });
-	//TextUI->SetActorLocation({ 400, 100 });
-	//TextUI->SetTextOut("TheBindingOfIsaac"); // 띄어쓰기 문제 해결 어떻게?
-
 	// Death Report
 	ADeathReportScene::DeathReport = GetWorld()->SpawnActor<ADeathReportScene>();
 	AMenuScene::Menu = GetWorld()->SpawnActor<AMenuScene>();

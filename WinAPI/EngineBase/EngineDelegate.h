@@ -4,7 +4,6 @@
 class EngineDelegate
 {
 public:
-	// constrcuter destructer
 	EngineDelegate();
 	
 	// 생성자 호출하면서 바로 함수 포인터를 넣을 수 있다.
@@ -15,11 +14,6 @@ public:
 
 	~EngineDelegate();
 
-	// delete Function
-	//EngineDelegate(const EngineDelegate& _Other) = delete;
-	//EngineDelegate(EngineDelegate&& _Other) noexcept = delete;
-	//EngineDelegate& operator=(const EngineDelegate& _Other) = delete;
-	//EngineDelegate& operator=(EngineDelegate&& _Other) noexcept = delete;
 
 	void operator()()
 	{

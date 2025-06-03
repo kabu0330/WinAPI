@@ -46,7 +46,7 @@ public:
 	void FailToPickup(class AActor* _Player);
 
 	virtual bool EatFunction(APlayer* _Player) = 0;  // 아이템 습득 즉시
-	virtual void UseItem(APlayer* _Player) {};       // 아이템 사용
+	virtual void UseItem(APlayer* _Player) {}       // 아이템 사용
 
 
 

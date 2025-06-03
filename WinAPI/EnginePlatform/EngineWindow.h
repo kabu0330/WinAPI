@@ -13,16 +13,8 @@ public:
 
 	static int WindowMessageLoop(EngineDelegate _FrameFuction, EngineDelegate _FrameFunction);
 
-	// constrcuter destructer
 	UEngineWindow();
 	~UEngineWindow();
-
-	// delete Function
-	UEngineWindow(const UEngineWindow& _Other) = delete;
-	UEngineWindow(UEngineWindow&& _Other) noexcept = delete;
-	UEngineWindow& operator=(const UEngineWindow& _Other) = delete;
-	UEngineWindow& operator=(UEngineWindow&& _Other) noexcept = delete;
-	//
 
 	void Create(std::string_view _TitleName, std::string_view _ClassName = "Default");
 
@@ -69,5 +61,11 @@ private:
 	UEngineWinImage* WindowImage = nullptr; // HDC : 진짜 창에 그려지는 화면
 
 	HWND WindowHandle = nullptr; // 윈도우 창 주소(몇 번째 창)
+
+	// delete Function
+	UEngineWindow(const UEngineWindow& _Other) = delete;
+	UEngineWindow(UEngineWindow&& _Other) noexcept = delete;
+	UEngineWindow& operator=(const UEngineWindow& _Other) = delete;
+	UEngineWindow& operator=(UEngineWindow&& _Other) noexcept = delete;
 };
 

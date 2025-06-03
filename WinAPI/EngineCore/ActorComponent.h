@@ -4,6 +4,7 @@
 #include <EngineBase/EngineDelegate.h>
 #include "EngineCoreDebug.h"
 #include "EngineSprite.h"
+
 // "플레이어의 위치를 기준으로 어디에 있다."를 표현하는 기능들을 언리얼에서는 SceneComponent라고 한다. (HP Bar, 무기 등)
 // 위치를 가지지 않는 ActorComponent가 있다. (길찾기 기능, 점수 계산, 퀘스트, 대화 등)
 // Component								: Actor의 구성 요소
@@ -21,10 +22,8 @@ public:
 	friend class AActor;
 	typedef UActorComponent Super;
 
-	// constrcuter destructer
 	UActorComponent();
-	// 객체화 못시키게 하는법중 하나
-	virtual ~UActorComponent() = 0;
+	virtual ~UActorComponent() = 0; // 객체화 못시키게 하는법 중 하나
 
 	// delete Function
 	UActorComponent(const UActorComponent& _Other) = delete;

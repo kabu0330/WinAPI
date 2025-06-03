@@ -15,7 +15,6 @@ ULevel::~ULevel()
 	{
 		// BeginPlayList 한번도 체인지 안한 액터는 
 		// 액터들이 다 비긴 플레이 리스트에 들어가 있다.
-
 		std::list<AActor*>::iterator StartIter = BeginPlayList.begin();
 		std::list<AActor*>::iterator EndIter = BeginPlayList.end();
 
@@ -58,11 +57,8 @@ void ULevel::BeginPlayCheck()
 
 		BeginPlayList.clear();
 
-		// todtjdtl 
 		AActor::ComponentBeginPlay();
 	}
-
-
 }
 
 // 내가 CurLevel 됐을 때 
@@ -300,7 +296,6 @@ void ULevel::Release(float _DeltaTime)
 			std::list<class U2DCollision*>::iterator CollisionStartIter = CollisionList.begin();
 			std::list<class U2DCollision*>::iterator CollisionEndIter = CollisionList.end();
 
-			// 언리얼은 중간에 삭제할수 없어.
 			for (; CollisionStartIter != CollisionEndIter; )
 			{
 				if (false == (*CollisionStartIter)->IsDestroy())
@@ -404,7 +399,6 @@ void ULevel::ScreenClear()
 
 void ULevel::DoubleBuffering()
 {
-
 	UEngineWindow& MainWindow = UEngineAPICore::GetCore()->GetMainWindow();
 
 	UEngineWinImage* WindowImage = MainWindow.GetWindowImage();
@@ -442,10 +436,6 @@ void ULevel::PushCheckCollision(class U2DCollision* _Collision)
 
 void ULevel::ChangeRenderOrder(USpriteRenderer* _Renderer, int _PrevOrder)
 {
-	//std::vector<int> Value;
-	// 벡터는 리무브가 없다.
-	//Value.remove
-
 	// 0번에 들어있었을 것이다.
 	Renderers[_PrevOrder].remove(_Renderer);
 
