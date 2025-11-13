@@ -57,11 +57,11 @@ ___
 
 ## 1. 씬 이동
 <p align="center">
- <img alt="이미지" src="Readme\Scene2.webp">
+ <img alt="이미지" src="readme\Scene2.webp">
 </p>
 
 <p align="center">
- <img alt="이미지" src="Readme\Scence.png">
+ <img alt="이미지" src="readme\Scence.png">
 </p>
 
 원작의 타이틀 화면 느낌을 구성하기 위해서 타이틀 레벨에 카메라가 한 화면에 보여줄 수 있는 크기를 기준으로 이미지를 이어 붙였고, 각 씬별로 자신과 이어진 다른 씬의 포인터를 저장하고, 키 입력에 따라 연결된 씬의 위치로 카메라를 이동시켰습니다.
@@ -311,11 +311,11 @@ ___
 
 ## 2. 아이템
 <p align="center">
- <img alt="이미지" src="Readme\Item00.webp">
+ <img alt="이미지" src="readme\Item00.webp">
 </p>
 
 <p align="center">
- <img alt="이미지" src="Readme\Item01.webp">
+ <img alt="이미지" src="readme\Item01.webp">
 </p>
 
 아이템에 따라 로직 처리를 달리하고, 공격 효과도 변경되도록 구현했습니다.
@@ -328,7 +328,7 @@ ___
 
 
 <p align="center">
- <img alt="이미지" src="Readme\ItemPPT.png">
+ <img alt="이미지" src="readme\ItemPPT.png">
 </p>
 
 
@@ -571,7 +571,7 @@ ___
 ## 3. 떨림 효과
 
 <p align="center">
- <img alt="이미지" src="Readme\SineWave.webp">
+ <img alt="이미지" src="readme\SineWave.webp">
 </p>
 
 사인파를 이용해서 캐릭터 이미지의 Scale 값을 조절해 떨고 있는 듯한 느낌을 주었습니다.
@@ -607,11 +607,11 @@ ___
 
 ## 4. 보스 중심으로 회전
 <p align="center">
- <img alt="이미지" src="Readme\Rotator.webp">
+ <img alt="이미지" src="readme\Rotator.webp">
 </p>
 
 <p align="center">
- <img alt="이미지" src="Readme\Rotator.png">
+ <img alt="이미지" src="readme\Rotator.png">
 </p>
 
 보스 몬스터가 스폰한 하위 몬스터는 플레이어를 인식하기 전까지 보스 주변을 원을 그리며 이동합니다.
