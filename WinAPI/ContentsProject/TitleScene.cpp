@@ -309,7 +309,6 @@ void ATitleScene::MoveToCamera(float _DeltaTime)
 
  	GetWorld()->AddCameraPos(CameraMoveForce);
 	FVector2D CameraPos = GetWorld()->GetCameraPos() + Global::WindowHalfScale;
-	int a = 0;
 }
 
 bool ATitleScene::IsAtDestination()
